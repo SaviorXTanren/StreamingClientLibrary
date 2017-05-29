@@ -16,7 +16,7 @@ namespace Mixer.UnitTests
             }
             catch (Exception ex)
             {
-                Assert.Fail(ex.Message);
+                Assert.Fail(ex.ToString());
             }
         }
     }

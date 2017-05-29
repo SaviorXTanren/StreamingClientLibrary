@@ -56,6 +56,19 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetHosters()
+        {
+            this.TestWrapper(async (MixerClient client) =>
+            {
+                ChannelModel channel = await this.GetChannel(client);
+
+                IEnumerable<ChannelAdvancedModel> hosters = await client.Channels.GetHosters(channel);
+
+                Assert.IsNotNull(hosters);
+            });
+        }
+
+        [TestMethod]
         public void GetPreferences()
         {
             this.TestWrapper(async (MixerClient client) =>
@@ -82,24 +95,34 @@ namespace Mixer.UnitTests
             });
         }
 
-        private async Task<ChannelModel> GetChannel(MixerClient client)
+        [TestMethod]
+        public void GetUsersWithRoles()
         {
-            ChannelModel channel = await client.Channels.GetChannel(this.GetChannelName());
+            this.TestWrapper(async (MixerClient client) =>
+            {
+                ChannelModel channel = await this.GetChannel(client);
 
-            Assert.IsNotNull(channel);
-            Assert.AreEqual(channel.id, (uint)5641335);
+                IEnumerable<UserWithGroupsModel> users = await client.Channels.GetUsersWithRoles(channel);
 
-            return channel;
+                Assert.IsNotNull(users);
+                Assert.IsTrue(users.Count() > 0);
+            });
         }
 
-        private string GetChannelName()
+        private async Task<ChannelModel> GetChannel(MixerClient client)
         {
             string channelName = ConfigurationManager.AppSettings["ChannelName"];
             if (string.IsNullOrEmpty(channelName))
             {
                 Assert.Fail("ChannelName value isn't set in application configuration");
             }
-            return channelName;
+
+            ChannelModel channel = await client.Channels.GetChannel(channelName);
+
+            Assert.IsNotNull(channel);
+            Assert.AreEqual(channel.id, (uint)5641335);
+
+            return channel;
         }
     }
 }

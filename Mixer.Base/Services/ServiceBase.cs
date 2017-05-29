@@ -31,6 +31,14 @@ namespace Mixer.Base.Services
             }
         }
 
+        protected async Task<string> GetStringAsync(string requestUri)
+        {
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            {
+                return await this.ProcessStringResponse(await client.GetAsync(requestUri));
+            }
+        }
+
         protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri)
         {
             List<T> results = new List<T>();
@@ -97,14 +105,20 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected HttpContent CreateContentFromObject(object obj) { return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json"); }
+        protected HttpContent CreateContentFromObject(object obj) { return this.CreateContentFromString(JsonConvert.SerializeObject(obj)); }
+
+        protected HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
 
         private async Task<T> ProcessResponse<T>(HttpResponseMessage response)
         {
+            return JsonConvert.DeserializeObject<T>(await this.ProcessStringResponse(response));
+        }
+
+        private async Task<string> ProcessStringResponse(HttpResponseMessage response)
+        {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                string result = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(result);
+                return await response.Content.ReadAsStringAsync();
             }
             else
             {

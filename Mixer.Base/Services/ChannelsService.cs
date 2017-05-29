@@ -31,6 +31,13 @@ namespace Mixer.Base.Services
             return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow");
         }
 
+        public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+
+            return await this.GetPagedAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters");
+        }
+
         public async Task<ChannelPreferencesModel> GetPreferences(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
@@ -44,6 +51,13 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(preferences, "preferences");
 
             return await this.PostAsync<ChannelPreferencesModel>("channels/" + channel.id + "/preferences", this.CreateContentFromObject(preferences));
+        }
+
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+
+            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users");
         }
     }
 }

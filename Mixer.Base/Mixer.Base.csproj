@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="MixerClient.cs" />
     <Compile Include="Model\User\UserWithChannelModel.cs" />
+    <Compile Include="Model\User\UserWithGroupsModel.cs" />
     <Compile Include="Services\ChannelsService.cs" />
     <Compile Include="Model\Achievement\AchievementEarningModel.cs" />
     <Compile Include="Model\Achievement\AchievementModel.cs" />

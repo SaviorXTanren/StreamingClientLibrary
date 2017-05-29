@@ -22,7 +22,7 @@ namespace Mixer.Base.Model.Channel
         public uint? typeId { get; set; }
         public bool interactive { get; set; }
         public uint? interactiveGameId { get; set; }
-        public uint? ftl { get; set; }
+        public int ftl { get; set; }
         public bool hasVod { get; set; }
         public string languageId { get; set; }
         public uint? coverId { get; set; }
