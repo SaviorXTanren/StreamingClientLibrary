@@ -55,8 +55,10 @@
   <ItemGroup>
     <Compile Include="AuthorizationUnitTests.cs" />
     <Compile Include="ChannelUnitTests.cs" />
+    <Compile Include="ChatsUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestBase.cs" />
+    <Compile Include="UsersUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">

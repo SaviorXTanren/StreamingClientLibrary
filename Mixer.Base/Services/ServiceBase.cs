@@ -1,6 +1,7 @@
 ﻿using Mixer.Base.Util;
 using Mixer.Base.Web;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -28,6 +29,14 @@ namespace Mixer.Base.Services
             using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
             {
                 return await this.ProcessResponse<T>(await client.GetAsync(requestUri));
+            }
+        }
+
+        protected async Task<JObject> GetJObjectAsync(string requestUri)
+        {
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            {
+                return await this.ProcessJObjectResponse(await client.GetAsync(requestUri));
             }
         }
 
@@ -114,11 +123,17 @@ namespace Mixer.Base.Services
             return JsonConvert.DeserializeObject<T>(await this.ProcessStringResponse(response));
         }
 
+        private async Task<JObject> ProcessJObjectResponse(HttpResponseMessage response)
+        {
+            return JObject.Parse(await this.ProcessStringResponse(response));
+        }
+
         private async Task<string> ProcessStringResponse(HttpResponseMessage response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return await response.Content.ReadAsStringAsync();
+                string result = await response.Content.ReadAsStringAsync();
+                return result;
             }
             else
             {

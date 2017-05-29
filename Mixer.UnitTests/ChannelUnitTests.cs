@@ -15,12 +15,28 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChannelUnitTests : UnitTestBase
     {
+        public static async Task<ChannelModel> GetChannel(MixerClient client)
+        {
+            string channelName = ConfigurationManager.AppSettings["ChannelName"];
+            if (string.IsNullOrEmpty(channelName))
+            {
+                Assert.Fail("ChannelName value isn't set in application configuration");
+            }
+
+            ChannelModel channel = await client.Channels.GetChannel(channelName);
+
+            Assert.IsNotNull(channel);
+            Assert.IsTrue(channel.id > (uint)0);
+
+            return channel;
+        }
+
         [TestMethod]
         public void GetChannelForUser()
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
             });
         }
 
@@ -29,7 +45,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
 
                 string newName = "Test Name";
                 channel.name = newName;
@@ -46,7 +62,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
 
                 IEnumerable<UserWithChannelModel> users = await client.Channels.GetFollowers(channel);
 
@@ -60,7 +76,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
 
                 IEnumerable<ChannelAdvancedModel> hosters = await client.Channels.GetHosters(channel);
 
@@ -73,7 +89,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
 
                 ChannelPreferencesModel preference = await client.Channels.GetPreferences(channel);
 
@@ -100,29 +116,13 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await this.GetChannel(client);
+                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
 
                 IEnumerable<UserWithGroupsModel> users = await client.Channels.GetUsersWithRoles(channel);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
             });
-        }
-
-        private async Task<ChannelModel> GetChannel(MixerClient client)
-        {
-            string channelName = ConfigurationManager.AppSettings["ChannelName"];
-            if (string.IsNullOrEmpty(channelName))
-            {
-                Assert.Fail("ChannelName value isn't set in application configuration");
-            }
-
-            ChannelModel channel = await client.Channels.GetChannel(channelName);
-
-            Assert.IsNotNull(channel);
-            Assert.AreEqual(channel.id, (uint)5641335);
-
-            return channel;
         }
     }
 }

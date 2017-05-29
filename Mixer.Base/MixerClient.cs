@@ -11,6 +11,8 @@ namespace Mixer.Base
         private AuthorizationToken token;
 
         public ChannelsService Channels { get; private set; }
+        public ChatsService Chats { get; private set; }
+        public UsersService Users { get; private set; }
 
         public static async Task<MixerClient> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<string> codeCallback)
         {
@@ -46,6 +48,8 @@ namespace Mixer.Base
             this.token = token;
 
             this.Channels = new ChannelsService(this);
+            this.Chats = new ChatsService(this);
+            this.Users = new UsersService(this);
         }
 
         internal async Task<AuthorizationToken> GetAuthorizationToken()

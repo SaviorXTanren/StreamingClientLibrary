@@ -25,8 +25,13 @@ namespace Mixer.UnitTests
                 AuthorizationUnitTests.client = MixerClient.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
                 {
                     ClientScopeEnum.chat__chat,
+                    ClientScopeEnum.chat__connect,
                     ClientScopeEnum.channel__details__self,
                     ClientScopeEnum.channel__update__self,
+                    ClientScopeEnum.user__details__self,
+                    ClientScopeEnum.user__log__self,
+                    ClientScopeEnum.user__notification__self,
+                    ClientScopeEnum.user__update__self,
                 },
                 (string code) =>
                 {

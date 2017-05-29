@@ -45,12 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MixerClient.cs" />
+    <Compile Include="Model\NotificationModel.cs" />
+    <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
+    <Compile Include="Model\Teams\TeamMembershipModel.cs" />
+    <Compile Include="Model\User\PrivatePopulatedUserModel.cs" />
+    <Compile Include="Model\User\PrivateUserModel.cs" />
+    <Compile Include="Model\User\UserLogModel.cs" />
+    <Compile Include="Model\User\UserPreferencesModel.cs" />
     <Compile Include="Model\User\UserWithChannelModel.cs" />
     <Compile Include="Model\User\UserWithGroupsModel.cs" />
     <Compile Include="Services\ChannelsService.cs" />
-    <Compile Include="Model\Achievement\AchievementEarningModel.cs" />
-    <Compile Include="Model\Achievement\AchievementModel.cs" />
-    <Compile Include="Model\Announcement.cs" />
     <Compile Include="Model\Channel\ChannelAdvancedModel.cs" />
     <Compile Include="Model\Channel\ChannelModel.cs" />
     <Compile Include="Model\Channel\ChannelPreferencesModel.cs" />
@@ -64,7 +68,9 @@
     <Compile Include="Model\User\SocialInfoModel.cs" />
     <Compile Include="Model\User\UserGroupModel.cs" />
     <Compile Include="Model\User\UserModel.cs" />
+    <Compile Include="Services\ChatsService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="Services\UsersService.cs" />
     <Compile Include="Util\RestServiceRequestException.cs" />
     <Compile Include="Util\Validator.cs" />
     <Compile Include="Web\AuthorizationToken.cs" />
@@ -74,9 +80,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Analytic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
