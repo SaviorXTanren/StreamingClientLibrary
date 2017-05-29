@@ -44,14 +44,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\ChannelsService.cs" />
-    <Compile Include="Model\Channel.cs" />
+    <Compile Include="MixerClient.cs" />
+    <Compile Include="Model\User\UserWithChannelModel.cs" />
+    <Compile Include="Services\ChannelsService.cs" />
+    <Compile Include="Model\Achievement\AchievementEarningModel.cs" />
+    <Compile Include="Model\Achievement\AchievementModel.cs" />
+    <Compile Include="Model\Announcement.cs" />
+    <Compile Include="Model\Channel\ChannelAdvancedModel.cs" />
+    <Compile Include="Model\Channel\ChannelModel.cs" />
+    <Compile Include="Model\Channel\ChannelPreferencesModel.cs" />
+    <Compile Include="Model\Channel\ExpandedChannelModel.cs" />
+    <Compile Include="Model\Channel\FollowModel.cs" />
+    <Compile Include="Model\Game\GameTypeModel.cs" />
+    <Compile Include="Model\Game\GameTypeSimpleModel.cs" />
+    <Compile Include="Model\ResourceModel.cs" />
+    <Compile Include="Model\TimeStampedModel.cs" />
+    <Compile Include="Model\User\ChatUserModel.cs" />
+    <Compile Include="Model\User\SocialInfoModel.cs" />
+    <Compile Include="Model\User\UserGroupModel.cs" />
+    <Compile Include="Model\User\UserModel.cs" />
+    <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="Util\RestServiceRequestException.cs" />
+    <Compile Include="Util\Validator.cs" />
     <Compile Include="Web\AuthorizationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\HttpClientWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\Analytic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

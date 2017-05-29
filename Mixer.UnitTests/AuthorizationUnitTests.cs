@@ -1,45 +1,61 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
-using Mixer.Base.API;
-using Mixer.Base.Model;
-using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Mixer.UnitTests
 {
     [TestClass]
-    public class AuthorizationUnitTests
+    public class AuthorizationUnitTests : UnitTestBase
     {
+        private static MixerClient client;
+
+        public static MixerClient GetMixerClient()
+        {
+            if (AuthorizationUnitTests.client == null)
+            {
+                string clientID = ConfigurationManager.AppSettings["ClientID"];
+                if (string.IsNullOrEmpty(clientID))
+                {
+                    Assert.Fail("ClientID value isn't set in application configuration");
+                }
+
+                AuthorizationUnitTests.client = MixerClient.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
+                {
+                    ClientScopeEnum.chat__chat,
+                    ClientScopeEnum.channel__details__self,
+                    ClientScopeEnum.channel__update__self,
+                },
+                (string code) =>
+                {
+                    Assert.IsNotNull(code);
+                    Process.Start("https://mixer.com/oauth/shortcode?code=" + code);
+                }).Result;
+            }
+
+            Assert.IsNotNull(AuthorizationUnitTests.client);
+            return AuthorizationUnitTests.client;
+        }
+
         [TestMethod]
         public void AuthorizeViaShortCode()
         {
-            try
+            this.TestWrapper((MixerClient client) =>
             {
-                string clientID = "a95a8520f369fdd46d08aba183953c5c8a4c3822affec476";
+                return Task.FromResult(0);
+            });
+        }
 
-                ShortCode shortCode = AuthorizationToken.GenerateShortCode("a95a8520f369fdd46d08aba183953c5c8a4c3822affec476", new List<ClientScopeEnum>() { ClientScopeEnum.chat__chat }).Result;
-
-                Assert.IsNotNull(shortCode);
-                Trace.WriteLine("Short Code: " + shortCode.code);
-
-                string code = AuthorizationToken.ValidateShortCode(shortCode).Result;
-
-                Assert.IsNotNull(code);
-                Assert.AreNotEqual(code, string.Empty);
-
-                AuthorizationToken token = AuthorizationToken.GetAuthorizationToken(clientID, code).Result;
-
-                Assert.IsNotNull(token);
-
-                token.RefreshToken().Wait();
-
-                Channel channel = ChannelsService.GetChannel(token, "GlockGirl").Result;
-            }
-            catch (Exception ex)
+        [TestMethod]
+        public void RefreshToken()
+        {
+            this.TestWrapper(async (MixerClient client) =>
             {
-                Assert.Fail(ex.Message);
-            }
+                AuthorizationToken token = await client.GetAuthorizationToken();
+                await token.RefreshToken();
+            });
         }
     }
 }

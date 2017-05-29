@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -55,12 +56,16 @@
     <Compile Include="AuthorizationUnitTests.cs" />
     <Compile Include="ChannelUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">
       <Project>{3d2fd5b5-befd-414e-a79f-c26b6842691d}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
