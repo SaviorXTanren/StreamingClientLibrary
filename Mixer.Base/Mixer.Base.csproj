@@ -44,7 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatClient.cs" />
     <Compile Include="MixerClient.cs" />
+    <Compile Include="Model\Channel\ChannelChatModel.cs" />
+    <Compile Include="Model\Chat\ChatEventPacket.cs" />
+    <Compile Include="Model\Chat\ChatMessageEventModel.cs" />
+    <Compile Include="Model\Chat\ChatMethodPacket.cs" />
+    <Compile Include="Model\Chat\ChatPacket.cs" />
+    <Compile Include="Model\Chat\ChatReplyPacket.cs" />
+    <Compile Include="Model\Chat\PollEventModel.cs" />
+    <Compile Include="Model\Chat\UserEventModel.cs" />
+    <Compile Include="Model\Chat\UserTimeoutEventModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />

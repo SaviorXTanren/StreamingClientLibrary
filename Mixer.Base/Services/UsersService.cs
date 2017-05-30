@@ -3,7 +3,9 @@ using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
@@ -29,6 +31,17 @@ namespace Mixer.Base.Services
             if (user.userId != null)
             {
                 return await this.GetUser(user.userId.GetValueOrDefault());
+            }
+            return null;
+        }
+
+        public async Task<UserModel> GetUser(string username)
+        {
+            Validator.ValidateString(username, "username");
+            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?where=username:eq:" + username + "&");
+            if (users.Count() > 0)
+            {
+                return users.First();
             }
             return null;
         }

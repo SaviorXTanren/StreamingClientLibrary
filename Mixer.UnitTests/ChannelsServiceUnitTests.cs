@@ -13,7 +13,7 @@ namespace Mixer.UnitTests
     /// Summary description for ChannelUnitTests
     /// </summary>
     [TestClass]
-    public class ChannelUnitTests : UnitTestBase
+    public class ChannelsServiceUnitTests : UnitTestBase
     {
         public static async Task<ChannelModel> GetChannel(MixerClient client)
         {
@@ -36,7 +36,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
             });
         }
 
@@ -45,7 +45,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
                 string newName = "Test Name";
                 channel.name = newName;
@@ -62,7 +62,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
                 IEnumerable<UserWithChannelModel> users = await client.Channels.GetFollowers(channel);
 
@@ -76,7 +76,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
                 IEnumerable<ChannelAdvancedModel> hosters = await client.Channels.GetHosters(channel);
 
@@ -89,7 +89,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
                 ChannelPreferencesModel preference = await client.Channels.GetPreferences(channel);
 
@@ -116,7 +116,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
                 IEnumerable<UserWithGroupsModel> users = await client.Channels.GetUsersWithRoles(channel);
 

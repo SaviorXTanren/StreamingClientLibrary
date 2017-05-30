@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 namespace Mixer.UnitTests
 {
     [TestClass]
-    public class UsersUnitTests : UnitTestBase
+    public class UsersServiceUnitTests : UnitTestBase
     {
         public static async Task<UserModel> GetCurrentUser(MixerClient client)
         {
-            ChannelModel channel = await ChannelUnitTests.GetChannel(client);
+            ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
             PrivatePopulatedUserModel user = await client.Users.GetCurrentUser();
 
@@ -30,7 +30,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
             });
         }
 
@@ -39,7 +39,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 UserWithChannelModel channelUser = await client.Users.GetUser(user);
 
@@ -49,11 +49,23 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetUserByUsername()
+        {
+            this.TestWrapper(async (MixerClient client) =>
+            {
+                UserModel user = await client.Users.GetUser("SaviorXTanren");
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > (uint)0);
+            });
+        }
+
+        [TestMethod]
         public void GetAvatar()
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 string avatar = await client.Users.GetAvatar(user);
 
@@ -66,7 +78,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 IEnumerable<ChannelAdvancedModel> follows = await client.Users.GetFollows(user);
 
@@ -80,7 +92,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 IEnumerable<UserLogModel> logs = await client.Users.GetLogs(user);
 
@@ -94,7 +106,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 IEnumerable<NotificationModel> notifications = await client.Users.GetNotifications(user);
 
@@ -108,7 +120,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 UserPreferencesModel preferences = await client.Users.GetPreferences(user);
 
@@ -121,7 +133,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 UserPreferencesModel preferences = await client.Users.GetPreferences(user);
 
@@ -148,7 +160,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                UserModel user = await UsersUnitTests.GetCurrentUser(client);
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
                 IEnumerable<TeamMembershipExpandedModel> teams = await client.Users.GetTeams(user);
 
