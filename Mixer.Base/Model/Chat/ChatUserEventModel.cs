@@ -1,6 +1,6 @@
 ﻿namespace Mixer.Base.Model.Chat
 {
-    public class UserEventModel
+    public class ChatUserEventModel
     {
         public uint id { get; set; }
         public string username { get; set; }

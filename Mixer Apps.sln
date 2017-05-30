@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.Base", "Mixer.Base\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.UnitTests", "Mixer.UnitTests\Mixer.UnitTests.csproj", "{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.Sample", "Mixer.Sample\Mixer.Sample.csproj", "{850B4E8C-9F48-4593-AD7D-FF920F02CECC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Release|Any CPU.Build.0 = Release|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

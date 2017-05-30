@@ -52,9 +52,9 @@
     <Compile Include="Model\Chat\ChatMethodPacket.cs" />
     <Compile Include="Model\Chat\ChatPacket.cs" />
     <Compile Include="Model\Chat\ChatReplyPacket.cs" />
-    <Compile Include="Model\Chat\PollEventModel.cs" />
-    <Compile Include="Model\Chat\UserEventModel.cs" />
-    <Compile Include="Model\Chat\UserTimeoutEventModel.cs" />
+    <Compile Include="Model\Chat\ChatPollEventModel.cs" />
+    <Compile Include="Model\Chat\ChatUserEventModel.cs" />
+    <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />

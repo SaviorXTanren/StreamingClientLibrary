@@ -1,5 +1,6 @@
 ﻿using Mixer.Base.Model;
 using Mixer.Base.Model.Channel;
+using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
@@ -20,6 +21,12 @@ namespace Mixer.Base.Services
         }
 
         public async Task<UserWithChannelModel> GetUser(UserModel user)
+        {
+            Validator.ValidateVariable(user, "user");
+            return await this.GetUser(user.id);
+        }
+
+        public async Task<UserWithChannelModel> GetUser(ChatUserEventModel user)
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetUser(user.id);

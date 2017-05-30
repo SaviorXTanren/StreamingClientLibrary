@@ -193,14 +193,7 @@ namespace Mixer.UnitTests
         {
             this.ClearRepliesAndEvents();
 
-            await chatClient.Authenticate();
-
-            await Task.Delay(1000);
-
-            Assert.IsTrue(this.replyPackets.Count > 0);
-            ChatReplyPacket replyPacket = this.replyPackets.First();
-            Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-            Assert.IsTrue((bool)replyPacket.data["authenticated"]);
+            Assert.IsTrue(await chatClient.Authenticate());
         }
 
         private async Task SendBasicMessage(ChatClient chatClient)
@@ -243,12 +236,7 @@ namespace Mixer.UnitTests
 
                 chatClient.MessageOccurred += ChatClient_MessageOccurred;
 
-                await chatClient.Connect();
-
-                await Task.Delay(2000);
-
-                Assert.IsTrue(this.eventPackets.Count > 0);
-                Assert.IsTrue(this.eventPackets.Any(e => e.eventName.Equals("WelcomeEvent")));
+                Assert.IsTrue(await chatClient.Connect());
 
                 await function(client, chatClient);
 

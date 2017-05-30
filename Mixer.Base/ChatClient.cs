@@ -22,13 +22,13 @@ namespace Mixer.Base
 
         public event EventHandler<ChatMessageEventModel> MessageOccurred;
 
-        public event EventHandler<UserEventModel> UserJoinOccurred;
-        public event EventHandler<UserEventModel> UserLeaveOccurred;
-        public event EventHandler<UserEventModel> UserUpdateOccurred;
-        public event EventHandler<UserEventModel> UserTimeoutOccurred;
+        public event EventHandler<ChatUserEventModel> UserJoinOccurred;
+        public event EventHandler<ChatUserEventModel> UserLeaveOccurred;
+        public event EventHandler<ChatUserEventModel> UserUpdateOccurred;
+        public event EventHandler<ChatUserEventModel> UserTimeoutOccurred;
 
-        public event EventHandler<PollEventModel> PollStartOccurred;
-        public event EventHandler<PollEventModel> PollEndOccurred;
+        public event EventHandler<ChatPollEventModel> PollStartOccurred;
+        public event EventHandler<ChatPollEventModel> PollEndOccurred;
 
         public event EventHandler<Guid> DeleteMessageOccurred;
         public event EventHandler<uint> PurgeMessageOccurred;
@@ -39,11 +39,13 @@ namespace Mixer.Base
 
         internal uint CurrentPacketID { get; private set; }
 
-
         private ChannelChatModel channelChat;
 
         private ClientWebSocket webSocket = new ClientWebSocket();
         private UTF8Encoding encoder = new UTF8Encoding();
+
+        private bool connectSuccessful = false;
+        private bool authenticateSuccessful = false;
 
         private int bufferSize = 4096 * 20;
 
@@ -71,27 +73,52 @@ namespace Mixer.Base
             this.CurrentPacketID = 0;
         }
 
-        public async Task Connect()
+        public async Task<bool> Connect()
         {
             int totalEndpoints = this.channelChat.endpoints.Count();
             Random random = new Random();
             int endpointToUse = random.Next() % totalEndpoints;
 
-            await this.webSocket.ConnectAsync(new Uri(this.channelChat.endpoints[endpointToUse]), CancellationToken.None);
+            this.connectSuccessful = false;
+            this.EventOccurred += ConnectEventHandler;
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             this.Receive();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            await this.webSocket.ConnectAsync(new Uri(this.channelChat.endpoints[endpointToUse]), CancellationToken.None);
+
+            for (int i = 0; i < 10 && !this.connectSuccessful; i++)
+            {
+                await Task.Delay(500);
+            }
+
+            this.EventOccurred -= ConnectEventHandler;
+
+            return this.connectSuccessful;
         }
 
-        public async Task Authenticate()
+        public async Task<bool> Authenticate()
         {
             ChatMethodPacket packet = new ChatMethodPacket()
             {
                 method = "auth",
                 arguments = new JArray() { this.Channel.id.ToString(), this.User.id.ToString(), this.channelChat.authkey },
             };
+
+            this.authenticateSuccessful = false;
+            this.ReplyOccurred += AuthenticateEventHandler;
+
             await this.Send(packet);
+
+            for (int i = 0; i < 10 && !this.authenticateSuccessful; i++)
+            {
+                await Task.Delay(500);
+            }
+
+            this.ReplyOccurred -= AuthenticateEventHandler;
+
+            return this.authenticateSuccessful;
         }
 
         public async Task SendMessage(string message)
@@ -208,32 +235,53 @@ namespace Mixer.Base
 
         private async Task Receive()
         {
-            while (this.webSocket != null && this.webSocket.State == WebSocketState.Open)
+            await Task.Delay(100);
+            while (this.webSocket != null)
             {
-                byte[] buffer = new byte[this.bufferSize];
-                WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result != null)
+                if (this.webSocket.State == WebSocketState.Open)
                 {
-                    if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
+                    byte[] buffer = new byte[this.bufferSize];
+                    WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    if (result != null)
                     {
-                        string jsonBuffer = this.encoder.GetString(buffer);
-                        ChatPacket packet = JsonConvert.DeserializeObject<ChatPacket>(jsonBuffer);
-                        if (packet.type.Equals("reply"))
+                        if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                         {
-                            ChatReplyPacket replyPacket = JsonConvert.DeserializeObject<ChatReplyPacket>(jsonBuffer);
-                            this.OnReplyOccurred(replyPacket);
+                            string jsonBuffer = this.encoder.GetString(buffer);
+                            ChatPacket packet = JsonConvert.DeserializeObject<ChatPacket>(jsonBuffer);
+                            if (packet.type.Equals("reply"))
+                            {
+                                ChatReplyPacket replyPacket = JsonConvert.DeserializeObject<ChatReplyPacket>(jsonBuffer);
+                                this.OnReplyOccurred(replyPacket);
+                            }
+                            else if (packet.type.Equals("event"))
+                            {
+                                ChatEventPacket eventPacket = JsonConvert.DeserializeObject<ChatEventPacket>(jsonBuffer);
+                                this.OnEventOccurred(eventPacket);
+                            }
                         }
-                        else if (packet.type.Equals("event"))
+                        else
                         {
-                            ChatEventPacket eventPacket = JsonConvert.DeserializeObject<ChatEventPacket>(jsonBuffer);
-                            this.OnEventOccurred(eventPacket);
+                            this.OnDisconnectOccurred(result);
                         }
-                    }
-                    else
-                    {
-                        this.OnDisconnectOccurred(result);
                     }
                 }
+            }
+        }
+
+        private void ConnectEventHandler(object sender, ChatEventPacket e)
+        {
+            if (e.eventName.Equals("WelcomeEvent"))
+            {
+                this.connectSuccessful = true;
+            }
+        }
+
+        private void AuthenticateEventHandler(object sender, ChatReplyPacket e)
+        {
+            JToken value;
+            if (e.id == (this.CurrentPacketID - 1) && e.data.TryGetValue("authenticated", out value) && (bool)value)
+            {
+                this.authenticateSuccessful = true;
             }
         }
 
