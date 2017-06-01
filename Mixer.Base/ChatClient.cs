@@ -118,6 +118,11 @@ namespace Mixer.Base
 
             this.ReplyOccurred -= AuthenticateEventHandler;
 
+            if (this.authenticateSuccessful)
+            {
+                this.DisconnectOccurred += ChatClient_DisconnectOccurred;
+            }
+
             return this.authenticateSuccessful;
         }
 
@@ -209,8 +214,12 @@ namespace Mixer.Base
 
         public async Task Disconnect()
         {
-            await this.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-            this.Dispose();
+            try
+            {
+                await this.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                this.Dispose();
+            }
+            catch (Exception) { }
         }
 
         public void Dispose()
@@ -335,6 +344,15 @@ namespace Mixer.Base
                 case "ClearMessages":
                     this.SendSpecificEvent(eventPacket, this.ClearMessagesOccurred);
                     break;
+            }
+        }
+
+
+        private async void ChatClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
+        {
+            if (await this.Connect())
+            {
+                await this.Authenticate();
             }
         }
 
