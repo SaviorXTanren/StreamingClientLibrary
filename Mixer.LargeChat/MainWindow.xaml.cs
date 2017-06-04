@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -26,6 +27,7 @@ namespace Mixer.LargeChat
 
         private ObservableCollection<ChatMessage> chatMessages = new ObservableCollection<ChatMessage>();
         private List<TextBlock> chatTextBlocks = new List<TextBlock>();
+        private int viewerCount = 0;
 
         private SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromRgb(16, 21, 33));
 
@@ -82,6 +84,10 @@ namespace Mixer.LargeChat
                 this.chatClient.PurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
                 this.chatClient.DeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
                 this.chatClient.ClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
+
+                IEnumerable<ChatUserModel> users = await this.client.Chats.GetUsers(this.channel);
+                this.viewerCount = users.Count();
+                this.CurrentViewersTextBlock.Text = this.viewerCount.ToString();
 
                 if (await this.chatClient.Connect() && await this.chatClient.Authenticate())
                 {
@@ -152,17 +158,20 @@ namespace Mixer.LargeChat
 
         private void ChatClient_UserJoinOccurred(object sender, ChatUserEventModel e)
         {
-
+            this.viewerCount++;
+            this.CurrentViewersTextBlock.Text = this.viewerCount.ToString();
         }
 
         private void ChatClient_UserLeaveOccurred(object sender, ChatUserEventModel e)
         {
-
+            this.viewerCount--;
+            this.CurrentViewersTextBlock.Text = this.viewerCount.ToString();
         }
 
         private void ChatClient_UserTimeoutOccurred(object sender, ChatUserEventModel e)
         {
-
+            this.viewerCount--;
+            this.CurrentViewersTextBlock.Text = this.viewerCount.ToString();
         }
 
         private void ChatClient_UserUpdateOccurred(object sender, ChatUserEventModel e)
@@ -196,5 +205,7 @@ namespace Mixer.LargeChat
         }
 
         #endregion Chat Event Handlers
+
+
     }
 }

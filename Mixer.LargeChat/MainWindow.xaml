@@ -29,7 +29,25 @@
         </Grid>
 
         <Grid x:Name="ChatGrid" Visibility="Visible">
-            <ScrollViewer>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="10,0,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" FontSize="24" Foreground="White" FontWeight="Bold">Total Viewers:</TextBlock>
+                <TextBlock Grid.Column="2" x:Name="CurrentViewersTextBlock" FontSize="24" Foreground="White" FontWeight="Bold" />
+
+            </Grid>
+            
+            <ScrollViewer Grid.Row="1">
                 <StackPanel x:Name="ChatListStackPanel" />
             </ScrollViewer>
         </Grid>
