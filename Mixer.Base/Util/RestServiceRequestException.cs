@@ -8,6 +8,8 @@ namespace Mixer.Base.Util
     {
         public HttpStatusCode StatusCode { get; private set; }
 
+        public string Reason { get; private set; }
+
         public string Content { get; private set; }
 
         public RestServiceRequestException() : base() { }
@@ -20,6 +22,7 @@ namespace Mixer.Base.Util
             : this(response.ReasonPhrase)
         {
             this.StatusCode = response.StatusCode;
+            this.Reason = response.ReasonPhrase;
             this.Content = response.Content.ReadAsStringAsync().Result;
         }
     }

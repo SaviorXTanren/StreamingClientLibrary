@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Web;
+﻿using Mixer.Base.Util;
+using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -108,7 +109,7 @@ namespace Mixer.Base
                 }
                 else
                 {
-                    throw new HttpRequestException(string.Format("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase));
+                    throw new RestServiceRequestException(response);
                 }
             }
         }
@@ -167,7 +168,7 @@ namespace Mixer.Base
                 }
                 else
                 {
-                    throw new HttpRequestException(string.Format("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase));
+                    throw new RestServiceRequestException(response);
                 }
             }
         }
@@ -260,7 +261,7 @@ namespace Mixer.Base
                 }
                 else
                 {
-                    throw new HttpRequestException(string.Format("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase));
+                    throw new RestServiceRequestException(response);
                 }
             }
         }
