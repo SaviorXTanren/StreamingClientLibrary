@@ -58,6 +58,7 @@
     <Compile Include="ChannelsServiceUnitTests.cs" />
     <Compile Include="ChatClientUnitTests.cs" />
     <Compile Include="ChatsServiceUnitTests.cs" />
+    <Compile Include="InteractiveClientUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestBase.cs" />
     <Compile Include="UsersServiceUnitTests.cs" />

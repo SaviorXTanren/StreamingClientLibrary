@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatClient.cs" />
+    <Compile Include="InteractiveClient.cs" />
     <Compile Include="MixerClient.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
     <Compile Include="Model\Chat\ChatEventPacket.cs" />
@@ -55,6 +56,9 @@
     <Compile Include="Model\Chat\ChatPollEventModel.cs" />
     <Compile Include="Model\Chat\ChatUserEventModel.cs" />
     <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveMethodPacket.cs" />
+    <Compile Include="Model\Interactive\InteractivePacket.cs" />
+    <Compile Include="Model\Interactive\InteractiveReplyPacket.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="Web\AuthorizationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\HttpClientWrapper.cs" />
+    <Compile Include="Web\WebSocketClientBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
