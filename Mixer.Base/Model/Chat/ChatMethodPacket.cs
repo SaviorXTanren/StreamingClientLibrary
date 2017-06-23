@@ -8,6 +8,5 @@ namespace Mixer.Base.Model.Chat
 
         public string method { get; set; }
         public JArray arguments { get; set; }
-        public uint id { get; set; }
     }
 }

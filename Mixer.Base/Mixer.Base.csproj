@@ -60,6 +60,7 @@
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />
     <Compile Include="Model\Interactive\InteractiveMethodPacket.cs" />
     <Compile Include="Model\Interactive\InteractivePacket.cs" />
     <Compile Include="Model\Interactive\InteractiveReplyPacket.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Model\User\UserPreferencesModel.cs" />
     <Compile Include="Model\User\UserWithChannelModel.cs" />
     <Compile Include="Model\User\UserWithGroupsModel.cs" />
+    <Compile Include="Model\WebSocketPacket.cs" />
     <Compile Include="Services\ChannelsService.cs" />
     <Compile Include="Model\Channel\ChannelAdvancedModel.cs" />
     <Compile Include="Model\Channel\ChannelModel.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Services\InteractiveService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\UsersService.cs" />
+    <Compile Include="Util\DateTimeHelper.cs" />
     <Compile Include="Util\RestServiceRequestException.cs" />
     <Compile Include="Util\Validator.cs" />
     <Compile Include="Web\AuthorizationToken.cs" />

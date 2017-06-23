@@ -1,9 +1,6 @@
 ﻿namespace Mixer.Base.Model.Interactive
 {
-    public class InteractivePacket
+    public class InteractivePacket : WebSocketPacket
     {
-        public string type { get; set; }
-
-        public uint id { get; set; }
     }
 }

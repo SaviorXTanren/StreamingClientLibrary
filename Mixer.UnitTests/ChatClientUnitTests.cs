@@ -227,6 +227,8 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerClient client) =>
             {
+                this.ClearRepliesAndEvents();
+
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
                 ChatClient chatClient = await ChatClient.CreateFromChannel(client, channel);
 

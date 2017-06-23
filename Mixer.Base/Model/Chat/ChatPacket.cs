@@ -1,7 +1,6 @@
 ﻿namespace Mixer.Base.Model.Chat
 {
-    public class ChatPacket
+    public class ChatPacket : WebSocketPacket
     {
-        public string type { get; set; }
     }
 }

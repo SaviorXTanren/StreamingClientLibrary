@@ -8,6 +8,5 @@ namespace Mixer.Base.Model.Chat
 
         public string error { get; set; }
         public JObject data { get; set; }
-        public uint id { get; set; }
     }
 }

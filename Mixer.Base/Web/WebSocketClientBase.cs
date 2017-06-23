@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Mixer.Base.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.WebSockets;
@@ -15,12 +18,11 @@ namespace Mixer.Base.Web
 
         internal uint CurrentPacketID { get; private set; }
 
-        private ClientWebSocket webSocket = new ClientWebSocket();
+        protected ClientWebSocket webSocket = new ClientWebSocket();
         private UTF8Encoding encoder = new UTF8Encoding();
 
         protected bool connectSuccessful { get; set; }
-
-        private bool authenticateSuccessful = false;
+        protected bool authenticateSuccessful { get; set; }
 
         private int bufferSize = 4096 * 20;
 
@@ -31,8 +33,6 @@ namespace Mixer.Base.Web
 
         protected async Task<bool> ConnectInternal(string endpoint)
         {
-            this.connectSuccessful = false;
-
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             this.ReceiveInternal();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -48,15 +48,10 @@ namespace Mixer.Base.Web
                 StreamReader reader = new StreamReader(response.GetResponseStream());
                 string responseString = reader.ReadToEnd();
 
-                throw ex;
+                throw new WebSocketException(string.Format("{0} - {1} - {2}", response.StatusCode, response.StatusDescription, responseString), ex);
             }
 
-            for (int i = 0; i < 10 && !this.connectSuccessful; i++)
-            {
-                await Task.Delay(500);
-            }
-
-            return this.connectSuccessful;
+            return true;
         }
 
         public async Task Disconnect()
@@ -77,14 +72,33 @@ namespace Mixer.Base.Web
             }
         }
 
-        protected async Task SendInternal(object packet)
+        protected async Task Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
+            if (!this.connectSuccessful)
+            {
+                throw new InvalidOperationException("Client is not connected");
+            }
+
+            if (checkIfAuthenticated && !this.authenticateSuccessful)
+            {
+                throw new InvalidOperationException("Client is not authenticated");
+            }
+
+            packet.id = this.CurrentPacketID;
             string packetJson = JsonConvert.SerializeObject(packet);
             byte[] buffer = this.encoder.GetBytes(packetJson);
 
             await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
 
             this.CurrentPacketID++;
+        }
+
+        protected async Task WaitForResponse(Func<bool> valueToCheck)
+        {
+            for (int i = 0; i < 10 && !valueToCheck(); i++)
+            {
+                await Task.Delay(500);
+            }
         }
 
         protected abstract void Receive(string jsonBuffer);

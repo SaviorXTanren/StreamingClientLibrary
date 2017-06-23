@@ -37,8 +37,6 @@ namespace Mixer.Base
 
         private ChannelChatModel channelChat;
 
-        private bool authenticateSuccessful = false;
-
         public static async Task<ChatClient> CreateFromChannel(MixerClient client, ChannelModel channel)
         {
             Validator.ValidateVariable(client, "client");
@@ -63,6 +61,8 @@ namespace Mixer.Base
 
         public async Task<bool> Connect()
         {
+            this.DisconnectOccurred -= ChatClient_DisconnectOccurred;
+
             int totalEndpoints = this.channelChat.endpoints.Count();
             Random random = new Random();
             int endpointToUse = random.Next() % totalEndpoints;
@@ -71,7 +71,14 @@ namespace Mixer.Base
 
             await this.ConnectInternal(this.channelChat.endpoints[endpointToUse]);
 
+            await this.WaitForResponse(() => { return this.connectSuccessful; });
+
             this.EventOccurred -= ConnectEventHandler;
+
+            if (this.connectSuccessful)
+            {
+                this.DisconnectOccurred += ChatClient_DisconnectOccurred;
+            }
 
             return this.connectSuccessful;
         }
@@ -87,19 +94,11 @@ namespace Mixer.Base
             this.authenticateSuccessful = false;
             this.ReplyOccurred += AuthenticateEventHandler;
 
-            await this.Send(packet);
+            await this.Send(packet, checkIfAuthenticated: false);
 
-            for (int i = 0; i < 10 && !this.authenticateSuccessful; i++)
-            {
-                await Task.Delay(500);
-            }
+            await this.WaitForResponse(() => { return this.authenticateSuccessful; });
 
             this.ReplyOccurred -= AuthenticateEventHandler;
-
-            if (this.authenticateSuccessful)
-            {
-                this.DisconnectOccurred += ChatClient_DisconnectOccurred;
-            }
 
             return this.authenticateSuccessful;
         }
@@ -203,12 +202,6 @@ namespace Mixer.Base
                 ChatEventPacket eventPacket = JsonConvert.DeserializeObject<ChatEventPacket>(jsonBuffer);
                 this.OnEventOccurred(eventPacket);
             }
-        }
-
-        private async Task Send(ChatMethodPacket packet)
-        {
-            packet.id = this.CurrentPacketID;
-            await this.SendInternal(packet);
         }
 
         private void ConnectEventHandler(object sender, ChatEventPacket e)
