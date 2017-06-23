@@ -39,11 +39,11 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetInteractive2Hosts()
+        public void GetInteractiveHosts()
         {
             this.TestWrapper(async (MixerClient client) =>
             {
-                IEnumerable<string> addresses = await client.Interactive.GetInteractive2Hosts();
+                IEnumerable<string> addresses = await client.Interactive.GetInteractiveHosts();
 
                 Assert.IsNotNull(addresses);
                 Assert.IsTrue(addresses.Count() > 0);

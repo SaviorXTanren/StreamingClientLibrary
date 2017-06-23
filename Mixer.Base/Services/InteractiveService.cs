@@ -23,7 +23,7 @@ namespace Mixer.Base.Services
             return await this.GetAsync<InteractiveRobotConnectionModel>("interactive/" + channel.id + "/robot");
         }
 
-        public async Task<IEnumerable<string>> GetInteractive2Hosts()
+        public async Task<IEnumerable<string>> GetInteractiveHosts()
         {
             List<string> addresses = new List<string>();
             string result = await this.GetStringAsync("interactive/hosts");

@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
+using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -35,7 +37,19 @@ namespace Mixer.Base.Web
             this.ReceiveInternal();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
+            try
+            {
+                await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
+            }
+            catch (WebSocketException ex)
+            {
+                WebException webException = (WebException)ex.InnerException;
+                HttpWebResponse response = (HttpWebResponse)webException.Response;
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                string responseString = reader.ReadToEnd();
+
+                throw ex;
+            }
 
             for (int i = 0; i < 10 && !this.connectSuccessful; i++)
             {
