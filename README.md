@@ -12,6 +12,7 @@ These are the current planned features to be developed in priority order:
 - Finish full REST web API functionality with associated unit tests
 - Develop interactive API functionality, unit tests, and sample app
 - Develop full-scale sample app using both REST web APIs and interactive APIs
+- Add ViewModels to all APIs to make ramp-up development work easier and put less focus on knowing the dev docs top-to-bottom
 
 ## How do I get started using it?
 There are two sample apps created the help showcase some the setup needed and how to use the APIs. Additionally, there are a large serious of unit tests that go through all of the individual functionality that you can look at. I plan on creating more formal documentation soon.
