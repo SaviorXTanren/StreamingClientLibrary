@@ -56,9 +56,15 @@
     <Compile Include="Model\Chat\ChatPollEventModel.cs" />
     <Compile Include="Model\Chat\ChatUserEventModel.cs" />
     <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
     <Compile Include="Model\Interactive\InteractiveMethodPacket.cs" />
     <Compile Include="Model\Interactive\InteractivePacket.cs" />
     <Compile Include="Model\Interactive\InteractiveReplyPacket.cs" />
+    <Compile Include="Model\Interactive\InteractiveRobotConnectionModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveVersionModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />
@@ -83,6 +89,7 @@
     <Compile Include="Model\User\UserGroupModel.cs" />
     <Compile Include="Model\User\UserModel.cs" />
     <Compile Include="Services\ChatsService.cs" />
+    <Compile Include="Services\InteractiveService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Util\RestServiceRequestException.cs" />

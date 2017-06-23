@@ -44,6 +44,9 @@ namespace Mixer.UnitTests
                     //ClientScopeEnum.chat__view_deleted,
                     ClientScopeEnum.chat__whisper,
 
+                    ClientScopeEnum.interactive__manage__self,
+                    ClientScopeEnum.interactive__robot__self,
+
                     ClientScopeEnum.user__details__self,
                     ClientScopeEnum.user__log__self,
                     ClientScopeEnum.user__notification__self,

@@ -12,6 +12,7 @@ namespace Mixer.Base
 
         public ChannelsService Channels { get; private set; }
         public ChatsService Chats { get; private set; }
+        public InteractiveService Interactive { get; private set; }
         public UsersService Users { get; private set; }
 
         public static async Task<MixerClient> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<string> codeCallback)
@@ -49,6 +50,7 @@ namespace Mixer.Base
 
             this.Channels = new ChannelsService(this);
             this.Chats = new ChatsService(this);
+            this.Interactive = new InteractiveService(this);
             this.Users = new UsersService(this);
         }
 

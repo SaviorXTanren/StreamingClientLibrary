@@ -50,7 +50,7 @@ namespace Mixer.Base
             return new ChatClient(channel, user, chat);
         }
 
-        public ChatClient(ChannelModel channel, UserModel user, ChannelChatModel channelChat)
+        private ChatClient(ChannelModel channel, UserModel user, ChannelChatModel channelChat)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
