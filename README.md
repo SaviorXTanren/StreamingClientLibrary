@@ -24,6 +24,8 @@ Just head over to the https://github.com/SaviorXTanren/mixer-client-csharp/issue
 Submit feature requests at the https://github.com/SaviorXTanren/mixer-client-csharp/issues page or feel free to develop the feature yourself and submit a pull request at https://github.com/SaviorXTanren/mixer-client-csharp/pulls! I'm happy to assist anyone if they're interested in developing something as well.
 
 ## License
+MIT License
+
 Copyright (c) 2017 Matthew Olivo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
