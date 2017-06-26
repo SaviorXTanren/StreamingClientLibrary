@@ -72,7 +72,7 @@ namespace Mixer.Base.Web
             }
         }
 
-        protected async Task Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        protected async Task Send(WebSocketPacket packet, bool checkIfAuthenticated = true, uint packetID = 0)
         {
             if (!this.connectSuccessful)
             {
@@ -84,13 +84,15 @@ namespace Mixer.Base.Web
                 throw new InvalidOperationException("Client is not authenticated");
             }
 
-            packet.id = this.CurrentPacketID;
+            packet.id = packetID > 0 ? packetID : getPacketID();
             string packetJson = JsonConvert.SerializeObject(packet);
             byte[] buffer = this.encoder.GetBytes(packetJson);
-
             await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-
+        }
+        public uint getPacketID()
+        {
             this.CurrentPacketID++;
+            return CurrentPacketID;
         }
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)
