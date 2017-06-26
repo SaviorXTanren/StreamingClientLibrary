@@ -16,11 +16,23 @@ namespace Mixer.Base
     public class InteractiveClient : WebSocketClientBase
     {
         public event EventHandler<InteractiveReplyPacket> ReplyOccurred;
+
         public event EventHandler<InteractiveMethodPacket> MethodOccurred;
 
         public event EventHandler<InteractiveIssueMemoryWarningModel> IssueMemoryWarningOccurred;
 
+        public event EventHandler<InteractiveOnParticipantLeaveModel> OnParticipantLeaveOccurred;
+
+        public event EventHandler<InteractiveOnParticipantJoinModel> OnParticipantJoinOccurred;
+
+        public event EventHandler<InteractiveOnParticipantUpdateModel> OnParticipantUpdateOccurred;
+
+        public event EventHandler<InteractiveError> OnError;
+
+        public event EventHandler<InteractiveGetScenes> OnReplyGetScenes;
+
         public ChannelModel Channel { get; private set; }
+
         public InteractiveGameListingModel InteractiveGame { get; private set; }
 
         private IEnumerable<string> interactiveConnections;
@@ -124,6 +136,16 @@ namespace Mixer.Base
             }
         }
 
+        public async Task GetScenes()
+        {
+            InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getScenes" };
+            uint packetID = getPacketID();
+            OutstandingCallbacks.Add(packetID, "getScenes");
+            await this.Send(packet, packetID: packetID);
+        }
+
+        private Dictionary<uint, string> OutstandingCallbacks = new Dictionary<uint, string>();
+
         private void HelloMethodHandler(object sender, InteractiveMethodPacket e)
         {
             if (e.method.Equals("hello"))
@@ -147,6 +169,21 @@ namespace Mixer.Base
             {
                 this.ReplyOccurred(this, replyPacket);
             }
+            if (replyPacket.error != null && OnError != null)
+            {
+                OnError(this, replyPacket.error);
+            }
+            else if (OutstandingCallbacks.ContainsKey(replyPacket.id))
+            {
+                switch (OutstandingCallbacks[replyPacket.id])
+                {
+                    case "getScenes":
+                        SendSpecificReplay(replyPacket, OnReplyGetScenes);
+                        break;
+                }
+
+                OutstandingCallbacks.Remove(replyPacket.id);
+            }
         }
 
         private void OnMethodOccurred(InteractiveMethodPacket methodPacket)
@@ -159,7 +196,19 @@ namespace Mixer.Base
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod<InteractiveIssueMemoryWarningModel>(methodPacket, IssueMemoryWarningOccurred);
+                    this.SendSpecificMethod(methodPacket, IssueMemoryWarningOccurred);
+                    break;
+
+                case "onParticipantLeave":
+                    this.SendSpecificMethod(methodPacket, OnParticipantLeaveOccurred);
+                    break;
+
+                case "onParticipantJoin":
+                    this.SendSpecificMethod(methodPacket, OnParticipantJoinOccurred);
+                    break;
+
+                case "onParticipantUpdate":
+                    this.SendSpecificMethod(methodPacket, OnParticipantUpdateOccurred);
                     break;
             }
         }
@@ -177,6 +226,14 @@ namespace Mixer.Base
             if (eventHandler != null)
             {
                 eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
+            }
+        }
+
+        private void SendSpecificReplay<T>(InteractiveReplyPacket replyPacket, EventHandler<T> eventHandler)
+        {
+            if (eventHandler != null)
+            {
+                eventHandler(this, JsonConvert.DeserializeObject<T>(replyPacket.result.ToString()));
             }
         }
     }
