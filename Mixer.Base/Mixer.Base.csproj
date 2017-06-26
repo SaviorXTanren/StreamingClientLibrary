@@ -61,6 +61,7 @@
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGetAllParticipants.cs" />
     <Compile Include="Model\Interactive\InteractiveGetScenes.cs" />
     <Compile Include="Model\Interactive\InteractiveGroup.cs" />
     <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />

@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="Mixer Interactive App" Height="600" Width="800">
     <Grid>
-        <Grid x:Name="LoginGrid" Visibility="Visible">
+        <Grid x:Name="LoginGrid" Visibility="Collapsed">
             <Grid  HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-              
+
                 <Button Grid.Row="0" x:Name="LoginButton" Width="100" Height="40" Click="LoginButton_Click">Login</Button>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -42,10 +42,39 @@
         <Grid x:Name="MainGrid" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" HorizontalAlignment="Left">
-                <Button Margin="10"  x:Name="GetScenes" Width="80" Click="GetScenes_Click">Get Scenes</Button>
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10"  x:Name="GetScenes" Width="80" Click="GetScenes_Click">Get Scenes</Button>
+
+                    <Button Margin="10"  x:Name="GetAllParticipants" Width="80" Click="GetAllParticipants_Click">Get Participants</Button>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <ScrollViewer Grid.Row="0" Grid.Column="0"  >
+                        <ListView  x:Name="Replies"/>
+                    </ScrollViewer>
+                    
+                    
+                     
+
+
+                    <Grid Grid.Column="1">
+                        <ScrollViewer>
+                            <ListView x:Name="ParticipantList" />
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

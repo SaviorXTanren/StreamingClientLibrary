@@ -19,6 +19,8 @@ namespace Mixer.Base
 
         public event EventHandler<InteractiveMethodPacket> MethodOccurred;
 
+        public event EventHandler<string> ReceiveOccurred;
+
         public event EventHandler<InteractiveIssueMemoryWarningModel> IssueMemoryWarningOccurred;
 
         public event EventHandler<InteractiveOnParticipantLeaveModel> OnParticipantLeaveOccurred;
@@ -29,13 +31,21 @@ namespace Mixer.Base
 
         public event EventHandler<InteractiveError> OnError;
 
+        
+
+         
+
         public event EventHandler<InteractiveGetScenes> OnReplyGetScenes;
+
+        public event EventHandler<InteractiveGetAllParticipants> OnReplyGetAllParticipants;
 
         public ChannelModel Channel { get; private set; }
 
         public InteractiveGameListingModel InteractiveGame { get; private set; }
 
         private IEnumerable<string> interactiveConnections;
+
+        private Dictionary<uint, string> registeredCallbacks = new Dictionary<uint, string>();
 
         public static async Task<InteractiveClient> CreateFromChannel(MixerClient client, ChannelModel channel, InteractiveGameListingModel interactiveGame)
         {
@@ -123,6 +133,11 @@ namespace Mixer.Base
 
         protected override void Receive(string jsonBuffer)
         {
+
+            if(ReceiveOccurred != null)
+            {
+                ReceiveOccurred(this, jsonBuffer);
+            }
             InteractivePacket packet = JsonConvert.DeserializeObject<InteractivePacket>(jsonBuffer);
             if (packet.type.Equals("reply"))
             {
@@ -140,11 +155,20 @@ namespace Mixer.Base
         {
             InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getScenes" };
             uint packetID = getPacketID();
-            OutstandingCallbacks.Add(packetID, "getScenes");
+            registeredCallbacks.Add(packetID, "getScenes");
             await this.Send(packet, packetID: packetID);
         }
 
-        private Dictionary<uint, string> OutstandingCallbacks = new Dictionary<uint, string>();
+        public async Task GetAllParticipants(uint from = 0)
+        {
+
+            JObject parameters = new JObject();
+            parameters.Add("from", from);
+            InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getAllParticipants", parameters = parameters };
+            uint packetID = getPacketID();
+            registeredCallbacks.Add(packetID, "getAllParticipants");
+            await this.Send(packet, packetID: packetID);
+        }
 
         private void HelloMethodHandler(object sender, InteractiveMethodPacket e)
         {
@@ -173,16 +197,21 @@ namespace Mixer.Base
             {
                 OnError(this, replyPacket.error);
             }
-            else if (OutstandingCallbacks.ContainsKey(replyPacket.id))
+            else if (registeredCallbacks.ContainsKey(replyPacket.id))
             {
-                switch (OutstandingCallbacks[replyPacket.id])
+                switch (registeredCallbacks[replyPacket.id])
                 {
                     case "getScenes":
-                        SendSpecificReplay(replyPacket, OnReplyGetScenes);
+                        SendSpecificReply(replyPacket, OnReplyGetScenes);
                         break;
+                    case "getAllParticipants":
+                        SendSpecificReply(replyPacket, OnReplyGetAllParticipants);
+                        break;
+
+
                 }
 
-                OutstandingCallbacks.Remove(replyPacket.id);
+                registeredCallbacks.Remove(replyPacket.id);
             }
         }
 
@@ -229,7 +258,7 @@ namespace Mixer.Base
             }
         }
 
-        private void SendSpecificReplay<T>(InteractiveReplyPacket replyPacket, EventHandler<T> eventHandler)
+        private void SendSpecificReply<T>(InteractiveReplyPacket replyPacket, EventHandler<T> eventHandler)
         {
             if (eventHandler != null)
             {

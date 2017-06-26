@@ -4,8 +4,10 @@ using Mixer.Base.Model.Interactive;
 using Mixer.Base.Model.User;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 
 namespace Mixer.Interactive
@@ -19,7 +21,10 @@ namespace Mixer.Interactive
         private ExpandedChannelModel channel;
         private PrivatePopulatedUserModel user;
         private InteractiveClient interactiveClient;
-        private string versionID;
+        private uint versionID;
+
+        private ObservableCollection<Reply> replies = new ObservableCollection<Reply>();
+        private ObservableCollection<Participant> participants = new ObservableCollection<Participant>();
 
         public MainWindow()
         {
@@ -32,7 +37,7 @@ namespace Mixer.Interactive
         {
             this.LoginButton.IsEnabled = false;
 
-            versionID = VersionTextBox.Text;
+            versionID = Convert.ToUInt32(VersionTextBox.Text);
 
             string clientID = ConfigurationManager.AppSettings["ClientID"];
 
@@ -60,18 +65,20 @@ namespace Mixer.Interactive
 
                 InteractiveGameListingModel game = new InteractiveGameListingModel()
                 {
-                    versions = new InteractiveVersionModel[] { new InteractiveVersionModel() { id = 70104 } }
+                    versions = new InteractiveVersionModel[] { new InteractiveVersionModel() { id = versionID } }
                 };
 
                 this.interactiveClient = await InteractiveClient.CreateFromChannel(this.client, this.channel, game); //ToDo - Prompt For Version Number
 
                 this.interactiveClient.ReplyOccurred += InteractiveClient_ReplyOccurred;
                 this.interactiveClient.MethodOccurred += InteractiveClient_MethodOccured;
+                this.interactiveClient.ReceiveOccurred += InteractiveClient_ReceiveOccurred;
 
                 this.interactiveClient.IssueMemoryWarningOccurred += InteractiveClient_IssueMemoryWarningOccurred;
                 this.interactiveClient.OnParticipantLeaveOccurred += InteractiveClient_OnParticipantLeaveOccurred;
                 this.interactiveClient.OnParticipantJoinOccurred += InteractiveClient_OnParticipantJoinOccurred;
                 this.interactiveClient.OnParticipantUpdateOccurred += InteractiveClient_OnParticipantUpdateOccurred;
+                this.interactiveClient.OnReplyGetAllParticipants += InteractiveClient_OnReplyGetAllParticipants;
                 this.interactiveClient.OnReplyGetScenes += InteractiveClient_OnReplyGetScenes;
 
                 this.interactiveClient.OnError += InteractiveClient_OnError;
@@ -92,6 +99,9 @@ namespace Mixer.Interactive
             this.LoginGrid.Visibility = Visibility.Visible;
 
             this.MainGrid.Visibility = Visibility.Collapsed;
+
+            this.ParticipantList.ItemsSource = participants;
+            this.Replies.ItemsSource = replies;
         }
 
         private async void MainWindow_Closed(object sender, EventArgs e)
@@ -104,28 +114,72 @@ namespace Mixer.Interactive
 
         #region Interactive Event Handler
 
+        private void InteractiveClient_ReceiveOccurred(object sender, string e)
+        {
+            replies.Insert(0, new Reply() { id = 0, message = e });
+        }
+
         private void InteractiveClient_ReplyOccurred(object sender, InteractiveReplyPacket e)
         {
+            replies.Insert(0, new Reply() { id = e.id, message = e.result.ToString() });
         }
 
         private void InteractiveClient_MethodOccured(object sender, InteractiveMethodPacket e)
         {
+            replies.Insert(0, new Reply() { id = e.id, message = e.method.ToString() });
         }
 
         private void InteractiveClient_IssueMemoryWarningOccurred(object sender, InteractiveIssueMemoryWarningModel e)
         {
         }
 
+        private void InteractiveClient_OnReplyGetAllParticipants(object sender, InteractiveGetAllParticipants e)
+        {
+            InteractiveGetAllParticipants participants = e;
+        }
+
         private void InteractiveClient_OnParticipantLeaveOccurred(object sender, InteractiveOnParticipantLeaveModel e)
         {
+            List<uint> userIDs = e.participants.Select(x => x.userID).ToList();
+            List<Participant> foundParticipants = participants.Where(x => userIDs.Contains(x.userID)).ToList();
+            foreach (Participant p in foundParticipants)
+            {
+                participants.Remove(p);
+            }
         }
 
         private void InteractiveClient_OnParticipantJoinOccurred(object sender, InteractiveOnParticipantJoinModel e)
         {
+            foreach (InteractiveParticipantModel p in e.participants)
+            {
+                if (participants.SingleOrDefault(x => x.userID == p.userID) == null)
+                {
+                    participants.Add(new Participant()
+                    {
+                        userID = p.userID,
+                        username = p.username,
+                        connectedAt = p.connectedAt,
+                        lastInputAt = p.lastInputAt,
+                        level = p.level,
+                    });
+                }
+            }
         }
 
         private void InteractiveClient_OnParticipantUpdateOccurred(object sender, InteractiveOnParticipantUpdateModel e)
         {
+            foreach (InteractiveParticipantModel p in e.participants)
+            {
+                Participant found = participants.SingleOrDefault(x => x.userID == p.userID);
+                if (found != null)
+                {
+                    found.userID = p.userID;
+                    found.username = p.username;
+                    found.connectedAt = p.connectedAt;
+                    found.lastInputAt = p.lastInputAt;
+                    found.level = p.level;
+                }
+            }
         }
 
         private void InteractiveClient_OnReplyGetScenes(object sender, InteractiveGetScenes e)
@@ -142,7 +196,12 @@ namespace Mixer.Interactive
 
         private void GetScenes_Click(object sender, RoutedEventArgs e)
         {
-            interactiveClient.GetScenes().Wait();
+            interactiveClient.GetScenes().Wait(200);
+        }
+
+        private void GetAllParticipants_Click(object sender, RoutedEventArgs e)
+        {
+            interactiveClient.GetAllParticipants().Wait(200);
         }
     }
 }
