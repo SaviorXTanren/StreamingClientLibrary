@@ -17,21 +17,3 @@ namespace Mixer.Base.Model.Interactive
         public JObject meta { get; set; }
     }
 }
-
-/*
- * "sessionID": "efe5e1d6-a870-4f77-b7e4-1cfaf30b097e",
-"etag": "54600913",
-"userID": 146,
-"username": "connor",
-"level": 67,
-"lastInputAt": 1484763854277,
-"connectedAt": 1484763846242,
-"disabled": false,
-"groupID": "default",
-"meta": {
-"is_awesome": {
-"etag": 37849560,
-"value": true
-}
-}
-*/

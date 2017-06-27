@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveError
+    public class InteractiveErrorModel
     {
         public uint code { get; set; }
         public string message { get; set; }

@@ -15,36 +15,22 @@ namespace Mixer.Base
 {
     public class InteractiveClient : WebSocketClientBase
     {
-        public event EventHandler<InteractiveReplyPacket> ReplyOccurred;
+        public event EventHandler<InteractiveReplyPacket> OnReply;
+        public event EventHandler<InteractiveMethodPacket> OnMethod;
+        public event EventHandler<InteractiveErrorModel> OnError;
 
-        public event EventHandler<InteractiveMethodPacket> MethodOccurred;
-
-        public event EventHandler<string> ReceiveOccurred;
-
-        public event EventHandler<InteractiveIssueMemoryWarningModel> IssueMemoryWarningOccurred;
-
-        public event EventHandler<InteractiveOnParticipantLeaveModel> OnParticipantLeaveOccurred;
-
-        public event EventHandler<InteractiveOnParticipantJoinModel> OnParticipantJoinOccurred;
-
-        public event EventHandler<InteractiveOnParticipantUpdateModel> OnParticipantUpdateOccurred;
-
-        public event EventHandler<InteractiveError> OnError;
-
-        
-
-         
-
+        public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarning;
         public event EventHandler<InteractiveGetScenes> OnReplyGetScenes;
 
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantLeave;
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantJoin;
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantUpdate;
         public event EventHandler<InteractiveGetAllParticipants> OnReplyGetAllParticipants;
 
+
         public ChannelModel Channel { get; private set; }
-
         public InteractiveGameListingModel InteractiveGame { get; private set; }
-
         private IEnumerable<string> interactiveConnections;
-
         private Dictionary<uint, string> registeredCallbacks = new Dictionary<uint, string>();
 
         public static async Task<InteractiveClient> CreateFromChannel(MixerClient client, ChannelModel channel, InteractiveGameListingModel interactiveGame)
@@ -85,13 +71,13 @@ namespace Mixer.Base
             Random random = new Random();
             int endpointToUse = random.Next() % totalEndpoints;
 
-            this.MethodOccurred += HelloMethodHandler;
+            this.OnMethod += HelloMethodHandler;
 
             await this.ConnectInternal(this.interactiveConnections.ElementAt(endpointToUse));
 
             await this.WaitForResponse(() => { return this.connectSuccessful; });
 
-            this.MethodOccurred -= HelloMethodHandler;
+            this.OnMethod -= HelloMethodHandler;
 
             if (this.connectSuccessful)
             {
@@ -105,7 +91,7 @@ namespace Mixer.Base
         {
             this.authenticateSuccessful = false;
 
-            this.MethodOccurred += OnReadyMethodHandler;
+            this.OnMethod += OnReadyMethodHandler;
 
             JObject parameters = new JObject();
             parameters.Add("isReady", true);
@@ -120,7 +106,7 @@ namespace Mixer.Base
 
             await this.WaitForResponse(() => { return this.authenticateSuccessful; });
 
-            this.MethodOccurred -= OnReadyMethodHandler;
+            this.OnMethod -= OnReadyMethodHandler;
 
             return this.authenticateSuccessful;
         }
@@ -133,11 +119,6 @@ namespace Mixer.Base
 
         protected override void Receive(string jsonBuffer)
         {
-
-            if(ReceiveOccurred != null)
-            {
-                ReceiveOccurred(this, jsonBuffer);
-            }
             InteractivePacket packet = JsonConvert.DeserializeObject<InteractivePacket>(jsonBuffer);
             if (packet.type.Equals("reply"))
             {
@@ -159,9 +140,11 @@ namespace Mixer.Base
             await this.Send(packet, packetID: packetID);
         }
 
+
         public async Task GetAllParticipants(uint from = 0)
         {
-
+            /* Spec p.19-20, 'from' is used to indicate earliest connect timestamp of the Participants. 
+             * Initial request should be at 0 and each subsequent call should be max participant 'connectedAt' per result set */
             JObject parameters = new JObject();
             parameters.Add("from", from);
             InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getAllParticipants", parameters = parameters };
@@ -189,13 +172,13 @@ namespace Mixer.Base
 
         private void OnReplyOccurred(InteractiveReplyPacket replyPacket)
         {
-            if (this.ReplyOccurred != null)
+            if (this.OnReply != null)
             {
-                this.ReplyOccurred(this, replyPacket);
+                this.OnReply(this, replyPacket);
             }
             if (replyPacket.error != null && OnError != null)
             {
-                OnError(this, replyPacket.error);
+                OnError(this, replyPacket.error); //Stop Attempting To Process And Return Error
             }
             else if (registeredCallbacks.ContainsKey(replyPacket.id))
             {
@@ -217,27 +200,27 @@ namespace Mixer.Base
 
         private void OnMethodOccurred(InteractiveMethodPacket methodPacket)
         {
-            if (this.MethodOccurred != null)
+            if (this.OnMethod != null)
             {
-                this.MethodOccurred(this, methodPacket);
+                this.OnMethod(this, methodPacket);
             }
 
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod(methodPacket, IssueMemoryWarningOccurred);
+                    this.SendSpecificMethod(methodPacket, OnIssueMemoryWarning);
                     break;
 
                 case "onParticipantLeave":
-                    this.SendSpecificMethod(methodPacket, OnParticipantLeaveOccurred);
+                    this.SendSpecificMethod(methodPacket, OnParticipantLeave);
                     break;
 
                 case "onParticipantJoin":
-                    this.SendSpecificMethod(methodPacket, OnParticipantJoinOccurred);
+                    this.SendSpecificMethod(methodPacket, OnParticipantJoin);
                     break;
 
                 case "onParticipantUpdate":
-                    this.SendSpecificMethod(methodPacket, OnParticipantUpdateOccurred);
+                    this.SendSpecificMethod(methodPacket, OnParticipantUpdate);
                     break;
             }
         }

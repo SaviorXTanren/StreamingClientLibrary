@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveScene
+   public class InteractiveGroupModel
     {
-
-        public string sceneID { get; set; }
+        public string groupID { get; set; }
         public string etag { get; set; }
-        public List<InteractiveControl> controls { get; set; }
-        public List<InteractiveGroup> groups { get; set; }
-
+        public string sceneID { get; set; }
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Model.Interactive
 {
-   public class InteractiveOnParticipantUpdateModel
+   public class InteractiveParticipantChangedModel
     {
-        public List<InteractiveParticipantModel> participants{ get; set; }
+        public List<InteractiveParticipantModel> participants { get; set; }
     }
 }

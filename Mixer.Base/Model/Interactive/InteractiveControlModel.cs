@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveControl
+    public class InteractiveControlModel
     {
         public string controlID { get; set; }
         public string etag { get; set; }

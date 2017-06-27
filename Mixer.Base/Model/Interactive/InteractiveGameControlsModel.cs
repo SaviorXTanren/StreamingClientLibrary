@@ -10,10 +10,10 @@ namespace Mixer.Base.Model.Interactive
     public class InteractiveGameControlsSceneModel
     {
         public string sceneID { get; set; }
-        public InteractiveControlModel[] controls { get; set; }
+        public InteractiveGameControlModel[] controls { get; set; }
     }
 
-    public class InteractiveControlModel
+    public class InteractiveGameControlModel
     {
         public string kind { get; set; }
         public string controlID { get; set; }

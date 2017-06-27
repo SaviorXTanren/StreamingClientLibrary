@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Model.Interactive
 {
-   public class InteractiveOnParticipantLeaveModel
+   public class InteractiveSceneDeleteModel
     {
-        public List<InteractiveParticipantModel> participants{ get; set; }
+        string sceneID { get; set; }
+        string reassignSceneID { get; set; }
     }
 }

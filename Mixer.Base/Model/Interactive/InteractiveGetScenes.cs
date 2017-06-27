@@ -8,6 +8,6 @@ namespace Mixer.Base.Model.Interactive
 {
     public class InteractiveGetScenes
     {
-        public List<InteractiveScene> scenes;
+        public List<InteractiveSceneModel> scenes;
     }
 }
