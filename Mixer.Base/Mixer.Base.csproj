@@ -57,7 +57,7 @@
     <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveError.cs" />
+    <Compile Include="Model\Interactive\InteractiveErrorModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
