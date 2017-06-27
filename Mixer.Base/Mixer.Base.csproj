@@ -31,8 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,14 +56,23 @@
     <Compile Include="Model\Chat\ChatUserEventModel.cs" />
     <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveErrorModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGetAllParticipants.cs" />
+    <Compile Include="Model\Interactive\InteractiveGetScenes.cs" />
+    <Compile Include="Model\Interactive\InteractiveGroupModel.cs" />
     <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />
     <Compile Include="Model\Interactive\InteractiveMethodPacket.cs" />
+    <Compile Include="Model\Interactive\InteractiveSceneDeleteModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveParticipantChangedModel.cs" />
     <Compile Include="Model\Interactive\InteractivePacket.cs" />
+    <Compile Include="Model\Interactive\InteractiveParticipantModel.cs" />
     <Compile Include="Model\Interactive\InteractiveReplyPacket.cs" />
     <Compile Include="Model\Interactive\InteractiveRobotConnectionModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveSceneModel.cs" />
     <Compile Include="Model\Interactive\InteractiveVersionModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
@@ -105,7 +113,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

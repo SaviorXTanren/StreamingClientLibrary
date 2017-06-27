@@ -7,6 +7,6 @@ namespace Mixer.Base.Model.Interactive
         public InteractiveReplyPacket() { this.type = "reply"; }
 
         public JObject result { get; set; }
-        public JObject error { get; set; }
+        public InteractiveErrorModel error { get; set; }
     }
 }

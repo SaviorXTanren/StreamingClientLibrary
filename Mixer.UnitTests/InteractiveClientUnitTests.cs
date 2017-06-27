@@ -79,8 +79,8 @@ namespace Mixer.UnitTests
 
                 InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(client, channel, games.First());
 
-                interactiveClient.ReplyOccurred += InteractiveClient_ReplyOccurred;
-                interactiveClient.MethodOccurred += InteractiveClient_MethodOccurred;
+                interactiveClient.OnReply += InteractiveClient_ReplyOccurred;
+                interactiveClient.OnMethod += InteractiveClient_MethodOccurred;
 
                 Assert.IsTrue(await interactiveClient.Connect());
 
