@@ -2,7 +2,6 @@
 using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
-using Mixer.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,19 +48,28 @@ namespace Mixer.UnitTests
 
                 this.ClearRepliesAndMethods();
 
-                await interactiveClient.GetTime();
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count == 1);
-                InteractiveReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(interactiveClient.CurrentPacketID - 1));
-                Assert.IsNotNull(replyPacket.result["time"]);
-
-                DateTimeOffset dateTime = DateTimeHelper.ParseUnixTimestamp((long)replyPacket.result["time"]);
+                DateTimeOffset? dateTime = await interactiveClient.GetTime();
 
                 Assert.IsNotNull(dateTime);
-                Assert.IsTrue(DateTimeOffset.UtcNow.Date.Equals(dateTime.Date));
+                Assert.IsTrue(DateTimeOffset.UtcNow.Date.Equals(dateTime.GetValueOrDefault().Date));
+            });
+        }
+
+        [TestMethod]
+        public void GetMemoryStats()
+        {
+            this.InteractiveWrapper(async (MixerClient client, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearRepliesAndMethods();
+
+                InteractiveIssueMemoryWarningModel memory = await interactiveClient.GetMemoryStates();
+
+                Assert.IsNotNull(memory);
+                Assert.IsTrue(memory.usedBytes > 0);
+                Assert.IsTrue(memory.totalBytes > 0);
+                Assert.IsNotNull(memory.resources);
             });
         }
 

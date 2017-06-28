@@ -6,6 +6,6 @@ namespace Mixer.Base.Model.Interactive
     {
         public uint usedBytes { get; set; }
         public uint totalBytes { get; set; }
-        public JObject resources { get; set; }
+        public JArray resources { get; set; }
     }
 }
