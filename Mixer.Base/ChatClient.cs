@@ -274,20 +274,21 @@ namespace Mixer.Base
             }
         }
 
-
-        private async void ChatClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
-        {
-            if (await this.Connect())
-            {
-                await this.Authenticate();
-            }
-        }
-
         private void SendSpecificEvent<T>(ChatEventPacket eventPacket, EventHandler<T> eventHandler)
         {
             if (eventHandler != null)
             {
                 eventHandler(this, JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()));
+            }
+        }
+
+        private async void ChatClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
+        {
+            this.connectSuccessful = false;
+            this.authenticateSuccessful = false;
+            if (await this.Connect())
+            {
+                await this.Authenticate();
             }
         }
     }

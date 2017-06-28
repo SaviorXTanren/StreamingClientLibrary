@@ -219,6 +219,8 @@ namespace Mixer.Base
 
         private async void InteractiveClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
         {
+            this.connectSuccessful = false;
+            this.authenticateSuccessful = false;
             if (await this.Connect())
             {
                 await this.Ready();
