@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
-namespace Mixer.Base
+namespace Mixer.Base.Clients
 {
     public class ChatClient : WebSocketClientBase
     {

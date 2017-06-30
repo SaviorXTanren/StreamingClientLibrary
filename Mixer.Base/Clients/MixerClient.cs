@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mixer.Base
+namespace Mixer.Base.Clients
 {
     public class MixerClient
     {

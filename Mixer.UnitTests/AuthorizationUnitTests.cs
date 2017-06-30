@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
+using Mixer.Base.Clients;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;

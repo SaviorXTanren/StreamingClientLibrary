@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Model.Channel;
+﻿using Mixer.Base.Clients;
+using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;

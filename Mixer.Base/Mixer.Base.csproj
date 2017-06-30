@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatClient.cs" />
-    <Compile Include="InteractiveClient.cs" />
-    <Compile Include="MixerClient.cs" />
+    <Compile Include="Clients\ChatClient.cs" />
+    <Compile Include="Clients\InteractiveClient.cs" />
+    <Compile Include="Clients\MixerClient.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
     <Compile Include="Model\Chat\ChatEventPacket.cs" />
     <Compile Include="Model\Chat\ChatMessageEventModel.cs" />

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base;
+using Mixer.Base.Clients;
 using System;
 using System.Threading.Tasks;
 

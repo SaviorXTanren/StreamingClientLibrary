@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Util;
+﻿using Mixer.Base.Clients;
+using Mixer.Base.Util;
 using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
