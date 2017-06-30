@@ -11,8 +11,8 @@ namespace Mixer.UnitTests
         {
             try
             {
-                MixerConnection client = MixerConnectionUnitTests.GetMixerClient();
-                function(client).Wait();
+                MixerConnection connection = MixerConnectionUnitTests.GetMixerClient();
+                function(connection).Wait();
             }
             catch (Exception ex)
             {

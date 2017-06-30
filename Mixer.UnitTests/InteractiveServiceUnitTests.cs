@@ -13,11 +13,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractive()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                InteractiveConnectionInfoModel interactive = await client.Interactive.GetInteractive(channel);
+                InteractiveConnectionInfoModel interactive = await connection.Interactive.GetInteractive(channel);
 
                 Assert.IsNotNull(interactive);
                 Assert.IsNotNull(interactive.address);
@@ -27,11 +27,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveRobot()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                InteractiveRobotConnectionModel interactive = await client.Interactive.GetInteractiveRobot(channel);
+                InteractiveRobotConnectionModel interactive = await connection.Interactive.GetInteractiveRobot(channel);
 
                 Assert.IsNotNull(interactive);
                 Assert.IsNotNull(interactive.address);
@@ -41,9 +41,9 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveHosts()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                IEnumerable<string> addresses = await client.Interactive.GetInteractiveHosts();
+                IEnumerable<string> addresses = await connection.Interactive.GetInteractiveHosts();
 
                 Assert.IsNotNull(addresses);
                 Assert.IsTrue(addresses.Count() > 0);
@@ -53,11 +53,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetOwnedInteractiveGames()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<InteractiveGameListingModel> games = await client.Interactive.GetOwnedInteractiveGames(channel);
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
                 Assert.IsTrue(games.Count() > 0);
@@ -67,11 +67,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetSharedInteractiveGames()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<InteractiveGameListingModel> games = await client.Interactive.GetSharedInteractiveGames(channel);
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetSharedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
                 Assert.IsTrue(games.Count() > 0);
@@ -81,16 +81,16 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveVersionInfo()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<InteractiveGameListingModel> games = await client.Interactive.GetOwnedInteractiveGames(channel);
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
                 Assert.IsTrue(games.Count() > 0);
 
-                InteractiveVersionModel version = await client.Interactive.GetInteractiveVersionInfo(games.First().versions.First());
+                InteractiveVersionModel version = await connection.Interactive.GetInteractiveVersionInfo(games.First().versions.First());
 
                 Assert.IsNotNull(version);
             });

@@ -10,11 +10,11 @@ namespace Mixer.UnitTests
     [TestClass]
     public class MixerConnectionUnitTests : UnitTestBase
     {
-        private static MixerConnection client;
+        private static MixerConnection connection;
 
         public static MixerConnection GetMixerClient()
         {
-            if (MixerConnectionUnitTests.client == null)
+            if (MixerConnectionUnitTests.connection == null)
             {
                 string clientID = ConfigurationManager.AppSettings["ClientID"];
                 if (string.IsNullOrEmpty(clientID))
@@ -22,7 +22,7 @@ namespace Mixer.UnitTests
                     Assert.Fail("ClientID value isn't set in application configuration");
                 }
 
-                MixerConnectionUnitTests.client = MixerConnection.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
+                MixerConnectionUnitTests.connection = MixerConnection.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
                 {
                     ClientScopeEnum.channel__details__self,
                     ClientScopeEnum.channel__update__self,
@@ -59,14 +59,14 @@ namespace Mixer.UnitTests
                 }).Result;
             }
 
-            Assert.IsNotNull(MixerConnectionUnitTests.client);
-            return MixerConnectionUnitTests.client;
+            Assert.IsNotNull(MixerConnectionUnitTests.connection);
+            return MixerConnectionUnitTests.connection;
         }
 
         [TestMethod]
         public void AuthorizeViaShortCode()
         {
-            this.TestWrapper((MixerConnection client) =>
+            this.TestWrapper((MixerConnection connection) =>
             {
                 return Task.FromResult(0);
             });
@@ -75,9 +75,9 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void RefreshToken()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                AuthorizationToken token = await client.GetAuthorizationToken();
+                AuthorizationToken token = await connection.GetAuthorizationToken();
                 await token.RefreshToken();
             });
         }

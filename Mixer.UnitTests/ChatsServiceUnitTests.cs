@@ -11,11 +11,11 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChatsServiceUnitTests : UnitTestBase
     {
-        public static async Task<ChannelChatModel> GetChat(MixerConnection client)
+        public static async Task<ChannelChatModel> GetChat(MixerConnection connection)
         {
-            ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+            ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-            ChannelChatModel chat = await client.Chats.GetChat(channel);
+            ChannelChatModel chat = await connection.Chats.GetChat(channel);
 
             Assert.IsNotNull(chat);
             Assert.IsTrue(chat.endpoints.Count() > 0);
@@ -26,20 +26,20 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChat()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelChatModel chat = await ChatsServiceUnitTests.GetChat(client);
+                ChannelChatModel chat = await ChatsServiceUnitTests.GetChat(connection);
             });
         }
 
         [TestMethod]
         public void GetUsers()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<ChatUserModel> users = await client.Chats.GetUsers(channel);
+                IEnumerable<ChatUserModel> users = await connection.Chats.GetUsers(channel);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);

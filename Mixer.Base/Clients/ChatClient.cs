@@ -37,13 +37,13 @@ namespace Mixer.Base.Clients
 
         private ChannelChatModel channelChat;
 
-        public static async Task<ChatClient> CreateFromChannel(MixerConnection client, ChannelModel channel)
+        public static async Task<ChatClient> CreateFromChannel(MixerConnection connection, ChannelModel channel)
         {
-            Validator.ValidateVariable(client, "client");
+            Validator.ValidateVariable(connection, "connection");
             Validator.ValidateVariable(channel, "channel");
 
-            UserModel user = await client.Users.GetCurrentUser();
-            ChannelChatModel chat = await client.Chats.GetChat(channel);
+            UserModel user = await connection.Users.GetCurrentUser();
+            ChannelChatModel chat = await connection.Chats.GetChat(channel);
 
             return new ChatClient(channel, user, chat);
         }

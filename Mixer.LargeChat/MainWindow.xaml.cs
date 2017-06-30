@@ -21,7 +21,7 @@ namespace Mixer.LargeChat
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MixerConnection client;
+        private MixerConnection connection;
         private ExpandedChannelModel channel;
         private PrivatePopulatedUserModel user;
         private ChatClient chatClient;
@@ -49,7 +49,7 @@ namespace Mixer.LargeChat
                 throw new ArgumentException("ClientID value isn't set in application configuration");
             }
 
-            this.client = await MixerConnection.ConnectViaShortCode(clientID,
+            this.connection = await MixerConnection.ConnectViaShortCode(clientID,
             new List<ClientScopeEnum>()
             {
                 ClientScopeEnum.chat__chat,
@@ -67,12 +67,12 @@ namespace Mixer.LargeChat
                 Process.Start("https://mixer.com/oauth/shortcode");
             });
 
-            if (this.client != null)
+            if (this.connection != null)
             {
-                this.user = await this.client.Users.GetCurrentUser();
-                this.channel = await this.client.Channels.GetChannel(this.user.username);
+                this.user = await this.connection.Users.GetCurrentUser();
+                this.channel = await this.connection.Channels.GetChannel(this.user.username);
 
-                this.chatClient = await ChatClient.CreateFromChannel(this.client, channel);
+                this.chatClient = await ChatClient.CreateFromChannel(this.connection, channel);
 
                 this.chatClient.DisconnectOccurred += ChatClient_DisconnectOccurred;
                 this.chatClient.MessageOccurred += ChatClient_MessageOccurred;
@@ -86,7 +86,7 @@ namespace Mixer.LargeChat
                 this.chatClient.DeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
                 this.chatClient.ClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
 
-                IEnumerable<ChatUserModel> users = await this.client.Chats.GetUsers(this.channel);
+                IEnumerable<ChatUserModel> users = await this.connection.Chats.GetUsers(this.channel);
                 this.viewerCount = users.Count();
                 this.CurrentViewersTextBlock.Text = this.viewerCount.ToString();
 

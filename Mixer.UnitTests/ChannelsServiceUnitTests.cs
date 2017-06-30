@@ -15,7 +15,7 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChannelsServiceUnitTests : UnitTestBase
     {
-        public static async Task<ChannelModel> GetChannel(MixerConnection client)
+        public static async Task<ChannelModel> GetChannel(MixerConnection connection)
         {
             string channelName = ConfigurationManager.AppSettings["ChannelName"];
             if (string.IsNullOrEmpty(channelName))
@@ -23,7 +23,7 @@ namespace Mixer.UnitTests
                 Assert.Fail("ChannelName value isn't set in application configuration");
             }
 
-            ChannelModel channel = await client.Channels.GetChannel(channelName);
+            ChannelModel channel = await connection.Channels.GetChannel(channelName);
 
             Assert.IsNotNull(channel);
             Assert.IsTrue(channel.id > (uint)0);
@@ -34,23 +34,23 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChannelForUser()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
             });
         }
 
         [TestMethod]
         public void UpdateChannel()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
                 string newName = "Test Name";
                 channel.name = newName;
 
-                channel = await client.Channels.UpdateChannel(channel);
+                channel = await connection.Channels.UpdateChannel(channel);
 
                 Assert.IsNotNull(channel);
                 Assert.IsTrue(string.Equals(channel.name, newName));
@@ -60,11 +60,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetFollowers()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<UserWithChannelModel> users = await client.Channels.GetFollowers(channel);
+                IEnumerable<UserWithChannelModel> users = await connection.Channels.GetFollowers(channel);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
@@ -74,11 +74,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetHosters()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<ChannelAdvancedModel> hosters = await client.Channels.GetHosters(channel);
+                IEnumerable<ChannelAdvancedModel> hosters = await connection.Channels.GetHosters(channel);
 
                 Assert.IsNotNull(hosters);
             });
@@ -87,24 +87,24 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetPreferences()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                ChannelPreferencesModel preference = await client.Channels.GetPreferences(channel);
+                ChannelPreferencesModel preference = await connection.Channels.GetPreferences(channel);
 
                 Assert.IsNotNull(preference);
 
                 preference.linksClickable = !preference.linksClickable;
 
-                ChannelPreferencesModel newPreferences = await client.Channels.UpdatePreferences(channel, preference);
+                ChannelPreferencesModel newPreferences = await connection.Channels.UpdatePreferences(channel, preference);
 
                 Assert.IsNotNull(newPreferences);
                 Assert.AreEqual(preference.linksClickable, newPreferences.linksClickable);
 
                 preference.linksClickable = !preference.linksClickable;
 
-                newPreferences = await client.Channels.UpdatePreferences(channel, preference);
+                newPreferences = await connection.Channels.UpdatePreferences(channel, preference);
 
                 Assert.IsNotNull(newPreferences);
                 Assert.AreEqual(preference.linksClickable, newPreferences.linksClickable);
@@ -114,11 +114,11 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUsersWithRoles()
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<UserWithGroupsModel> users = await client.Channels.GetUsersWithRoles(channel);
+                IEnumerable<UserWithGroupsModel> users = await connection.Channels.GetUsersWithRoles(channel);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);

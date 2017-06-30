@@ -28,7 +28,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ConnectToChat()
         {
-            this.ChatWrapper((MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper((MixerConnection connection, ChatClient chatClient) =>
             {
                 return Task.FromResult(0);
             });
@@ -37,7 +37,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void AuthenticateToChat()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
             });
@@ -46,7 +46,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void SendMessage()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.SendBasicMessage(chatClient);
             });
@@ -55,7 +55,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void Whisper()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -76,7 +76,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void StartPollAndVote()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -107,13 +107,13 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void TimeoutUser()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
                 this.ClearRepliesAndEvents();
 
-                UserModel user = await client.Users.GetUser("SXTBot");
+                UserModel user = await connection.Users.GetUser("SXTBot");
 
                 await chatClient.TimeoutUser(user.username, 1);
 
@@ -129,13 +129,13 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void PurgeUser()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
                 this.ClearRepliesAndEvents();
 
-                UserModel user = await client.Users.GetUser("SXTBot");
+                UserModel user = await connection.Users.GetUser("SXTBot");
 
                 await chatClient.PurgeUser(user.username);
 
@@ -151,7 +151,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void DeleteMessage()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.SendBasicMessage(chatClient);
 
@@ -173,7 +173,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ClearMessages()
         {
-            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -226,12 +226,12 @@ namespace Mixer.UnitTests
 
         private void ChatWrapper(Func<MixerConnection, ChatClient, Task> function)
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
                 this.ClearRepliesAndEvents();
 
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
-                ChatClient chatClient = await ChatClient.CreateFromChannel(client, channel);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+                ChatClient chatClient = await ChatClient.CreateFromChannel(connection, channel);
 
                 chatClient.ReplyOccurred += ChatClient_ReplyOccurred;
                 chatClient.EventOccurred += ChatClient_EventOccurred;
@@ -241,7 +241,7 @@ namespace Mixer.UnitTests
 
                 Assert.IsTrue(await chatClient.Connect());
 
-                await function(client, chatClient);
+                await function(connection, chatClient);
 
                 await chatClient.Disconnect();
             });

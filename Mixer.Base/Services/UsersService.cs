@@ -13,7 +13,7 @@ namespace Mixer.Base.Services
 {
     public class UsersService : ServiceBase
     {
-        public UsersService(MixerConnection client) : base(client) { }
+        public UsersService(MixerConnection connection) : base(connection) { }
 
         public async Task<PrivatePopulatedUserModel> GetCurrentUser()
         {

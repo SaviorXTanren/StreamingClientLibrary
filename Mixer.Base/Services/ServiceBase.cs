@@ -17,17 +17,17 @@ namespace Mixer.Base.Services
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
 
-        private MixerConnection client;
+        private MixerConnection connection;
 
-        public ServiceBase(MixerConnection client)
+        public ServiceBase(MixerConnection connection)
         {
-            Validator.ValidateVariable(client, "client");
-            this.client = client;
+            Validator.ValidateVariable(connection, "connection");
+            this.connection = connection;
         }
 
         protected async Task<T> GetAsync<T>(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 return await this.ProcessResponse<T>(await client.GetAsync(requestUri));
             }
@@ -35,7 +35,7 @@ namespace Mixer.Base.Services
 
         protected async Task<JObject> GetJObjectAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 return await this.ProcessJObjectResponse(await client.GetAsync(requestUri));
             }
@@ -43,7 +43,7 @@ namespace Mixer.Base.Services
 
         protected async Task<string> GetStringAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 return await this.ProcessStringResponse(await client.GetAsync(requestUri));
             }
@@ -57,7 +57,7 @@ namespace Mixer.Base.Services
 
             while (currentPage <= pageTotal)
             {
-                using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+                using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
                 {
                     string currentRequestUri = requestUri + "?page=" + currentPage;
                     HttpResponseMessage response = await client.GetAsync(currentRequestUri);
@@ -90,7 +90,7 @@ namespace Mixer.Base.Services
 
         protected async Task<T> PostAsync<T>(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 return await this.ProcessResponse<T>(await client.PostAsync(requestUri, content));
             }
@@ -98,7 +98,7 @@ namespace Mixer.Base.Services
 
         protected async Task<T> PutAsync<T>(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 return await this.ProcessResponse<T>(await client.PutAsync(requestUri, content));
             }
@@ -106,7 +106,7 @@ namespace Mixer.Base.Services
 
         protected async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 HttpMethod method = new HttpMethod("PATCH");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };

@@ -18,7 +18,7 @@ namespace Mixer.Sample
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MixerConnection client;
+        private MixerConnection connection;
         private ExpandedChannelModel channel;
         private PrivatePopulatedUserModel user;
         private ChatClient chatClient;
@@ -43,7 +43,7 @@ namespace Mixer.Sample
                 throw new ArgumentException("ClientID value isn't set in application configuration");
             }
 
-            this.client = await MixerConnection.ConnectViaShortCode(clientID,
+            this.connection = await MixerConnection.ConnectViaShortCode(clientID,
             new List<ClientScopeEnum>()
             {
                 ClientScopeEnum.chat__chat,
@@ -61,12 +61,12 @@ namespace Mixer.Sample
                 Process.Start("https://mixer.com/oauth/shortcode");
             });
 
-            if (this.client != null)
+            if (this.connection != null)
             {
-                this.user = await this.client.Users.GetCurrentUser();
-                this.channel = await this.client.Channels.GetChannel(this.user.username);
+                this.user = await this.connection.Users.GetCurrentUser();
+                this.channel = await this.connection.Channels.GetChannel(this.user.username);
 
-                this.chatClient = await ChatClient.CreateFromChannel(this.client, this.user.channel);
+                this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.user.channel);
 
                 this.chatClient.MessageOccurred += ChatClient_MessageOccurred;
                 this.chatClient.UserJoinOccurred += ChatClient_UserJoinOccurred;
@@ -85,7 +85,7 @@ namespace Mixer.Sample
                     this.StreamTitleTextBox.Text = this.channel.name;
                     this.GameTitleTextBlock.Text = this.channel.type.name;
 
-                    foreach (ChatUserModel user in await this.client.Chats.GetUsers(this.chatClient.Channel))
+                    foreach (ChatUserModel user in await this.connection.Chats.GetUsers(this.chatClient.Channel))
                     {
                         this.chatUsers.Add(new ChatUser(user));
                     }
@@ -111,7 +111,7 @@ namespace Mixer.Sample
 
                 this.channel.name = this.StreamTitleTextBox.Text;
 
-                await this.client.Channels.UpdateChannel(this.channel);
+                await this.connection.Channels.UpdateChannel(this.channel);
             }
         }
 

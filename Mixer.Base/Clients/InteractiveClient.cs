@@ -25,15 +25,15 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
-        public static async Task<InteractiveClient> CreateFromChannel(MixerConnection client, ChannelModel channel, InteractiveGameListingModel interactiveGame)
+        public static async Task<InteractiveClient> CreateFromChannel(MixerConnection connection, ChannelModel channel, InteractiveGameListingModel interactiveGame)
         {
-            Validator.ValidateVariable(client, "client");
+            Validator.ValidateVariable(connection, "connection");
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
 
-            AuthorizationToken authToken = await client.GetAuthorizationToken();
+            AuthorizationToken authToken = await connection.GetAuthorizationToken();
 
-            IEnumerable<string> interactiveConnections = await client.Interactive.GetInteractiveHosts();
+            IEnumerable<string> interactiveConnections = await connection.Interactive.GetInteractiveHosts();
 
             return new InteractiveClient(channel, interactiveGame, authToken, interactiveConnections);
         }

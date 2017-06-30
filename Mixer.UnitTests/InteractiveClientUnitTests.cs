@@ -25,7 +25,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ConnectToInteractive()
         {
-            this.InteractiveWrapper((MixerConnection client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper((MixerConnection connection, InteractiveClient interactiveClient) =>
             {
                 return Task.FromResult(0);
             });
@@ -34,7 +34,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ReadyInteractive()
         {
-            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
             });
@@ -43,7 +43,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetTime()
         {
-            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
 
@@ -59,7 +59,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetMemoryStats()
         {
-            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
 
@@ -76,24 +76,24 @@ namespace Mixer.UnitTests
 
         private void InteractiveWrapper(Func<MixerConnection, InteractiveClient, Task> function)
         {
-            this.TestWrapper(async (MixerConnection client) =>
+            this.TestWrapper(async (MixerConnection connection) =>
             {
                 this.ClearRepliesAndMethods();
 
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
-                IEnumerable<InteractiveGameListingModel> games = await client.Interactive.GetOwnedInteractiveGames(channel);
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
                 Assert.IsTrue(games.Count() > 0);
 
-                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(client, channel, games.First());
+                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, games.First());
 
                 interactiveClient.ReplyOccurred += InteractiveClient_ReplyOccurred;
                 interactiveClient.MethodOccurred += InteractiveClient_MethodOccurred;
 
                 Assert.IsTrue(await interactiveClient.Connect());
 
-                await function(client, interactiveClient);
+                await function(connection, interactiveClient);
 
                 await interactiveClient.Disconnect();
             });

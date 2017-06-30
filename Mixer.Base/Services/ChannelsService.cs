@@ -9,7 +9,7 @@ namespace Mixer.Base.Services
 {
     public class ChannelsService : ServiceBase
     {
-        public ChannelsService(MixerConnection client) : base(client) { }
+        public ChannelsService(MixerConnection connection) : base(connection) { }
 
         public async Task<ExpandedChannelModel> GetChannel(string channelName)
         {
