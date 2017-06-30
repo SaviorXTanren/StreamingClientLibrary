@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base.Clients;
+using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChannelsServiceUnitTests : UnitTestBase
     {
-        public static async Task<ChannelModel> GetChannel(MixerClient client)
+        public static async Task<ChannelModel> GetChannel(MixerConnection client)
         {
             string channelName = ConfigurationManager.AppSettings["ChannelName"];
             if (string.IsNullOrEmpty(channelName))
@@ -34,7 +34,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChannelForUser()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
             });
@@ -43,7 +43,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void UpdateChannel()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -60,7 +60,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetFollowers()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -74,7 +74,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetHosters()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -87,7 +87,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetPreferences()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -114,7 +114,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUsersWithRoles()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 

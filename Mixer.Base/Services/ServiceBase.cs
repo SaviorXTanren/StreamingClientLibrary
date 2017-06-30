@@ -17,9 +17,9 @@ namespace Mixer.Base.Services
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
 
-        private MixerClient client;
+        private MixerConnection client;
 
-        public ServiceBase(MixerClient client)
+        public ServiceBase(MixerConnection client)
         {
             Validator.ValidateVariable(client, "client");
             this.client = client;

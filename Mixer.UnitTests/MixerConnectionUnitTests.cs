@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
-using Mixer.Base.Clients;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -9,13 +8,13 @@ using System.Threading.Tasks;
 namespace Mixer.UnitTests
 {
     [TestClass]
-    public class AuthorizationUnitTests : UnitTestBase
+    public class MixerConnectionUnitTests : UnitTestBase
     {
-        private static MixerClient client;
+        private static MixerConnection client;
 
-        public static MixerClient GetMixerClient()
+        public static MixerConnection GetMixerClient()
         {
-            if (AuthorizationUnitTests.client == null)
+            if (MixerConnectionUnitTests.client == null)
             {
                 string clientID = ConfigurationManager.AppSettings["ClientID"];
                 if (string.IsNullOrEmpty(clientID))
@@ -23,7 +22,7 @@ namespace Mixer.UnitTests
                     Assert.Fail("ClientID value isn't set in application configuration");
                 }
 
-                AuthorizationUnitTests.client = MixerClient.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
+                MixerConnectionUnitTests.client = MixerConnection.ConnectViaShortCode(clientID, new List<ClientScopeEnum>()
                 {
                     ClientScopeEnum.channel__details__self,
                     ClientScopeEnum.channel__update__self,
@@ -60,14 +59,14 @@ namespace Mixer.UnitTests
                 }).Result;
             }
 
-            Assert.IsNotNull(AuthorizationUnitTests.client);
-            return AuthorizationUnitTests.client;
+            Assert.IsNotNull(MixerConnectionUnitTests.client);
+            return MixerConnectionUnitTests.client;
         }
 
         [TestMethod]
         public void AuthorizeViaShortCode()
         {
-            this.TestWrapper((MixerClient client) =>
+            this.TestWrapper((MixerConnection client) =>
             {
                 return Task.FromResult(0);
             });
@@ -76,7 +75,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void RefreshToken()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 AuthorizationToken token = await client.GetAuthorizationToken();
                 await token.RefreshToken();

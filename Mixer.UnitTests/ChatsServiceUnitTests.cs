@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base.Clients;
+using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChatsServiceUnitTests : UnitTestBase
     {
-        public static async Task<ChannelChatModel> GetChat(MixerClient client)
+        public static async Task<ChannelChatModel> GetChat(MixerConnection client)
         {
             ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -26,7 +26,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChat()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelChatModel chat = await ChatsServiceUnitTests.GetChat(client);
             });
@@ -35,7 +35,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUsers()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 

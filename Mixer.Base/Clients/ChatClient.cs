@@ -37,7 +37,7 @@ namespace Mixer.Base.Clients
 
         private ChannelChatModel channelChat;
 
-        public static async Task<ChatClient> CreateFromChannel(MixerClient client, ChannelModel channel)
+        public static async Task<ChatClient> CreateFromChannel(MixerConnection client, ChannelModel channel)
         {
             Validator.ValidateVariable(client, "client");
             Validator.ValidateVariable(channel, "channel");

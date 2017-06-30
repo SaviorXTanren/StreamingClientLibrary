@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base.Clients;
+using Mixer.Base;
 using Mixer.Base.Model;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Teams;
@@ -13,7 +13,7 @@ namespace Mixer.UnitTests
     [TestClass]
     public class UsersServiceUnitTests : UnitTestBase
     {
-        public static async Task<UserModel> GetCurrentUser(MixerClient client)
+        public static async Task<UserModel> GetCurrentUser(MixerConnection client)
         {
             ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -28,7 +28,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetCurrentUser()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
             });
@@ -37,7 +37,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUser()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -51,7 +51,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUserByUsername()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await client.Users.GetUser("SaviorXTanren");
 
@@ -63,7 +63,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetAvatar()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -76,7 +76,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetFollows()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -90,7 +90,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetLogs()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -104,7 +104,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetNotifications()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -118,7 +118,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetPreferences()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -131,7 +131,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void UpdatePreferences()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 
@@ -158,7 +158,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetTeams()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(client);
 

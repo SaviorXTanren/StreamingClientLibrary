@@ -54,7 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AuthorizationUnitTests.cs" />
+    <Compile Include="MixerConnectionUnitTests.cs" />
     <Compile Include="ChannelsServiceUnitTests.cs" />
     <Compile Include="ChatClientUnitTests.cs" />
     <Compile Include="ChatsServiceUnitTests.cs" />

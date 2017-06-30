@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mixer.Base.Clients
+namespace Mixer.Base
 {
-    public class MixerClient
+    public class MixerConnection
     {
         private AuthorizationToken token;
 
@@ -15,7 +15,7 @@ namespace Mixer.Base.Clients
         public InteractiveService Interactive { get; private set; }
         public UsersService Users { get; private set; }
 
-        public static async Task<MixerClient> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<string> codeCallback)
+        public static async Task<MixerConnection> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<string> codeCallback)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
@@ -28,21 +28,21 @@ namespace Mixer.Base.Clients
             string authorizationCode = await AuthorizationToken.ValidateShortCode(shortCode);
             if (authorizationCode != null)
             {
-                return await MixerClient.ConnectViaAuthorizationCode(clientID, authorizationCode);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode);
             }
             return null;
         }
 
-        public static async Task<MixerClient> ConnectViaAuthorizationCode(string clientID, string authorizationCode)
+        public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(authorizationCode, "authorizationCode");
 
             AuthorizationToken token = await AuthorizationToken.GetAuthorizationToken(clientID, authorizationCode);
-            return new MixerClient(token);
+            return new MixerConnection(token);
         }
 
-        private MixerClient(AuthorizationToken token)
+        private MixerConnection(AuthorizationToken token)
         {
             Validator.ValidateVariable(token, "token");
 

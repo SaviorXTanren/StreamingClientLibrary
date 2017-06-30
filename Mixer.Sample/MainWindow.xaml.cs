@@ -18,7 +18,7 @@ namespace Mixer.Sample
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MixerClient client;
+        private MixerConnection client;
         private ExpandedChannelModel channel;
         private PrivatePopulatedUserModel user;
         private ChatClient chatClient;
@@ -43,7 +43,7 @@ namespace Mixer.Sample
                 throw new ArgumentException("ClientID value isn't set in application configuration");
             }
 
-            this.client = await MixerClient.ConnectViaShortCode(clientID,
+            this.client = await MixerConnection.ConnectViaShortCode(clientID,
             new List<ClientScopeEnum>()
             {
                 ClientScopeEnum.chat__chat,

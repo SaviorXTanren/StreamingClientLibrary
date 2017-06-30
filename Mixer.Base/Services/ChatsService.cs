@@ -9,7 +9,7 @@ namespace Mixer.Base.Services
 {
     public class ChatsService : ServiceBase
     {
-        public ChatsService(MixerClient client) : base(client) { }
+        public ChatsService(MixerConnection client) : base(client) { }
 
         public async Task<ChannelChatModel> GetChat(ChannelModel channel)
         {

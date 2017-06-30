@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Clients\ChatClient.cs" />
     <Compile Include="Clients\InteractiveClient.cs" />
-    <Compile Include="Clients\MixerClient.cs" />
+    <Compile Include="MixerConnection.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
     <Compile Include="Model\Chat\ChatEventPacket.cs" />
     <Compile Include="Model\Chat\ChatMessageEventModel.cs" />

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base.Clients;
+using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractive()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -27,7 +27,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveRobot()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -41,7 +41,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveHosts()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 IEnumerable<string> addresses = await client.Interactive.GetInteractiveHosts();
 
@@ -53,7 +53,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetOwnedInteractiveGames()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -67,7 +67,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetSharedInteractiveGames()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 
@@ -81,7 +81,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveVersionInfo()
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(client);
 

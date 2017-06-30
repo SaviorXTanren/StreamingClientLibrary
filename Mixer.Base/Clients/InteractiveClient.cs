@@ -25,7 +25,7 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
-        public static async Task<InteractiveClient> CreateFromChannel(MixerClient client, ChannelModel channel, InteractiveGameListingModel interactiveGame)
+        public static async Task<InteractiveClient> CreateFromChannel(MixerConnection client, ChannelModel channel, InteractiveGameListingModel interactiveGame)
         {
             Validator.ValidateVariable(client, "client");
             Validator.ValidateVariable(channel, "channel");

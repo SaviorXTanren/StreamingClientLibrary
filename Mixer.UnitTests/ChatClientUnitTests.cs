@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mixer.Base;
 using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
@@ -27,7 +28,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ConnectToChat()
         {
-            this.ChatWrapper((MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper((MixerConnection client, ChatClient chatClient) =>
             {
                 return Task.FromResult(0);
             });
@@ -36,7 +37,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void AuthenticateToChat()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
             });
@@ -45,7 +46,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void SendMessage()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.SendBasicMessage(chatClient);
             });
@@ -54,7 +55,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void Whisper()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -75,7 +76,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void StartPollAndVote()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -106,7 +107,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void TimeoutUser()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -128,7 +129,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void PurgeUser()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -150,7 +151,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void DeleteMessage()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.SendBasicMessage(chatClient);
 
@@ -172,7 +173,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ClearMessages()
         {
-            this.ChatWrapper(async (MixerClient client, ChatClient chatClient) =>
+            this.ChatWrapper(async (MixerConnection client, ChatClient chatClient) =>
             {
                 await this.AuthenticateChat(chatClient);
 
@@ -223,9 +224,9 @@ namespace Mixer.UnitTests
             Assert.IsTrue(message.message.message.First().text.Equals(messageText));
         }
 
-        private void ChatWrapper(Func<MixerClient, ChatClient, Task> function)
+        private void ChatWrapper(Func<MixerConnection, ChatClient, Task> function)
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 this.ClearRepliesAndEvents();
 

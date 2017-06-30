@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mixer.Base;
 using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
@@ -24,7 +25,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ConnectToInteractive()
         {
-            this.InteractiveWrapper((MixerClient client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper((MixerConnection client, InteractiveClient interactiveClient) =>
             {
                 return Task.FromResult(0);
             });
@@ -33,7 +34,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void ReadyInteractive()
         {
-            this.InteractiveWrapper(async (MixerClient client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
             });
@@ -42,7 +43,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetTime()
         {
-            this.InteractiveWrapper(async (MixerClient client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
 
@@ -58,7 +59,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetMemoryStats()
         {
-            this.InteractiveWrapper(async (MixerClient client, InteractiveClient interactiveClient) =>
+            this.InteractiveWrapper(async (MixerConnection client, InteractiveClient interactiveClient) =>
             {
                 await this.ReadyInteractive(interactiveClient);
 
@@ -73,9 +74,9 @@ namespace Mixer.UnitTests
             });
         }
 
-        private void InteractiveWrapper(Func<MixerClient, InteractiveClient, Task> function)
+        private void InteractiveWrapper(Func<MixerConnection, InteractiveClient, Task> function)
         {
-            this.TestWrapper(async (MixerClient client) =>
+            this.TestWrapper(async (MixerConnection client) =>
             {
                 this.ClearRepliesAndMethods();
 

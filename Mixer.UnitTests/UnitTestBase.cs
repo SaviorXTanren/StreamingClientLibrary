@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base.Clients;
+using Mixer.Base;
 using System;
 using System.Threading.Tasks;
 
@@ -7,11 +7,11 @@ namespace Mixer.UnitTests
 {
     public abstract class UnitTestBase
     {
-        protected void TestWrapper(Func<MixerClient, Task> function)
+        protected void TestWrapper(Func<MixerConnection, Task> function)
         {
             try
             {
-                MixerClient client = AuthorizationUnitTests.GetMixerClient();
+                MixerConnection client = MixerConnectionUnitTests.GetMixerClient();
                 function(client).Wait();
             }
             catch (Exception ex)

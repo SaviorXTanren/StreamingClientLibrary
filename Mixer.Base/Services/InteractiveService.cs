@@ -10,7 +10,7 @@ namespace Mixer.Base.Services
 {
     public class InteractiveService : ServiceBase
     {
-        public InteractiveService(MixerClient client) : base(client) { }
+        public InteractiveService(MixerConnection client) : base(client) { }
 
         public async Task<InteractiveConnectionInfoModel> GetInteractive(ChannelModel channel)
         {
