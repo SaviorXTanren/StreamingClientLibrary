@@ -61,7 +61,7 @@ namespace Mixer.UnitTests
                 this.ClearRepliesAndEvents();
 
                 string messageText = "Hello World!";
-                await chatClient.Whisper(chatClient.User, messageText);
+                await chatClient.Whisper(chatClient.User.username, messageText);
 
                 await Task.Delay(1000);
 
@@ -114,7 +114,7 @@ namespace Mixer.UnitTests
 
                 UserModel user = await client.Users.GetUser("SXTBot");
 
-                await chatClient.TimeoutUser(user, 1);
+                await chatClient.TimeoutUser(user.username, 1);
 
                 await Task.Delay(1000);
 
@@ -136,7 +136,7 @@ namespace Mixer.UnitTests
 
                 UserModel user = await client.Users.GetUser("SXTBot");
 
-                await chatClient.PurgeUser(user);
+                await chatClient.PurgeUser(user.username);
 
                 await Task.Delay(1000);
 
@@ -158,7 +158,7 @@ namespace Mixer.UnitTests
 
                 this.ClearRepliesAndEvents();
 
-                await chatClient.DeleteMessage(message);
+                await chatClient.DeleteMessage(message.id);
 
                 await Task.Delay(1000);
 

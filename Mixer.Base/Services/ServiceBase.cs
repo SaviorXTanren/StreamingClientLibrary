@@ -58,9 +58,8 @@ namespace Mixer.Base.Services
             {
                 using (HttpClientWrapper client = new HttpClientWrapper(await this.client.GetAuthorizationToken()))
                 {
-                    requestUri += "?page=" + currentPage;
-
-                    HttpResponseMessage response = await client.GetAsync(requestUri);
+                    string currentRequestUri = requestUri + "?page=" + currentPage;
+                    HttpResponseMessage response = await client.GetAsync(currentRequestUri);
 
                     if (pageTotal == 0)
                     {

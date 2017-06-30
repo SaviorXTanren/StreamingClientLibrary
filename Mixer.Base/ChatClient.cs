@@ -30,7 +30,7 @@ namespace Mixer.Base
 
         public event EventHandler<Guid> DeleteMessageOccurred;
         public event EventHandler<uint> PurgeMessageOccurred;
-        public event EventHandler<uint> ClearMessagesOccurred;
+        public event EventHandler ClearMessagesOccurred;
 
         public ChannelModel Channel { get; private set; }
         public UserModel User { get; private set; }
@@ -113,12 +113,12 @@ namespace Mixer.Base
             await this.Send(packet);
         }
 
-        public async Task Whisper(UserModel user, string message)
+        public async Task Whisper(string username, string message)
         {
             ChatMethodPacket packet = new ChatMethodPacket()
             {
                 method = "whisper",
-                arguments = new JArray() { user.username, message },
+                arguments = new JArray() { username, message },
             };
             await this.Send(packet);
         }
@@ -146,34 +146,34 @@ namespace Mixer.Base
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task TimeoutUser(UserModel user, uint durationInSeconds)
+        public async Task TimeoutUser(string username, uint durationInSeconds)
         {
             ChatMethodPacket packet = new ChatMethodPacket()
             {
                 method = "timeout",
-                arguments = new JArray() { user.username, durationInSeconds },
+                arguments = new JArray() { username, durationInSeconds },
             };
             await this.Send(packet);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task PurgeUser(UserModel user)
+        public async Task PurgeUser(string username)
         {
             ChatMethodPacket packet = new ChatMethodPacket()
             {
                 method = "purge",
-                arguments = new JArray() { user.username },
+                arguments = new JArray() { username },
             };
             await this.Send(packet);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task DeleteMessage(ChatMessageEventModel message)
+        public async Task DeleteMessage(Guid messageID)
         {
             ChatMethodPacket packet = new ChatMethodPacket()
             {
                 method = "purge",
-                arguments = new JArray() { message.id },
+                arguments = new JArray() { messageID },
             };
             await this.Send(packet);
         }
@@ -269,7 +269,7 @@ namespace Mixer.Base
                     this.SendSpecificEvent(eventPacket, this.PurgeMessageOccurred);
                     break;
                 case "ClearMessages":
-                    this.SendSpecificEvent(eventPacket, this.ClearMessagesOccurred);
+                    if (this.ClearMessagesOccurred != null) { this.ClearMessagesOccurred(this, new EventArgs()); }
                     break;
             }
         }

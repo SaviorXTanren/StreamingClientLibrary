@@ -196,7 +196,7 @@ namespace Mixer.Sample
 
         }
 
-        private void ChatClient_ClearMessagesOccurred(object sender, uint e)
+        private void ChatClient_ClearMessagesOccurred(object sender, EventArgs e)
         {
 
         }

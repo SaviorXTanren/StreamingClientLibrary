@@ -199,13 +199,11 @@ namespace Mixer.LargeChat
 
         }
 
-        private void ChatClient_ClearMessagesOccurred(object sender, uint e)
+        private void ChatClient_ClearMessagesOccurred(object sender, EventArgs e)
         {
 
         }
 
         #endregion Chat Event Handlers
-
-
     }
 }
