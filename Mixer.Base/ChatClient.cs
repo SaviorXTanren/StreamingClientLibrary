@@ -32,7 +32,7 @@ namespace Mixer.Base
 
         public event EventHandler<Guid> DeleteMessageOccurred;
         public event EventHandler<uint> PurgeMessageOccurred;
-        public event EventHandler<uint> ClearMessagesOccurred;
+        public event EventHandler ClearMessagesOccurred;
 
         public ChannelModel Channel { get; private set; }
         public UserModel User { get; private set; }
@@ -342,7 +342,7 @@ namespace Mixer.Base
                     this.SendSpecificEvent(eventPacket, this.PurgeMessageOccurred);
                     break;
                 case "ClearMessages":
-                    this.SendSpecificEvent(eventPacket, this.ClearMessagesOccurred);
+                    if (this.ClearMessagesOccurred != null) { this.ClearMessagesOccurred(this, new EventArgs()); }
                     break;
             }
         }
