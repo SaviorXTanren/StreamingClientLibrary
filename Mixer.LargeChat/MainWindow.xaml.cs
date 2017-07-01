@@ -74,17 +74,17 @@ namespace Mixer.LargeChat
 
                 this.chatClient = await ChatClient.CreateFromChannel(this.connection, channel);
 
-                this.chatClient.DisconnectOccurred += ChatClient_DisconnectOccurred;
-                this.chatClient.MessageOccurred += ChatClient_MessageOccurred;
-                this.chatClient.UserJoinOccurred += ChatClient_UserJoinOccurred;
-                this.chatClient.UserLeaveOccurred += ChatClient_UserLeaveOccurred;
-                this.chatClient.UserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
-                this.chatClient.UserUpdateOccurred += ChatClient_UserUpdateOccurred;
-                this.chatClient.PollStartOccurred += ChatClient_PollStartOccurred;
-                this.chatClient.PollEndOccurred += ChatClient_PollEndOccurred;
-                this.chatClient.PurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
-                this.chatClient.DeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
-                this.chatClient.ClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
+                this.chatClient.OnDisconnectOccurred += ChatClient_OnDisconnectOccurred;
+                this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
+                this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
+                this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
+                this.chatClient.OnUserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
+                this.chatClient.OnUserUpdateOccurred += ChatClient_UserUpdateOccurred;
+                this.chatClient.OnPollStartOccurred += ChatClient_PollStartOccurred;
+                this.chatClient.OnPollEndOccurred += ChatClient_PollEndOccurred;
+                this.chatClient.OnPurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
+                this.chatClient.OnDeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
+                this.chatClient.OnClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
 
                 IEnumerable<ChatUserModel> users = await this.connection.Chats.GetUsers(this.channel);
                 this.viewerCount = users.Count();
@@ -147,7 +147,7 @@ namespace Mixer.LargeChat
 
         #region Chat Event Handler
 
-        private void ChatClient_DisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        private void ChatClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
         {
             this.AddChatMessage(new ChatMessage("ERROR", "DISCONNECTED FROM CHAT"));
         }

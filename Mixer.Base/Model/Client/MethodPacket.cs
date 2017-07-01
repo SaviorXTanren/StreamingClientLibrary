@@ -1,18 +1,22 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Mixer.Base.Model.Interactive
+namespace Mixer.Base.Model.Client
 {
-    public class InteractiveMethodPacket : InteractivePacket
+    public class MethodPacket : WebSocketPacket
     {
-        public InteractiveMethodPacket()
+        public MethodPacket()
         {
             this.type = "method";
-            this.parameters = new JObject();
+            this.arguments = new JArray();
         }
 
-        public bool discard { get; set; }
         public string method { get; set; }
+
+        public bool discard { get; set; }
+
+        public JArray arguments { get; set; }
+
         [JsonProperty("params")]
         public JObject parameters { get; set; }
     }

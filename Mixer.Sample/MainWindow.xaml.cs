@@ -68,16 +68,16 @@ namespace Mixer.Sample
 
                 this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.user.channel);
 
-                this.chatClient.MessageOccurred += ChatClient_MessageOccurred;
-                this.chatClient.UserJoinOccurred += ChatClient_UserJoinOccurred;
-                this.chatClient.UserLeaveOccurred += ChatClient_UserLeaveOccurred;
-                this.chatClient.UserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
-                this.chatClient.UserUpdateOccurred += ChatClient_UserUpdateOccurred;
-                this.chatClient.PollStartOccurred += ChatClient_PollStartOccurred;
-                this.chatClient.PollEndOccurred += ChatClient_PollEndOccurred;
-                this.chatClient.PurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
-                this.chatClient.DeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
-                this.chatClient.ClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
+                this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
+                this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
+                this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
+                this.chatClient.OnUserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
+                this.chatClient.OnUserUpdateOccurred += ChatClient_UserUpdateOccurred;
+                this.chatClient.OnPollStartOccurred += ChatClient_PollStartOccurred;
+                this.chatClient.OnPollEndOccurred += ChatClient_PollEndOccurred;
+                this.chatClient.OnPurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
+                this.chatClient.OnDeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
+                this.chatClient.OnClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
 
                 if (await this.chatClient.Connect() && await this.chatClient.Authenticate())
                 {

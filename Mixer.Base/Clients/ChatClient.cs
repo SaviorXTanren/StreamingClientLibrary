@@ -1,8 +1,8 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
+using Mixer.Base.Model.Client;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
-using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,22 +15,19 @@ namespace Mixer.Base.Clients
 {
     public class ChatClient : WebSocketClientBase
     {
-        public event EventHandler<ChatReplyPacket> ReplyOccurred;
-        public event EventHandler<ChatEventPacket> EventOccurred;
+        public event EventHandler<ChatMessageEventModel> OnMessageOccurred;
 
-        public event EventHandler<ChatMessageEventModel> MessageOccurred;
+        public event EventHandler<ChatUserEventModel> OnUserJoinOccurred;
+        public event EventHandler<ChatUserEventModel> OnUserLeaveOccurred;
+        public event EventHandler<ChatUserEventModel> OnUserUpdateOccurred;
+        public event EventHandler<ChatUserEventModel> OnUserTimeoutOccurred;
 
-        public event EventHandler<ChatUserEventModel> UserJoinOccurred;
-        public event EventHandler<ChatUserEventModel> UserLeaveOccurred;
-        public event EventHandler<ChatUserEventModel> UserUpdateOccurred;
-        public event EventHandler<ChatUserEventModel> UserTimeoutOccurred;
+        public event EventHandler<ChatPollEventModel> OnPollStartOccurred;
+        public event EventHandler<ChatPollEventModel> OnPollEndOccurred;
 
-        public event EventHandler<ChatPollEventModel> PollStartOccurred;
-        public event EventHandler<ChatPollEventModel> PollEndOccurred;
-
-        public event EventHandler<Guid> DeleteMessageOccurred;
-        public event EventHandler<uint> PurgeMessageOccurred;
-        public event EventHandler ClearMessagesOccurred;
+        public event EventHandler<Guid> OnDeleteMessageOccurred;
+        public event EventHandler<uint> OnPurgeMessageOccurred;
+        public event EventHandler OnClearMessagesOccurred;
 
         public ChannelModel Channel { get; private set; }
         public UserModel User { get; private set; }
@@ -61,23 +58,25 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> Connect()
         {
-            this.DisconnectOccurred -= ChatClient_DisconnectOccurred;
+            this.OnDisconnectOccurred -= ChatClient_OnDisconnectOccurred;
+            this.OnEventOccurred -= ChatClient_OnEventOccurred;
 
             int totalEndpoints = this.channelChat.endpoints.Count();
             Random random = new Random();
             int endpointToUse = random.Next() % totalEndpoints;
 
-            this.EventOccurred += ConnectEventHandler;
+            this.OnEventOccurred += ConnectEventHandler;
 
             await this.ConnectInternal(this.channelChat.endpoints[endpointToUse]);
 
             await this.WaitForResponse(() => { return this.connectSuccessful; });
 
-            this.EventOccurred -= ConnectEventHandler;
+            this.OnEventOccurred -= ConnectEventHandler;
 
             if (this.connectSuccessful)
             {
-                this.DisconnectOccurred += ChatClient_DisconnectOccurred;
+                this.OnDisconnectOccurred += ChatClient_OnDisconnectOccurred;
+                this.OnEventOccurred += ChatClient_OnEventOccurred;
             }
 
             return this.connectSuccessful;
@@ -85,27 +84,27 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> Authenticate()
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "auth",
                 arguments = new JArray() { this.Channel.id.ToString(), this.User.id.ToString(), this.channelChat.authkey },
             };
 
             this.authenticateSuccessful = false;
-            this.ReplyOccurred += AuthenticateEventHandler;
+            this.OnReplyOccurred += AuthenticateEventHandler;
 
             await this.Send(packet, checkIfAuthenticated: false);
 
             await this.WaitForResponse(() => { return this.authenticateSuccessful; });
 
-            this.ReplyOccurred -= AuthenticateEventHandler;
+            this.OnReplyOccurred -= AuthenticateEventHandler;
 
             return this.authenticateSuccessful;
         }
 
         public async Task SendMessage(string message)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "msg",
                 arguments = new JArray() { message },
@@ -115,7 +114,7 @@ namespace Mixer.Base.Clients
 
         public async Task Whisper(string username, string message)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "whisper",
                 arguments = new JArray() { username, message },
@@ -126,7 +125,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task StartVote(string question, IEnumerable<string> options, uint timeLimit)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "vote:start",
                 arguments = new JArray() { question, options, timeLimit },
@@ -137,7 +136,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task ChooseVote(uint optionIndex)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "vote",
                 arguments = new JArray() { optionIndex },
@@ -148,7 +147,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task TimeoutUser(string username, uint durationInSeconds)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "timeout",
                 arguments = new JArray() { username, durationInSeconds },
@@ -159,7 +158,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task PurgeUser(string username)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "purge",
                 arguments = new JArray() { username },
@@ -170,7 +169,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task DeleteMessage(Guid messageID)
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "purge",
                 arguments = new JArray() { messageID },
@@ -181,7 +180,7 @@ namespace Mixer.Base.Clients
         // TODO: Need to figure out how to get correct permissions for command to work
         public async Task ClearMessages()
         {
-            ChatMethodPacket packet = new ChatMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "clearMessages",
                 arguments = new JArray(),
@@ -189,22 +188,7 @@ namespace Mixer.Base.Clients
             await this.Send(packet);
         }
 
-        protected override void Receive(string jsonBuffer)
-        {
-            ChatPacket packet = JsonConvert.DeserializeObject<ChatPacket>(jsonBuffer);
-            if (packet.type.Equals("reply"))
-            {
-                ChatReplyPacket replyPacket = JsonConvert.DeserializeObject<ChatReplyPacket>(jsonBuffer);
-                this.OnReplyOccurred(replyPacket);
-            }
-            else if (packet.type.Equals("event"))
-            {
-                ChatEventPacket eventPacket = JsonConvert.DeserializeObject<ChatEventPacket>(jsonBuffer);
-                this.OnEventOccurred(eventPacket);
-            }
-        }
-
-        private void ConnectEventHandler(object sender, ChatEventPacket e)
+        private void ConnectEventHandler(object sender, EventPacket e)
         {
             if (e.eventName.Equals("WelcomeEvent"))
             {
@@ -212,7 +196,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private void AuthenticateEventHandler(object sender, ChatReplyPacket e)
+        private void AuthenticateEventHandler(object sender, ReplyPacket e)
         {
             JToken value;
             if (e.id == (this.CurrentPacketID - 1) && e.data.TryGetValue("authenticated", out value) && (bool)value)
@@ -221,60 +205,47 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private void OnReplyOccurred(ChatReplyPacket replyPacket)
+        private void ChatClient_OnEventOccurred(object sender, EventPacket eventPacket)
         {
-            if (this.ReplyOccurred != null)
-            {
-                this.ReplyOccurred(this, replyPacket);
-            }
-        }
-
-        private void OnEventOccurred(ChatEventPacket eventPacket)
-        {
-            if (this.EventOccurred != null)
-            {
-                this.EventOccurred(this, eventPacket);
-            }
-
             switch (eventPacket.eventName)
             {
                 case "ChatMessage":
-                    this.SendSpecificEvent(eventPacket, this.MessageOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnMessageOccurred);
                     break;
 
                 case "UserJoin":
-                    this.SendSpecificEvent(eventPacket, this.UserJoinOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnUserJoinOccurred);
                     break;
                 case "UserLeave":
-                    this.SendSpecificEvent(eventPacket, this.UserLeaveOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnUserLeaveOccurred);
                     break;
                 case "UserUpdate":
-                    this.SendSpecificEvent(eventPacket, this.UserUpdateOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnUserUpdateOccurred);
                     break;
                 case "UserTimeout":
-                    this.SendSpecificEvent(eventPacket, this.UserTimeoutOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnUserTimeoutOccurred);
                     break;
 
                 case "PollStart":
-                    this.SendSpecificEvent(eventPacket, this.PollStartOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnPollStartOccurred);
                     break;
                 case "PollEnd":
-                    this.SendSpecificEvent(eventPacket, this.PollEndOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnPollEndOccurred);
                     break;
 
                 case "DeleteMessage":
-                    this.SendSpecificEvent(eventPacket, this.DeleteMessageOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnDeleteMessageOccurred);
                     break;
                 case "PurgeMessage":
-                    this.SendSpecificEvent(eventPacket, this.PurgeMessageOccurred);
+                    this.SendSpecificEvent(eventPacket, this.OnPurgeMessageOccurred);
                     break;
                 case "ClearMessages":
-                    if (this.ClearMessagesOccurred != null) { this.ClearMessagesOccurred(this, new EventArgs()); }
+                    if (this.OnClearMessagesOccurred != null) { this.OnClearMessagesOccurred(this, new EventArgs()); }
                     break;
             }
         }
 
-        private void SendSpecificEvent<T>(ChatEventPacket eventPacket, EventHandler<T> eventHandler)
+        private void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
         {
             if (eventHandler != null)
             {
@@ -282,7 +253,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private async void ChatClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
+        private async void ChatClient_OnDisconnectOccurred(object sender, WebSocketCloseStatus e)
         {
             this.connectSuccessful = false;
             this.authenticateSuccessful = false;

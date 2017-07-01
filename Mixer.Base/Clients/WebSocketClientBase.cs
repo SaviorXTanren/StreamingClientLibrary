@@ -1,4 +1,4 @@
-﻿using Mixer.Base.Model;
+﻿using Mixer.Base.Model.Client;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -8,11 +8,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mixer.Base.Web
+namespace Mixer.Base.Clients
 {
     public abstract class WebSocketClientBase : IDisposable
     {
-        public event EventHandler<WebSocketCloseStatus> DisconnectOccurred;
+        public event EventHandler<MethodPacket> OnMethodOccurred;
+        public event EventHandler<ReplyPacket> OnReplyOccurred;
+        public event EventHandler<EventPacket> OnEventOccurred;
+
+        public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
         internal uint CurrentPacketID { get; private set; }
 
@@ -91,6 +95,39 @@ namespace Mixer.Base.Web
             this.CurrentPacketID++;
         }
 
+        protected async Task<ReplyPacket> SendAndListen(MethodPacket packet, bool checkIfAuthenticated = true)
+        {
+            uint packetID = this.CurrentPacketID;
+            ReplyPacket replyPacket = null;
+
+            EventHandler<ReplyPacket> listener = new EventHandler<ReplyPacket>(delegate (object sender, ReplyPacket reply)
+            {
+                if (reply.id == packetID)
+                {
+                    replyPacket = reply;
+                }
+            });
+
+            this.OnReplyOccurred += listener;
+
+            await this.Send(packet, checkIfAuthenticated);
+
+            await this.WaitForResponse(() => { return (replyPacket != null); });
+
+            this.OnReplyOccurred -= listener;
+
+            return replyPacket;
+        }
+
+        protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
+        {
+            if (replyPacket != null)
+            {
+                return JsonConvert.DeserializeObject<T>(replyPacket.result.ToString());
+            }
+            return default(T);
+        }
+
         protected async Task WaitForResponse(Func<bool> valueToCheck)
         {
             for (int i = 0; i < 10 && !valueToCheck(); i++)
@@ -98,8 +135,6 @@ namespace Mixer.Base.Web
                 await Task.Delay(500);
             }
         }
-
-        protected abstract void Receive(string jsonBuffer);
 
         private async Task ReceiveInternal()
         {
@@ -115,22 +150,45 @@ namespace Mixer.Base.Web
                         if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                         {
                             string jsonBuffer = this.encoder.GetString(buffer);
-                            this.Receive(jsonBuffer);
+                            WebSocketPacket packet = JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer);
+                            if (packet.type.Equals("method"))
+                            {
+                                MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
+                                this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
+                            }
+                            else if (packet.type.Equals("reply"))
+                            {
+                                ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+                                this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
+                            }
+                            else if (packet.type.Equals("event"))
+                            {
+                                EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
+                                this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                            }
                         }
                         else
                         {
-                            this.OnDisconnectOccurred(result);
+                            this.DisconnectOccurred(result);
                         }
                     }
                 }
             }
         }
 
-        private void OnDisconnectOccurred(WebSocketReceiveResult result)
+        private void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
         {
-            if (this.DisconnectOccurred != null)
+            if (eventHandler != null)
             {
-                this.DisconnectOccurred(this, result.CloseStatus.GetValueOrDefault());
+                eventHandler(this, packet);
+            }
+        }
+
+        private void DisconnectOccurred(WebSocketReceiveResult result)
+        {
+            if (this.OnDisconnectOccurred != null)
+            {
+                this.OnDisconnectOccurred(this, result.CloseStatus.GetValueOrDefault());
             }
         }
     }

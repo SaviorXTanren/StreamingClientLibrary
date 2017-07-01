@@ -1,4 +1,4 @@
-﻿namespace Mixer.Base.Model
+﻿namespace Mixer.Base.Model.Client
 {
     public class WebSocketPacket
     {

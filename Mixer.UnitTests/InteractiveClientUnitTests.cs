@@ -2,6 +2,7 @@
 using Mixer.Base;
 using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
+using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Interactive;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,10 @@ namespace Mixer.UnitTests
     [TestClass]
     public class InteractiveClientUnitTests : UnitTestBase
     {
-        List<InteractiveReplyPacket> replyPackets = new List<InteractiveReplyPacket>();
-        List<InteractiveMethodPacket> methodPackets = new List<InteractiveMethodPacket>();
-
         [TestInitialize]
         public void TestInitialize()
         {
-            this.ClearRepliesAndMethods();
+            this.ClearPackets();
         }
 
         [TestMethod]
@@ -47,7 +45,7 @@ namespace Mixer.UnitTests
             {
                 await this.ReadyInteractive(interactiveClient);
 
-                this.ClearRepliesAndMethods();
+                this.ClearPackets();
 
                 DateTimeOffset? dateTime = await interactiveClient.GetTime();
 
@@ -63,7 +61,7 @@ namespace Mixer.UnitTests
             {
                 await this.ReadyInteractive(interactiveClient);
 
-                this.ClearRepliesAndMethods();
+                this.ClearPackets();
 
                 InteractiveIssueMemoryWarningModel memory = await interactiveClient.GetMemoryStates();
 
@@ -78,7 +76,7 @@ namespace Mixer.UnitTests
         {
             this.TestWrapper(async (MixerConnection connection) =>
             {
-                this.ClearRepliesAndMethods();
+                this.ClearPackets();
 
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
                 IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
@@ -88,8 +86,8 @@ namespace Mixer.UnitTests
 
                 InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, games.First());
 
-                interactiveClient.ReplyOccurred += InteractiveClient_ReplyOccurred;
-                interactiveClient.MethodOccurred += InteractiveClient_MethodOccurred;
+                interactiveClient.OnReplyOccurred += InteractiveClient_OnReplyOccurred;
+                interactiveClient.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
 
                 Assert.IsTrue(await interactiveClient.Connect());
 
@@ -101,25 +99,19 @@ namespace Mixer.UnitTests
 
         private async Task ReadyInteractive(InteractiveClient interactiveClient)
         {
-            this.ClearRepliesAndMethods();
+            this.ClearPackets();
 
             Assert.IsTrue(await interactiveClient.Ready());
         }
 
-        private void InteractiveClient_ReplyOccurred(object sender, InteractiveReplyPacket e)
+        private void InteractiveClient_OnReplyOccurred(object sender, ReplyPacket e)
         {
             this.replyPackets.Add(e);
         }
 
-        private void InteractiveClient_MethodOccurred(object sender, InteractiveMethodPacket e)
+        private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket e)
         {
             this.methodPackets.Add(e);
-        }
-
-        private void ClearRepliesAndMethods()
-        {
-            this.replyPackets.Clear();
-            this.methodPackets.Clear();
         }
     }
 }

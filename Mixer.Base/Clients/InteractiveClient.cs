@@ -1,7 +1,7 @@
 ﻿using Mixer.Base.Model.Channel;
+using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Util;
-using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,10 +15,7 @@ namespace Mixer.Base.Clients
 {
     public class InteractiveClient : WebSocketClientBase
     {
-        public event EventHandler<InteractiveReplyPacket> ReplyOccurred;
-        public event EventHandler<InteractiveMethodPacket> MethodOccurred;
-
-        public event EventHandler<InteractiveIssueMemoryWarningModel> IssueMemoryWarningOccurred;
+        public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarningOccurred;
 
         public ChannelModel Channel { get; private set; }
         public InteractiveGameListingModel InteractiveGame { get; private set; }
@@ -57,23 +54,25 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> Connect()
         {
-            this.DisconnectOccurred -= InteractiveClient_DisconnectOccurred;
+            this.OnDisconnectOccurred -= InteractiveClient_OnDisconnectOccurred;
+            this.OnMethodOccurred -= InteractiveClient_OnMethodOccurred;
 
             int totalEndpoints = this.interactiveConnections.Count();
             Random random = new Random();
             int endpointToUse = random.Next() % totalEndpoints;
 
-            this.MethodOccurred += InteractiveClient_HelloMethodHandler;
+            this.OnMethodOccurred += InteractiveClient_HelloMethodHandler;
 
             await this.ConnectInternal(this.interactiveConnections.ElementAt(endpointToUse));
 
             await this.WaitForResponse(() => { return this.connectSuccessful; });
 
-            this.MethodOccurred -= InteractiveClient_HelloMethodHandler;
+            this.OnMethodOccurred -= InteractiveClient_HelloMethodHandler;
 
             if (this.connectSuccessful)
             {
-                this.DisconnectOccurred += InteractiveClient_DisconnectOccurred;
+                this.OnDisconnectOccurred += InteractiveClient_OnDisconnectOccurred;
+                this.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
             }
 
             return this.connectSuccessful;
@@ -83,11 +82,11 @@ namespace Mixer.Base.Clients
         {
             this.authenticateSuccessful = false;
 
-            this.MethodOccurred += InteractiveClient_ReadyMethodHandler;
+            this.OnMethodOccurred += InteractiveClient_ReadyMethodHandler;
 
             JObject parameters = new JObject();
             parameters.Add("isReady", true);
-            InteractiveMethodPacket packet = new InteractiveMethodPacket()
+            MethodPacket packet = new MethodPacket()
             {
                 method = "ready",
                 parameters = parameters,
@@ -98,15 +97,15 @@ namespace Mixer.Base.Clients
 
             await this.WaitForResponse(() => { return this.authenticateSuccessful; });
 
-            this.MethodOccurred -= InteractiveClient_ReadyMethodHandler;
+            this.OnMethodOccurred -= InteractiveClient_ReadyMethodHandler;
 
             return this.authenticateSuccessful;
         }
 
         public async Task<DateTimeOffset?> GetTime()
         {
-            InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getTime" };
-            InteractiveReplyPacket reply = await this.SendAndListen(packet);
+            MethodPacket packet = new MethodPacket() { method = "getTime" };
+            ReplyPacket reply = await this.SendAndListen(packet);
             if (reply != null && reply.result["time"] != null)
             {
                 return DateTimeHelper.ParseUnixTimestamp((long)reply.result["time"]);
@@ -116,74 +115,22 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveIssueMemoryWarningModel> GetMemoryStates()
         {
-            InteractiveMethodPacket packet = new InteractiveMethodPacket() { method = "getMemoryStats" };
-            InteractiveReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyValue<InteractiveIssueMemoryWarningModel>(reply);
+            MethodPacket packet = new MethodPacket() { method = "getMemoryStats" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveIssueMemoryWarningModel>(reply);
         }
 
-        protected override void Receive(string jsonBuffer)
+        private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket methodPacket)
         {
-            InteractivePacket packet = JsonConvert.DeserializeObject<InteractivePacket>(jsonBuffer);
-            if (packet.type.Equals("reply"))
-            {
-                InteractiveReplyPacket replyPacket = JsonConvert.DeserializeObject<InteractiveReplyPacket>(jsonBuffer);
-                this.OnReplyOccurred(replyPacket);
-            }
-            else if (packet.type.Equals("method"))
-            {
-                InteractiveMethodPacket methodPacket = JsonConvert.DeserializeObject<InteractiveMethodPacket>(jsonBuffer);
-                this.OnMethodOccurred(methodPacket);
-            }
-        }
-
-        private async Task<InteractiveReplyPacket> SendAndListen(InteractiveMethodPacket packet, bool checkIfAuthenticated = true)
-        {
-            uint packetID = this.CurrentPacketID;
-            InteractiveReplyPacket replyPacket = null;
-
-            EventHandler<InteractiveReplyPacket> listener = new EventHandler<InteractiveReplyPacket>(delegate (object sender, InteractiveReplyPacket reply)
-            {
-                if (reply.id == packetID)
-                {
-                    replyPacket = reply;
-                }
-            });
-
-            this.ReplyOccurred += listener;
-
-            await this.Send(packet, checkIfAuthenticated);
-
-            await this.WaitForResponse(() => { return (replyPacket != null); });
-
-            this.ReplyOccurred -= listener;
-
-            return replyPacket;
-        }
-
-        private void OnReplyOccurred(InteractiveReplyPacket replyPacket)
-        {
-            if (this.ReplyOccurred != null)
-            {
-                this.ReplyOccurred(this, replyPacket);
-            }
-        }
-
-        private void OnMethodOccurred(InteractiveMethodPacket methodPacket)
-        {
-            if (this.MethodOccurred != null)
-            {
-                this.MethodOccurred(this, methodPacket);
-            }
-
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod<InteractiveIssueMemoryWarningModel>(methodPacket, IssueMemoryWarningOccurred);
+                    this.SendSpecificMethod<InteractiveIssueMemoryWarningModel>(methodPacket, OnIssueMemoryWarningOccurred);
                     break;
             }
         }
 
-        private void SendSpecificMethod<T>(InteractiveMethodPacket methodPacket, EventHandler<T> eventHandler)
+        private void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
         {
             if (eventHandler != null)
             {
@@ -191,16 +138,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private T GetSpecificReplyValue<T>(InteractiveReplyPacket replyPacket)
-        {
-            if (replyPacket != null)
-            {
-                return JsonConvert.DeserializeObject<T>(replyPacket.result.ToString());
-            }
-            return default(T);
-        }
-
-        private void InteractiveClient_HelloMethodHandler(object sender, InteractiveMethodPacket e)
+        private void InteractiveClient_HelloMethodHandler(object sender, MethodPacket e)
         {
             if (e.method.Equals("hello"))
             {
@@ -208,7 +146,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private void InteractiveClient_ReadyMethodHandler(object sender, InteractiveMethodPacket e)
+        private void InteractiveClient_ReadyMethodHandler(object sender, MethodPacket e)
         {
             JToken value;
             if (e.method.Equals("onReady") && e.parameters.TryGetValue("isReady", out value) && (bool)value)
@@ -217,7 +155,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private async void InteractiveClient_DisconnectOccurred(object sender, WebSocketCloseStatus e)
+        private async void InteractiveClient_OnDisconnectOccurred(object sender, WebSocketCloseStatus e)
         {
             this.connectSuccessful = false;
             this.authenticateSuccessful = false;

@@ -177,15 +177,9 @@ namespace Mixer.Base
         {
             string result = "";
 
-            foreach (ClientScopeEnum scope in scopes)
+            foreach (string scopeName in EnumHelper.EnumListToStringList(scopes))
             {
-                string enumName = Enum.GetName(typeof(ClientScopeEnum), scope);
-                if (string.IsNullOrEmpty(enumName))
-                {
-                    throw new ArgumentException("Invalid client scope specified: " + scope);
-                }
-                enumName = enumName.Replace("__", ":");
-                result += enumName + " ";
+                result += scopeName.Replace("__", ":") + " ";
             }
 
             if (result.Length > 0)
