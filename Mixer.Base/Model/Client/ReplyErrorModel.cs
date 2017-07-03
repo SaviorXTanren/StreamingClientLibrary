@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mixer.Base.Model.Interactive
+namespace Mixer.Base.Model.Client
 {
-    public class InteractiveErrorModel
+    public class ReplyErrorModel
     {
         public uint code { get; set; }
         public string message { get; set; }
