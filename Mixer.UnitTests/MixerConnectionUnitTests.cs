@@ -72,7 +72,7 @@ namespace Mixer.UnitTests
                 Assert.Fail("ClientID value isn't set in application configuration");
             }
 
-            string url = MixerConnection.GetAuthorizationCodeURLForOAuth(clientID, new List<ClientScopeEnum>()
+            string url = MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, new List<ClientScopeEnum>()
             {
                 ClientScopeEnum.chat__connect,
             }, "http://localhost").Result;

@@ -3,6 +3,7 @@ using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.User;
+using Mixer.Base.Web;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -177,7 +178,42 @@ namespace Mixer.Sample
                 ClientScopeEnum.user__update__self,
             };
 
-            await this.OAuthBrowser.Initialize(ConfigurationManager.AppSettings["ClientID"], scopes, "http://localhost");
+            this.connection = await MixerConnection.ConnectViaLocalhostOAuthBrowser(ConfigurationManager.AppSettings["ClientID"], scopes);
+
+            if (this.connection != null)
+            {
+                this.user = await this.connection.Users.GetCurrentUser();
+                this.channel = await this.connection.Channels.GetChannel("ChannelOne");
+
+                this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.channel);
+
+                this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
+                this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
+                this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
+                this.chatClient.OnUserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
+                this.chatClient.OnUserUpdateOccurred += ChatClient_UserUpdateOccurred;
+                this.chatClient.OnPollStartOccurred += ChatClient_PollStartOccurred;
+                this.chatClient.OnPollEndOccurred += ChatClient_PollEndOccurred;
+                this.chatClient.OnPurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
+                this.chatClient.OnDeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
+                this.chatClient.OnClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
+
+                if (await this.chatClient.Connect() && await this.chatClient.Authenticate())
+                {
+                    this.ChannelUserTextBlock.Text = this.user.username;
+                    this.StreamTitleTextBox.Text = this.channel.name;
+                    this.GameTitleTextBlock.Text = this.channel.type.name;
+
+                    foreach (ChatUserModel user in await this.connection.Chats.GetUsers(this.chatClient.Channel))
+                    {
+                        this.chatUsers.Add(new ChatUser(user));
+                    }
+
+                    this.LoginGrid.Visibility = Visibility.Collapsed;
+
+                    this.MainGrid.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private async void MainWindow_Closed(object sender, EventArgs e)

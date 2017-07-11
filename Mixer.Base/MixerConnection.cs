@@ -1,13 +1,17 @@
 ﻿using Mixer.Base.Services;
 using Mixer.Base.Util;
+using Mixer.Base.Web;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Mixer.Base
 {
     public class MixerConnection
     {
+        public const string OAUTH_LOCALHOST_URL = "http://localhost:8080/";
+
         private AuthorizationToken token;
 
         public ChannelsService Channels { get; private set; }
@@ -34,26 +38,53 @@ namespace Mixer.Base
             return null;
         }
 
-        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
         {
-            return await MixerConnection.GetAuthorizationCodeURLForOAuth(clientID, null, scopes, redirectUri);
+            return await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, null, scopes, redirectUri);
         }
 
-        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
             Validator.ValidateString(redirectUri, "redirectUri");
 
-            return await AuthorizationToken.GetAuthorizationCodeURLForOAuth(clientID, clientSecret, scopes, redirectUri);
+            return await AuthorizationToken.GetAuthorizationCodeURLForOAuthBrowser(clientID, clientSecret, scopes, redirectUri);
         }
 
-        public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<ClientScopeEnum> scopes)
+        {
+            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes);
+        }
+
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes)
         {
             Validator.ValidateString(clientID, "clientID");
-            Validator.ValidateList(authorizationCode, "authorizationCode");
+            Validator.ValidateList(scopes, "scopes");
 
-            AuthorizationToken token = await AuthorizationToken.GetAuthorizationToken(clientID, authorizationCode);
+            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(OAUTH_LOCALHOST_URL);
+            oauthServer.Start();
+
+            string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL);
+
+            Process.Start(url);
+
+            string authorizationCode = await oauthServer.WaitForAuthorizationCode();
+            oauthServer.End();
+
+            if (authorizationCode != null)
+            {
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode, redirectUrl: OAUTH_LOCALHOST_URL);
+            }
+            return null;
+        }
+
+        public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode, string redirectUrl = null)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(authorizationCode, "authorizationCode");
+
+            AuthorizationToken token = await AuthorizationToken.GetAuthorizationToken(clientID, authorizationCode, redirectUrl);
             return new MixerConnection(token);
         }
 

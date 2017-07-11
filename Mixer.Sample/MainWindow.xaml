@@ -4,12 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mixer.Sample"
-        xmlns:MixerOAuthWPF="clr-namespace:Mixer.OAuth.WPF;assembly=Mixer.OAuth.WPF"
         mc:Ignorable="d"
         Title="Mixer Sample App" Height="600" Width="800">
     <Grid>
         <Grid x:Name="LoginGrid" Visibility="Collapsed">
-            <MixerOAuthWPF:MixerOAuthBrowser x:Name="OAuthBrowser" />
+            
         </Grid>
         
         <Grid x:Name="MainGrid" Visibility="Visible">

@@ -82,15 +82,8 @@ namespace Mixer.Base
     {
         public static async Task<string> GetAuthorizationCodeViaShortCode(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
         {
-            if (string.IsNullOrEmpty(clientID))
-            {
-                throw new ArgumentException("Client ID must have a valid value");
-            }
-
-            if (scopes.Count() == 0)
-            {
-                throw new ArgumentException("At least one scope must be specified");
-            }
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateList(scopes, "scopes");
 
             ShortCode shortCode = null;
             using (HttpClientWrapper client = new HttpClientWrapper())
@@ -137,8 +130,12 @@ namespace Mixer.Base
             return null;
         }
 
-        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
         {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateList(scopes, "scopes");
+            Validator.ValidateString(redirectUri, "redirectUri");
+
             string url = "https://mixer.com/oauth/authorize";
 
             Dictionary<string, string> contentValues = new Dictionary<string, string>()
@@ -161,26 +158,26 @@ namespace Mixer.Base
             return url + "?" + parameters;
         }
 
-        public static async Task<AuthorizationToken> GetAuthorizationToken(string clientID, string authorizationCode)
+        public static async Task<AuthorizationToken> GetAuthorizationToken(string clientID, string authorizationCode, string redirectUrl = null)
         {
-            if (string.IsNullOrEmpty(clientID))
-            {
-                throw new ArgumentException("Client ID must have a valid value");
-            }
-
-            if (string.IsNullOrEmpty(authorizationCode))
-            {
-                throw new ArgumentException("Authorization Code must have a valid value");
-            }
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(authorizationCode, "authorizationCode");
 
             using (HttpClientWrapper client = new HttpClientWrapper())
             {
-                FormUrlEncodedContent content = new FormUrlEncodedContent(new[]
+                Dictionary<string, string> contentValues = new Dictionary<string, string>()
                 {
-                    new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                    new KeyValuePair<string, string>("client_id", clientID),
-                    new KeyValuePair<string, string>("code", authorizationCode),
-                });
+                    { "client_id", clientID },
+                    { "code", authorizationCode },
+                    { "grant_type", "authorization_code" },
+                };
+
+                if (!string.IsNullOrEmpty(redirectUrl))
+                {
+                    contentValues.Add("redirect_uri", redirectUrl);
+                }
+
+                FormUrlEncodedContent content = new FormUrlEncodedContent(contentValues);
 
                 HttpResponseMessage response = await client.PostAsync("oauth/token", content);
                 if (response.StatusCode == HttpStatusCode.OK)

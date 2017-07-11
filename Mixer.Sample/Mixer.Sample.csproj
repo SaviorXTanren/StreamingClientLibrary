@@ -125,10 +125,6 @@
       <Project>{3d2fd5b5-befd-414e-a79f-c26b6842691d}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mixer.OAuth.WPF\Mixer.OAuth.WPF.csproj">
-      <Project>{2c4c4b23-86b0-4066-b615-ba49ff7cf6fb}</Project>
-      <Name>Mixer.OAuth.WPF</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
