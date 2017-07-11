@@ -80,7 +80,7 @@ namespace Mixer.Base
 
     public class AuthorizationToken
     {
-        public static async Task<ShortCode> GenerateShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes)
+        public static async Task<string> GetAuthorizationCodeViaShortCode(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
         {
             if (string.IsNullOrEmpty(clientID))
             {
@@ -92,12 +92,13 @@ namespace Mixer.Base
                 throw new ArgumentException("At least one scope must be specified");
             }
 
+            ShortCode shortCode = null;
             using (HttpClientWrapper client = new HttpClientWrapper())
             {
-                FormUrlEncodedContent content = new FormUrlEncodedContent(new[]
+                FormUrlEncodedContent content = new FormUrlEncodedContent(new []
                 {
                     new KeyValuePair<string, string>("client_id", clientID),
-                    new KeyValuePair<string, string>("client_secret", null),
+                    new KeyValuePair<string, string>("client_secret", clientSecret),
                     new KeyValuePair<string, string>("scope", AuthorizationToken.ConvertClientScopesToString(scopes)),
                 });
 
@@ -105,21 +106,19 @@ namespace Mixer.Base
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<ShortCode>(result);
+                    shortCode = JsonConvert.DeserializeObject<ShortCode>(result);
                 }
                 else
                 {
                     throw new RestServiceRequestException(response);
                 }
             }
-        }
 
-        public static async Task<string> ValidateShortCode(ShortCode shortCode)
-        {
             if (shortCode == null)
             {
                 throw new ArgumentException("Short Code is null");
             }
+            codeCallback(shortCode);
 
             for (int i = 0; i < shortCode.expires_in; i++)
             {
@@ -136,6 +135,30 @@ namespace Mixer.Base
                 await Task.Delay(1000);
             }
             return null;
+        }
+
+        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        {
+            string url = "https://mixer.com/oauth/authorize";
+
+            Dictionary<string, string> contentValues = new Dictionary<string, string>()
+            {
+                { "client_id", clientID },
+                { "scope", AuthorizationToken.ConvertClientScopesToString(scopes) },
+                { "response_type", "code" },
+                { "redirect_uri", redirectUri },
+            };
+
+            if (!string.IsNullOrEmpty(clientSecret))
+            {
+                contentValues.Add("client_secret", clientSecret);
+            }
+
+            FormUrlEncodedContent content = new FormUrlEncodedContent(contentValues.AsEnumerable());
+
+            string parameters = await content.ReadAsStringAsync();
+
+            return url + "?" + parameters;
         }
 
         public static async Task<AuthorizationToken> GetAuthorizationToken(string clientID, string authorizationCode)

@@ -1,6 +1,8 @@
 ﻿using Mixer.Base.Model.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.WebSockets;
@@ -145,26 +147,53 @@ namespace Mixer.Base.Clients
                 {
                     byte[] buffer = new byte[this.bufferSize];
                     WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
                     if (result != null)
                     {
                         if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                         {
+                            List<WebSocketPacket> packets = new List<WebSocketPacket>();
+
                             string jsonBuffer = this.encoder.GetString(buffer);
-                            WebSocketPacket packet = JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer);
-                            if (packet.type.Equals("method"))
+                            dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
+
+                            if (jsonObject.Type == JTokenType.Array)
                             {
-                                MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
-                                this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
+                                JArray array = JArray.Parse(jsonBuffer);
+                                foreach (JToken token in array.Children())
+                                {
+                                    packets.Add(token.ToObject<WebSocketPacket>());
+                                }
                             }
-                            else if (packet.type.Equals("reply"))
+                            else
                             {
-                                ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
-                                this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
+                                packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
                             }
-                            else if (packet.type.Equals("event"))
+
+                            foreach (WebSocketPacket packet in packets)
                             {
-                                EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
-                                this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                try
+                                {
+                                    if (packet.type.Equals("method"))
+                                    {
+                                        MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
+                                        this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
+                                    }
+                                    else if (packet.type.Equals("reply"))
+                                    {
+                                        ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+                                        this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
+                                    }
+                                    else if (packet.type.Equals("event"))
+                                    {
+                                        EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
+                                        this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
                             }
                         }
                         else

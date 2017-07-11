@@ -61,9 +61,9 @@ namespace Mixer.LargeChat
                 ClientScopeEnum.user__notification__self,
                 ClientScopeEnum.user__update__self,
             },
-            (string code) =>
+            (ShortCode code) =>
             {
-                this.ShortCodeTextBox.Text = code;
+                this.ShortCodeTextBox.Text = code.code;
                 Process.Start("https://mixer.com/oauth/shortcode");
             });
 
@@ -190,17 +190,17 @@ namespace Mixer.LargeChat
 
         }
 
-        private void ChatClient_PurgeMessageOccurred(object sender, uint e)
+        private void ChatClient_PurgeMessageOccurred(object sender, ChatPurgeMessageEventModel e)
         {
 
         }
 
-        private void ChatClient_DeleteMessageOccurred(object sender, Guid e)
+        private void ChatClient_DeleteMessageOccurred(object sender, ChatDeleteMessageEventModel e)
         {
 
         }
 
-        private void ChatClient_ClearMessagesOccurred(object sender, EventArgs e)
+        private void ChatClient_ClearMessagesOccurred(object sender, ChatClearMessagesEventModel e)
         {
 
         }

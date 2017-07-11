@@ -15,22 +15,37 @@ namespace Mixer.Base
         public InteractiveService Interactive { get; private set; }
         public UsersService Users { get; private set; }
 
-        public static async Task<MixerConnection> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<string> codeCallback)
+        public static async Task<MixerConnection> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
+        {
+            return await MixerConnection.ConnectViaShortCode(clientID, null, scopes, codeCallback);
+        }
+
+        public static async Task<MixerConnection> ConnectViaShortCode(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
             Validator.ValidateVariable(codeCallback, "codeCallback");
 
-            ShortCode shortCode = await AuthorizationToken.GenerateShortCode(clientID, scopes);
-
-            codeCallback(shortCode.code);
-
-            string authorizationCode = await AuthorizationToken.ValidateShortCode(shortCode);
+            string authorizationCode = await AuthorizationToken.GetAuthorizationCodeViaShortCode(clientID, clientSecret, scopes, codeCallback);
             if (authorizationCode != null)
             {
                 return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode);
             }
             return null;
+        }
+
+        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        {
+            return await MixerConnection.GetAuthorizationCodeURLForOAuth(clientID, null, scopes, redirectUri);
+        }
+
+        public static async Task<string> GetAuthorizationCodeURLForOAuth(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, string redirectUri)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateList(scopes, "scopes");
+            Validator.ValidateString(redirectUri, "redirectUri");
+
+            return await AuthorizationToken.GetAuthorizationCodeURLForOAuth(clientID, clientSecret, scopes, redirectUri);
         }
 
         public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode)

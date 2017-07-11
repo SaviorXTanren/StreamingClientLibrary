@@ -4,30 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mixer.Sample"
+        xmlns:MixerOAuthWPF="clr-namespace:Mixer.OAuth.WPF;assembly=Mixer.OAuth.WPF"
         mc:Ignorable="d"
         Title="Mixer Sample App" Height="600" Width="800">
     <Grid>
         <Grid x:Name="LoginGrid" Visibility="Collapsed">
-            <Grid  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Button Grid.Row="0" x:Name="LoginButton" Width="100" Height="40" Click="LoginButton_Click">Login</Button>
-
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0">Short Code: </TextBlock>
-                    <TextBox Grid.Column="2" x:Name="ShortCodeTextBox" Width="60" />
-                </Grid>
-            </Grid>
+            <MixerOAuthWPF:MixerOAuthBrowser x:Name="OAuthBrowser" />
         </Grid>
         
         <Grid x:Name="MainGrid" Visibility="Visible">

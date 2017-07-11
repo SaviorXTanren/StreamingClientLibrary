@@ -12,7 +12,7 @@ namespace Mixer.UnitTests
     {
         private static MixerConnection connection;
 
-        public static MixerConnection GetMixerClient()
+        public static MixerConnection GetMixerClientViaShortCode()
         {
             if (MixerConnectionUnitTests.connection == null)
             {
@@ -52,15 +52,32 @@ namespace Mixer.UnitTests
                     ClientScopeEnum.user__notification__self,
                     ClientScopeEnum.user__update__self,
                 },
-                (string code) =>
+                (ShortCode code) =>
                 {
                     Assert.IsNotNull(code);
-                    Process.Start("https://mixer.com/oauth/shortcode?code=" + code);
+                    Process.Start("https://mixer.com/oauth/shortcode?code=" + code.code);
                 }).Result;
             }
 
             Assert.IsNotNull(MixerConnectionUnitTests.connection);
             return MixerConnectionUnitTests.connection;
+        }
+
+        [TestMethod]
+        public void GetAuthorizationCodeURLForOAuth()
+        {
+            string clientID = ConfigurationManager.AppSettings["ClientID"];
+            if (string.IsNullOrEmpty(clientID))
+            {
+                Assert.Fail("ClientID value isn't set in application configuration");
+            }
+
+            string url = MixerConnection.GetAuthorizationCodeURLForOAuth(clientID, new List<ClientScopeEnum>()
+            {
+                ClientScopeEnum.chat__connect,
+            }, "http://localhost").Result;
+
+            Assert.IsNotNull(url);
         }
 
         [TestMethod]

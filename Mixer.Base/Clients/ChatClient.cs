@@ -25,9 +25,9 @@ namespace Mixer.Base.Clients
         public event EventHandler<ChatPollEventModel> OnPollStartOccurred;
         public event EventHandler<ChatPollEventModel> OnPollEndOccurred;
 
-        public event EventHandler<Guid> OnDeleteMessageOccurred;
-        public event EventHandler<uint> OnPurgeMessageOccurred;
-        public event EventHandler OnClearMessagesOccurred;
+        public event EventHandler<ChatDeleteMessageEventModel> OnDeleteMessageOccurred;
+        public event EventHandler<ChatPurgeMessageEventModel> OnPurgeMessageOccurred;
+        public event EventHandler<ChatClearMessagesEventModel> OnClearMessagesOccurred;
 
         public ChannelModel Channel { get; private set; }
         public UserModel User { get; private set; }
@@ -102,24 +102,26 @@ namespace Mixer.Base.Clients
             return this.authenticateSuccessful;
         }
 
-        public async Task SendMessage(string message)
+        public async Task<ChatMessageEventModel> SendMessage(string message)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "msg",
                 arguments = new JArray() { message },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);    
         }
 
-        public async Task Whisper(string username, string message)
+        public async Task<ChatMessageEventModel> Whisper(string username, string message)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "whisper",
                 arguments = new JArray() { username, message },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
@@ -240,7 +242,7 @@ namespace Mixer.Base.Clients
                     this.SendSpecificEvent(eventPacket, this.OnPurgeMessageOccurred);
                     break;
                 case "ClearMessages":
-                    if (this.OnClearMessagesOccurred != null) { this.OnClearMessagesOccurred(this, new EventArgs()); }
+                    this.SendSpecificEvent(eventPacket, this.OnClearMessagesOccurred);
                     break;
             }
         }

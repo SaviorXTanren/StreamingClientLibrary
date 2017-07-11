@@ -35,68 +35,84 @@ namespace Mixer.Sample
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            this.LoginButton.IsEnabled = false;
+            //this.LoginButton.IsEnabled = false;
 
-            string clientID = ConfigurationManager.AppSettings["ClientID"];
-            if (string.IsNullOrEmpty(clientID))
-            {
-                throw new ArgumentException("ClientID value isn't set in application configuration");
-            }
+            //string clientID = ConfigurationManager.AppSettings["ClientID"];
+            //if (string.IsNullOrEmpty(clientID))
+            //{
+            //    throw new ArgumentException("ClientID value isn't set in application configuration");
+            //}
 
-            this.connection = await MixerConnection.ConnectViaShortCode(clientID,
-            new List<ClientScopeEnum>()
-            {
-                ClientScopeEnum.chat__chat,
-                ClientScopeEnum.chat__connect,
-                ClientScopeEnum.channel__details__self,
-                ClientScopeEnum.channel__update__self,
-                ClientScopeEnum.user__details__self,
-                ClientScopeEnum.user__log__self,
-                ClientScopeEnum.user__notification__self,
-                ClientScopeEnum.user__update__self,
-            },
-            (string code) =>
-            {
-                this.ShortCodeTextBox.Text = code;
-                Process.Start("https://mixer.com/oauth/shortcode");
-            });
+            //this.connection = await MixerConnection.ConnectViaShortCode(clientID,
+            //new List<ClientScopeEnum>()
+            //{
+            //    //ClientScopeEnum.chat__bypass_links,
+            //    //ClientScopeEnum.chat__bypass_slowchat,
+            //    //ClientScopeEnum.chat__change_ban,
+            //    //ClientScopeEnum.chat__change_role,
+            //    ClientScopeEnum.chat__chat,
+            //    ClientScopeEnum.chat__connect,
+            //    //ClientScopeEnum.chat__clear_messages,
+            //    //ClientScopeEnum.chat__edit_options,
+            //    //ClientScopeEnum.chat__giveaway_start,
+            //    //ClientScopeEnum.chat__poll_start,
+            //    ClientScopeEnum.chat__poll_vote,
+            //    //ClientScopeEnum.chat__purge,
+            //    //ClientScopeEnum.chat__remove_message,
+            //    //ClientScopeEnum.chat__timeout,
+            //    //ClientScopeEnum.chat__view_deleted,
+            //    ClientScopeEnum.chat__whisper,
 
-            if (this.connection != null)
-            {
-                this.user = await this.connection.Users.GetCurrentUser();
-                this.channel = await this.connection.Channels.GetChannel(this.user.username);
+            //    ClientScopeEnum.channel__details__self,
+            //    ClientScopeEnum.channel__update__self,
 
-                this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.user.channel);
+            //    ClientScopeEnum.user__details__self,
+            //    ClientScopeEnum.user__log__self,
+            //    ClientScopeEnum.user__notification__self,
+            //    ClientScopeEnum.user__update__self,
+            //},
+            //(ShortCode code) =>
+            //{
+            //    this.ShortCodeTextBox.Text = code.code;
+            //    Process.Start("https://mixer.com/oauth/shortcode");
+            //});
 
-                this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
-                this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
-                this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
-                this.chatClient.OnUserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
-                this.chatClient.OnUserUpdateOccurred += ChatClient_UserUpdateOccurred;
-                this.chatClient.OnPollStartOccurred += ChatClient_PollStartOccurred;
-                this.chatClient.OnPollEndOccurred += ChatClient_PollEndOccurred;
-                this.chatClient.OnPurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
-                this.chatClient.OnDeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
-                this.chatClient.OnClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
+            //if (this.connection != null)
+            //{
+            //    this.user = await this.connection.Users.GetCurrentUser();
+            //    this.channel = await this.connection.Channels.GetChannel("ChannelOne");
 
-                if (await this.chatClient.Connect() && await this.chatClient.Authenticate())
-                {
-                    this.ChannelUserTextBlock.Text = this.user.username;
-                    this.StreamTitleTextBox.Text = this.channel.name;
-                    this.GameTitleTextBlock.Text = this.channel.type.name;
+            //    this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.channel);
 
-                    foreach (ChatUserModel user in await this.connection.Chats.GetUsers(this.chatClient.Channel))
-                    {
-                        this.chatUsers.Add(new ChatUser(user));
-                    }
+            //    this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
+            //    this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
+            //    this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
+            //    this.chatClient.OnUserTimeoutOccurred += ChatClient_UserTimeoutOccurred;
+            //    this.chatClient.OnUserUpdateOccurred += ChatClient_UserUpdateOccurred;
+            //    this.chatClient.OnPollStartOccurred += ChatClient_PollStartOccurred;
+            //    this.chatClient.OnPollEndOccurred += ChatClient_PollEndOccurred;
+            //    this.chatClient.OnPurgeMessageOccurred += ChatClient_PurgeMessageOccurred;
+            //    this.chatClient.OnDeleteMessageOccurred += ChatClient_DeleteMessageOccurred;
+            //    this.chatClient.OnClearMessagesOccurred += ChatClient_ClearMessagesOccurred;
 
-                    this.LoginGrid.Visibility = Visibility.Collapsed;
+            //    if (await this.chatClient.Connect() && await this.chatClient.Authenticate())
+            //    {
+            //        this.ChannelUserTextBlock.Text = this.user.username;
+            //        this.StreamTitleTextBox.Text = this.channel.name;
+            //        this.GameTitleTextBlock.Text = this.channel.type.name;
 
-                    this.MainGrid.Visibility = Visibility.Visible;
-                }
-            }
+            //        foreach (ChatUserModel user in await this.connection.Chats.GetUsers(this.chatClient.Channel))
+            //        {
+            //            this.chatUsers.Add(new ChatUser(user));
+            //        }
 
-            this.LoginButton.IsEnabled = true;
+            //        this.LoginGrid.Visibility = Visibility.Collapsed;
+
+            //        this.MainGrid.Visibility = Visibility.Visible;
+            //    }
+            //}
+
+            //this.LoginButton.IsEnabled = true;
         }
 
         private async void UpdateStreamButton_Click(object sender, RoutedEventArgs e)
@@ -124,7 +140,7 @@ namespace Mixer.Sample
             }
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.LoginGrid.Visibility = Visibility.Visible;
 
@@ -132,6 +148,36 @@ namespace Mixer.Sample
 
             this.ChatListView.ItemsSource = this.chatMessages;
             this.UsersListView.ItemsSource = this.chatUsers;
+
+            List<ClientScopeEnum> scopes = new List<ClientScopeEnum>()
+            {
+                //ClientScopeEnum.chat__bypass_links,
+                //ClientScopeEnum.chat__bypass_slowchat,
+                //ClientScopeEnum.chat__change_ban,
+                //ClientScopeEnum.chat__change_role,
+                ClientScopeEnum.chat__chat,
+                ClientScopeEnum.chat__connect,
+                //ClientScopeEnum.chat__clear_messages,
+                //ClientScopeEnum.chat__edit_options,
+                //ClientScopeEnum.chat__giveaway_start,
+                //ClientScopeEnum.chat__poll_start,
+                ClientScopeEnum.chat__poll_vote,
+                //ClientScopeEnum.chat__purge,
+                //ClientScopeEnum.chat__remove_message,
+                //ClientScopeEnum.chat__timeout,
+                //ClientScopeEnum.chat__view_deleted,
+                ClientScopeEnum.chat__whisper,
+
+                ClientScopeEnum.channel__details__self,
+                ClientScopeEnum.channel__update__self,
+
+                ClientScopeEnum.user__details__self,
+                ClientScopeEnum.user__log__self,
+                ClientScopeEnum.user__notification__self,
+                ClientScopeEnum.user__update__self,
+            };
+
+            await this.OAuthBrowser.Initialize(ConfigurationManager.AppSettings["ClientID"], scopes, "http://localhost");
         }
 
         private async void MainWindow_Closed(object sender, EventArgs e)
@@ -187,17 +233,17 @@ namespace Mixer.Sample
 
         }
 
-        private void ChatClient_PurgeMessageOccurred(object sender, uint e)
+        private void ChatClient_PurgeMessageOccurred(object sender, ChatPurgeMessageEventModel e)
         {
 
         }
 
-        private void ChatClient_DeleteMessageOccurred(object sender, Guid e)
+        private void ChatClient_DeleteMessageOccurred(object sender, ChatDeleteMessageEventModel e)
         {
 
         }
 
-        private void ChatClient_ClearMessagesOccurred(object sender, EventArgs e)
+        private void ChatClient_ClearMessagesOccurred(object sender, ChatClearMessagesEventModel e)
         {
 
         }
