@@ -121,11 +121,23 @@ namespace Mixer.Base.Clients
             return replyPacket;
         }
 
+        protected bool VerifyDataExists(ReplyPacket replyPacket)
+        {
+            return (replyPacket != null && replyPacket.data != null && !string.IsNullOrEmpty(replyPacket.data.ToString()));
+        }
+
         protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
         {
             if (replyPacket != null)
             {
-                return JsonConvert.DeserializeObject<T>(replyPacket.result.ToString());
+                if (replyPacket.resultObject != null)
+                {
+                    return JsonConvert.DeserializeObject<T>(replyPacket.resultObject.ToString());
+                }
+                else if (replyPacket.dataObject != null)
+                {
+                    return JsonConvert.DeserializeObject<T>(replyPacket.dataObject.ToString());
+                }
             }
             return default(T);
         }

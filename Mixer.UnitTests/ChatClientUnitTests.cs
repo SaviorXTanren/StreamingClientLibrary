@@ -61,14 +61,11 @@ namespace Mixer.UnitTests
                 this.ClearAllPackets();
 
                 string messageText = "Hello World!";
-                await chatClient.Whisper(chatClient.User.username, messageText);
+                ChatMessageEventModel message = await chatClient.Whisper(chatClient.User.username, messageText);
 
-                await Task.Delay(1000);
+                this.ValidateMessage(chatClient, message, messageText);
 
-                this.ValidateMessage(chatClient, messageText);
-
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.data["target"].ToString().Equals(chatClient.User.username));
+                Assert.IsTrue(message.target.ToString().Equals(chatClient.User.username));
             });
         }
 
@@ -81,25 +78,13 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                await chatClient.StartVote("Turkey or Ham?", new List<string>() { "Turkey", "Ham" }, 30);
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue(replyPacket.data.ToString().Equals("Poll started."));
+                bool result = await chatClient.StartVote("Turkey or Ham?", new List<string>() { "Turkey", "Ham" }, 30);
+                Assert.IsTrue(result);
 
                 this.ClearAllPackets();
 
-                await chatClient.ChooseVote(0);
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue((bool)replyPacket.data);
+                result = await chatClient.ChooseVote(0);
+                Assert.IsTrue(result);
             });
         }
 
@@ -108,20 +93,14 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
+                await this.SendBasicMessage(chatClient);
 
                 this.ClearAllPackets();
 
                 UserModel user = await connection.Users.GetUser("SXTBot");
 
-                await chatClient.TimeoutUser(user.username, 1);
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue(replyPacket.data.ToString().Contains("has been timed out for"));
+                bool result = await chatClient.TimeoutUser(user.username, 65000);
+                Assert.IsTrue(result);
             });
         }
 
@@ -130,20 +109,14 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
+                await this.SendBasicMessage(chatClient);
 
                 this.ClearAllPackets();
 
                 UserModel user = await connection.Users.GetUser("SXTBot");
 
-                await chatClient.PurgeUser(user.username);
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue(string.IsNullOrEmpty(replyPacket.error.ToString()));
+                bool result = await chatClient.PurgeUser(user.username);
+                Assert.IsTrue(result);
             });
         }
 
@@ -158,14 +131,8 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                await chatClient.DeleteMessage(message.id);
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue(replyPacket.data.ToString().Equals("Message deleted."));
+                bool result = await chatClient.DeleteMessage(message.id);
+                Assert.IsTrue(result);
             });
         }
 
@@ -174,18 +141,12 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
+                await this.SendBasicMessage(chatClient);
 
                 this.ClearAllPackets();
 
-                await chatClient.ClearMessages();
-
-                await Task.Delay(1000);
-
-                Assert.IsTrue(this.replyPackets.Count > 0);
-                ReplyPacket replyPacket = this.replyPackets.First();
-                Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-                Assert.IsTrue(replyPacket.data.ToString().Equals("Messages cleared."));
+                bool result = await chatClient.ClearMessages();
+                Assert.IsTrue(result);
             });
         }
 
@@ -203,23 +164,14 @@ namespace Mixer.UnitTests
             this.ClearAllPackets();
 
             string messageText = "Hello World!";
-            await chatClient.SendMessage(messageText);
+            ChatMessageEventModel message = await chatClient.SendMessage(messageText);
 
-            await Task.Delay(1000);
-
-            this.ValidateMessage(chatClient, messageText);
+            this.ValidateMessage(chatClient, message, messageText);
         }
 
-        private void ValidateMessage(ChatClient chatClient, string messageText)
+        private void ValidateMessage(ChatClient chatClient, ChatMessageEventModel message, string messageText)
         {
-            Assert.IsTrue(this.replyPackets.Count > 0);
-            ReplyPacket replyPacket = this.replyPackets.First();
-            Assert.IsTrue(replyPacket.id == (uint)(chatClient.CurrentPacketID - 1));
-            Assert.IsTrue(replyPacket.data["user_name"].ToString().Equals(chatClient.User.username));
-            Assert.IsTrue(replyPacket.data["message"]["message"][0]["text"].ToString().Equals(messageText));
-
-            Assert.IsTrue(this.messages.Count > 0);
-            ChatMessageEventModel message = this.messages.First();
+            Assert.IsTrue(message.user_name.ToString().Equals(chatClient.User.username));
             Assert.IsTrue(message.message.message.First().text.Equals(messageText));
         }
 

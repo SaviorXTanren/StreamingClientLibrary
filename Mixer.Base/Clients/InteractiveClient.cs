@@ -106,9 +106,9 @@ namespace Mixer.Base.Clients
         {
             MethodPacket packet = new MethodPacket() { method = "getTime" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            if (reply != null && reply.result["time"] != null)
+            if (reply != null && reply.resultObject["time"] != null)
             {
-                return DateTimeHelper.ParseUnixTimestamp((long)reply.result["time"]);
+                return DateTimeHelper.ParseUnixTimestamp((long)reply.resultObject["time"]);
             }
             return null;
         }

@@ -125,69 +125,75 @@ namespace Mixer.Base.Clients
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task StartVote(string question, IEnumerable<string> options, uint timeLimit)
+        public async Task<bool> StartVote(string question, IEnumerable<string> options, uint timeLimit)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "vote:start",
-                arguments = new JArray() { question, options, timeLimit },
+                arguments = new JArray() { question, new JArray() { options }, timeLimit },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyDataExists(reply);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task ChooseVote(uint optionIndex)
+        public async Task<bool> ChooseVote(uint optionIndex)
         {
             MethodPacket packet = new MethodPacket()
             {
-                method = "vote",
+                method = "vote:choose",
                 arguments = new JArray() { optionIndex },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyDataExists(reply);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task TimeoutUser(string username, uint durationInSeconds)
+        public async Task<bool> TimeoutUser(string username, uint durationInMilliseconds)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "timeout",
-                arguments = new JArray() { username, durationInSeconds },
+                arguments = new JArray() { username, durationInMilliseconds.ToString() },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyDataExists(reply);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task PurgeUser(string username)
+        public async Task<bool> PurgeUser(string username)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "purge",
                 arguments = new JArray() { username },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return (reply != null);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task DeleteMessage(Guid messageID)
+        public async Task<bool> DeleteMessage(Guid messageID)
         {
             MethodPacket packet = new MethodPacket()
             {
-                method = "purge",
+                method = "deleteMessage",
                 arguments = new JArray() { messageID },
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyDataExists(reply);
         }
 
         // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task ClearMessages()
+        public async Task<bool> ClearMessages()
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "clearMessages",
                 arguments = new JArray(),
             };
-            await this.Send(packet);
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyDataExists(reply);
         }
 
         private void ConnectEventHandler(object sender, EventPacket e)
@@ -201,7 +207,7 @@ namespace Mixer.Base.Clients
         private void AuthenticateEventHandler(object sender, ReplyPacket e)
         {
             JToken value;
-            if (e.id == (this.CurrentPacketID - 1) && e.data.TryGetValue("authenticated", out value) && (bool)value)
+            if (e.id == (this.CurrentPacketID - 1) && e.dataObject.TryGetValue("authenticated", out value) && (bool)value)
             {
                 this.authenticateSuccessful = true;
             }
