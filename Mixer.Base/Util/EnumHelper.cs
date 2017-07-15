@@ -36,7 +36,7 @@ namespace Mixer.Base.Util
             List<T> values = new List<T>();
             foreach (T value in Enum.GetValues(typeof(T)))
             {
-                value.Equals(value);
+                values.Add(value);
             }
             return EnumHelper.GetEnumNames(values);
         }
