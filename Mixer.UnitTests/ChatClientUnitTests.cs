@@ -88,18 +88,21 @@ namespace Mixer.UnitTests
             });
         }
 
+        /// <summary>
+        /// Requires user that is being timed out to be logged in to the chat for the channel
+        /// </summary>
         [TestMethod]
         public void TimeoutUser()
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.SendBasicMessage(chatClient);
+                await this.AuthenticateChat(chatClient);
 
                 this.ClearAllPackets();
 
                 UserModel user = await connection.Users.GetUser("SXTBot");
 
-                bool result = await chatClient.TimeoutUser(user.username, 65000);
+                bool result = await chatClient.TimeoutUser(user.username, 60);
                 Assert.IsTrue(result);
             });
         }

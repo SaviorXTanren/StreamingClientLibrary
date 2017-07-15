@@ -136,7 +136,6 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
         public async Task<bool> ChooseVote(uint optionIndex)
         {
             MethodPacket packet = new MethodPacket()
@@ -148,19 +147,17 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task<bool> TimeoutUser(string username, uint durationInMilliseconds)
+        public async Task<bool> TimeoutUser(string username, uint durationInSeconds)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "timeout",
-                arguments = new JArray() { username, durationInMilliseconds.ToString() },
+                arguments = new JArray() { username, durationInSeconds.ToString() },
             };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyDataExists(reply);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
         public async Task<bool> PurgeUser(string username)
         {
             MethodPacket packet = new MethodPacket()
@@ -172,7 +169,6 @@ namespace Mixer.Base.Clients
             return (reply != null);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
         public async Task<bool> DeleteMessage(Guid messageID)
         {
             MethodPacket packet = new MethodPacket()
@@ -184,7 +180,6 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
         public async Task<bool> ClearMessages()
         {
             MethodPacket packet = new MethodPacket()
