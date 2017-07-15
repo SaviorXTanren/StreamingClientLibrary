@@ -15,7 +15,13 @@ namespace Mixer.Base.Clients
 {
     public class InteractiveClient : WebSocketClientBase
     {
-        public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarningOccurred;
+        public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarning;
+
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantLeave;
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantJoin;
+        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantUpdate;
+
+        public event EventHandler<InteractiveGiveInputModel> OnGiveInput;
 
         public ChannelModel Channel { get; private set; }
         public InteractiveGameListingModel InteractiveGame { get; private set; }
@@ -120,13 +126,58 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveIssueMemoryWarningModel>(reply);
         }
 
+        public async Task<InteractiveGetScenesModel> GetScenes()
+        {
+            MethodPacket packet = new MethodPacket() { method = "getScenes" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGetScenesModel>(reply);
+        }
+
+        public async Task<InteractiveGetAllParticipantsModel> GetAllParticipants(uint from = 0) //TODO - TT - Not sure if we need to iterate through entire list here or not.
+        {
+            /* Spec p.19-20, 'from' is used to indicate earliest connect timestamp of the Participants. 
+             * Initial request should be at 0 and each subsequent call should be max participant 'connectedAt' per result set */
+            JObject parameters = new JObject();
+            parameters.Add("from", from);
+            MethodPacket packet = new MethodPacket() { method = "getAllParticipants", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+        }
+
+        public async Task<InteractiveUpdateControlsModel> UpdateControls(string scenedID, List<InteractiveControlModel> controls)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("sceneID", scenedID);
+            parameters.Add("controls", JToken.FromObject(controls));
+            MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveUpdateControlsModel>(reply);
+        }
+
         private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket methodPacket)
         {
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod<InteractiveIssueMemoryWarningModel>(methodPacket, OnIssueMemoryWarningOccurred);
+                    this.SendSpecificMethod(methodPacket, OnIssueMemoryWarning);
                     break;
+
+                case "onParticipantLeave":
+                    this.SendSpecificMethod(methodPacket, OnParticipantLeave);
+                    break;
+
+                case "onParticipantJoin":
+                    this.SendSpecificMethod(methodPacket, OnParticipantJoin);
+                    break;
+
+                case "onParticipantUpdate":
+                    this.SendSpecificMethod(methodPacket, OnParticipantUpdate);
+                    break;
+
+                case "giveInput":
+                    this.SendSpecificMethod(methodPacket, OnGiveInput);
+                    break;
+
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿using Mixer.Base.Model.Client;
+using Mixer.Base.Model.Interactive;
+using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -130,7 +132,11 @@ namespace Mixer.Base.Clients
         {
             if (replyPacket != null)
             {
-                if (replyPacket.resultObject != null)
+                if (replyPacket.error != null)
+                {
+                    throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
+                }
+                else if (replyPacket.resultObject != null)
                 {
                     return JsonConvert.DeserializeObject<T>(replyPacket.resultObject.ToString());
                 }
