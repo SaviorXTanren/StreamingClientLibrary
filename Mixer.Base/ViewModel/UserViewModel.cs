@@ -5,9 +5,11 @@ namespace Mixer.Base.ViewModel
 {
     public class UserViewModel : IEquatable<UserViewModel>
     {
-        public uint ID { get; private set; }
+        public uint ID { get; set; }
 
-        public string UserName { get; private set; }
+        public string UserName { get; set; }
+
+        public UserViewModel() { }
 
         public UserViewModel(uint id, string username)
         {
