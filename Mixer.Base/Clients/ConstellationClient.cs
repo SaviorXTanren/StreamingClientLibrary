@@ -177,7 +177,7 @@ namespace Mixer.Base.Clients
             List<string> stringEventTypes = new List<string>();
             foreach (ConstellationEventType eventType in eventTypes)
             {
-                string eventName = EnumHelper.EnumToString(eventType.Type);
+                string eventName = EnumHelper.GetEnumName(eventType.Type);
                 eventName = eventName.Replace("__", ":");
                 eventName = eventName.Replace(":id:", string.Format(":{0}:", eventType.ID));
                 stringEventTypes.Add(eventName);

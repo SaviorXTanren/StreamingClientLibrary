@@ -197,7 +197,7 @@ namespace Mixer.Base
         {
             string result = "";
 
-            foreach (string scopeName in EnumHelper.EnumListToStringList(scopes))
+            foreach (string scopeName in EnumHelper.GetEnumNames(scopes))
             {
                 result += scopeName.Replace("__", ":") + " ";
             }
