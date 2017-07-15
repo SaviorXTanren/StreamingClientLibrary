@@ -17,12 +17,8 @@ namespace Mixer.Base.ViewModel.Chat
         Streamer,
     }
 
-    public class ChatUserViewModel : IEquatable<ChatUserViewModel>
+    public class ChatUserViewModel : UserViewModel, IEquatable<ChatUserViewModel>
     {
-        public uint ID { get; private set; }
-
-        public string UserName { get; private set; }
-
         public IEnumerable<UserRole> Roles { get; private set; }
 
         public UserRole PrimaryRole { get { return this.Roles.Max(); } }
@@ -34,9 +30,8 @@ namespace Mixer.Base.ViewModel.Chat
         public ChatUserViewModel(ChatMessageEventModel messageEvent) : this(messageEvent.user_id, messageEvent.user_name, messageEvent.user_roles) { }
 
         public ChatUserViewModel(uint id, string username, string[] userRoles)
+            : base(id, username)
         {
-            this.ID = id;
-            this.UserName = username;
             List<UserRole> roles = new List<UserRole>();
 
             roles.Add(UserRole.User);
@@ -50,7 +45,7 @@ namespace Mixer.Base.ViewModel.Chat
             this.Roles = roles;
         }
 
-        public ChatUserModel GetModel()
+        public new ChatUserModel GetModel()
         {
             return new ChatUserModel()
             {
