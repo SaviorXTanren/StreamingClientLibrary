@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mixer.Base.Model.Interactive
+﻿namespace Mixer.Base.Model.Interactive
 {
-   public class InteractiveGroupModel
+    public class InteractiveGroupModel
     {
         public string groupID { get; set; }
         public string etag { get; set; }

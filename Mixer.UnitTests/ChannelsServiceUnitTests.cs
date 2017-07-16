@@ -40,6 +40,9 @@ namespace Mixer.UnitTests
             });
         }
 
+        /// <summary>
+        /// New bug where channel updating does not seem to be working correctly, need to investigate why the call is returning with a 403 error
+        /// </summary>
         [TestMethod]
         public void UpdateChannel()
         {

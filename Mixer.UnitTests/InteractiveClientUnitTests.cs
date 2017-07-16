@@ -55,7 +55,7 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetMemoryStats()
+        public void GetMemoryStates()
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
@@ -63,12 +63,65 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                InteractiveIssueMemoryWarningModel memory = await interactiveClient.GetMemoryStates();
+                InteractiveIssueMemoryWarningModel memoryWarning = await interactiveClient.GetMemoryStates();
 
-                Assert.IsNotNull(memory);
-                Assert.IsTrue(memory.usedBytes > 0);
-                Assert.IsTrue(memory.totalBytes > 0);
-                Assert.IsNotNull(memory.resources);
+                Assert.IsNotNull(memoryWarning);
+                Assert.IsTrue(memoryWarning.usedBytes > 0);
+                Assert.IsTrue(memoryWarning.totalBytes > 0);
+                Assert.IsNotNull(memoryWarning.resources);
+            });
+        }
+
+        [TestMethod]
+        public void GetScenes()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGetScenesModel scenes = await interactiveClient.GetScenes();
+
+                Assert.IsNotNull(scenes);
+                Assert.IsTrue(scenes.scenes.Count > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetAllParticipants()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGetAllParticipantsModel participants = await interactiveClient.GetAllParticipants();
+
+                Assert.IsNotNull(participants);
+                Assert.IsTrue(participants.participants != null);
+            });
+        }
+
+        [TestMethod]
+        public void UpdateControls()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGetScenesModel scenes = await interactiveClient.GetScenes();
+
+                Assert.IsNotNull(scenes);
+                Assert.IsTrue(scenes.scenes.Count > 0);
+
+                InteractiveUpdateControlsModel updateControls = await interactiveClient.UpdateControls(scenes.scenes[0].sceneID, scenes.scenes[0].controls);
+
+                Assert.IsNotNull(updateControls);
+                Assert.IsTrue(updateControls.controls.Count() > 0);
             });
         }
 

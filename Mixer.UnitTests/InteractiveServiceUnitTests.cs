@@ -10,6 +10,9 @@ namespace Mixer.UnitTests
     [TestClass]
     public class InteractiveServiceUnitTests : UnitTestBase
     {
+        /// <summary>
+        /// Requires an interactive connection to be established for this unit test to pass
+        /// </summary>
         [TestMethod]
         public void GetInteractive()
         {
@@ -24,6 +27,9 @@ namespace Mixer.UnitTests
             });
         }
 
+        /// <summary>
+        /// Requires an interactive connection to be established for this unit test to pass
+        /// </summary>
         [TestMethod]
         public void GetInteractiveRobot()
         {
@@ -64,6 +70,9 @@ namespace Mixer.UnitTests
             });
         }
 
+        /// <summary>
+        /// Requires an interactive connection to be established for this unit test to pass
+        /// </summary>
         [TestMethod]
         public void GetSharedInteractiveGames()
         {
