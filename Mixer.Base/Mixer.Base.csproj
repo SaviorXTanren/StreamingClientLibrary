@@ -59,10 +59,10 @@
     <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
     <Compile Include="Model\Client\EventPacket.cs" />
     <Compile Include="Model\Client\MethodPacket.cs" />
+    <Compile Include="Model\Client\ReplyErrorModel.cs" />
     <Compile Include="Model\Client\ReplyPacket.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveErrorModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
@@ -110,6 +110,7 @@
     <Compile Include="Util\DateTimeHelper.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\NameAttribute.cs" />
+    <Compile Include="Util\ReplyPacketException.cs" />
     <Compile Include="Util\RestServiceRequestException.cs" />
     <Compile Include="Util\Validator.cs" />
     <Compile Include="ViewModel\Chat\ChatMessageViewModel.cs" />

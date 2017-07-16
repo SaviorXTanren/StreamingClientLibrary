@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mixer.Base.Model.Client;
 
 namespace Mixer.Base.Model.Interactive
 {
-  public  class InteractiveGiveInputModel : InteractiveMethodPacket
+    public  class InteractiveGiveInputModel : MethodPacket
     {
         public string participantID { get; set; }
         public string transactionID { get; set; }

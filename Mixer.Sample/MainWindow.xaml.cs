@@ -34,7 +34,7 @@ namespace Mixer.Sample
             this.Closed += MainWindow_Closed;
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             //this.LoginButton.IsEnabled = false;
 

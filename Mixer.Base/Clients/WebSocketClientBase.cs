@@ -132,7 +132,7 @@ namespace Mixer.Base.Clients
         {
             if (replyPacket != null)
             {
-                if (replyPacket.error != null)
+                if (replyPacket.errorObject != null)
                 {
                     throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
                 }
