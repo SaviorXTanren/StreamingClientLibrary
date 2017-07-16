@@ -19,11 +19,29 @@ namespace Mixer.Base
         public InteractiveService Interactive { get; private set; }
         public UsersService Users { get; private set; }
 
+        /// <summary>
+        /// NOTE: There is a known issue with the Mixer APIs where authenticating with a short code as opposed to the regular OAuth process, where certain
+        /// Chat Client commands will not work (EX: Timeout, Clear Messages, Delete Message, etc). The current work around to this is to use the traditional
+        /// OAuth authentication methods.
+        /// </summary>
+        /// <param name="clientID"></param>
+        /// <param name="scopes"></param>
+        /// <param name="codeCallback"></param>
+        /// <returns></returns>
         public static async Task<MixerConnection> ConnectViaShortCode(string clientID, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
         {
             return await MixerConnection.ConnectViaShortCode(clientID, null, scopes, codeCallback);
         }
 
+        /// <summary>
+        /// NOTE: There is a known issue with the Mixer APIs where authenticating with a short code as opposed to the regular OAuth process, where certain
+        /// Chat Client commands will not work (EX: Timeout, Clear Messages, Delete Message, etc). The current work around to this is to use the traditional
+        /// OAuth authentication methods.
+        /// </summary>
+        /// <param name="clientID"></param>
+        /// <param name="scopes"></param>
+        /// <param name="codeCallback"></param>
+        /// <returns></returns>
         public static async Task<MixerConnection> ConnectViaShortCode(string clientID, string clientSecret, IEnumerable<ClientScopeEnum> scopes, Action<ShortCode> codeCallback)
         {
             Validator.ValidateString(clientID, "clientID");
