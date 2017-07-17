@@ -15,16 +15,16 @@ namespace Mixer.Base.ViewModel.Chat
 
         public bool IsDeleted { get; set; }
 
-        private ChatMessageEventModel chatMessageEvent;
+        public ChatMessageEventModel ChatMessageEvent { get; private set; }
 
         public ChatMessageViewModel(ChatMessageEventModel chatMessageEvent)
         {
-            this.chatMessageEvent = chatMessageEvent;
-            this.ID = this.chatMessageEvent.id;
-            this.User = new ChatUserViewModel(this.chatMessageEvent);
+            this.ChatMessageEvent = chatMessageEvent;
+            this.ID = this.ChatMessageEvent.id;
+            this.User = new ChatUserViewModel(this.ChatMessageEvent);
             this.Timestamp = DateTimeOffset.Now;
             this.Message = string.Empty;
-            foreach (ChatMessageDataModel message in this.chatMessageEvent.message.message)
+            foreach (ChatMessageDataModel message in this.ChatMessageEvent.message.message)
             {
                 this.Message += message.text;
             }
