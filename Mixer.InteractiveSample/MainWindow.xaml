@@ -1,0 +1,25 @@
+﻿<Window x:Class="Mixer.InteractiveSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mixer.InteractiveSample"
+        mc:Ignorable="d"
+        Title="Mixer Interactive Sample" Height="350" Width="525">
+    <Grid>
+        <Grid x:Name="LoginGrid" Visibility="Visible">
+            <Button x:Name="LoginButton" Click="LoginButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">Login</Button>
+        </Grid>
+
+        <Grid x:Name="GameSelectGrid" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <ComboBox x:Name="GameSelectComboBox" Width="200" />
+                <Button x:Name="GameSelectButton" Click="GameSelectButton_Click">Select</Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="MainGrid" Visibility="Collapsed">
+            <TextBlock x:Name="InteractiveDataTextBlock" />
+        </Grid>
+    </Grid>
+</Window>

@@ -226,6 +226,15 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveUpdateControlsModel>(reply);
         }
 
+        public async Task<bool> CaptureSparkTransaction(string transactionID)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("transactionID", transactionID);
+            MethodPacket packet = new MethodPacket() { method = "capture", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
         private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket methodPacket)
         {
             switch (methodPacket.method)
@@ -264,7 +273,6 @@ namespace Mixer.Base.Clients
                 case "giveInput":
                     this.SendSpecificMethod(methodPacket, this.OnGiveInput);
                     break;
-
             }
         }
 

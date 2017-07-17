@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Mixer Sample App" Height="600" Width="800">
     <Grid>
-        <Grid x:Name="LoginGrid" Visibility="Collapsed">
-            
+        <Grid x:Name="LoginGrid" Visibility="Visible">
+            <Button x:Name="LoginButton" Click="LoginButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">Login</Button>
         </Grid>
         
-        <Grid x:Name="MainGrid" Visibility="Visible">
+        <Grid x:Name="MainGrid" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />

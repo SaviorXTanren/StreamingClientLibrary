@@ -260,6 +260,21 @@ namespace Mixer.UnitTests
             });
         }
 
+        [TestMethod]
+        public void CaptureSparkTransaction()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                bool result = await interactiveClient.CaptureSparkTransaction(Guid.Empty.ToString());
+
+                Assert.IsTrue(result);
+            });
+        }
+
         private void InteractiveWrapper(Func<MixerConnection, InteractiveClient, Task> function)
         {
             this.TestWrapper(async (MixerConnection connection) =>
