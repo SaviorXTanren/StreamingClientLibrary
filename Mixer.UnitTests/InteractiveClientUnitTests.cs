@@ -73,7 +73,7 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetScenes()
+        public void SetBandwidthThrottle()
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
@@ -81,10 +81,25 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                InteractiveGetScenesModel scenes = await interactiveClient.GetScenes();
+                InteractiveSetBandwidthThrottleModel bandwidthThrottle = new InteractiveSetBandwidthThrottleModel();
+                bool result = await interactiveClient.SetBandwidthThrottle(bandwidthThrottle);
 
-                Assert.IsNotNull(scenes);
-                Assert.IsTrue(scenes.scenes.Count > 0);
+                Assert.IsTrue(result);
+            });
+        }
+
+        [TestMethod]
+        public void GetThrottleState()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                Dictionary<string, MethodGetThrottleStateModel> throttleState = await interactiveClient.GetThrottleState();
+
+                Assert.IsNotNull(throttleState);
             });
         }
 
@@ -101,6 +116,126 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(participants);
                 Assert.IsTrue(participants.participants != null);
+            });
+        }
+
+        [TestMethod]
+        public void GetActiveParticipants()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                DateTimeOffset dateTime = DateTimeOffset.Now;
+                InteractiveGetAllParticipantsModel participants = await interactiveClient.GetActiveParticipants(dateTime);
+
+                Assert.IsNotNull(participants);
+                Assert.IsTrue(participants.participants != null);
+            });
+        }
+
+        [TestMethod]
+        public void UpdateParticipants()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGetAllParticipantsModel participants = await interactiveClient.GetAllParticipants();
+
+                Assert.IsNotNull(participants);
+                Assert.IsTrue(participants.participants != null);
+
+                this.ClearPackets();
+
+                participants = await interactiveClient.UpdateParticipants(participants.participants);
+
+                Assert.IsNotNull(participants);
+                Assert.IsTrue(participants.participants != null);
+            });
+        }
+
+        [TestMethod]
+        public void CreateGroups()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGroupContainerModel groups = new InteractiveGroupContainerModel();
+
+                bool result = await interactiveClient.CreateGroups(groups);
+
+                Assert.IsTrue(result);
+            });
+        }
+
+        [TestMethod]
+        public void GetGroups()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGroupContainerModel groups = await interactiveClient.GetGroups();
+
+                Assert.IsNotNull(groups);
+                Assert.IsTrue(groups.groups != null);
+            });
+        }
+
+        [TestMethod]
+        public void UpdateGroups()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGroupContainerModel groups = await interactiveClient.GetGroups();
+
+                Assert.IsNotNull(groups);
+                Assert.IsTrue(groups.groups != null);
+
+                this.ClearPackets();
+
+                groups = await interactiveClient.UpdateGroups(groups);
+
+                Assert.IsNotNull(groups);
+                Assert.IsTrue(groups.groups != null);
+            });
+        }
+
+        [TestMethod]
+        public void DeleteGroup()
+        {
+            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
+            {
+                await this.ReadyInteractive(interactiveClient);
+
+                this.ClearPackets();
+
+                InteractiveGroupContainerModel groups = await interactiveClient.GetGroups();
+
+                Assert.IsNotNull(groups);
+                Assert.IsTrue(groups.groups != null);
+
+                Assert.IsTrue(groups.groups.Count >= 2);
+
+                this.ClearPackets();
+
+                bool result = await interactiveClient.DeleteGroup(groups.groups[0], groups.groups[1]);
+
+                Assert.IsTrue(result);
             });
         }
 

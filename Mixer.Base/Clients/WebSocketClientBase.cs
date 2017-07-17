@@ -128,7 +128,7 @@ namespace Mixer.Base.Clients
             return (replyPacket != null && replyPacket.data != null && !string.IsNullOrEmpty(replyPacket.data.ToString()));
         }
 
-        protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
+        protected bool VerifyNoErrors(ReplyPacket replyPacket)
         {
             if (replyPacket != null)
             {
@@ -136,7 +136,17 @@ namespace Mixer.Base.Clients
                 {
                     throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
                 }
-                else if (replyPacket.resultObject != null)
+            }
+            return true;
+        }
+
+        protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
+        {
+            this.VerifyNoErrors(replyPacket);
+
+            if (replyPacket != null)
+            {
+                if (replyPacket.resultObject != null)
                 {
                     return JsonConvert.DeserializeObject<T>(replyPacket.resultObject.ToString());
                 }

@@ -21,6 +21,10 @@ namespace Mixer.Base.Clients
         public event EventHandler<InteractiveParticipantChangedModel> OnParticipantJoin;
         public event EventHandler<InteractiveParticipantChangedModel> OnParticipantUpdate;
 
+        public event EventHandler<InteractiveGroupContainerModel> OnGroupCreate;
+        public event EventHandler<Tuple<InteractiveGroupModel, InteractiveGroupModel>> OnGroupDelete;
+        public event EventHandler<InteractiveGroupContainerModel> OnGroupUpdate;
+
         public event EventHandler<InteractiveGiveInputModel> OnGiveInput;
 
         public ChannelModel Channel { get; private set; }
@@ -114,7 +118,7 @@ namespace Mixer.Base.Clients
             ReplyPacket reply = await this.SendAndListen(packet);
             if (reply != null && reply.resultObject["time"] != null)
             {
-                return DateTimeHelper.ParseUnixTimestamp((long)reply.resultObject["time"]);
+                return DateTimeHelper.UnixTimestampToDateTimeOffset((long)reply.resultObject["time"]);
             }
             return null;
         }
@@ -124,6 +128,21 @@ namespace Mixer.Base.Clients
             MethodPacket packet = new MethodPacket() { method = "getMemoryStats" };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveIssueMemoryWarningModel>(reply);
+        }
+
+        public async Task<bool> SetBandwidthThrottle(InteractiveSetBandwidthThrottleModel throttling)
+        {
+            MethodPacket packet = new MethodPacket() { method = "setBandwidthThrottle", parameters = throttling };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
+        public async Task<Dictionary<string, MethodGetThrottleStateModel>> GetThrottleState()
+        {
+            MethodPacket packet = new MethodPacket() { method = "getThrottleState" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            InteractiveGetThrottleStateModel throttleState = this.GetSpecificReplyResultValue<InteractiveGetThrottleStateModel>(reply);
+            return throttleState.GetAllThrottles();
         }
 
         public async Task<InteractiveGetScenesModel> GetScenes()
@@ -144,6 +163,59 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
         }
 
+        public async Task<InteractiveGetAllParticipantsModel> GetActiveParticipants(DateTimeOffset startThreshold)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("threshold", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startThreshold));
+            MethodPacket packet = new MethodPacket() { method = "getActiveParticipants", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+        }
+
+        public async Task<InteractiveGetAllParticipantsModel> UpdateParticipants(IEnumerable<InteractiveParticipantModel> participants)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("participants", JsonConvert.SerializeObject(participants));
+            MethodPacket packet = new MethodPacket() { method = "updateParticipants", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+        }
+
+        public async Task<bool> CreateGroups(InteractiveGroupContainerModel groups)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            MethodPacket packet = new MethodPacket() { method = "createGroups" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
+        public async Task<InteractiveGroupContainerModel> GetGroups()
+        {
+            MethodPacket packet = new MethodPacket() { method = "getGroups" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGroupContainerModel>(reply);
+        }
+
+        public async Task<InteractiveGroupContainerModel> UpdateGroups(InteractiveGroupContainerModel groups)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            MethodPacket packet = new MethodPacket() { method = "updateGroups" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveGroupContainerModel>(reply);
+        }
+
+        public async Task<bool> DeleteGroup(InteractiveGroupModel groupToDelete, InteractiveGroupModel groupToReplace)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("groupID", groupToDelete.groupID);
+            parameters.Add("reassignGroupID", groupToReplace.groupID);
+            MethodPacket packet = new MethodPacket() { method = "deleteGroup", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
         public async Task<InteractiveUpdateControlsModel> UpdateControls(string scenedID, List<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
@@ -159,23 +231,38 @@ namespace Mixer.Base.Clients
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod(methodPacket, OnIssueMemoryWarning);
+                    this.SendSpecificMethod(methodPacket, this.OnIssueMemoryWarning);
                     break;
 
                 case "onParticipantLeave":
-                    this.SendSpecificMethod(methodPacket, OnParticipantLeave);
+                    this.SendSpecificMethod(methodPacket, this.OnParticipantLeave);
                     break;
-
                 case "onParticipantJoin":
-                    this.SendSpecificMethod(methodPacket, OnParticipantJoin);
+                    this.SendSpecificMethod(methodPacket, this.OnParticipantJoin);
+                    break;
+                case "onParticipantUpdate":
+                    this.SendSpecificMethod(methodPacket, this.OnParticipantUpdate);
                     break;
 
-                case "onParticipantUpdate":
-                    this.SendSpecificMethod(methodPacket, OnParticipantUpdate);
+                case "onGroupCreate":
+                    this.SendSpecificMethod(methodPacket, this.OnGroupCreate);
+                    break;
+                case "onGroupDelete":
+                    if (this.OnGroupDelete != null)
+                    {
+                        Tuple<InteractiveGroupModel, InteractiveGroupModel> groupDeleted = new Tuple<InteractiveGroupModel, InteractiveGroupModel>(
+                            new InteractiveGroupModel() { groupID = methodPacket.parameters["groupID"].ToString() },
+                            new InteractiveGroupModel() { groupID = methodPacket.parameters["reassignGroupID"].ToString() });
+
+                        this.OnGroupDelete(this, groupDeleted);
+                    }
+                    break;
+                case "onGroupUpdate":
+                    this.SendSpecificMethod(methodPacket, this.OnGroupUpdate);
                     break;
 
                 case "giveInput":
-                    this.SendSpecificMethod(methodPacket, OnGiveInput);
+                    this.SendSpecificMethod(methodPacket, this.OnGiveInput);
                     break;
 
             }

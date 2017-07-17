@@ -166,7 +166,7 @@ namespace Mixer.Base.Clients
                 arguments = new JArray() { username },
             };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return (reply != null);
+            return this.VerifyNoErrors(reply);
         }
 
         public async Task<bool> DeleteMessage(Guid messageID)

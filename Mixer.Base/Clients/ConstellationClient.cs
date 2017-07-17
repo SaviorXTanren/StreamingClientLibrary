@@ -127,7 +127,7 @@ namespace Mixer.Base.Clients
         {
             MethodPacket packet = new MethodPacket() { method = "ping" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return (reply != null);
+            return this.VerifyNoErrors(reply);
         }
 
         public async Task<bool> LiveSubscribe(IEnumerable<ConstellationEventType> events)
@@ -139,7 +139,7 @@ namespace Mixer.Base.Clients
             packet.parameters.Add("events", new JArray(eventStrings));
 
             ReplyPacket reply = await this.SendAndListen(packet);
-            return true;
+            return this.VerifyNoErrors(reply);
         }
 
         public async Task<bool> LiveUnsubscribe(IEnumerable<ConstellationEventType> events)
@@ -151,7 +151,7 @@ namespace Mixer.Base.Clients
             packet.parameters.Add("events", new JArray(eventStrings));
 
             ReplyPacket reply = await this.SendAndListen(packet);
-            return true;
+            return this.VerifyNoErrors(reply);
         }
 
         private void ConstellationClient_OnEventOccurred(object sender, EventPacket eventPacket)
