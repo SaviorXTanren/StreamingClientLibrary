@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.Base", "Mixer.Base\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.UnitTests", "Mixer.UnitTests\Mixer.UnitTests.csproj", "{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.Sample", "Mixer.Sample\Mixer.Sample.csproj", "{850B4E8C-9F48-4593-AD7D-FF920F02CECC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.LargeChat", "Mixer.LargeChat\Mixer.LargeChat.csproj", "{2AC15800-AFE0-405C-AB3B-ED8F2182145E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9EA2EC51-3CCB-4B6F-939F-1BE9BD81E7EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.ChatSample", "Mixer.ChatSample\Mixer.ChatSample.csproj", "{850B4E8C-9F48-4593-AD7D-FF920F02CECC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,6 @@ Global
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Release|x86.ActiveCfg = Release|Any CPU
 		{6CE0ED6C-9AE0-47C6-973B-8A50CF658482}.Release|x86.Build.0 = Release|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|x86.ActiveCfg = Debug|x86
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|x86.Build.0 = Debug|x86
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|x86.ActiveCfg = Release|Any CPU
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|x86.Build.0 = Release|Any CPU
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -53,12 +45,20 @@ Global
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Release|x86.ActiveCfg = Release|Any CPU
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E}.Release|x86.Build.0 = Release|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|x86.ActiveCfg = Debug|x86
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Debug|x86.Build.0 = Debug|x86
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|x86.ActiveCfg = Release|x86
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{850B4E8C-9F48-4593-AD7D-FF920F02CECC} = {9EA2EC51-3CCB-4B6F-939F-1BE9BD81E7EC}
 		{2AC15800-AFE0-405C-AB3B-ED8F2182145E} = {9EA2EC51-3CCB-4B6F-939F-1BE9BD81E7EC}
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC} = {9EA2EC51-3CCB-4B6F-939F-1BE9BD81E7EC}
 	EndGlobalSection
 EndGlobal
