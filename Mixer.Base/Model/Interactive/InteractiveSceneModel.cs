@@ -2,7 +2,7 @@
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveSceneModel : InteractiveGroupContainerModel
+    public class InteractiveSceneModel : InteractiveGroupCollectionModel
     {
         public string sceneID { get; set; }
         public string etag { get; set; }

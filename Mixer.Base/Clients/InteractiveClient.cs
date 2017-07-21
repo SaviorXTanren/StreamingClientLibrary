@@ -21,9 +21,13 @@ namespace Mixer.Base.Clients
         public event EventHandler<InteractiveParticipantChangedModel> OnParticipantJoin;
         public event EventHandler<InteractiveParticipantChangedModel> OnParticipantUpdate;
 
-        public event EventHandler<InteractiveGroupContainerModel> OnGroupCreate;
+        public event EventHandler<InteractiveGroupCollectionModel> OnGroupCreate;
         public event EventHandler<Tuple<InteractiveGroupModel, InteractiveGroupModel>> OnGroupDelete;
-        public event EventHandler<InteractiveGroupContainerModel> OnGroupUpdate;
+        public event EventHandler<InteractiveGroupCollectionModel> OnGroupUpdate;
+
+        public event EventHandler<InteractiveSceneCollectionModel> OnSceneCreate;
+        public event EventHandler<Tuple<InteractiveSceneModel, InteractiveSceneModel>> OnSceneDelete;
+        public event EventHandler<InteractiveSceneCollectionModel> OnSceneUpdate;
 
         public event EventHandler<InteractiveGiveInputModel> OnGiveInput;
 
@@ -145,14 +149,7 @@ namespace Mixer.Base.Clients
             return throttleState.GetAllThrottles();
         }
 
-        public async Task<InteractiveGetScenesModel> GetScenes()
-        {
-            MethodPacket packet = new MethodPacket() { method = "getScenes" };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGetScenesModel>(reply);
-        }
-
-        public async Task<InteractiveGetAllParticipantsModel> GetAllParticipants(uint from = 0) //TODO - TT - Not sure if we need to iterate through entire list here or not.
+        public async Task<InteractiveParticipantCollectionModel> GetAllParticipants(uint from = 0) //TODO - TT - Not sure if we need to iterate through entire list here or not.
         {
             /* Spec p.19-20, 'from' is used to indicate earliest connect timestamp of the Participants. 
              * Initial request should be at 0 and each subsequent call should be max participant 'connectedAt' per result set */
@@ -160,50 +157,52 @@ namespace Mixer.Base.Clients
             parameters.Add("from", from);
             MethodPacket packet = new MethodPacket() { method = "getAllParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
-        public async Task<InteractiveGetAllParticipantsModel> GetActiveParticipants(DateTimeOffset startThreshold)
+        public async Task<InteractiveParticipantCollectionModel> GetActiveParticipants(DateTimeOffset startThreshold)
         {
             JObject parameters = new JObject();
             parameters.Add("threshold", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startThreshold));
             MethodPacket packet = new MethodPacket() { method = "getActiveParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
-        public async Task<InteractiveGetAllParticipantsModel> UpdateParticipants(IEnumerable<InteractiveParticipantModel> participants)
+        public async Task<InteractiveParticipantCollectionModel> UpdateParticipants(IEnumerable<InteractiveParticipantModel> participants)
         {
             JObject parameters = new JObject();
             parameters.Add("participants", JsonConvert.SerializeObject(participants));
             MethodPacket packet = new MethodPacket() { method = "updateParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGetAllParticipantsModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
-        public async Task<bool> CreateGroups(InteractiveGroupContainerModel groups)
+        public async Task<bool> CreateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
+            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel(groups);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            parameters.Add("groups", JsonConvert.SerializeObject(collection));
             MethodPacket packet = new MethodPacket() { method = "createGroups" };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<InteractiveGroupContainerModel> GetGroups()
+        public async Task<InteractiveGroupCollectionModel> GetGroups()
         {
             MethodPacket packet = new MethodPacket() { method = "getGroups" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGroupContainerModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
         }
 
-        public async Task<InteractiveGroupContainerModel> UpdateGroups(InteractiveGroupContainerModel groups)
+        public async Task<InteractiveGroupCollectionModel> UpdateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
+            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel(groups);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            parameters.Add("groups", JsonConvert.SerializeObject(collection));
             MethodPacket packet = new MethodPacket() { method = "updateGroups" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveGroupContainerModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
         }
 
         public async Task<bool> DeleteGroup(InteractiveGroupModel groupToDelete, InteractiveGroupModel groupToReplace)
@@ -216,14 +215,53 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<InteractiveUpdateControlsModel> UpdateControls(string scenedID, List<InteractiveControlModel> controls)
+        public async Task<InteractiveSceneCollectionModel> CreateScenes(IEnumerable<InteractiveSceneModel> scenes)
+        {
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel(scenes);
+            JObject parameters = new JObject();
+            parameters.Add("groups", JsonConvert.SerializeObject(collection));
+            MethodPacket packet = new MethodPacket() { method = "createScenes" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+        }
+
+        public async Task<InteractiveSceneCollectionModel> GetScenes()
+        {
+            MethodPacket packet = new MethodPacket() { method = "getScenes" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+        }
+
+        public async Task<bool> DeleteScene(InteractiveSceneModel sceneToDelete, InteractiveSceneModel sceneToReplace)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("sceneID", sceneToDelete.sceneID);
+            parameters.Add("reassignSceneID", sceneToReplace.sceneID);
+            MethodPacket packet = new MethodPacket() { method = "deleteScene", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
+        public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
+        {
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel(scenes);
+            JObject parameters = new JObject();
+            parameters.Add("groups", JsonConvert.SerializeObject(collection));
+            MethodPacket packet = new MethodPacket() { method = "updateScenes" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+        }
+
+
+
+        public async Task<InteractiveControlCollectionModel> UpdateControls(string scenedID, List<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scenedID);
             parameters.Add("controls", JToken.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveUpdateControlsModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveControlCollectionModel>(reply);
         }
 
         public async Task<bool> CaptureSparkTransaction(string transactionID)
@@ -268,6 +306,23 @@ namespace Mixer.Base.Clients
                     break;
                 case "onGroupUpdate":
                     this.SendSpecificMethod(methodPacket, this.OnGroupUpdate);
+                    break;
+
+                case "onSceneCreate":
+                    this.SendSpecificMethod(methodPacket, this.OnSceneCreate);
+                    break;
+                case "onSceneDelete":
+                    if (this.OnSceneDelete != null)
+                    {
+                        Tuple<InteractiveSceneModel, InteractiveSceneModel> sceneDeleted = new Tuple<InteractiveSceneModel, InteractiveSceneModel>(
+                            new InteractiveSceneModel() { sceneID = methodPacket.parameters["sceneID"].ToString() },
+                            new InteractiveSceneModel() { sceneID = methodPacket.parameters["reassignSceneID"].ToString() });
+
+                        this.OnSceneDelete(this, sceneDeleted);
+                    }
+                    break;
+                case "onSceneUpdate":
+                    this.SendSpecificMethod(methodPacket, this.OnSceneUpdate);
                     break;
 
                 case "giveInput":

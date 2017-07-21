@@ -115,7 +115,7 @@ namespace Mixer.InteractiveSample
             }
         }
 
-        private void InteractiveClient_OnGroupCreate(object sender, InteractiveGroupContainerModel e)
+        private void InteractiveClient_OnGroupCreate(object sender, InteractiveGroupCollectionModel e)
         {
             if (e.groups != null)
             {
@@ -131,7 +131,7 @@ namespace Mixer.InteractiveSample
             this.InteractiveDataTextBlock.Text += "Group Deleted: " + e.Item1 + " - " + e.Item2 + Environment.NewLine;
         }
 
-        private void InteractiveClient_OnGroupUpdate(object sender, InteractiveGroupContainerModel e)
+        private void InteractiveClient_OnGroupUpdate(object sender, InteractiveGroupCollectionModel e)
         {
             if (e.groups != null)
             {

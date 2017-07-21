@@ -2,7 +2,7 @@
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveGetAllParticipantsModel
+    public class InteractiveParticipantCollectionModel
     {
         public List<InteractiveParticipantModel> participants { get; set; }
         public uint total { get; set; }
