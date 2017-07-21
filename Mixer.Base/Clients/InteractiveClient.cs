@@ -29,6 +29,10 @@ namespace Mixer.Base.Clients
         public event EventHandler<Tuple<InteractiveSceneModel, InteractiveSceneModel>> OnSceneDelete;
         public event EventHandler<InteractiveSceneCollectionModel> OnSceneUpdate;
 
+        public event EventHandler<InteractiveSceneModel> OnControlCreate;
+        public event EventHandler<InteractiveSceneModel> OnControlDelete;
+        public event EventHandler<InteractiveSceneModel> OnControlUpdate;
+
         public event EventHandler<InteractiveGiveInputModel> OnGiveInput;
 
         public ChannelModel Channel { get; private set; }
@@ -180,10 +184,9 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> CreateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
-            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel(groups);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(collection));
-            MethodPacket packet = new MethodPacket() { method = "createGroups" };
+            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            MethodPacket packet = new MethodPacket() { method = "createGroups", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
         }
@@ -197,10 +200,9 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveGroupCollectionModel> UpdateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
-            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel(groups);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(collection));
-            MethodPacket packet = new MethodPacket() { method = "updateGroups" };
+            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            MethodPacket packet = new MethodPacket() { method = "updateGroups", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
         }
@@ -217,10 +219,9 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveSceneCollectionModel> CreateScenes(IEnumerable<InteractiveSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel(scenes);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(collection));
-            MethodPacket packet = new MethodPacket() { method = "createScenes" };
+            parameters.Add("scenes", JsonConvert.SerializeObject(scenes));
+            MethodPacket packet = new MethodPacket() { method = "createScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
         }
@@ -244,21 +245,38 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel(scenes);
             JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(collection));
-            MethodPacket packet = new MethodPacket() { method = "updateScenes" };
+            parameters.Add("scenes", JsonConvert.SerializeObject(scenes));
+            MethodPacket packet = new MethodPacket() { method = "updateScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
         }
 
-
-
-        public async Task<InteractiveControlCollectionModel> UpdateControls(string scenedID, List<InteractiveControlModel> controls)
+        public async Task<bool> CreateControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
-            parameters.Add("sceneID", scenedID);
-            parameters.Add("controls", JToken.FromObject(controls));
+            parameters.Add("sceneID", scene.sceneID);
+            parameters.Add("controls", JsonConvert.SerializeObject(controls));
+            MethodPacket packet = new MethodPacket() { method = "createControls", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
+        public async Task<bool> DeleteControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("sceneID", scene.sceneID);
+            parameters.Add("controlIDs", JsonConvert.SerializeObject(controls.Select(c => c.controlID)));
+            MethodPacket packet = new MethodPacket() { method = "deleteControls", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
+        }
+
+        public async Task<InteractiveControlCollectionModel> UpdateControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("sceneID", scene.sceneID);
+            parameters.Add("controls", JsonConvert.SerializeObject(controls));
             MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveControlCollectionModel>(reply);
@@ -323,6 +341,16 @@ namespace Mixer.Base.Clients
                     break;
                 case "onSceneUpdate":
                     this.SendSpecificMethod(methodPacket, this.OnSceneUpdate);
+                    break;
+
+                case "onControlCreate":
+                    this.SendSpecificMethod(methodPacket, this.OnControlCreate);
+                    break;
+                case "onControlDelete":
+                    this.SendSpecificMethod(methodPacket, this.OnControlDelete);
+                    break;
+                case "onControlUpdate":
+                    this.SendSpecificMethod(methodPacket, this.OnControlUpdate);
                     break;
 
                 case "giveInput":
