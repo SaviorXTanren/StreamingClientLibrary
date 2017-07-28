@@ -38,7 +38,7 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void LiveSubscribe()
+        public void LiveSubscribeAndUnsubscribe()
         {
             this.ConstellationWrapper(async (MixerConnection connection, ConstellationClient constellationClient) =>
             {
@@ -48,18 +48,8 @@ namespace Mixer.UnitTests
                 eventTypes.Add(new ConstellationEventType(ConstellationEventTypeEnum.announcement__announce));
 
                 Assert.IsTrue(await constellationClient.LiveSubscribe(eventTypes));
-            });
-        }
 
-        [TestMethod]
-        public void LiveUnsubscribe()
-        {
-            this.ConstellationWrapper(async (MixerConnection connection, ConstellationClient constellationClient) =>
-            {
                 this.ClearPackets();
-
-                List<ConstellationEventType> eventTypes = new List<ConstellationEventType>();
-                eventTypes.Add(new ConstellationEventType(ConstellationEventTypeEnum.announcement__announce));
 
                 Assert.IsTrue(await constellationClient.LiveUnsubscribe(eventTypes));
             });

@@ -130,12 +130,13 @@ namespace Mixer.Base.Clients
 
         protected bool VerifyNoErrors(ReplyPacket replyPacket)
         {
-            if (replyPacket != null)
+            if (replyPacket == null)
             {
-                if (replyPacket.errorObject != null)
-                {
-                    throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
-                }
+                return false;
+            }
+            if (replyPacket.errorObject != null)
+            {
+                throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
             }
             return true;
         }

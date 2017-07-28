@@ -105,12 +105,12 @@ namespace Mixer.InteractiveSample
 
         private async void InteractiveClient_OnGiveInput(object sender, InteractiveGiveInputModel e)
         {
-            this.InteractiveDataTextBlock.Text += "Input Received: " + e.participantID + " - " + e.input.@event + " - " + e.input.controlID + Environment.NewLine;
-            if (e.input.@event.Equals("mousedown"))
+            this.InteractiveDataTextBlock.Text += "Input Received: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
+            if (e.input.eventType.Equals("mousedown"))
             {
                 if (await this.interactiveClient.CaptureSparkTransaction(e.transactionID))
                 {
-                    this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.@event + " - " + e.input.controlID + Environment.NewLine;
+                    this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace Mixer.InteractiveSample
             this.InteractiveDataTextBlock.Text += "Memory Warning Issued: " + e.usedBytes + " bytes used out of " + e.totalBytes + " total bytes" + Environment.NewLine;
         }
 
-        private void InteractiveClient_OnParticipantJoin(object sender, InteractiveParticipantChangedModel e)
+        private void InteractiveClient_OnParticipantJoin(object sender, InteractiveParticipantCollectionModel e)
         {
             if (e.participants != null)
             {
@@ -158,7 +158,7 @@ namespace Mixer.InteractiveSample
             }
         }
 
-        private void InteractiveClient_OnParticipantLeave(object sender, InteractiveParticipantChangedModel e)
+        private void InteractiveClient_OnParticipantLeave(object sender, InteractiveParticipantCollectionModel e)
         {
             if (e.participants != null)
             {
@@ -169,7 +169,7 @@ namespace Mixer.InteractiveSample
             }
         }
 
-        private void InteractiveClient_OnParticipantUpdate(object sender, InteractiveParticipantChangedModel e)
+        private void InteractiveClient_OnParticipantUpdate(object sender, InteractiveParticipantCollectionModel e)
         {
             if (e.participants != null)
             {

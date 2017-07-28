@@ -17,9 +17,9 @@ namespace Mixer.Base.Clients
     {
         public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarning;
 
-        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantLeave;
-        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantJoin;
-        public event EventHandler<InteractiveParticipantChangedModel> OnParticipantUpdate;
+        public event EventHandler<InteractiveParticipantCollectionModel> OnParticipantLeave;
+        public event EventHandler<InteractiveParticipantCollectionModel> OnParticipantJoin;
+        public event EventHandler<InteractiveParticipantCollectionModel> OnParticipantUpdate;
 
         public event EventHandler<InteractiveGroupCollectionModel> OnGroupCreate;
         public event EventHandler<Tuple<InteractiveGroupModel, InteractiveGroupModel>> OnGroupDelete;
@@ -145,12 +145,15 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<Dictionary<string, MethodGetThrottleStateModel>> GetThrottleState()
+        public async Task<InteractiveGetThrottleStateModel> GetThrottleState()
         {
             MethodPacket packet = new MethodPacket() { method = "getThrottleState" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            InteractiveGetThrottleStateModel throttleState = this.GetSpecificReplyResultValue<InteractiveGetThrottleStateModel>(reply);
-            return throttleState.GetAllThrottles();
+            if (this.VerifyNoErrors(reply))
+            {
+                return new InteractiveGetThrottleStateModel(reply.resultObject);
+            }
+            return new InteractiveGetThrottleStateModel();
         }
 
         public async Task<InteractiveParticipantCollectionModel> GetAllParticipants(uint from = 0) //TODO - TT - Not sure if we need to iterate through entire list here or not.
@@ -184,8 +187,8 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> CreateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
-            JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel() { groups = groups.ToList() };
+            JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "createGroups", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
@@ -200,8 +203,8 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveGroupCollectionModel> UpdateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
-            JObject parameters = new JObject();
-            parameters.Add("groups", JsonConvert.SerializeObject(groups));
+            InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel() { groups = groups.ToList() };
+            JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "updateGroups", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
@@ -219,8 +222,8 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveSceneCollectionModel> CreateScenes(IEnumerable<InteractiveSceneModel> scenes)
         {
-            JObject parameters = new JObject();
-            parameters.Add("scenes", JsonConvert.SerializeObject(scenes));
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel() { scenes = scenes.ToList() };
+            JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "createScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
@@ -229,6 +232,15 @@ namespace Mixer.Base.Clients
         public async Task<InteractiveSceneCollectionModel> GetScenes()
         {
             MethodPacket packet = new MethodPacket() { method = "getScenes" };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+        }
+
+        public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
+        {
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel() { scenes = scenes.ToList() };
+            JObject parameters = JObject.FromObject(collection);
+            MethodPacket packet = new MethodPacket() { method = "updateScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
         }
@@ -243,31 +255,12 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
-        {
-            JObject parameters = new JObject();
-            parameters.Add("scenes", JsonConvert.SerializeObject(scenes));
-            MethodPacket packet = new MethodPacket() { method = "updateScenes", parameters = parameters };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
-        }
-
         public async Task<bool> CreateControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controls", JsonConvert.SerializeObject(controls));
+            parameters.Add("controls", JObject.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "createControls", parameters = parameters };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
-        }
-
-        public async Task<bool> DeleteControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
-        {
-            JObject parameters = new JObject();
-            parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controlIDs", JsonConvert.SerializeObject(controls.Select(c => c.controlID)));
-            MethodPacket packet = new MethodPacket() { method = "deleteControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
         }
@@ -276,10 +269,20 @@ namespace Mixer.Base.Clients
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controls", JsonConvert.SerializeObject(controls));
+            parameters.Add("controls", JObject.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveControlCollectionModel>(reply);
+        }
+
+        public async Task<bool> DeleteControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        {
+            JObject parameters = new JObject();
+            parameters.Add("sceneID", scene.sceneID);
+            parameters.Add("controlIDs", JObject.FromObject(controls.Select(c => c.controlID)));
+            MethodPacket packet = new MethodPacket() { method = "deleteControls", parameters = parameters };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
         }
 
         public async Task<bool> CaptureSparkTransaction(string transactionID)

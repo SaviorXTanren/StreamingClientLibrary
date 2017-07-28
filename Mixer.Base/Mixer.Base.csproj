@@ -66,6 +66,7 @@
     <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveModelBase.cs" />
     <Compile Include="Model\Interactive\InteractiveParticipantCollectionModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGetThrottleStateModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGiveInputModel.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Model\Interactive\InteractiveGroupModel.cs" />
     <Compile Include="Model\Interactive\InteractiveInputModel.cs" />
     <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveParticipantChangedModel.cs" />
     <Compile Include="Model\Interactive\InteractiveParticipantModel.cs" />
     <Compile Include="Model\Interactive\InteractiveRobotConnectionModel.cs" />
     <Compile Include="Model\Interactive\InteractiveSceneCollectionModel.cs" />

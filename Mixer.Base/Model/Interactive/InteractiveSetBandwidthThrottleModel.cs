@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Mixer.Base.Model.Interactive
 {
@@ -16,7 +15,7 @@ namespace Mixer.Base.Model.Interactive
             MethodSetBandwidthThrottleModel method = new MethodSetBandwidthThrottleModel();
             method.capacity = capacity;
             method.drainRate = drainRate;
-            this.Add(methodName, JsonConvert.SerializeObject(method));
+            this.Add(methodName, JObject.FromObject(method));
         }
     }
 }

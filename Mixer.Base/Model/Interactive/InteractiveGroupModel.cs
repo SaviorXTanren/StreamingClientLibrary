@@ -1,9 +1,8 @@
 ﻿namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveGroupModel
+    public class InteractiveGroupModel : InteractiveModelBase
     {
         public string groupID { get; set; }
-        public string etag { get; set; }
         public string sceneID { get; set; }
     }
 }
