@@ -9,9 +9,6 @@ Most of the standard REST web API functions exist with some exceptions as I need
 
 ## Feature roadmap
 These are the current planned features to be developed in priority order:
-- Finish full REST web API functionality with associated unit tests
-- Develop interactive API functionality, unit tests, and sample app
-- Develop full-scale sample app using both REST web APIs and interactive APIs
 - Add ViewModels to all APIs to make ramp-up development work easier and put less focus on knowing the dev docs top-to-bottom
 
 ## How do I get started using it?
