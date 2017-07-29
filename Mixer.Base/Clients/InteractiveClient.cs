@@ -179,7 +179,7 @@ namespace Mixer.Base.Clients
         public async Task<InteractiveParticipantCollectionModel> UpdateParticipants(IEnumerable<InteractiveParticipantModel> participants)
         {
             JObject parameters = new JObject();
-            parameters.Add("participants", JsonConvert.SerializeObject(participants));
+            parameters.Add("participants", JArray.FromObject(participants));
             MethodPacket packet = new MethodPacket() { method = "updateParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
@@ -259,7 +259,7 @@ namespace Mixer.Base.Clients
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controls", JObject.FromObject(controls));
+            parameters.Add("controls", JArray.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "createControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
@@ -269,7 +269,7 @@ namespace Mixer.Base.Clients
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controls", JObject.FromObject(controls));
+            parameters.Add("controls", JArray.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveControlCollectionModel>(reply);
@@ -279,7 +279,7 @@ namespace Mixer.Base.Clients
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controlIDs", JObject.FromObject(controls.Select(c => c.controlID)));
+            parameters.Add("controlIDs", JArray.FromObject(controls.Select(c => c.controlID)));
             MethodPacket packet = new MethodPacket() { method = "deleteControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);

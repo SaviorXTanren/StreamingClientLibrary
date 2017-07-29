@@ -13,7 +13,7 @@ namespace Mixer.Base.Util
 
         public static long DateTimeOffsetToUnixTimestamp(DateTimeOffset dateTime)
         {
-            return EpochDateTimeOffset.Subtract(dateTime).Milliseconds;
+            return (long)dateTime.Subtract(EpochDateTimeOffset).TotalMilliseconds;
         }
     }
 }

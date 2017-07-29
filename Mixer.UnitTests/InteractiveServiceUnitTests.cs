@@ -70,9 +70,6 @@ namespace Mixer.UnitTests
             });
         }
 
-        /// <summary>
-        /// Requires an interactive connection to be established for this unit test to pass
-        /// </summary>
         [TestMethod]
         public void GetSharedInteractiveGames()
         {
@@ -83,7 +80,6 @@ namespace Mixer.UnitTests
                 IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetSharedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
-                Assert.IsTrue(games.Count() > 0);
             });
         }
 
