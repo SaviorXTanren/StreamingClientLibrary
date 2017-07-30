@@ -50,6 +50,7 @@
     <Compile Include="Clients\InteractiveClient.cs" />
     <Compile Include="MixerConnection.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
+    <Compile Include="Model\Channel\ChannelUpdateableModel.cs" />
     <Compile Include="Model\Chat\ChatClearMessagesEventModel.cs" />
     <Compile Include="Model\Chat\ChatDeleteMessageEventModel.cs" />
     <Compile Include="Model\Chat\ChatMessageEventModel.cs" />
