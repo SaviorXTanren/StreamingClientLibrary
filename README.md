@@ -4,12 +4,18 @@ A C# client library for the Mixer streaming service
 ## What is this?
 Unsatisfied with the current set of APIs that exist to interact with Mixer, I took some time to build and design an API set in C# to interact with the service. This API set can be used by anyone to build out any apps they wish to use and it’s very easy to setup.
 
-## Current functionality
-Most of the standard REST web API functions exist with some exceptions as I need to spent more time researching & testing them. I also plan to add API support for interactivity features when I get the chance.
+### Current functionality
+We have must of the most common usage scenarios completed, including:
+- The most common REST APIs for Channels, Chat, Interactive, and Users services
+- WebSocket-based clients to use Chat, Interactive, and Constellation features
+- Various OAuth logic flows to allow your application to authenticate with the Mixer endpoints and handle authorization scopes
+- Unit tests and sample applications to document and show usage of all functionality
 
-## Feature roadmap
+### Feature roadmap
 These are the current planned features to be developed in priority order:
 - Add ViewModels to all APIs to make ramp-up development work easier and put less focus on knowing the dev docs top-to-bottom
+- Continue filling out REST API services with less-common methods
+- Add full documentation to github for API usage
 
 ## How do I get started using it?
 There are two sample apps created the help showcase some the setup needed and how to use the APIs. Additionally, there are a large serious of unit tests that go through all of the individual functionality that you can look at. I plan on creating more formal documentation soon.
