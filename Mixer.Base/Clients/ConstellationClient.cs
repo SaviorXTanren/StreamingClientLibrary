@@ -75,10 +75,13 @@ namespace Mixer.Base.Clients
         public uint ID { get; set; }
 
         public ConstellationEventType(ConstellationEventTypeEnum type, uint id = 0)
+            : this()
         {
             this.Type = type;
             this.ID = id;
         }
+
+        public ConstellationEventType() { }
 
         public override string ToString()
         {
