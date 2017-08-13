@@ -59,11 +59,11 @@ namespace Mixer.Base.Clients
         user__id__subscribed,
         [Name("User Resubscribed")]
         user__id__resubscribed,
-        [Name("User Team Accepted")]
+        [Name("User Joined Team")]
         user__id__teamAccepted,
-        [Name("User Team Invited")]
+        [Name("User Invited To Team")]
         user__id__teamInvited,
-        [Name("User Team Removed")]
+        [Name("User Left Team")]
         user__id__teamRemoved,
         [Name("User Updated")]
         user__id__update,
@@ -109,7 +109,7 @@ namespace Mixer.Base.Clients
             List<string> stringEventTypes = new List<string>();
             foreach (ConstellationEventType eventType in eventTypes)
             {
-                string eventName = EnumHelper.GetEnumName(eventType.Type);
+                string eventName = eventType.Type.ToString();
                 eventName = eventName.Replace("__", ":");
                 eventName = eventName.Replace(":id:", string.Format(":{0}:", eventType.ID));
                 stringEventTypes.Add(eventName);

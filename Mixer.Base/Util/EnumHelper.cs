@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Mixer.Base.Util
 {
     public static class EnumHelper
-    {        
+    {
         public static string GetEnumName<T>(T value)
         {
-            MemberExpression member = value as MemberExpression;
-            if (member != null)
+            string name = Enum.GetName(typeof(T), value);
+            NameAttribute[] attributes = (NameAttribute[])typeof(T).GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
+            if (attributes != null && attributes.Length > 0)
             {
-                NameAttribute[] attributes = (NameAttribute[])Attribute.GetCustomAttributes(member.Member, typeof(NameAttribute), false);
-                if (attributes != null && attributes.Length > 0)
-                {
-                    return attributes[0].Name;
-                }
+                return attributes[0].Name;
             }
-
-            return Enum.GetName(typeof(T), value);
+            return name;
         }
 
         public static IEnumerable<string> GetEnumNames<T>(IEnumerable<T> list)

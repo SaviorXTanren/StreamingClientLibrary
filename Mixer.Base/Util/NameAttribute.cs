@@ -11,7 +11,7 @@ namespace Mixer.Base.Util
 
         public NameAttribute() : this(string.Empty) { }
 
-        public NameAttribute(string name) { }
+        public NameAttribute(string name) { this.Name = name; }
 
         public override bool Equals(object obj)
         {
