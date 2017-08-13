@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
 using Mixer.Base.Clients;
+using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Client;
+using Mixer.Base.Model.Constellation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -31,8 +33,6 @@ namespace Mixer.UnitTests
         {
             this.ConstellationWrapper(async (MixerConnection connection, ConstellationClient constellationClient) =>
             {
-                this.ClearPackets();
-
                 Assert.IsTrue(await constellationClient.Ping());
             });
         }
@@ -42,16 +42,42 @@ namespace Mixer.UnitTests
         {
             this.ConstellationWrapper(async (MixerConnection connection, ConstellationClient constellationClient) =>
             {
-                this.ClearPackets();
-
-                List<ConstellationEventType> eventTypes = new List<ConstellationEventType>();
-                eventTypes.Add(new ConstellationEventType(ConstellationEventTypeEnum.announcement__announce));
-
-                Assert.IsTrue(await constellationClient.LiveSubscribe(eventTypes));
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
                 this.ClearPackets();
 
-                Assert.IsTrue(await constellationClient.LiveUnsubscribe(eventTypes));
+                ConstellationEventType eventType = new ConstellationEventType(ConstellationEventTypeEnum.channel__id__update, channel.id);
+                Assert.IsTrue(await constellationClient.LiveSubscribe(new List<ConstellationEventType>() { eventType }));
+
+                this.ClearPackets();
+
+                bool eventReceived = false;
+                constellationClient.OnSubscribedEventOccurred += (sender, le) =>
+                {
+                    if (le.channel.Equals(eventType.ToString()))
+                    {
+                        eventReceived = true;
+                    }
+                };
+
+                string newName = "Test Name - " + DateTimeOffset.Now;
+                channel.name = newName;
+
+                channel = await connection.Channels.UpdateChannel(channel);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(string.Equals(channel.name, newName));
+
+                this.ClearPackets();
+
+                await Task.Delay(5000);
+
+                if (!eventReceived)
+                {
+                    Assert.Fail("Did not get live event for channel updating");
+                }
+
+                Assert.IsTrue(await constellationClient.LiveUnsubscribe(new List<ConstellationEventType>() { eventType }));
             });
         }
 
@@ -67,6 +93,8 @@ namespace Mixer.UnitTests
                 constellationClient.OnEventOccurred += ConstellationClient_OnEventOccurred;
 
                 Assert.IsTrue(await constellationClient.Connect());
+
+                this.ClearPackets();
 
                 await function(connection, constellationClient);
 

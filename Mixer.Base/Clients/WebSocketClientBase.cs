@@ -159,6 +159,22 @@ namespace Mixer.Base.Clients
             return default(T);
         }
 
+        protected void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
+        {
+            if (eventHandler != null)
+            {
+                eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
+            }
+        }
+
+        protected void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
+        {
+            if (eventHandler != null)
+            {
+                eventHandler(this, JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()));
+            }
+        }
+
         protected async Task WaitForResponse(Func<bool> valueToCheck)
         {
             for (int i = 0; i < 10 && !valueToCheck(); i++)

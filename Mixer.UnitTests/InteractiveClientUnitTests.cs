@@ -70,7 +70,6 @@ namespace Mixer.UnitTests
                 InteractiveIssueMemoryWarningModel memoryWarning = await interactiveClient.GetMemoryStates();
 
                 Assert.IsNotNull(memoryWarning);
-                Assert.IsTrue(memoryWarning.usedBytes > 0);
                 Assert.IsTrue(memoryWarning.totalBytes > 0);
                 Assert.IsNotNull(memoryWarning.resources);
             });
@@ -342,6 +341,8 @@ namespace Mixer.UnitTests
                 interactiveClient.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
 
                 Assert.IsTrue(await interactiveClient.Connect());
+
+                this.ClearPackets();
 
                 await function(connection, interactiveClient);
 

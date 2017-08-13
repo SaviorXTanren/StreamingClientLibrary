@@ -1,9 +1,10 @@
 ﻿using Mixer.Base.Model.Client;
+using Mixer.Base.Model.Constellation;
 using Mixer.Base.Util;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
@@ -34,7 +35,6 @@ namespace Mixer.Base.Clients
 
         [Name("Interactive Connected")]
         interactive__id__connect,
-
         [Name("Interactive Disconnected")]
         interactive__id__disconnected,
 
@@ -69,7 +69,7 @@ namespace Mixer.Base.Clients
         user__id__update,
     }
 
-    public class ConstellationEventType
+    public class ConstellationEventType : IEquatable<ConstellationEventType>
     {
         public ConstellationEventTypeEnum Type { get; set; }
         public uint ID { get; set; }
@@ -79,10 +79,46 @@ namespace Mixer.Base.Clients
             this.Type = type;
             this.ID = id;
         }
+
+        public override string ToString()
+        {
+            return ConstellationClient.ConvertEventTypesToStrings(new List<ConstellationEventType>() { this }).First();
+        }
+
+        public override int GetHashCode() { return this.Type.GetHashCode() + this.ID.GetHashCode(); }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ConstellationEventType)
+            {
+                return this.Equals((ConstellationEventType)obj);
+            }
+            return false;
+        }
+
+        public bool Equals(ConstellationEventType other)
+        {
+            return this.Type.Equals(other.Type) && this.ID.Equals(other.ID);
+        }
     }
 
     public class ConstellationClient : WebSocketClientBase
     {
+        internal static IEnumerable<string> ConvertEventTypesToStrings(IEnumerable<ConstellationEventType> eventTypes)
+        {
+            List<string> stringEventTypes = new List<string>();
+            foreach (ConstellationEventType eventType in eventTypes)
+            {
+                string eventName = EnumHelper.GetEnumName(eventType.Type);
+                eventName = eventName.Replace("__", ":");
+                eventName = eventName.Replace(":id:", string.Format(":{0}:", eventType.ID));
+                stringEventTypes.Add(eventName);
+            }
+            return stringEventTypes;
+        }
+
+        public event EventHandler<ConstellationLiveEventModel> OnSubscribedEventOccurred;
+
         public static async Task<ConstellationClient> Create(MixerConnection connection)
         {
             Validator.ValidateVariable(connection, "connection");
@@ -132,7 +168,7 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> LiveSubscribe(IEnumerable<ConstellationEventType> events)
         {
-            IEnumerable<string> eventStrings = this.ConvertEventTypesToStrings(events);
+            IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
 
             MethodPacket packet = new MethodPacket() { method = "livesubscribe" };
             packet.parameters = new JObject();
@@ -144,7 +180,7 @@ namespace Mixer.Base.Clients
 
         public async Task<bool> LiveUnsubscribe(IEnumerable<ConstellationEventType> events)
         {
-            IEnumerable<string> eventStrings = this.ConvertEventTypesToStrings(events);
+            IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
 
             MethodPacket packet = new MethodPacket() { method = "liveunsubscribe" };
             packet.parameters = new JObject();
@@ -158,31 +194,10 @@ namespace Mixer.Base.Clients
         {
             switch (eventPacket.eventName)
             {
-                case "issueMemoryWarning":
-                    //this.SendSpecificMethod<InteractiveIssueMemoryWarningModel>(eventPacket, IssueMemoryWarningOccurred);
+                case "live":
+                    this.SendSpecificEvent<ConstellationLiveEventModel>(eventPacket, this.OnSubscribedEventOccurred);
                     break;
             }
-        }
-
-        private void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
-            }
-        }
-
-        private IEnumerable<string> ConvertEventTypesToStrings(IEnumerable<ConstellationEventType> eventTypes)
-        {
-            List<string> stringEventTypes = new List<string>();
-            foreach (ConstellationEventType eventType in eventTypes)
-            {
-                string eventName = EnumHelper.GetEnumName(eventType.Type);
-                eventName = eventName.Replace("__", ":");
-                eventName = eventName.Replace(":id:", string.Format(":{0}:", eventType.ID));
-                stringEventTypes.Add(eventName);
-            }
-            return stringEventTypes;
         }
 
         private void ConstellationClient_HelloMethodHandler(object sender, EventPacket e)

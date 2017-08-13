@@ -3,7 +3,6 @@ using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.Client;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -245,14 +244,6 @@ namespace Mixer.Base.Clients
                 case "ClearMessages":
                     this.SendSpecificEvent(eventPacket, this.OnClearMessagesOccurred);
                     break;
-            }
-        }
-
-        private void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()));
             }
         }
 

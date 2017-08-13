@@ -362,14 +362,6 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
-            }
-        }
-
         private void InteractiveClient_HelloMethodHandler(object sender, MethodPacket e)
         {
             if (e.method.Equals("hello"))

@@ -3,7 +3,6 @@ using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,13 +16,12 @@ namespace Mixer.UnitTests
     {
         public static async Task<ChannelModel> GetChannel(MixerConnection connection)
         {
-            string channelName = ConfigurationManager.AppSettings["ChannelName"];
-            if (string.IsNullOrEmpty(channelName))
-            {
-                Assert.Fail("ChannelName value isn't set in application configuration");
-            }
+            UserModel user = await connection.Users.GetCurrentUser();
 
-            ChannelModel channel = await connection.Channels.GetChannel(channelName);
+            Assert.IsNotNull(user);
+            Assert.IsTrue(user.id > (uint)0);
+
+            ChannelModel channel = await connection.Channels.GetChannel(user.username);
 
             Assert.IsNotNull(channel);
             Assert.IsTrue(channel.id > (uint)0);

@@ -62,6 +62,7 @@
     <Compile Include="Model\Client\MethodPacket.cs" />
     <Compile Include="Model\Client\ReplyErrorModel.cs" />
     <Compile Include="Model\Client\ReplyPacket.cs" />
+    <Compile Include="Model\Constellation\ConstellationLiveEventModel.cs" />
     <Compile Include="Model\Interactive\InteractiveButtonControlModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlModel.cs" />

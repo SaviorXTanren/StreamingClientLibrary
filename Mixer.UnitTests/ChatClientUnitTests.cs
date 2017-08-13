@@ -193,6 +193,8 @@ namespace Mixer.UnitTests
 
                 chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
 
+                this.ClearPackets();
+
                 Assert.IsTrue(await chatClient.Connect());
 
                 await function(connection, chatClient);
