@@ -56,32 +56,20 @@ namespace Mixer.Base.Interactive
                     new InteractiveControlPositionModel()
                     {
                         size = "large",
-                        width = 10,
-                        height = 9,
-                        x = 0,
-                        y = 0
                     },
                     new InteractiveControlPositionModel()
                     {
                         size = "medium",
-                        width = 10,
-                        height = 3,
-                        x = 0,
-                        y = 0
                     },
                     new InteractiveControlPositionModel()
                     {
                         size = "small",
-                        width = 10,
-                        height = 3,
-                        x = 0,
-                        y = 0
                     }
                 }
             };
         }
 
-        public static InteractiveJoystickControlModel CreateJoystick(string controlID, int sampleRate)
+        public static InteractiveJoystickControlModel CreateJoystick(string controlID, int sampleRate = 50)
         {
             return new InteractiveJoystickControlModel()
             {
@@ -93,26 +81,14 @@ namespace Mixer.Base.Interactive
                     new InteractiveControlPositionModel()
                     {
                         size = "large",
-                        width = 10,
-                        height = 9,
-                        x = 0,
-                        y = 0
                     },
                     new InteractiveControlPositionModel()
                     {
                         size = "medium",
-                        width = 10,
-                        height = 3,
-                        x = 0,
-                        y = 0
                     },
                     new InteractiveControlPositionModel()
                     {
                         size = "small",
-                        width = 10,
-                        height = 3,
-                        x = 0,
-                        y = 0
                     }
                 }
             };

@@ -16,15 +16,16 @@ namespace Mixer.UnitTests
     {
         private const string GroupID = "MixerUnitTestGroup";
         private const string SceneID = "MixerUnitTestScene";
-        private const string ControlID = "MixerUnitTestControl";
+        private const string ButtonControlID = "MixerUnitTestButtonControl";
+        private const string JoystickControlID = "MixerUnitTestJoystickControl";
 
         private static InteractiveGameListingModel testGameListing;
 
-        public static InteractiveControlModel CreateTestControl()
+        public static InteractiveButtonControlModel CreateTestButton()
         {
             return new InteractiveButtonControlModel()
             {
-                controlID = ControlID,
+                controlID = ButtonControlID,
                 text = "I'm a button",
                 cost = 0,
                 disabled = false,
@@ -52,6 +53,43 @@ namespace Mixer.UnitTests
                         width = 10,
                         height = 3,
                         x = 0,
+                        y = 0
+                    }
+                }
+            };
+        }
+
+        public static InteractiveJoystickControlModel CreateTestJoystick()
+        {
+            return new InteractiveJoystickControlModel()
+            {
+                controlID = JoystickControlID,
+                disabled = false,
+                sampleRate = 50,
+                position = new InteractiveControlPositionModel[]
+                {
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "large",
+                        width = 10,
+                        height = 9,
+                        x = 15,
+                        y = 0
+                    },
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "medium",
+                        width = 10,
+                        height = 3,
+                        x = 15,
+                        y = 0
+                    },
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "small",
+                        width = 10,
+                        height = 3,
+                        x = 15,
                         y = 0
                     }
                 }
@@ -302,15 +340,15 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                InteractiveControlModel testControl = InteractiveClientUnitTests.CreateTestControl();
+                InteractiveControlModel testControl = InteractiveClientUnitTests.CreateTestButton();
 
-                List<InteractiveControlModel> controls = new List<InteractiveControlModel>() { testControl };
+                List<InteractiveControlModel> controls = new List<InteractiveControlModel>() { testControl, InteractiveClientUnitTests.CreateTestJoystick() };
                 bool result = await interactiveClient.CreateControls(testScene, controls);
 
                 Assert.IsTrue(result);
 
                 testScene = await this.GetScene(interactiveClient);
-                testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ControlID));
+                testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ButtonControlID));
                 Assert.IsNotNull(testControl);
 
                 controls = new List<InteractiveControlModel>() { testControl };
@@ -320,7 +358,7 @@ namespace Mixer.UnitTests
                 Assert.IsNotNull(controlCollection.controls);
 
                 testScene = await this.GetScene(interactiveClient);
-                testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ControlID));
+                testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ButtonControlID));
                 Assert.IsNotNull(testControl);
 
                 result = await interactiveClient.DeleteControls(testScene, controls);

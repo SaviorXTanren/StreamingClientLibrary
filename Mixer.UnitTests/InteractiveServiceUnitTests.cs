@@ -49,8 +49,8 @@ namespace Mixer.UnitTests
                 sceneID = "default",
             };
 
-            InteractiveControlModel control = InteractiveClientUnitTests.CreateTestControl();
-            defaultScene.controls.Add(control);
+            defaultScene.controls.Add(InteractiveClientUnitTests.CreateTestButton());
+            defaultScene.controls.Add(InteractiveClientUnitTests.CreateTestJoystick());
 
             version.controls.scenes.Add(defaultScene);
             version.controlVersion = "2.0";

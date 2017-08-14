@@ -18,15 +18,15 @@ namespace Mixer.Base.Model.Interactive
         }
 
         [JsonIgnore]
-        public IEnumerable<InteractiveButtonControlModel> buttons
+        public IEnumerable<InteractiveConnectedButtonControlModel> buttons
         {
-            get { return this.ConvertJArrayToTypedArray<InteractiveButtonControlModel>(this.controlsUnstructured).Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)); }
+            get { return this.ConvertJArrayToTypedArray<InteractiveConnectedButtonControlModel>(this.controlsUnstructured).Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)); }
         }
 
         [JsonIgnore]
-        public IEnumerable<InteractiveJoystickControlModel> joysticks
+        public IEnumerable<InteractiveConnectedJoystickControlModel> joysticks
         {
-            get { return this.ConvertJArrayToTypedArray<InteractiveJoystickControlModel>(this.controlsUnstructured).Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)); }
+            get { return this.ConvertJArrayToTypedArray<InteractiveConnectedJoystickControlModel>(this.controlsUnstructured).Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)); }
         }
 
         private List<T> ConvertJArrayToTypedArray<T>(JArray array)
