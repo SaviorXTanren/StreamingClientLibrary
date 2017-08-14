@@ -25,13 +25,13 @@ namespace Mixer.Base.Clients
         public event EventHandler<Tuple<InteractiveGroupModel, InteractiveGroupModel>> OnGroupDelete;
         public event EventHandler<InteractiveGroupCollectionModel> OnGroupUpdate;
 
-        public event EventHandler<InteractiveSceneCollectionModel> OnSceneCreate;
-        public event EventHandler<Tuple<InteractiveSceneModel, InteractiveSceneModel>> OnSceneDelete;
-        public event EventHandler<InteractiveSceneCollectionModel> OnSceneUpdate;
+        public event EventHandler<InteractiveConnectedSceneCollectionModel> OnSceneCreate;
+        public event EventHandler<Tuple<InteractiveConnectedSceneModel, InteractiveConnectedSceneModel>> OnSceneDelete;
+        public event EventHandler<InteractiveConnectedSceneCollectionModel> OnSceneUpdate;
 
-        public event EventHandler<InteractiveSceneModel> OnControlCreate;
-        public event EventHandler<InteractiveSceneModel> OnControlDelete;
-        public event EventHandler<InteractiveSceneModel> OnControlUpdate;
+        public event EventHandler<InteractiveConnectedSceneModel> OnControlCreate;
+        public event EventHandler<InteractiveConnectedSceneModel> OnControlDelete;
+        public event EventHandler<InteractiveConnectedSceneModel> OnControlUpdate;
 
         public event EventHandler<InteractiveGiveInputModel> OnGiveInput;
 
@@ -220,44 +220,44 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<InteractiveSceneCollectionModel> CreateScenes(IEnumerable<InteractiveSceneModel> scenes)
+        public async Task<InteractiveConnectedSceneCollectionModel> CreateScenes(IEnumerable<InteractiveConnectedSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel();
-            foreach (InteractiveSceneModel scene in scenes)
+            InteractiveConnectedSceneCollectionModel collection = new InteractiveConnectedSceneCollectionModel();
+            foreach (InteractiveConnectedSceneModel scene in scenes)
             {
                 // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveSceneModel>(scene));
+                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveConnectedSceneModel>(scene));
             }
 
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "createScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveConnectedSceneCollectionModel>(reply);
         }
 
-        public async Task<InteractiveSceneGroupCollectionModel> GetScenes()
+        public async Task<InteractiveConnectedSceneGroupCollectionModel> GetScenes()
         {
             MethodPacket packet = new MethodPacket() { method = "getScenes" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveSceneGroupCollectionModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveConnectedSceneGroupCollectionModel>(reply);
         }
 
-        public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
+        public async Task<InteractiveConnectedSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveConnectedSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel();
-            foreach (InteractiveSceneModel scene in scenes)
+            InteractiveConnectedSceneCollectionModel collection = new InteractiveConnectedSceneCollectionModel();
+            foreach (InteractiveConnectedSceneModel scene in scenes)
             {
                 // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveSceneModel>(scene));
+                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveConnectedSceneModel>(scene));
             }
 
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "updateScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveConnectedSceneCollectionModel>(reply);
         }
 
-        public async Task<bool> DeleteScene(InteractiveSceneModel sceneToDelete, InteractiveSceneModel sceneToReplace)
+        public async Task<bool> DeleteScene(InteractiveConnectedSceneModel sceneToDelete, InteractiveConnectedSceneModel sceneToReplace)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", sceneToDelete.sceneID);
@@ -267,7 +267,7 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<bool> CreateControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        public async Task<bool> CreateControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
@@ -277,17 +277,17 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<InteractiveControlCollectionModel> UpdateControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        public async Task<InteractiveConnectedControlCollectionModel> UpdateControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
             parameters.Add("controls", JArray.FromObject(controls));
             MethodPacket packet = new MethodPacket() { method = "updateControls", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveControlCollectionModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveConnectedControlCollectionModel>(reply);
         }
 
-        public async Task<bool> DeleteControls(InteractiveSceneModel scene, IEnumerable<InteractiveControlModel> controls)
+        public async Task<bool> DeleteControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
@@ -347,9 +347,9 @@ namespace Mixer.Base.Clients
                 case "onSceneDelete":
                     if (this.OnSceneDelete != null)
                     {
-                        Tuple<InteractiveSceneModel, InteractiveSceneModel> sceneDeleted = new Tuple<InteractiveSceneModel, InteractiveSceneModel>(
-                            new InteractiveSceneModel() { sceneID = methodPacket.parameters["sceneID"].ToString() },
-                            new InteractiveSceneModel() { sceneID = methodPacket.parameters["reassignSceneID"].ToString() });
+                        Tuple<InteractiveConnectedSceneModel, InteractiveConnectedSceneModel> sceneDeleted = new Tuple<InteractiveConnectedSceneModel, InteractiveConnectedSceneModel>(
+                            new InteractiveConnectedSceneModel() { sceneID = methodPacket.parameters["sceneID"].ToString() },
+                            new InteractiveConnectedSceneModel() { sceneID = methodPacket.parameters["reassignSceneID"].ToString() });
 
                         this.OnSceneDelete(this, sceneDeleted);
                     }

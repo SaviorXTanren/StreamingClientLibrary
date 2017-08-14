@@ -64,6 +64,7 @@
     <Compile Include="Model\Client\ReplyPacket.cs" />
     <Compile Include="Model\Constellation\ConstellationLiveEventModel.cs" />
     <Compile Include="Model\Interactive\InteractiveButtonControlModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveConnectedSceneModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlPositionModel.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />
     <Compile Include="Model\Interactive\InteractiveParticipantModel.cs" />
     <Compile Include="Model\Interactive\InteractiveRobotConnectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveSceneCollectionModel.cs" />
     <Compile Include="Model\Interactive\InteractiveSceneModel.cs" />
     <Compile Include="Model\Interactive\InteractiveSetBandwidthThrottleModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlCollectionModel.cs" />

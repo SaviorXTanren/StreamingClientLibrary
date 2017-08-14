@@ -261,7 +261,7 @@ namespace Mixer.UnitTests
             {
                 await this.ReadyInteractive(interactiveClient);
 
-                InteractiveSceneModel testScene = await this.CreateScene(interactiveClient);
+                InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
 
@@ -313,11 +313,11 @@ namespace Mixer.UnitTests
             {
                 await this.ReadyInteractive(interactiveClient);
 
-                InteractiveSceneModel testScene = await this.CreateScene(interactiveClient);
+                InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
 
-                InteractiveSceneCollectionModel scenes = await interactiveClient.UpdateScenes(new List<InteractiveSceneModel>() { testScene });
+                InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.UpdateScenes(new List<InteractiveConnectedSceneModel>() { testScene });
 
                 Assert.IsNotNull(scenes);
                 Assert.IsNotNull(scenes.scenes);
@@ -336,7 +336,7 @@ namespace Mixer.UnitTests
             {
                 await this.ReadyInteractive(interactiveClient);
 
-                InteractiveSceneModel testScene = await this.CreateScene(interactiveClient);
+                InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
 
@@ -352,10 +352,10 @@ namespace Mixer.UnitTests
                 Assert.IsNotNull(testControl);
 
                 controls = new List<InteractiveControlModel>() { testControl };
-                InteractiveControlCollectionModel controlCollection = await interactiveClient.UpdateControls(testScene, controls);
+                InteractiveConnectedControlCollectionModel controlCollection = await interactiveClient.UpdateControls(testScene, controls);
 
                 Assert.IsNotNull(controlCollection);
-                Assert.IsNotNull(controlCollection.controls);
+                Assert.IsNotNull(controlCollection.buttons);
 
                 testScene = await this.GetScene(interactiveClient);
                 testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ButtonControlID));
@@ -413,49 +413,49 @@ namespace Mixer.UnitTests
             Assert.IsTrue(await interactiveClient.Ready());
         }
 
-        private async Task<InteractiveSceneModel> CreateScene(InteractiveClient interactiveClient)
+        private async Task<InteractiveConnectedSceneModel> CreateScene(InteractiveClient interactiveClient)
         {
             this.ClearPackets();
 
-            InteractiveSceneCollectionModel scenes = await interactiveClient.CreateScenes(new List<InteractiveSceneModel>() { new InteractiveSceneModel(SceneID) });
+            InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.CreateScenes(new List<InteractiveConnectedSceneModel>() { new InteractiveConnectedSceneModel() { sceneID = SceneID } });
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);
             Assert.IsTrue(scenes.scenes.Count >= 1);
 
-            InteractiveSceneModel testScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals(SceneID));
+            InteractiveConnectedSceneModel testScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals(SceneID));
             Assert.IsNotNull(testScene);
 
             return await this.GetScene(interactiveClient);
         }
 
-        private async Task<InteractiveSceneModel> GetScene(InteractiveClient interactiveClient)
+        private async Task<InteractiveConnectedSceneModel> GetScene(InteractiveClient interactiveClient)
         {
             this.ClearPackets();
 
-            InteractiveSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
+            InteractiveConnectedSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);
             Assert.IsTrue(scenes.scenes.Count >= 2);
 
-            InteractiveSceneModel testScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals(SceneID));
+            InteractiveConnectedSceneModel testScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals(SceneID));
             Assert.IsNotNull(testScene);
 
             return testScene;
         }
 
-        private async Task DeleteScene(InteractiveClient interactiveClient, InteractiveSceneModel scene)
+        private async Task DeleteScene(InteractiveClient interactiveClient, InteractiveConnectedSceneModel scene)
         {
             this.ClearPackets();
 
-            InteractiveSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
+            InteractiveConnectedSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);
             Assert.IsTrue(scenes.scenes.Count >= 2);
 
-            InteractiveSceneModel backupScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals("default"));
+            InteractiveConnectedSceneModel backupScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals("default"));
 
             bool result = await interactiveClient.DeleteScene(scene, backupScene);
 
