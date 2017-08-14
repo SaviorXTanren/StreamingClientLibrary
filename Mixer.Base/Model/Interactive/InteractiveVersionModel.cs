@@ -4,13 +4,13 @@
     {
         public InteractiveVersionUpdateableModel()
         {
-            this.controls = new InteractiveGameControlsModel();
+            this.controls = new InteractiveSceneCollectionModel();
         }
 
         public string state { get; set; }
         public string installation { get; set; }
         public string download { get; set; }
-        public InteractiveGameControlsModel controls { get; set; }
+        public InteractiveSceneCollectionModel controls { get; set; }
         public string controlVersion { get; set; }
     }
 

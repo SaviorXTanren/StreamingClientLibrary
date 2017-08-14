@@ -68,7 +68,6 @@
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlPositionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGameControlsModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
     <Compile Include="Model\Interactive\InteractiveJoystickControlModel.cs" />
