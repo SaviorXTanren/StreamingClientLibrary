@@ -1,7 +1,6 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Util;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -91,9 +90,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(version, "version");
 
             // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-            string json = JsonConvert.SerializeObject(version);
-            JObject jobj = JObject.Parse(json);
-            InteractiveVersionUpdateableModel updateableVersion = jobj.ToObject<InteractiveVersionUpdateableModel>();
+            InteractiveVersionUpdateableModel updateableVersion = JsonHelper.ConvertToDifferentType<InteractiveVersionUpdateableModel>(version);
             updateableVersion.controls = version.controls;
 
             return await this.PutAsync<InteractiveVersionModel>("interactive/versions/" + version.id, this.CreateContentFromObject(updateableVersion));

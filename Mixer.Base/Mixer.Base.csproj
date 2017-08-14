@@ -115,6 +115,7 @@
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Util\DateTimeHelper.cs" />
     <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\JsonHelper.cs" />
     <Compile Include="Util\NameAttribute.cs" />
     <Compile Include="Util\ReplyPacketException.cs" />
     <Compile Include="Util\RestServiceRequestException.cs" />

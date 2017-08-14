@@ -9,7 +9,7 @@ namespace Mixer.Base.Interactive
 {
     public static class InteractiveGameHelper
     {
-        public static async Task<InteractiveGameListingModel> CreateInteractive2Game(MixerConnection connection, ChannelModel channel, UserModel user, string gameName, InteractiveGameControlsSceneModel initialScene)
+        public static async Task<InteractiveGameListingModel> CreateInteractive2Game(MixerConnection connection, ChannelModel channel, UserModel user, string gameName, InteractiveSceneModel initialScene)
         {
             InteractiveGameModel game = new InteractiveGameModel()
             {
@@ -35,9 +35,9 @@ namespace Mixer.Base.Interactive
             return gameListing;
         }
 
-        public static InteractiveGameControlsSceneModel CreateDefaultScene(IEnumerable<InteractiveControlModel> controls)
+        public static InteractiveSceneModel CreateDefaultScene()
         {
-            return new InteractiveGameControlsSceneModel()
+            return new InteractiveSceneModel()
             {
                 sceneID = "default",
             };

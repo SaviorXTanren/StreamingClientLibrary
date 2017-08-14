@@ -433,7 +433,7 @@ namespace Mixer.UnitTests
         {
             this.ClearPackets();
 
-            InteractiveSceneCollectionModel scenes = await interactiveClient.GetScenes();
+            InteractiveSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);
@@ -449,7 +449,7 @@ namespace Mixer.UnitTests
         {
             this.ClearPackets();
 
-            InteractiveSceneCollectionModel scenes = await interactiveClient.GetScenes();
+            InteractiveSceneGroupCollectionModel scenes = await interactiveClient.GetScenes();
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);

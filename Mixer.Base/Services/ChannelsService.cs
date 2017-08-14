@@ -1,11 +1,7 @@
-﻿using Mixer.Base.Clients;
-using Mixer.Base.Model.Channel;
+﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
@@ -25,9 +21,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
 
             // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-            string json = JsonConvert.SerializeObject(channel);
-            JObject jobj = JObject.Parse(json);
-            ChannelUpdateableModel updateableChannel = jobj.ToObject<ChannelUpdateableModel>();
+            ChannelUpdateableModel updateableChannel = JsonHelper.ConvertToDifferentType<ChannelUpdateableModel>(channel);
 
             return await this.PatchAsync<ChannelModel>("channels/" + channel.id, this.CreateContentFromObject(updateableChannel));
         }

@@ -222,23 +222,35 @@ namespace Mixer.Base.Clients
 
         public async Task<InteractiveSceneCollectionModel> CreateScenes(IEnumerable<InteractiveSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel() { scenes = scenes.ToList() };
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel();
+            foreach (InteractiveSceneModel scene in scenes)
+            {
+                // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
+                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveSceneModel>(scene));
+            }
+
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "createScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
         }
 
-        public async Task<InteractiveSceneCollectionModel> GetScenes()
+        public async Task<InteractiveSceneGroupCollectionModel> GetScenes()
         {
             MethodPacket packet = new MethodPacket() { method = "getScenes" };
             ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<InteractiveSceneCollectionModel>(reply);
+            return this.GetSpecificReplyResultValue<InteractiveSceneGroupCollectionModel>(reply);
         }
 
         public async Task<InteractiveSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveSceneModel> scenes)
         {
-            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel() { scenes = scenes.ToList() };
+            InteractiveSceneCollectionModel collection = new InteractiveSceneCollectionModel();
+            foreach (InteractiveSceneModel scene in scenes)
+            {
+                // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
+                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveSceneModel>(scene));
+            }
+
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "updateScenes", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);

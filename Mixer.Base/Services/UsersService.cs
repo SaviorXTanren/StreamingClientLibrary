@@ -1,5 +1,4 @@
-﻿using Mixer.Base.Clients;
-using Mixer.Base.Model;
+﻿using Mixer.Base.Model;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.Teams;
@@ -97,6 +96,7 @@ namespace Mixer.Base.Services
 
         private async Task<UserWithChannelModel> GetUser(uint userID)
         {
+            Validator.ValidateVariable(userID, "userID");
             return await this.GetAsync<UserWithChannelModel>("users/" + userID);
         }
     }

@@ -7,6 +7,11 @@ namespace Mixer.Base.Model.Interactive
 {
     public class InteractiveControlCollectionModel
     {
+        public InteractiveControlCollectionModel()
+        {
+            this.controls = new List<InteractiveControlModel>();
+        }
+
         [JsonProperty("controls")]
         public JArray controlsUnstructured { get; set; }
 
@@ -14,7 +19,7 @@ namespace Mixer.Base.Model.Interactive
         public List<InteractiveControlModel> controls
         {
             get { return this.ConvertJArrayToTypedArray<InteractiveControlModel>(this.controlsUnstructured); }
-            set { JArray.FromObject(value); }
+            set { controlsUnstructured = JArray.FromObject(value); }
         }
 
         [JsonIgnore]

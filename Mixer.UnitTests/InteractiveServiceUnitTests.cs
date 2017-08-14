@@ -44,7 +44,7 @@ namespace Mixer.UnitTests
             Assert.IsNotNull(gameListing);
 
             InteractiveVersionModel version = gameListing.versions.First();
-            InteractiveGameControlsSceneModel defaultScene = new InteractiveGameControlsSceneModel()
+            InteractiveSceneModel defaultScene = new InteractiveSceneModel()
             {
                 sceneID = "default",
             };
