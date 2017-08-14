@@ -33,7 +33,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void AuthorizeViaOAuthRedirect()
         {
-            this.TestWrapper((MixerConnection connection) =>
+            TestWrapper((MixerConnection connection) =>
             {
                 return Task.FromResult(0);
             });
@@ -50,7 +50,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void RefreshToken()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 AuthorizationToken token = await connection.GetAuthorizationToken();
                 await token.RefreshToken();

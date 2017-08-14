@@ -1,53 +1,126 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
+using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
+using Mixer.Base.Model.User;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mixer.UnitTests
 {
     [TestClass]
     public class InteractiveServiceUnitTests : UnitTestBase
     {
-        /// <summary>
-        /// Requires an interactive connection to be established for this unit test to pass
-        /// </summary>
-        [TestMethod]
-        public void GetInteractive()
+        private static InteractiveGameListingModel testGameListing;
+
+        public static async Task<InteractiveGameListingModel> CreateTestGame(MixerConnection connection, ChannelModel channel)
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
+
+            InteractiveGameModel game = new InteractiveGameModel()
+            {
+                name = "Test Game",
+                ownerId = user.id,             
+            };
+            game = await connection.Interactive.CreateInteractiveGame(game);
+
+            Assert.IsNotNull(game);
+            Assert.IsTrue(game.id > 0);
+
+            game.controlVersion = "2.0";
+            game = await connection.Interactive.UpdateInteractiveGame(game);
+
+            Assert.IsNotNull(game);
+            Assert.IsTrue(game.id > 0);
+
+            IEnumerable<InteractiveGameListingModel> gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+            Assert.IsNotNull(gameListings);
+            Assert.IsTrue(gameListings.Count() > 0);
+
+            InteractiveGameListingModel gameListing = gameListings.FirstOrDefault(gl => gl.id.Equals(game.id));
+            Assert.IsNotNull(gameListing);
+
+            InteractiveVersionModel version = gameListing.versions.First();
+            InteractiveGameControlsSceneModel defaultScene = new InteractiveGameControlsSceneModel()
+            {
+                sceneID = "default",
+            };
+
+            InteractiveControlModel control = InteractiveClientUnitTests.CreateTestControl();
+            defaultScene.controls.Add(control);
+
+            version.controls.scenes.Add(defaultScene);
+            version.controlVersion = "2.0";
+            version = await connection.Interactive.UpdateInteractiveGameVersion(version);
+
+            gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+            Assert.IsNotNull(gameListings);
+            Assert.IsTrue(gameListings.Count() > 0);
+
+            gameListing = gameListings.FirstOrDefault(gl => gl.id.Equals(game.id));
+            Assert.IsNotNull(gameListing);
+
+            return gameListing;
+        }
+
+        public static async Task DeleteTestGame(MixerConnection connection, InteractiveGameModel game)
+        {
+            Assert.IsTrue(await connection.Interactive.DeleteInteractiveGame(game));
+        }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                InteractiveConnectionInfoModel interactive = await connection.Interactive.GetInteractive(channel);
-
-                Assert.IsNotNull(interactive);
-                Assert.IsNotNull(interactive.address);
+                testGameListing = await InteractiveServiceUnitTests.CreateTestGame(connection, channel);
             });
         }
 
-        /// <summary>
-        /// Requires an interactive connection to be established for this unit test to pass
-        /// </summary>
-        [TestMethod]
-        public void GetInteractiveRobot()
+        [ClassCleanup]
+        public static void ClassCleanup()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                await InteractiveServiceUnitTests.DeleteTestGame(connection, testGameListing);
+            });
+        }
+
+        [TestMethod]
+        public void GetInteractiveConnections()
+        {
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                InteractiveRobotConnectionModel interactive = await connection.Interactive.GetInteractiveRobot(channel);
+                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, testGameListing);
 
-                Assert.IsNotNull(interactive);
-                Assert.IsNotNull(interactive.address);
+                Assert.IsTrue(await interactiveClient.Connect());
+
+                InteractiveConnectionInfoModel interactiveConnection = await connection.Interactive.GetInteractive(channel);
+
+                Assert.IsNotNull(interactiveConnection);
+                Assert.IsNotNull(interactiveConnection.address);
+
+                InteractiveRobotConnectionModel robotConnection = await connection.Interactive.GetInteractiveRobot(channel);
+
+                Assert.IsNotNull(robotConnection);
+                Assert.IsNotNull(robotConnection.address);
+
+                await interactiveClient.Disconnect();
             });
         }
 
         [TestMethod]
         public void GetInteractiveHosts()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 IEnumerable<string> addresses = await connection.Interactive.GetInteractiveHosts();
 
@@ -59,21 +132,20 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetOwnedInteractiveGames()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
                 IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
                 Assert.IsNotNull(games);
-                Assert.IsTrue(games.Count() > 0);
             });
         }
 
         [TestMethod]
         public void GetSharedInteractiveGames()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -86,7 +158,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetInteractiveVersionInfo()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -98,6 +170,37 @@ namespace Mixer.UnitTests
                 InteractiveVersionModel version = await connection.Interactive.GetInteractiveVersionInfo(games.First().versions.First());
 
                 Assert.IsNotNull(version);
+            });
+        }
+
+        [TestMethod]
+        public void CreateGetUpdateDeleteGame()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                InteractiveGameListingModel gameListing = await InteractiveServiceUnitTests.CreateTestGame(connection, channel);
+
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+                Assert.IsNotNull(games);
+                Assert.IsTrue(games.Count() > 0);
+                Assert.IsTrue(games.Any(g => g.id.Equals(gameListing.id)));
+
+                string gameName = gameListing.name = "Test Game";
+                InteractiveGameModel game = await connection.Interactive.UpdateInteractiveGame(gameListing);
+
+                Assert.IsNotNull(game);
+                Assert.IsTrue(game.id > 0);
+                Assert.AreEqual(game.name, gameName);
+
+                await InteractiveServiceUnitTests.DeleteTestGame(connection, game);
+
+                games = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+                Assert.IsNotNull(games);
+                Assert.IsFalse(games.Any(g => g.id.Equals(game.id)));
             });
         }
     }

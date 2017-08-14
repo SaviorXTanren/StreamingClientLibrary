@@ -26,7 +26,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChat()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelChatModel chat = await ChatsServiceUnitTests.GetChat(connection);
             });
@@ -35,7 +35,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUsers()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 

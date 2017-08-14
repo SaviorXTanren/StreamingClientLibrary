@@ -2,7 +2,7 @@
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveControlModel : InteractiveModelBase
+    public class InteractiveControlModel
     {
         public string controlID { get; set; }
         public string kind { get; set; }

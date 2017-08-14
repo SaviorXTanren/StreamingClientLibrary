@@ -83,7 +83,7 @@ namespace Mixer.UnitTests
 
         private void ConstellationWrapper(Func<MixerConnection, ConstellationClient, Task> function)
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 this.ClearPackets();
 

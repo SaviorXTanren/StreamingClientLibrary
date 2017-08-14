@@ -66,7 +66,7 @@ namespace Mixer.Base.Clients
 
             AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", authToken.AccessToken);
             this.webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
-            this.webSocket.Options.SetRequestHeader("X-Interactive-Version", this.InteractiveGame.versions.First().id.ToString());
+            this.webSocket.Options.SetRequestHeader("X-Interactive-Version", this.InteractiveGame.versions.OrderByDescending(v => v.versionOrder).First().id.ToString());
             this.webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");
         }
 

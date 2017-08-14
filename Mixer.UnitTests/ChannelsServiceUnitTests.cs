@@ -32,7 +32,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetChannelForUser()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
             });
@@ -44,7 +44,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void UpdateChannel()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -61,7 +61,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetFollowers()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -75,7 +75,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetHosters()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -88,7 +88,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetPreferences()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
@@ -115,7 +115,7 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void GetUsersWithRoles()
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 

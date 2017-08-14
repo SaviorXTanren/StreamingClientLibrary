@@ -3,7 +3,7 @@ using System;
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveParticipantModel : InteractiveModelBase
+    public class InteractiveParticipantModel
     {
         public string sessionID { get; set; }
         public uint userID { get; set; }

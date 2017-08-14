@@ -180,7 +180,7 @@ namespace Mixer.UnitTests
 
         private void ChatWrapper(Func<MixerConnection, ChatClient, Task> function)
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
                 this.ClearAllPackets();
 

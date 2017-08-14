@@ -9,5 +9,6 @@
         public string description { get; set; }
         public bool hasPublishedVersions { get; set; }
         public string installation { get; set; }
+        public string controlVersion { get; set; }
     }
 }

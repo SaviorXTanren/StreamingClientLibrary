@@ -38,7 +38,7 @@ namespace Mixer.UnitTests
 
         private static MixerConnection connection;
 
-        public MixerConnection GetMixerClient()
+        public static MixerConnection GetMixerClient()
         {
             if (UnitTestBase.connection == null)
             {
@@ -60,11 +60,11 @@ namespace Mixer.UnitTests
             this.eventPackets.Clear();
         }
 
-        protected void TestWrapper(Func<MixerConnection, Task> function)
+        protected static void TestWrapper(Func<MixerConnection, Task> function)
         {
             try
             {
-                MixerConnection connection = this.GetMixerClient();
+                MixerConnection connection = UnitTestBase.GetMixerClient();
                 function(connection).Wait();
             }
             catch (Exception ex)

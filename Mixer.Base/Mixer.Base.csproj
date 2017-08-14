@@ -48,9 +48,9 @@
     <Compile Include="Clients\ChatClient.cs" />
     <Compile Include="Clients\ConstellationClient.cs" />
     <Compile Include="Clients\InteractiveClient.cs" />
+    <Compile Include="Helpers\InteractiveGameHelper.cs" />
     <Compile Include="MixerConnection.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
-    <Compile Include="Model\Channel\ChannelUpdateableModel.cs" />
     <Compile Include="Model\Chat\ChatClearMessagesEventModel.cs" />
     <Compile Include="Model\Chat\ChatDeleteMessageEventModel.cs" />
     <Compile Include="Model\Chat\ChatMessageEventModel.cs" />
@@ -71,7 +71,6 @@
     <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
     <Compile Include="Model\Interactive\InteractiveJoystickControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveModelBase.cs" />
     <Compile Include="Model\Interactive\InteractiveParticipantCollectionModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGetThrottleStateModel.cs" />
     <Compile Include="Model\Interactive\InteractiveGiveInputModel.cs" />

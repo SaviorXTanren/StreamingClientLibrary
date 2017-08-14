@@ -1,5 +1,4 @@
-﻿using Mixer.Base.Clients;
-using Mixer.Base.Util;
+﻿using Mixer.Base.Util;
 using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -111,6 +110,15 @@ namespace Mixer.Base.Services
                 HttpMethod method = new HttpMethod("PATCH");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
                 return await this.ProcessResponse<T>(await client.SendAsync(request));
+            }
+        }
+
+        protected async Task<bool> DeleteAsync(string requestUri)
+        {
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            {
+                HttpResponseMessage response = await client.DeleteAsync(requestUri);
+                return (response.StatusCode == HttpStatusCode.NoContent);
             }
         }
 

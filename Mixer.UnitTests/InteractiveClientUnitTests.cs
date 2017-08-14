@@ -18,6 +18,66 @@ namespace Mixer.UnitTests
         private const string SceneID = "MixerUnitTestScene";
         private const string ControlID = "MixerUnitTestControl";
 
+        private static InteractiveGameListingModel testGameListing;
+
+        public static InteractiveControlModel CreateTestControl()
+        {
+            return new InteractiveButtonControlModel()
+            {
+                controlID = ControlID,
+                text = "I'm a button",
+                cost = 0,
+                disabled = false,
+                position = new InteractiveControlPositionModel[]
+                {
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "large",
+                        width = 10,
+                        height = 9,
+                        x = 0,
+                        y = 0
+                    },
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "medium",
+                        width = 10,
+                        height = 3,
+                        x = 0,
+                        y = 0
+                    },
+                    new InteractiveControlPositionModel()
+                    {
+                        size = "small",
+                        width = 10,
+                        height = 3,
+                        x = 0,
+                        y = 0
+                    }
+                }
+            };
+        }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                testGameListing = await InteractiveServiceUnitTests.CreateTestGame(connection, channel);
+            });
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                await InteractiveServiceUnitTests.DeleteTestGame(connection, testGameListing);
+            });
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -242,42 +302,8 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                InteractiveButtonControlModel testControl = new InteractiveButtonControlModel()
-                {
-                    controlID = ControlID,
-                    kind = "button",
-                    text = "I'm a button",
-                    cost = 0,
-                    progress = 0.5f,
-                    disabled = false,
-                    position = new InteractiveControlPositionModel[]
-                    {
-                        new InteractiveControlPositionModel()
-                        {
-                            size = "large",
-                            width = 5,
-                            height = 5,
-                            x = 5,
-                            y = 5
-                        },
-                        new InteractiveControlPositionModel()
-                        {
-                            size = "medium",
-                            width = 5,
-                            height = 5,
-                            x = 5,
-                            y = 5
-                        },
-                        new InteractiveControlPositionModel()
-                        {
-                            size = "small",
-                            width = 5,
-                            height = 5,
-                            x = 5,
-                            y = 5
-                        }
-                    }
-                };
+                InteractiveControlModel testControl = InteractiveClientUnitTests.CreateTestControl();
+
                 List<InteractiveControlModel> controls = new List<InteractiveControlModel>() { testControl };
                 bool result = await interactiveClient.CreateControls(testScene, controls);
 
@@ -325,24 +351,16 @@ namespace Mixer.UnitTests
 
         private void InteractiveWrapper(Func<MixerConnection, InteractiveClient, Task> function)
         {
-            this.TestWrapper(async (MixerConnection connection) =>
+            TestWrapper(async (MixerConnection connection) =>
             {
-                this.ClearPackets();
-
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
-                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
-                Assert.IsNotNull(games);
-                Assert.IsTrue(games.Count() > 0);
-
-                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, games.First());
-
-                interactiveClient.OnReplyOccurred += InteractiveClient_OnReplyOccurred;
-                interactiveClient.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
+                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, testGameListing);
 
                 Assert.IsTrue(await interactiveClient.Connect());
 
-                this.ClearPackets();
+                interactiveClient.OnReplyOccurred += InteractiveClient_OnReplyOccurred;
+                interactiveClient.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
 
                 await function(connection, interactiveClient);
 

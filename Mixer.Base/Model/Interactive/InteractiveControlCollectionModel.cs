@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveControlCollectionModel : InteractiveModelBase
+    public class InteractiveControlCollectionModel
     {
         [JsonProperty("controls")]
         public JArray controlsUnstructured { get; set; }
