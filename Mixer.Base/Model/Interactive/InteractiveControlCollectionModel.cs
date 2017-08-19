@@ -72,5 +72,17 @@ namespace Mixer.Base.Model.Interactive
 
         [JsonIgnore]
         public List<InteractiveJoystickControlModel> joysticks { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<InteractiveControlModel> allControls
+        {
+            get
+            {
+                List<InteractiveControlModel> controls = new List<InteractiveControlModel>();
+                controls.AddRange(this.buttons);
+                controls.AddRange(this.joysticks);
+                return controls;
+            }
+        }
     }
 }
