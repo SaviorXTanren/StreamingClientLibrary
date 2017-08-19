@@ -49,12 +49,6 @@ namespace Mixer.Base.Services
             return await this.GetAsync<IEnumerable<InteractiveGameListingModel>>("interactive/games/shared?user=" + channel.userId);
         }
 
-        public async Task<InteractiveVersionModel> GetInteractiveVersionInfo(InteractiveVersionModel version)
-        {
-            Validator.ValidateVariable(version, "version");
-            return await this.GetAsync<InteractiveVersionModel>("interactive/versions/" + version.id);
-        }
-
         public async Task<InteractiveGameModel> CreateInteractiveGame(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");

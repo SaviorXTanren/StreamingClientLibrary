@@ -156,24 +156,6 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetInteractiveVersionInfo()
-        {
-            TestWrapper(async (MixerConnection connection) =>
-            {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
-
-                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
-
-                Assert.IsNotNull(games);
-                Assert.IsTrue(games.Count() > 0);
-
-                InteractiveVersionModel version = await connection.Interactive.GetInteractiveVersionInfo(games.First().versions.First());
-
-                Assert.IsNotNull(version);
-            });
-        }
-
-        [TestMethod]
         public void CreateGetUpdateDeleteGame()
         {
             TestWrapper(async (MixerConnection connection) =>
