@@ -106,7 +106,7 @@ namespace Mixer.InteractiveSample
         private async void InteractiveClient_OnGiveInput(object sender, InteractiveGiveInputModel e)
         {
             this.InteractiveDataTextBlock.Text += "Input Received: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
-            if (e.input.eventType.Equals("mousedown"))
+            if (e.input.eventType.Equals("mousedown") && e.transactionID != null)
             {
                 if (await this.interactiveClient.CaptureSparkTransaction(e.transactionID))
                 {
