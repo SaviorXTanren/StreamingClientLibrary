@@ -32,6 +32,25 @@ namespace Mixer.Base.Services
             return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow");
         }
 
+        public async Task<ChannelAdvancedModel> GetHostedChannel(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hostee");
+        }
+
+        public async Task<ChannelModel> SetHostChannel(ChannelModel channel, ChannelModel hosteeChannel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(hosteeChannel, "hosteeChannel");
+            return await this.PutAsync<ChannelModel>("channels/" + channel.id + "/hostee", this.CreateContentFromObject(hosteeChannel));
+        }
+
+        public async Task<bool> UnhostChannel(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.DeleteAsync("channels/" + channel.id + "/hostee");
+        }
+
         public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");

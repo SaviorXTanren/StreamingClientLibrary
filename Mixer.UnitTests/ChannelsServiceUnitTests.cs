@@ -73,6 +73,30 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void HostGetUnhostChannel()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                ChannelModel hostChannel = await connection.Channels.GetChannel("Mixer");
+
+                channel = await connection.Channels.SetHostChannel(channel, hostChannel);
+
+                Assert.IsNotNull(channel);
+
+                ChannelModel hostedChannel = await connection.Channels.GetHostedChannel(channel);
+
+                Assert.IsNotNull(hostedChannel);
+                Assert.AreEqual(hostChannel.id, hostedChannel.id);
+
+                bool result = await connection.Channels.UnhostChannel(channel);
+
+                Assert.IsTrue(result);
+            });
+        }
+
+        [TestMethod]
         public void GetHosters()
         {
             TestWrapper(async (MixerConnection connection) =>
