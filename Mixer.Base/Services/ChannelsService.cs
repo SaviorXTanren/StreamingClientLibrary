@@ -75,5 +75,12 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users");
         }
+
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, string role)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateString(role, "role");
+            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role);
+        }
     }
 }

@@ -147,6 +147,11 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
+
+                users = await connection.Channels.GetUsersWithRoles(channel, "mod");
+
+                Assert.IsNotNull(users);
+                Assert.IsTrue(users.Count() > 0);
             });
         }
     }
