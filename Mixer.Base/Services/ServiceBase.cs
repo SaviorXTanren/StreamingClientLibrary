@@ -24,6 +24,14 @@ namespace Mixer.Base.Services
             this.connection = connection;
         }
 
+        protected async Task<HttpResponseMessage> GetAsync(string requestUri)
+        {
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            {
+                return await client.GetAsync(requestUri);
+            }
+        }
+
         protected async Task<T> GetAsync<T>(string requestUri)
         {
             using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))

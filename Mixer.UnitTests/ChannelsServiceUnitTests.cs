@@ -154,5 +154,55 @@ namespace Mixer.UnitTests
                 Assert.IsTrue(users.Count() > 0);
             });
         }
+
+
+        [TestMethod]
+        public void GetUpdateDiscord()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                DiscordBotModel discord = await connection.Channels.GetDiscord(channel);
+
+                Assert.IsNotNull(discord);
+                Assert.IsTrue(discord.id > 0);
+
+                IEnumerable<DiscordChannelModel> channels = await connection.Channels.GetDiscordChannels(channel);
+
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+
+                IEnumerable<DiscordRoleModel> roles = await connection.Channels.GetDiscordRoles(channel);
+
+                Assert.IsNotNull(roles);
+                Assert.IsTrue(roles.Count() > 0);
+
+                discord = await connection.Channels.UpdateDiscord(channel, discord);
+
+                Assert.IsNotNull(discord);
+                Assert.IsTrue(discord.id > 0);
+            });
+        }
+
+        [TestMethod]
+        public void CheckGetDiscordInvite()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                UserModel user = await connection.Users.GetCurrentUser();
+
+                bool result = await connection.Channels.CanUserGetDiscordInvite(channel, user);
+
+                Assert.IsTrue(result);
+
+                string invite = await connection.Channels.GetUserDiscordInvite(channel, user);
+
+                Assert.IsNotNull(invite);
+                Assert.IsTrue(invite.Length > 0);
+            });
+        }
     }
 }
