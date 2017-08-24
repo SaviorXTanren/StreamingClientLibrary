@@ -67,6 +67,9 @@
     <Compile Include="Model\Client\ReplyErrorModel.cs" />
     <Compile Include="Model\Client\ReplyPacket.cs" />
     <Compile Include="Model\Constellation\ConstellationLiveEventModel.cs" />
+    <Compile Include="Model\Costream\CostreamChannelModel.cs" />
+    <Compile Include="Model\Costream\CostreamLayoutModel.cs" />
+    <Compile Include="Model\Costream\CostreamModel.cs" />
     <Compile Include="Model\Interactive\InteractiveButtonControlModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectedSceneModel.cs" />
     <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="Model\User\UserGroupModel.cs" />
     <Compile Include="Model\User\UserModel.cs" />
     <Compile Include="Services\ChatsService.cs" />
+    <Compile Include="Services\CostreamService.cs" />
     <Compile Include="Services\InteractiveService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\UsersService.cs" />

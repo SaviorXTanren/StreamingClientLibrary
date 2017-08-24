@@ -16,6 +16,7 @@ namespace Mixer.Base
 
         public ChannelsService Channels { get; private set; }
         public ChatsService Chats { get; private set; }
+        public CostreamService Costream { get; private set; }
         public InteractiveService Interactive { get; private set; }
         public UsersService Users { get; private set; }
 
@@ -114,6 +115,7 @@ namespace Mixer.Base
 
             this.Channels = new ChannelsService(this);
             this.Chats = new ChatsService(this);
+            this.Costream = new CostreamService(this);
             this.Interactive = new InteractiveService(this);
             this.Users = new UsersService(this);
         }

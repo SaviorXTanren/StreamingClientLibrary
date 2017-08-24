@@ -34,26 +34,17 @@ namespace Mixer.Base.Services
 
         protected async Task<T> GetAsync<T>(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
-            {
-                return await this.ProcessResponse<T>(await client.GetAsync(requestUri));
-            }
+            return await this.ProcessResponse<T>(await this.GetAsync(requestUri));
         }
 
         protected async Task<JObject> GetJObjectAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
-            {
-                return await this.ProcessJObjectResponse(await client.GetAsync(requestUri));
-            }
+            return await this.ProcessJObjectResponse(await this.GetAsync(requestUri));
         }
 
         protected async Task<string> GetStringAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
-            {
-                return await this.ProcessStringResponse(await client.GetAsync(requestUri));
-            }
+            return await this.ProcessStringResponse(await this.GetAsync(requestUri));
         }
 
         protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri)
@@ -64,61 +55,73 @@ namespace Mixer.Base.Services
 
             while (currentPage <= pageTotal)
             {
-                using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
-                {
-                    string currentRequestUri = requestUri + "?page=" + currentPage;
-                    HttpResponseMessage response = await client.GetAsync(currentRequestUri);
+                string currentRequestUri = requestUri + "?page=" + currentPage;
+                HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
-                    if (pageTotal == 0)
+                if (pageTotal == 0)
+                {
+                    IEnumerable<string> linkValues;
+                    if (response.Headers.TryGetValues("link", out linkValues))
                     {
-                        IEnumerable<string> linkValues;
-                        if (response.Headers.TryGetValues("link", out linkValues))
+                        Regex regex = new Regex(RequestLastPageRegexString);
+                        Match match = regex.Match(linkValues.First());
+                        if (match != null && match.Success)
                         {
-                            Regex regex = new Regex(RequestLastPageRegexString);
-                            Match match = regex.Match(linkValues.First());
-                            if (match != null && match.Success)
-                            {
-                                string matchValue = match.Captures[0].Value;
-                                matchValue = matchValue.Substring(5);
-                                matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
-                                pageTotal = int.Parse(matchValue);
-                            }
+                            string matchValue = match.Captures[0].Value;
+                            matchValue = matchValue.Substring(5);
+                            matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
+                            pageTotal = int.Parse(matchValue);
                         }
                     }
-
-                    T[] pagedResults = await this.ProcessResponse<T[]>(response);
-                    results.AddRange(pagedResults);
                 }
+
+                T[] pagedResults = await this.ProcessResponse<T[]>(response);
+                results.AddRange(pagedResults);
                 currentPage++;
             }
 
             return results;
         }
 
-        protected async Task<T> PostAsync<T>(string requestUri, HttpContent content)
+        protected async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
-                return await this.ProcessResponse<T>(await client.PostAsync(requestUri, content));
+                return await client.PostAsync(requestUri, content);
+            }
+        }
+
+        protected async Task<T> PostAsync<T>(string requestUri, HttpContent content)
+        {
+            return await this.ProcessResponse<T>(await this.PostAsync(requestUri, content));
+        }
+
+        protected async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
+        {
+            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            {
+                return await client.PutAsync(requestUri, content)
             }
         }
 
         protected async Task<T> PutAsync<T>(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
-            {
-                return await this.ProcessResponse<T>(await client.PutAsync(requestUri, content));
-            }
+            return await this.ProcessResponse<T>(await this.PutAsync(requestUri, content));
         }
 
-        protected async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
+        protected async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
         {
             using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
             {
                 HttpMethod method = new HttpMethod("PATCH");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
-                return await this.ProcessResponse<T>(await client.SendAsync(request));
+                return await client.SendAsync(request);
             }
+        }
+
+        protected async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
+        {
+            return await this.ProcessResponse<T>(await this.PatchAsync(requestUri, content));
         }
 
         protected async Task<bool> DeleteAsync(string requestUri)

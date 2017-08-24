@@ -1,5 +1,4 @@
-﻿using Mixer.Base.Clients;
-using Mixer.Base.Model.Channel;
+﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using System.Collections.Generic;
