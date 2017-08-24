@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Util;
+﻿using Mixer.Base.Model.OAuth;
+using Mixer.Base.Util;
 using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,9 +25,11 @@ namespace Mixer.Base.Services
             this.connection = connection;
         }
 
+        internal ServiceBase() { }
+
         protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            using (HttpClientWrapper client = await this.GetHttpClient())
             {
                 return await client.GetAsync(requestUri);
             }
@@ -85,7 +88,7 @@ namespace Mixer.Base.Services
 
         protected async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            using (HttpClientWrapper client = await this.GetHttpClient())
             {
                 return await client.PostAsync(requestUri, content);
             }
@@ -98,9 +101,9 @@ namespace Mixer.Base.Services
 
         protected async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            using (HttpClientWrapper client = await this.GetHttpClient())
             {
-                return await client.PutAsync(requestUri, content)
+                return await client.PutAsync(requestUri, content);
             }
         }
 
@@ -111,7 +114,7 @@ namespace Mixer.Base.Services
 
         protected async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            using (HttpClientWrapper client = await this.GetHttpClient())
             {
                 HttpMethod method = new HttpMethod("PATCH");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
@@ -126,7 +129,7 @@ namespace Mixer.Base.Services
 
         protected async Task<bool> DeleteAsync(string requestUri)
         {
-            using (HttpClientWrapper client = new HttpClientWrapper(await this.connection.GetAuthorizationToken()))
+            using (HttpClientWrapper client = await this.GetHttpClient())
             {
                 HttpResponseMessage response = await client.DeleteAsync(requestUri);
                 return (response.StatusCode == HttpStatusCode.NoContent);
@@ -158,6 +161,15 @@ namespace Mixer.Base.Services
             {
                 throw new RestServiceRequestException(response);
             }
+        }
+
+        private async Task<HttpClientWrapper> GetHttpClient()
+        {
+            if (this.connection != null)
+            {
+                return new HttpClientWrapper(await this.connection.GetOAuthTokenModel());
+            }
+            return new HttpClientWrapper();
         }
     }
 }

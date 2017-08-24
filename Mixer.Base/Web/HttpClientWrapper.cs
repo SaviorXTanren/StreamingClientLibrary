@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mixer.Base.Model.OAuth;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -15,10 +16,10 @@ namespace Mixer.Base.Web
             this.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public HttpClientWrapper(AuthorizationToken authorizationToken)
+        public HttpClientWrapper(OAuthTokenModel token)
             : this()
         {
-            this.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationToken.AccessToken);
+            this.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.accessToken);
         }
     }
 }

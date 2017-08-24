@@ -2,6 +2,7 @@
 using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
+using Mixer.Base.Model.OAuth;
 using Mixer.Base.Model.User;
 using Mixer.Sample;
 using System;
@@ -50,18 +51,18 @@ namespace Mixer.LargeChat
             }
 
             this.connection = await MixerConnection.ConnectViaShortCode(clientID,
-            new List<ClientScopeEnum>()
+            new List<OAuthClientScopeEnum>()
             {
-                ClientScopeEnum.chat__chat,
-                ClientScopeEnum.chat__connect,
-                ClientScopeEnum.channel__details__self,
-                ClientScopeEnum.channel__update__self,
-                ClientScopeEnum.user__details__self,
-                ClientScopeEnum.user__log__self,
-                ClientScopeEnum.user__notification__self,
-                ClientScopeEnum.user__update__self,
+                OAuthClientScopeEnum.chat__chat,
+                OAuthClientScopeEnum.chat__connect,
+                OAuthClientScopeEnum.channel__details__self,
+                OAuthClientScopeEnum.channel__update__self,
+                OAuthClientScopeEnum.user__details__self,
+                OAuthClientScopeEnum.user__log__self,
+                OAuthClientScopeEnum.user__notification__self,
+                OAuthClientScopeEnum.user__update__self,
             },
-            (ShortCode code) =>
+            (OAuthShortCodeModel code) =>
             {
                 this.ShortCodeTextBox.Text = code.code;
                 Process.Start("https://mixer.com/oauth/shortcode");

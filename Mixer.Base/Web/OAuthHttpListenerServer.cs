@@ -7,7 +7,7 @@ namespace Mixer.Base.Web
     {
         public const string URL_CODE_IDENTIFIER = "/?code=";
 
-        private string authorizationToken = null;
+        private string OAuthTokenModel = null;
 
         public OAuthHttpListenerServer(string address) : base(address) { }
 
@@ -15,13 +15,13 @@ namespace Mixer.Base.Web
         {
             for (int i = 0; i < 30; i++)
             {
-                if (!string.IsNullOrEmpty(this.authorizationToken))
+                if (!string.IsNullOrEmpty(this.OAuthTokenModel))
                 {
                     break;
                 }
                 await Task.Delay(1000);
             }
-            return this.authorizationToken;
+            return this.OAuthTokenModel;
         }
 
         protected override HttpStatusCode RequestReceived(HttpListenerRequest request, string data, out string result)
@@ -29,7 +29,7 @@ namespace Mixer.Base.Web
             if (request.RawUrl.Contains(URL_CODE_IDENTIFIER))
             {
                 string token = request.RawUrl.Substring(URL_CODE_IDENTIFIER.Length);
-                this.authorizationToken = token.Substring(0, token.IndexOf("&"));
+                this.OAuthTokenModel = token.Substring(0, token.IndexOf("&"));
             }
             result = "OK";
             return HttpStatusCode.OK;

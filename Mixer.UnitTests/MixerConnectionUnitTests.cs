@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Mixer.Base.Model.OAuth;
 using System.Threading.Tasks;
 
 namespace Mixer.UnitTests
@@ -13,21 +11,21 @@ namespace Mixer.UnitTests
         [TestMethod]
         public void AuthorizeViaShortCode()
         {
-            try
-            {
-                MixerConnection connection = MixerConnection.ConnectViaShortCode(clientID, new List<ClientScopeEnum>() { ClientScopeEnum.chat__connect },
-                (ShortCode code) =>
-                {
-                    Assert.IsNotNull(code);
-                    Process.Start("https://mixer.com/oauth/shortcode?code=" + code.code);
-                }).Result;
+            //try
+            //{
+            //    MixerConnection connection = MixerConnection.ConnectViaShortCode(clientID, new List<OAuthClientScopeEnum>() { OAuthClientScopeEnum.chat__connect },
+            //    (OAuthShortCodeModel code) =>
+            //    {
+            //        Assert.IsNotNull(code);
+            //        Process.Start("https://mixer.com/oauth/shortcode?code=" + code.code);
+            //    }).Result;
 
-                Assert.IsNotNull(connection);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.ToString());
-            }
+            //    Assert.IsNotNull(connection);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Assert.Fail(ex.ToString());
+            //}
         }
 
         [TestMethod]
@@ -52,8 +50,14 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                AuthorizationToken token = await connection.GetAuthorizationToken();
-                await token.RefreshToken();
+                OAuthTokenModel token = await connection.GetOAuthTokenModel();
+
+                Assert.IsNotNull(token);
+
+                await connection.RefreshOAuthToken();
+                token = await connection.GetOAuthTokenModel();
+
+                Assert.IsNotNull(token);
             });
         }
     }

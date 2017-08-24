@@ -92,6 +92,8 @@
     <Compile Include="Model\Interactive\InteractiveControlCollectionModel.cs" />
     <Compile Include="Model\Interactive\InteractiveVersionModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
+    <Compile Include="Model\OAuth\OAuthShortCodeModel.cs" />
+    <Compile Include="Model\OAuth\OAuthTokenModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />
     <Compile Include="Model\User\PrivatePopulatedUserModel.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Services\ChatsService.cs" />
     <Compile Include="Services\CostreamService.cs" />
     <Compile Include="Services\InteractiveService.cs" />
+    <Compile Include="Services\OAuthService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Util\DateTimeHelper.cs" />
@@ -130,7 +133,6 @@
     <Compile Include="ViewModel\Chat\ChatMessageViewModel.cs" />
     <Compile Include="ViewModel\Chat\ChatUserViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
-    <Compile Include="Web\AuthorizationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\HttpClientWrapper.cs" />
     <Compile Include="Clients\WebSocketClientBase.cs" />

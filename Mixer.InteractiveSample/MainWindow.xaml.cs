@@ -36,18 +36,18 @@ namespace Mixer.InteractiveSample
 
             this.MainGrid.Visibility = Visibility.Collapsed;
 
-            List<ClientScopeEnum> scopes = new List<ClientScopeEnum>()
+            List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
             {
-                ClientScopeEnum.channel__details__self,
-                ClientScopeEnum.channel__update__self,
+                OAuthClientScopeEnum.channel__details__self,
+                OAuthClientScopeEnum.channel__update__self,
 
-                ClientScopeEnum.interactive__manage__self,
-                ClientScopeEnum.interactive__robot__self,
+                OAuthClientScopeEnum.interactive__manage__self,
+                OAuthClientScopeEnum.interactive__robot__self,
 
-                ClientScopeEnum.user__details__self,
-                ClientScopeEnum.user__log__self,
-                ClientScopeEnum.user__notification__self,
-                ClientScopeEnum.user__update__self,
+                OAuthClientScopeEnum.user__details__self,
+                OAuthClientScopeEnum.user__log__self,
+                OAuthClientScopeEnum.user__notification__self,
+                OAuthClientScopeEnum.user__update__self,
             };
 
             this.connection = await MixerConnection.ConnectViaLocalhostOAuthBrowser(ConfigurationManager.AppSettings["ClientID"], scopes);

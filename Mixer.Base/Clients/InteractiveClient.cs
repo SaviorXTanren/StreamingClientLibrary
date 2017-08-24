@@ -1,8 +1,8 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Interactive;
+using Mixer.Base.Model.OAuth;
 using Mixer.Base.Util;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -46,14 +46,14 @@ namespace Mixer.Base.Clients
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
 
-            AuthorizationToken authToken = await connection.GetAuthorizationToken();
+            OAuthTokenModel authToken = await connection.GetOAuthTokenModel();
 
             IEnumerable<string> interactiveConnections = await connection.Interactive.GetInteractiveHosts();
 
             return new InteractiveClient(channel, interactiveGame, authToken, interactiveConnections);
         }
 
-        private InteractiveClient(ChannelModel channel, InteractiveGameListingModel interactiveGame, AuthorizationToken authToken, IEnumerable<string> interactiveConnections)
+        private InteractiveClient(ChannelModel channel, InteractiveGameListingModel interactiveGame, OAuthTokenModel authToken, IEnumerable<string> interactiveConnections)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
@@ -64,7 +64,7 @@ namespace Mixer.Base.Clients
             this.InteractiveGame = interactiveGame;
             this.interactiveConnections = interactiveConnections;
 
-            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", authToken.AccessToken);
+            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", authToken.accessToken);
             this.webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
             this.webSocket.Options.SetRequestHeader("X-Interactive-Version", this.InteractiveGame.versions.OrderByDescending(v => v.versionOrder).First().id.ToString());
             this.webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");

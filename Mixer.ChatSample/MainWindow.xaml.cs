@@ -40,32 +40,32 @@ namespace Mixer.Sample
             this.ChatListView.ItemsSource = this.chatMessages;
             this.UsersListView.ItemsSource = this.chatUsers;
 
-            List<ClientScopeEnum> scopes = new List<ClientScopeEnum>()
+            List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
             {
-                ClientScopeEnum.chat__bypass_links,
-                ClientScopeEnum.chat__bypass_slowchat,
-                ClientScopeEnum.chat__change_ban,
-                ClientScopeEnum.chat__change_role,
-                ClientScopeEnum.chat__chat,
-                ClientScopeEnum.chat__connect,
-                ClientScopeEnum.chat__clear_messages,
-                ClientScopeEnum.chat__edit_options,
-                ClientScopeEnum.chat__giveaway_start,
-                ClientScopeEnum.chat__poll_start,
-                ClientScopeEnum.chat__poll_vote,
-                ClientScopeEnum.chat__purge,
-                ClientScopeEnum.chat__remove_message,
-                ClientScopeEnum.chat__timeout,
-                ClientScopeEnum.chat__view_deleted,
-                ClientScopeEnum.chat__whisper,
+                OAuthClientScopeEnum.chat__bypass_links,
+                OAuthClientScopeEnum.chat__bypass_slowchat,
+                OAuthClientScopeEnum.chat__change_ban,
+                OAuthClientScopeEnum.chat__change_role,
+                OAuthClientScopeEnum.chat__chat,
+                OAuthClientScopeEnum.chat__connect,
+                OAuthClientScopeEnum.chat__clear_messages,
+                OAuthClientScopeEnum.chat__edit_options,
+                OAuthClientScopeEnum.chat__giveaway_start,
+                OAuthClientScopeEnum.chat__poll_start,
+                OAuthClientScopeEnum.chat__poll_vote,
+                OAuthClientScopeEnum.chat__purge,
+                OAuthClientScopeEnum.chat__remove_message,
+                OAuthClientScopeEnum.chat__timeout,
+                OAuthClientScopeEnum.chat__view_deleted,
+                OAuthClientScopeEnum.chat__whisper,
 
-                ClientScopeEnum.channel__details__self,
-                ClientScopeEnum.channel__update__self,
+                OAuthClientScopeEnum.channel__details__self,
+                OAuthClientScopeEnum.channel__update__self,
 
-                ClientScopeEnum.user__details__self,
-                ClientScopeEnum.user__log__self,
-                ClientScopeEnum.user__notification__self,
-                ClientScopeEnum.user__update__self,
+                OAuthClientScopeEnum.user__details__self,
+                OAuthClientScopeEnum.user__log__self,
+                OAuthClientScopeEnum.user__notification__self,
+                OAuthClientScopeEnum.user__update__self,
             };
 
             this.connection = await MixerConnection.ConnectViaLocalhostOAuthBrowser(ConfigurationManager.AppSettings["ClientID"], scopes);
