@@ -28,10 +28,10 @@ namespace Mixer.Base.Services
             return await this.PatchAsync<ChannelModel>("channels/" + channel.id, this.CreateContentFromObject(updateableChannel));
         }
 
-        public async Task<IEnumerable<UserWithChannelModel>> GetFollowers(ChannelModel channel)
+        public async Task<IEnumerable<UserWithChannelModel>> GetFollowers(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow");
+            return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow", maxResults);
         }
 
         public async Task<ChannelAdvancedModel> GetHostedChannel(ChannelModel channel)
@@ -53,10 +53,10 @@ namespace Mixer.Base.Services
             return await this.DeleteAsync("channels/" + channel.id + "/hostee");
         }
 
-        public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel)
+        public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters");
+            return await this.GetPagedAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters", maxResults);
         }
 
         public async Task<ChannelPreferencesModel> GetPreferences(ChannelModel channel)
@@ -72,17 +72,17 @@ namespace Mixer.Base.Services
             return await this.PostAsync<ChannelPreferencesModel>("channels/" + channel.id + "/preferences", this.CreateContentFromObject(preferences));
         }
 
-        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel)
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users");
+            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", maxResults);
         }
 
-        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, string role)
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, string role, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateString(role, "role");
-            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role);
+            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, maxResults);
         }
 
         public async Task<DiscordBotModel> GetDiscord(ChannelModel channel)

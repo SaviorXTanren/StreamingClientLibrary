@@ -82,6 +82,8 @@ namespace Mixer.Base
         public CostreamService Costream { get; private set; }
         public InteractiveService Interactive { get; private set; }
         public OAuthService OAuth { get; private set; }
+        public TeamsService Teams { get; private set; }
+        public GameTypesService GameTypes { get; private set; }
         public UsersService Users { get; private set; }
 
         /// <summary>
@@ -145,7 +147,7 @@ namespace Mixer.Base
 
             string url = "https://mixer.com/oauth/authorize";
 
-            Dictionary<string, string> contentValues = new Dictionary<string, string>()
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "client_id", clientID },
                 { "scope", MixerConnection.ConvertClientScopesToString(scopes) },
@@ -155,14 +157,12 @@ namespace Mixer.Base
 
             if (!string.IsNullOrEmpty(clientSecret))
             {
-                contentValues.Add("client_secret", clientSecret);
+                parameters.Add("client_secret", clientSecret);
             }
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(contentValues.AsEnumerable());
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
 
-            string parameters = await content.ReadAsStringAsync();
-
-            return url + "?" + parameters;
+            return url + "?" + await content.ReadAsStringAsync();
         }
 
         public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes)
@@ -234,6 +234,8 @@ namespace Mixer.Base
             this.Costream = new CostreamService(this);
             this.Interactive = new InteractiveService(this);
             this.OAuth = new OAuthService(this);
+            this.Teams = new TeamsService(this);
+            this.GameTypes = new GameTypesService(this);
             this.Users = new UsersService(this);
         }
 

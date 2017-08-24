@@ -50,13 +50,13 @@ namespace Mixer.Base.Services
             return await this.ProcessStringResponse(await this.GetAsync(requestUri));
         }
 
-        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri)
+        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 0)
         {
             List<T> results = new List<T>();
             int currentPage = 0;
             int pageTotal = 0;
 
-            while (currentPage <= pageTotal)
+            while (currentPage <= pageTotal && (maxResults == 0 || results.Count < maxResults))
             {
                 string currentRequestUri = requestUri + "?page=" + currentPage;
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);

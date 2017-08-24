@@ -96,6 +96,7 @@
     <Compile Include="Model\OAuth\OAuthTokenModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
     <Compile Include="Model\Teams\TeamMembershipModel.cs" />
+    <Compile Include="Model\Teams\TeamModel.cs" />
     <Compile Include="Model\User\PrivatePopulatedUserModel.cs" />
     <Compile Include="Model\User\PrivateUserModel.cs" />
     <Compile Include="Model\User\UserLogModel.cs" />
@@ -122,6 +123,8 @@
     <Compile Include="Services\InteractiveService.cs" />
     <Compile Include="Services\OAuthService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="Services\TeamsService.cs" />
+    <Compile Include="Services\GameTypesService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Util\DateTimeHelper.cs" />
     <Compile Include="Util\EnumHelper.cs" />

@@ -41,10 +41,10 @@ namespace Mixer.Base.Services
             return null;
         }
 
-        public async Task<UserModel> GetUser(string username)
+        public async Task<UserModel> GetUser(string username, uint maxResults = 0)
         {
             Validator.ValidateString(username, "username");
-            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?where=username:eq:" + username + "&");
+            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?where=username:eq:" + username + "&", maxResults);
             if (users.Count() > 0)
             {
                 return users.First();
@@ -58,22 +58,22 @@ namespace Mixer.Base.Services
             return await this.GetStringAsync("users/" + user.id + "/avatar");
         }
 
-        public async Task<IEnumerable<ChannelAdvancedModel>> GetFollows(UserModel user)
+        public async Task<IEnumerable<ChannelAdvancedModel>> GetFollows(UserModel user, uint maxResults = 0)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<ChannelAdvancedModel>("users/" + user.id + "/follows");
+            return await this.GetPagedAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", maxResults);
         }
 
-        public async Task<IEnumerable<UserLogModel>> GetLogs(UserModel user)
+        public async Task<IEnumerable<UserLogModel>> GetLogs(UserModel user, uint maxResults = 0)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<UserLogModel>("users/" + user.id + "/log");
+            return await this.GetPagedAsync<UserLogModel>("users/" + user.id + "/log", maxResults);
         }
 
-        public async Task<IEnumerable<NotificationModel>> GetNotifications(UserModel user)
+        public async Task<IEnumerable<NotificationModel>> GetNotifications(UserModel user, uint maxResults = 0)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<NotificationModel>("users/" + user.id + "/notifications");
+            return await this.GetPagedAsync<NotificationModel>("users/" + user.id + "/notifications", maxResults);
         }
 
         public async Task<UserPreferencesModel> GetPreferences(UserModel user)

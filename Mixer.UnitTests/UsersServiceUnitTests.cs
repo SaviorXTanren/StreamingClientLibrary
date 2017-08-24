@@ -53,7 +53,7 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                UserModel user = await connection.Users.GetUser("SaviorXTanren");
+                UserModel user = await connection.Users.GetUser("SaviorXTanren", 1);
 
                 Assert.IsNotNull(user);
                 Assert.IsTrue(user.id > (uint)0);
@@ -80,7 +80,7 @@ namespace Mixer.UnitTests
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
 
-                IEnumerable<ChannelAdvancedModel> follows = await connection.Users.GetFollows(user);
+                IEnumerable<ChannelAdvancedModel> follows = await connection.Users.GetFollows(user, 1);
 
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count() > 0);
@@ -94,7 +94,7 @@ namespace Mixer.UnitTests
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
 
-                IEnumerable<UserLogModel> logs = await connection.Users.GetLogs(user);
+                IEnumerable<UserLogModel> logs = await connection.Users.GetLogs(user, 1);
 
                 Assert.IsNotNull(logs);
                 Assert.IsTrue(logs.Count() > 0);
@@ -108,7 +108,7 @@ namespace Mixer.UnitTests
             {
                 UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
 
-                IEnumerable<NotificationModel> notifications = await connection.Users.GetNotifications(user);
+                IEnumerable<NotificationModel> notifications = await connection.Users.GetNotifications(user, 1);
 
                 Assert.IsNotNull(notifications);
                 Assert.IsTrue(notifications.Count() > 0);

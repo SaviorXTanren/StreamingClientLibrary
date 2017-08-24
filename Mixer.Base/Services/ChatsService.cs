@@ -16,10 +16,10 @@ namespace Mixer.Base.Services
             return await this.GetAsync<ChannelChatModel>("chats/" + channel.id);
         }
 
-        public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel)
+        public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users");
+            return await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users", maxResults);
         }
     }
 }

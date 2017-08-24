@@ -65,7 +65,7 @@ namespace Mixer.UnitTests
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<UserWithChannelModel> users = await connection.Channels.GetFollowers(channel);
+                IEnumerable<UserWithChannelModel> users = await connection.Channels.GetFollowers(channel, 1);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
@@ -103,7 +103,7 @@ namespace Mixer.UnitTests
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<ChannelAdvancedModel> hosters = await connection.Channels.GetHosters(channel);
+                IEnumerable<ChannelAdvancedModel> hosters = await connection.Channels.GetHosters(channel, 1);
 
                 Assert.IsNotNull(hosters);
             });
@@ -143,12 +143,12 @@ namespace Mixer.UnitTests
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<UserWithGroupsModel> users = await connection.Channels.GetUsersWithRoles(channel);
+                IEnumerable<UserWithGroupsModel> users = await connection.Channels.GetUsersWithRoles(channel, 1);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
 
-                users = await connection.Channels.GetUsersWithRoles(channel, "mod");
+                users = await connection.Channels.GetUsersWithRoles(channel, "mod", 1);
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
