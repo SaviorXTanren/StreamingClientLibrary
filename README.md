@@ -18,7 +18,7 @@ These are the current planned features to be developed in priority order:
 - Add full documentation to github for API usage
 
 ## How do I get started using it?
-There are two sample apps created the help showcase some the setup needed and how to use the APIs. Additionally, there are a large serious of unit tests that go through all of the individual functionality that you can look at. I plan on creating more formal documentation soon.
+Download the NuGet package by searching for "mixer-client-csharp" or downloading it manually from https://www.nuget.org/packages/mixer-client-csharp. There are two sample apps created the help showcase some the setup needed and how to use the APIs. Additionally, there are a large serious of unit tests that go through all of the individual functionality that you can look at. I plan on creating more formal documentation soon.
 
 ## I found a bug, who do I contact?
 Just head over to the https://github.com/SaviorXTanren/mixer-client-csharp/issues page and create a new issue.
