@@ -3,6 +3,7 @@ using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Model.User;
+using Mixer.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -23,6 +24,11 @@ namespace Mixer.InteractiveSample
 
         private List<InteractiveGameListingModel> games;
         private InteractiveGameListingModel game;
+
+        private List<InteractiveConnectedSceneModel> scenes = new List<InteractiveConnectedSceneModel>();
+
+        private List<InteractiveConnectedButtonControlModel> buttons = new List<InteractiveConnectedButtonControlModel>();
+        private List<InteractiveConnectedJoystickControlModel> joysticks = new List<InteractiveConnectedJoystickControlModel>();
 
         public MainWindow()
         {
@@ -89,6 +95,22 @@ namespace Mixer.InteractiveSample
                     this.GameSelectGrid.Visibility = Visibility.Collapsed;
 
                     this.MainGrid.Visibility = Visibility.Visible;
+
+                    InteractiveConnectedSceneGroupCollectionModel scenes = await this.interactiveClient.GetScenes();
+                    this.scenes = new List<InteractiveConnectedSceneModel>(scenes.scenes);
+
+                    foreach (InteractiveConnectedSceneModel scene in this.scenes)
+                    {
+                        foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                        {
+                            this.buttons.Add(button);
+                        }
+
+                        foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
+                        {
+                            this.joysticks.Add(joystick);
+                        }
+                    }
                 }
             }
         }
@@ -106,11 +128,25 @@ namespace Mixer.InteractiveSample
         private async void InteractiveClient_OnGiveInput(object sender, InteractiveGiveInputModel e)
         {
             this.InteractiveDataTextBlock.Text += "Input Received: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
+
             if (e.input.eventType.Equals("mousedown") && e.transactionID != null)
             {
                 if (await this.interactiveClient.CaptureSparkTransaction(e.transactionID))
                 {
                     this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
+                }
+
+                InteractiveConnectedButtonControlModel button = this.buttons.FirstOrDefault(b => b.controlID.Equals(e.input.controlID));
+                if (button != null)
+                {
+                    InteractiveConnectedSceneModel scene = this.scenes.FirstOrDefault(s => s.buttons.Contains(button));
+                    if (scene != null)
+                    {
+                        button.cooldown = DateTimeHelper.DateTimeOffsetToUnixTimestamp(DateTimeOffset.Now.AddSeconds(10));
+                        await this.interactiveClient.UpdateControls(scene, new List<InteractiveConnectedButtonControlModel>() { button });
+
+                        this.InteractiveDataTextBlock.Text += "Sent 10 second cooldown to button: " + e.input.controlID + Environment.NewLine;
+                    }
                 }
             }
         }
