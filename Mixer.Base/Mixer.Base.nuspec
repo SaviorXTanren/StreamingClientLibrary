@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>mixer-client-csharp</id>
+    <version>0.2.0-beta</version>
+    <title>Mixer Client Library</title>
+    <authors>Matthew Olivo (SaviorXTanren)</authors>
+    <owners>Matthew Olivo (SaviorXTanren)</owners>
+    <licenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# client library for Mixer streaming service: https://mixer.com</description>
+    <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
+    <releaseNotes>First release of NuGet package</releaseNotes>
+    <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
+    <tags>Mixer Streaming Bot Chat Interactive</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="Newtonsoft.Json" version="10.0.3" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Mixer.Base.dll" target="lib\net46\Mixer.Base.dll" />
+    <file src="bin\Release\LICENSE.txt" target="" />
+    <file src="bin\Release\readme.txt" target="" />
+  </files>
+</package>
