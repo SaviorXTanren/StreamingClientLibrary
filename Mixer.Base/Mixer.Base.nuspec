@@ -9,7 +9,11 @@
     <licenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>C# client library for Mixer streaming service: https://mixer.com</description>
+    <description>
+      C# client library for Mixer streaming service: https://mixer.com
+
+      For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp
+    </description>
     <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
     <releaseNotes>First release of NuGet package</releaseNotes>
     <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
