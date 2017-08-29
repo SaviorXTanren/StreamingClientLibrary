@@ -70,6 +70,9 @@ namespace Mixer.Base.Clients
         user__id__update,
     }
 
+    /// <summary>
+    /// The real-time client for Constellation event interactions.
+    /// </summary>
     public class ConstellationEventType : IEquatable<ConstellationEventType>
     {
         public ConstellationEventTypeEnum Type { get; set; }

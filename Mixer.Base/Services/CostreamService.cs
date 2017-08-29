@@ -1,5 +1,4 @@
-﻿using Mixer.Base.Model.Channel;
-using Mixer.Base.Model.Costream;
+﻿using Mixer.Base.Model.Costream;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
@@ -10,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for costream-based services.
+    /// </summary>
     public class CostreamService : ServiceBase
     {
         public CostreamService(MixerConnection connection) : base(connection) { }

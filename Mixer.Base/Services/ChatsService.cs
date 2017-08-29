@@ -6,16 +6,32 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for Chat-based services.
+    /// </summary>
     public class ChatsService : ServiceBase
     {
         public ChatsService(MixerConnection connection) : base(connection) { }
 
+        /// <summary>
+        /// Gets the chat information for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get chat information for</param>
+        /// <returns>The chat information</returns>
         public async Task<ChannelChatModel> GetChat(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<ChannelChatModel>("chats/" + channel.id);
         }
 
+        /// <summary>
+        /// Gets the current users connected to chat for the specified channel. The search can be limited to a maximum number
+        /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+        /// threshold and slightly more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get chat users for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The chat users</returns>
         public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");

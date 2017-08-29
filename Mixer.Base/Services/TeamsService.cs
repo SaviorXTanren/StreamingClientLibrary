@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for team-based services.
+    /// </summary>
     public class TeamsService : ServiceBase
     {
         public TeamsService(MixerConnection connection) : base(connection) { }

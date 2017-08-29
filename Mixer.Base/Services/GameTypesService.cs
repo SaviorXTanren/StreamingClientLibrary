@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for game type-based services.
+    /// </summary>
     public class GameTypesService : ServiceBase
     {
         public GameTypesService(MixerConnection connection) : base(connection) { }

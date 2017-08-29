@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for user-based services.
+    /// </summary>
     public class UsersService : ServiceBase
     {
         public UsersService(MixerConnection connection) : base(connection) { }

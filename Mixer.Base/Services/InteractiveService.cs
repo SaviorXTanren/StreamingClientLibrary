@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for interactive-based services.
+    /// </summary>
     public class InteractiveService : ServiceBase
     {
         public InteractiveService(MixerConnection connection) : base(connection) { }

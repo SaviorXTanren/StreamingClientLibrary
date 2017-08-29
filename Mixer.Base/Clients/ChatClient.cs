@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
+    /// <summary>
+    /// The real-time client for Chat interactions.
+    /// </summary>
     public class ChatClient : WebSocketClientBase
     {
         public event EventHandler<ChatMessageEventModel> OnMessageOccurred;

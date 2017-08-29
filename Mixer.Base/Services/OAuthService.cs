@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
+    /// <summary>
+    /// The APIs for OAuth-based services.
+    /// </summary>
     public class OAuthService : ServiceBase
     {
         public OAuthService(MixerConnection connection) : base(connection) { }

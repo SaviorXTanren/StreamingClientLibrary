@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
+    /// <summary>
+    /// The real-time client for Interactive interactions.
+    /// </summary>
     public class InteractiveClient : WebSocketClientBase
     {
         public event EventHandler<InteractiveIssueMemoryWarningModel> OnIssueMemoryWarning;
