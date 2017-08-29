@@ -103,12 +103,12 @@ namespace Mixer.UnitTests
 
                 Assert.IsTrue(await interactiveClient.Connect());
 
-                InteractiveConnectionInfoModel interactiveConnection = await connection.Interactive.GetInteractive(channel);
+                InteractiveConnectionInfoModel interactiveConnection = await connection.Interactive.GetInteractiveConnectionInfo(channel);
 
                 Assert.IsNotNull(interactiveConnection);
                 Assert.IsNotNull(interactiveConnection.address);
 
-                InteractiveRobotConnectionModel robotConnection = await connection.Interactive.GetInteractiveRobot(channel);
+                InteractiveRobotConnectionModel robotConnection = await connection.Interactive.GetInteractiveRobotConnectionInfo(channel);
 
                 Assert.IsNotNull(robotConnection);
                 Assert.IsNotNull(robotConnection.address);

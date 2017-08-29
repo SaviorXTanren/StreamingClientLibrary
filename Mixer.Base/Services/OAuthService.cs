@@ -17,6 +17,13 @@ namespace Mixer.Base.Services
 
         internal OAuthService() : base() { }
 
+        /// <summary>
+        /// Gets the short code authorization for the specified client and scopes.
+        /// </summary>
+        /// <param name="clientID">The id of the client application</param>
+        /// <param name="clientSecret">The secret key of the client application</param>
+        /// <param name="scopes">The scopes to authorize</param>
+        /// <returns>The short code authorization</returns>
         public async Task<OAuthShortCodeModel> GetShortCode(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -30,6 +37,11 @@ namespace Mixer.Base.Services
             return await this.PostAsync<OAuthShortCodeModel>("oauth/shortcode", this.CreateContentFromObject(payload));
         }
 
+        /// <summary>
+        /// Validates the specified short code authorization and returns the authorization code.
+        /// </summary>
+        /// <param name="shortCode">The short code authorization to validate</param>
+        /// <returns>The authorization code</returns>
         public async Task<string> ValidateShortCode(OAuthShortCodeModel shortCode)
         {
             Validator.ValidateVariable(shortCode, "shortCode");
@@ -43,6 +55,13 @@ namespace Mixer.Base.Services
             return null;
         }
 
+        /// <summary>
+        /// Creates an OAuth token for authenticating with the Mixer services.
+        /// </summary>
+        /// <param name="clientID">The id of the client application</param>
+        /// <param name="authorizationCode">The authorization code</param>
+        /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
+        /// <returns></returns>
         public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string authorizationCode, string redirectUrl = null)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -63,6 +82,11 @@ namespace Mixer.Base.Services
             return token;
         }
 
+        /// <summary>
+        /// Refreshes the specified OAuth token.
+        /// </summary>
+        /// <param name="token">The token to refresh</param>
+        /// <returns>The refreshed token</returns>
         public async Task<OAuthTokenModel> RefreshToken(OAuthTokenModel token)
         {
             Validator.ValidateVariable(token, "token");

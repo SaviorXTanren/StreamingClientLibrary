@@ -14,18 +14,32 @@ namespace Mixer.Base.Services
     {
         public InteractiveService(MixerConnection connection) : base(connection) { }
 
-        public async Task<InteractiveConnectionInfoModel> GetInteractive(ChannelModel channel)
+        /// <summary>
+        /// Gets the interactive connection information for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get interactive connection information for</param>
+        /// <returns>The interactive connection information</returns>
+        public async Task<InteractiveConnectionInfoModel> GetInteractiveConnectionInfo(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<InteractiveConnectionInfoModel>("interactive/" + channel.id);
         }
 
-        public async Task<InteractiveRobotConnectionModel> GetInteractiveRobot(ChannelModel channel)
+        /// <summary>
+        /// Gets the robot interactive connection information for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get robot interactive connection information for</param>
+        /// <returns>The interactive connection information</returns>
+        public async Task<InteractiveRobotConnectionModel> GetInteractiveRobotConnectionInfo(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<InteractiveRobotConnectionModel>("interactive/" + channel.id + "/robot");
         }
 
+        /// <summary>
+        /// Gets the interactive host connection addresses.
+        /// </summary>
+        /// <returns>The interactive host connection addresses</returns>
         public async Task<IEnumerable<string>> GetInteractiveHosts()
         {
             List<string> addresses = new List<string>();
@@ -40,48 +54,99 @@ namespace Mixer.Base.Services
             return addresses;
         }
 
+        /// <summary>
+        /// Gets all of the owned games for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get games for</param>
+        /// <returns>The games owned by the channel</returns>
         public async Task<IEnumerable<InteractiveGameListingModel>> GetOwnedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<IEnumerable<InteractiveGameListingModel>>("interactive/games/owned?user=" + channel.userId);
         }
 
+        /// <summary>
+        /// Gets all of the shared games for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get games for</param>
+        /// <returns>The games shared with the channel</returns>
         public async Task<IEnumerable<InteractiveGameListingModel>> GetSharedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<IEnumerable<InteractiveGameListingModel>>("interactive/games/shared?user=" + channel.userId);
         }
 
+        /// <summary>
+        /// Creates the specified interactive game.
+        /// </summary>
+        /// <param name="game">The interactive game to create</param>
+        /// <returns>The created interactive game</returns>
         public async Task<InteractiveGameModel> CreateInteractiveGame(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");
             return await this.PostAsync<InteractiveGameModel>("interactive/games", this.CreateContentFromObject(game));
         }
 
+        /// <summary>
+        /// Gets the specified interactive game.
+        /// </summary>
+        /// <param name="game">The interactive game to get</param>
+        /// <returns></returns>
+        public async Task<InteractiveGameModel> GetInteractiveGame(InteractiveGameModel game)
+        {
+            Validator.ValidateVariable(game, "game");
+            return await this.GetAsync<InteractiveGameModel>("interactive/games/" + game.id);
+        }
+
+        /// <summary>
+        /// Updates the specified interactive game.
+        /// </summary>
+        /// <param name="game">The interactive game to update</param>
+        /// <returns>The updated interactive game</returns>
         public async Task<InteractiveGameModel> UpdateInteractiveGame(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");
             return await this.PutAsync<InteractiveGameModel>("interactive/games/" + game.id, this.CreateContentFromObject(game));
         }
 
+        /// <summary>
+        /// Deletes the specified interactive game.
+        /// </summary>
+        /// <param name="game">The interactive game to delete</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteInteractiveGame(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");
             return await this.DeleteAsync("interactive/games/" + game.id);
         }
 
+        /// <summary>
+        /// Creates the specified interactive game version.
+        /// </summary>
+        /// <param name="version">The interactive game version to create</param>
+        /// <returns>The created interactive game version</returns>
         public async Task<InteractiveGameVersionModel> CreateInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
             return await this.PostAsync<InteractiveGameVersionModel>("interactive/versions", this.CreateContentFromObject(version));
         }
 
+        /// <summary>
+        /// Gets the specified interactive game version.
+        /// </summary>
+        /// <param name="version">The interactive game version to get</param>
+        /// <returns>The interactive game version</returns>
         public async Task<InteractiveGameVersionModel> GetInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
             return await this.GetAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id);
         }
 
+        /// <summary>
+        /// Updates the specified interactive game version.
+        /// </summary>
+        /// <param name="version">The interactive game version to update</param>
+        /// <returns>The updated interactive game version</returns>
         public async Task<InteractiveGameVersionModel> UpdateInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
@@ -93,6 +158,11 @@ namespace Mixer.Base.Services
             return await this.PutAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id, this.CreateContentFromObject(updateableVersion));
         }
 
+        /// <summary>
+        /// Deletes the specified interactive game version.
+        /// </summary>
+        /// <param name="version">The interactive game version to delete</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");

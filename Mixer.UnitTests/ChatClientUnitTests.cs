@@ -100,7 +100,7 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                UserModel user = await connection.Users.GetUser("SXTBot", 1);
+                UserModel user = await connection.Users.GetUser("SXTBot");
 
                 bool result = await chatClient.TimeoutUser(user.username, 60);
                 Assert.IsTrue(result);
@@ -116,7 +116,7 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                UserModel user = await connection.Users.GetUser("SXTBot", 1);
+                UserModel user = await connection.Users.GetUser("SXTBot");
 
                 bool result = await chatClient.PurgeUser(user.username);
                 Assert.IsTrue(result);

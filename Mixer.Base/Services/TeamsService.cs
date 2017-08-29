@@ -13,17 +13,37 @@ namespace Mixer.Base.Services
     {
         public TeamsService(MixerConnection connection) : base(connection) { }
 
+        /// <summary>
+        /// Gets all of the known teams. The search can be limited to a maximum number of results to speed up the operation
+        /// as it can take a long time on large channels. This maximum number is a lower threshold and slightly more than the
+        /// maximum number may be returned.
+        /// </summary>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All teams</returns>
         public async Task<IEnumerable<TeamModel>> GetTeams(uint maxResults = 0)
         {
             return await this.GetPagedAsync<TeamModel>("teams", maxResults);
         }
 
+        /// <summary>
+        /// Gets the team with the specified id.
+        /// </summary>
+        /// <param name="id">The id of the team</param>
+        /// <returns>The team</returns>
         public async Task<TeamModel> GetTeam(uint id)
         {
             Validator.ValidateVariable(id, "id");
             return await this.GetAsync<TeamModel>("teams/" + id.ToString());
         }
 
+        /// <summary>
+        /// Gets all users for the specified team. The search can be limited to a maximum number of results to speed up the operation
+        /// as it can take a long time on large channels. This maximum number is a lower threshold and slightly more than the
+        /// maximum number may be returned.
+        /// </summary>
+        /// <param name="team">The team to get users for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The users</returns>
         public async Task<IEnumerable<UserWithChannelModel>> GetTeamUsers(TeamModel team, uint maxResults = 0)
         {
             return await this.GetPagedAsync<UserWithChannelModel>("teams/" + team.id.ToString() + "/users", maxResults);
