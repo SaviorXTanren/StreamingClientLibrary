@@ -67,30 +67,30 @@ namespace Mixer.Base.Services
             return await this.DeleteAsync("interactive/games/" + game.id);
         }
 
-        public async Task<InteractiveVersionModel> CreateInteractiveGameVersion(InteractiveVersionModel version)
+        public async Task<InteractiveGameVersionModel> CreateInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
-            return await this.PostAsync<InteractiveVersionModel>("interactive/versions", this.CreateContentFromObject(version));
+            return await this.PostAsync<InteractiveGameVersionModel>("interactive/versions", this.CreateContentFromObject(version));
         }
 
-        public async Task<InteractiveVersionModel> GetInteractiveGameVersion(InteractiveVersionModel version)
+        public async Task<InteractiveGameVersionModel> GetInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
-            return await this.GetAsync<InteractiveVersionModel>("interactive/versions/" + version.id);
+            return await this.GetAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id);
         }
 
-        public async Task<InteractiveVersionModel> UpdateInteractiveGameVersion(InteractiveVersionModel version)
+        public async Task<InteractiveGameVersionModel> UpdateInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
 
             // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-            InteractiveVersionUpdateableModel updateableVersion = JsonHelper.ConvertToDifferentType<InteractiveVersionUpdateableModel>(version);
+            InteractiveGameVersionUpdateableModel updateableVersion = JsonHelper.ConvertToDifferentType<InteractiveGameVersionUpdateableModel>(version);
             updateableVersion.controls = version.controls;
 
-            return await this.PutAsync<InteractiveVersionModel>("interactive/versions/" + version.id, this.CreateContentFromObject(updateableVersion));
+            return await this.PutAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id, this.CreateContentFromObject(updateableVersion));
         }
 
-        public async Task<bool> DeleteInteractiveGameVersion(InteractiveVersionModel version)
+        public async Task<bool> DeleteInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
             return await this.DeleteAsync("interactive/versions/" + version.id);

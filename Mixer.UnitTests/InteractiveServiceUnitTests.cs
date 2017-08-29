@@ -43,7 +43,7 @@ namespace Mixer.UnitTests
             InteractiveGameListingModel gameListing = gameListings.FirstOrDefault(gl => gl.id.Equals(game.id));
             Assert.IsNotNull(gameListing);
 
-            InteractiveVersionModel version = gameListing.versions.First();
+            InteractiveGameVersionModel version = gameListing.versions.First();
             InteractiveSceneModel defaultScene = new InteractiveSceneModel()
             {
                 sceneID = "default",

@@ -90,7 +90,7 @@
     <Compile Include="Model\Interactive\InteractiveSceneModel.cs" />
     <Compile Include="Model\Interactive\InteractiveSetBandwidthThrottleModel.cs" />
     <Compile Include="Model\Interactive\InteractiveControlCollectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveVersionModel.cs" />
+    <Compile Include="Model\Interactive\InteractiveGameVersionModel.cs" />
     <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\OAuth\OAuthShortCodeModel.cs" />
     <Compile Include="Model\OAuth\OAuthTokenModel.cs" />

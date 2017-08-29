@@ -1,8 +1,8 @@
 ﻿namespace Mixer.Base.Model.Interactive
 {
-    public class InteractiveVersionUpdateableModel : TimeStampedModel
+    public class InteractiveGameVersionUpdateableModel : TimeStampedModel
     {
-        public InteractiveVersionUpdateableModel()
+        public InteractiveGameVersionUpdateableModel()
         {
             this.controls = new InteractiveSceneCollectionModel();
         }
@@ -14,7 +14,7 @@
         public string controlVersion { get; set; }
     }
 
-    public class InteractiveVersionModel : InteractiveVersionUpdateableModel
+    public class InteractiveGameVersionModel : InteractiveGameVersionUpdateableModel
     {
         public uint id { get; set; }
         public uint gameId { get; set; }

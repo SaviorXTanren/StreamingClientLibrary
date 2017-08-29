@@ -24,7 +24,7 @@ namespace Mixer.Base.Interactive
             IEnumerable<InteractiveGameListingModel> gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
             InteractiveGameListingModel gameListing = gameListings.FirstOrDefault(gl => gl.id.Equals(game.id));
 
-            InteractiveVersionModel version = gameListing.versions.First();
+            InteractiveGameVersionModel version = gameListing.versions.First();
             version.controls.scenes.Add(initialScene);
             version.controlVersion = "2.0";
             version = await connection.Interactive.UpdateInteractiveGameVersion(version);
