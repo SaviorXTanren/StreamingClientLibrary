@@ -36,6 +36,12 @@ namespace Mixer.Base.Clients
 
         private ChannelChatModel channelChat;
 
+        /// <summary>
+        /// Creates a chat client for the specified connection and channel.
+        /// </summary>
+        /// <param name="connection">The connection to use for client creation</param>
+        /// <param name="channel">The channel to connect to</param>
+        /// <returns>The chat client for the specified channel</returns>
         public static async Task<ChatClient> CreateFromChannel(MixerConnection connection, ChannelModel channel)
         {
             Validator.ValidateVariable(connection, "connection");
@@ -58,6 +64,10 @@ namespace Mixer.Base.Clients
             this.channelChat = channelChat;
         }
 
+        /// <summary>
+        /// Connects to the channel.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
             this.OnDisconnectOccurred -= ChatClient_OnDisconnectOccurred;
@@ -84,6 +94,10 @@ namespace Mixer.Base.Clients
             return this.connectSuccessful;
         }
 
+        /// <summary>
+        /// Authenticates the currently logged in user with the channel's chat.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Authenticate()
         {
             MethodPacket packet = new MethodPacket()

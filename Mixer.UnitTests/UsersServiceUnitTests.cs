@@ -53,7 +53,7 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                UserModel user = await connection.Users.GetUser("SaviorXTanren",);
+                UserModel user = await connection.Users.GetUser("SaviorXTanren");
 
                 Assert.IsNotNull(user);
                 Assert.IsTrue(user.id > (uint)0);
