@@ -58,7 +58,16 @@ namespace Mixer.Base.Services
 
             while (currentPage <= pageTotal && (maxResults == 0 || results.Count < maxResults))
             {
-                string currentRequestUri = requestUri + "?page=" + currentPage;
+                string currentRequestUri = requestUri;
+                if (currentRequestUri.Contains("?"))
+                {
+                    currentRequestUri += "&";
+                }
+                else
+                {
+                    currentRequestUri += "?";
+                }
+                currentRequestUri += "page=" + currentPage;
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
                 if (pageTotal == 0)

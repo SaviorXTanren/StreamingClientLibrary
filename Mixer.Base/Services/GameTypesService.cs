@@ -17,10 +17,11 @@ namespace Mixer.Base.Services
         public GameTypesService(MixerConnection connection) : base(connection) { }
 
         /// <summary>
-        /// Gets all known game types. The search can be limited to a maximum number of results to speed up the operation
-        /// as it can take a long time on large channels. This maximum number is a lower threshold and slightly more than the
-        /// maximum number may be returned.
+        /// Gets all known game types. The search can be limited to a maximum number of results to speed
+        /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
         /// </summary>
+        /// <param name="name">The name of the game to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All game types</returns>
         public async Task<IEnumerable<GameTypeModel>> GetGameTypes(uint maxResults = 0)
@@ -28,24 +29,17 @@ namespace Mixer.Base.Services
             return await this.GetPagedAsync<GameTypeModel>("types", maxResults);
         }
 
-        public async Task<IEnumerable<GameTypeSimpleModel>> GetGameTypesByLookup(string applicationUserModelId = null, string knownGamesListId = null, string processName = null, int xboxTitleId = -1, string titleName = null)
+        /// <summary>
+        /// Gets all known game types using the specified name. The search can be limited to a maximum number of results to speed
+        /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="name">The name of the game to search for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All game types</returns>
+        public async Task<IEnumerable<GameTypeModel>> GetGameTypes(string name, uint maxResults = 0)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-
-            if (!string.IsNullOrEmpty(applicationUserModelId)) { parameters.Add("aumId", applicationUserModelId); }
-            if (!string.IsNullOrEmpty(knownGamesListId)) { parameters.Add("kglId", knownGamesListId); }
-            if (!string.IsNullOrEmpty(processName)) { parameters.Add("processName", processName); }
-            if (xboxTitleId > 0) { parameters.Add("titleId", xboxTitleId.ToString()); }
-            if (!string.IsNullOrEmpty(titleName)) { parameters.Add("titleName", titleName); }
-
-            if (parameters.Count == 0)
-            {
-                throw new InvalidOperationException("At least one parameter must be specified");
-            }
-
-            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
-
-            return await this.GetAsync<IEnumerable<GameTypeSimpleModel>>("types/lookup" + "?" + await content.ReadAsStringAsync());
+            return await this.GetPagedAsync<GameTypeModel>("types?query=" + name, maxResults);
         }
 
         /// <summary>

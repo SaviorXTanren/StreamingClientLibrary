@@ -15,15 +15,12 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                IEnumerable<GameTypeModel> gameTypes = await connection.GameTypes.GetGameTypes(1);
+                string gameName = "Maui";
+                IEnumerable<GameTypeModel> gameTypes = await connection.GameTypes.GetGameTypes(gameName, 1);
 
                 Assert.IsNotNull(gameTypes);
                 Assert.IsTrue(gameTypes.Count() > 0);
-
-                IEnumerable<GameTypeSimpleModel> searchedGameTypes = await connection.GameTypes.GetGameTypesByLookup(titleName: "PLAYERUNKNOWN'S BATTLEGROUNDS");
-
-                Assert.IsNotNull(searchedGameTypes);
-                Assert.IsTrue(searchedGameTypes.Count() > 0);
+                Assert.IsTrue(gameTypes.Any(gt => gt.name.Equals(gameName)));
 
                 IEnumerable<ChannelModel> channels = await connection.GameTypes.GetChannelsByGameType(searchedGameTypes.First(), 1);
 

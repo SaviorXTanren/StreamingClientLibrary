@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
 using Mixer.Base.Model.Channel;
+using Mixer.Base.Model.Game;
 using Mixer.Base.Model.User;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,9 +40,6 @@ namespace Mixer.UnitTests
             });
         }
 
-        /// <summary>
-        /// New bug where channel updating does not seem to be working correctly, need to investigate why the call is returning with a 403 error
-        /// </summary>
         [TestMethod]
         public void UpdateChannel()
         {
@@ -55,6 +54,29 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(channel);
                 Assert.IsTrue(string.Equals(channel.name, newName));
+            });
+        }
+
+        [TestMethod]
+        public void UpdateChannelGame()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                string gameName = "Maui";
+                IEnumerable<GameTypeSimpleModel> games = await connection.GameTypes.GetGameTypes(gameName);
+
+                Assert.IsNotNull(games);
+                Assert.IsTrue(games.Count() > 0);
+                Assert.IsTrue(games.Any(gt => gt.name.Equals(gameName)));
+
+                channel.typeId = games.First().id;
+
+                channel = await connection.Channels.UpdateChannel(channel);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(channel.typeId == games.First().id);
             });
         }
 
