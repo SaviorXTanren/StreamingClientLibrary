@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>mixer-client-csharp</id>
-    <version>0.2.0-beta</version>
+    <version>0.2.1-beta</version>
     <title>Mixer Client Library</title>
     <authors>Matthew Olivo (SaviorXTanren)</authors>
     <owners>Matthew Olivo (SaviorXTanren)</owners>
@@ -10,12 +10,16 @@
     <projectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      C# client library for Mixer streaming service: https://mixer.com
-
-      For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp
+C# client library for Mixer streaming service: https://mixer.com
+      
+For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp
     </description>
     <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
-    <releaseNotes>First release of NuGet package</releaseNotes>
+    <releaseNotes>
+- Usability tweaks to certain service and client APIs
+- Adding intellisense comments for services and clients
+- Minor bug fixes
+    </releaseNotes>
     <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
     <tags>Mixer Streaming Bot Chat Interactive</tags>
     <dependencies>
