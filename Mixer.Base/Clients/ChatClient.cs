@@ -118,6 +118,11 @@ namespace Mixer.Base.Clients
             return this.authenticateSuccessful;
         }
 
+        /// <summary>
+        /// Sends a message.
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        /// <returns>The event of the message</returns>
         public async Task<ChatMessageEventModel> SendMessage(string message)
         {
             MethodPacket packet = new MethodPacket()
@@ -129,6 +134,12 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);    
         }
 
+        /// <summary>
+        /// Sends a whisper to the specified username.
+        /// </summary>
+        /// <param name="username">The username to whisper</param>
+        /// <param name="message">The message to send</param>
+        /// <returns>The event of the whisper</returns>
         public async Task<ChatMessageEventModel> Whisper(string username, string message)
         {
             MethodPacket packet = new MethodPacket()
@@ -140,18 +151,29 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);
         }
 
-        // TODO: Need to figure out how to get correct permissions for command to work
-        public async Task<bool> StartVote(string question, IEnumerable<string> options, uint timeLimit)
+        /// <summary>
+        /// Starts a vote.
+        /// </summary>
+        /// <param name="question">The question to ask</param>
+        /// <param name="options">The available choices to select from</param>
+        /// <param name="durationInSeconds">The duration in seconds</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public async Task<bool> StartVote(string question, IEnumerable<string> options, uint durationInSeconds)
         {
             MethodPacket packet = new MethodPacket()
             {
                 method = "vote:start",
-                arguments = new JArray() { question, new JArray() { options }, timeLimit },
+                arguments = new JArray() { question, new JArray() { options }, durationInSeconds },
             };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyDataExists(reply);
         }
 
+        /// <summary>
+        /// Selects an choice for the current vote
+        /// </summary>
+        /// <param name="optionIndex">The index of the choice</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> ChooseVote(uint optionIndex)
         {
             MethodPacket packet = new MethodPacket()
@@ -163,6 +185,12 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
+        /// <summary>
+        /// Times out the user for the specified duration.
+        /// </summary>
+        /// <param name="username">The username to time out</param>
+        /// <param name="durationInSeconds">The duration of the time out</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> TimeoutUser(string username, uint durationInSeconds)
         {
             MethodPacket packet = new MethodPacket()
@@ -174,6 +202,11 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
+        /// <summary>
+        /// Purges all messages in chat from the specified user.
+        /// </summary>
+        /// <param name="username">The username to purge</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> PurgeUser(string username)
         {
             MethodPacket packet = new MethodPacket()
@@ -185,6 +218,11 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Deletes the specified message.
+        /// </summary>
+        /// <param name="messageID">The id of the message to delete</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteMessage(Guid messageID)
         {
             MethodPacket packet = new MethodPacket()
@@ -196,6 +234,10 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(reply);
         }
 
+        /// <summary>
+        /// Clears all messages from chat.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> ClearMessages()
         {
             MethodPacket packet = new MethodPacket()

@@ -47,7 +47,7 @@ namespace Mixer.UnitTests
                 this.ClearPackets();
 
                 ConstellationEventType eventType = new ConstellationEventType(ConstellationEventTypeEnum.channel__id__update, channel.id);
-                Assert.IsTrue(await constellationClient.LiveSubscribe(new List<ConstellationEventType>() { eventType }));
+                Assert.IsTrue(await constellationClient.SubscribeToEvents(new List<ConstellationEventType>() { eventType }));
 
                 this.ClearPackets();
 
@@ -77,7 +77,7 @@ namespace Mixer.UnitTests
                     Assert.Fail("Did not get live event for channel updating");
                 }
 
-                Assert.IsTrue(await constellationClient.LiveUnsubscribe(new List<ConstellationEventType>() { eventType }));
+                Assert.IsTrue(await constellationClient.UnsubscribeToEvents(new List<ConstellationEventType>() { eventType }));
             });
         }
 

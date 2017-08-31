@@ -123,6 +123,11 @@ namespace Mixer.Base.Clients
 
         public event EventHandler<ConstellationLiveEventModel> OnSubscribedEventOccurred;
 
+        /// <summary>
+        /// Creates a constellation event client using the specified connection.
+        /// </summary>
+        /// <param name="connection">The connection to use</param>
+        /// <returns>The constellation event client</returns>
         public static async Task<ConstellationClient> Create(MixerConnection connection)
         {
             Validator.ValidateVariable(connection, "connection");
@@ -141,6 +146,10 @@ namespace Mixer.Base.Clients
             this.webSocket.Options.SetRequestHeader("X-Is-Bot", true.ToString());
         }
 
+        /// <summary>
+        /// Connects to the Constellation service.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
             this.OnDisconnectOccurred -= ConstellationClient_OnDisconnectOccurred;
@@ -163,6 +172,10 @@ namespace Mixer.Base.Clients
             return this.connectSuccessful;
         }
 
+        /// <summary>
+        /// Pings the Constellation service.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Ping()
         {
             MethodPacket packet = new MethodPacket() { method = "ping" };
@@ -170,7 +183,12 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<bool> LiveSubscribe(IEnumerable<ConstellationEventType> events)
+        /// <summary>
+        /// Subscribes to the specified events.
+        /// </summary>
+        /// <param name="events">The events to subscribe to</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public async Task<bool> SubscribeToEvents(IEnumerable<ConstellationEventType> events)
         {
             IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
 
@@ -182,7 +200,12 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
-        public async Task<bool> LiveUnsubscribe(IEnumerable<ConstellationEventType> events)
+        /// <summary>
+        /// Unsubscribes from the specified events.
+        /// </summary>
+        /// <param name="events">The events to unsubscribe from</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public async Task<bool> UnsubscribeToEvents(IEnumerable<ConstellationEventType> events)
         {
             IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
 

@@ -43,6 +43,13 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
+        /// <summary>
+        /// Creates an interactive client using the specified connection to the specified channel and game.
+        /// </summary>
+        /// <param name="connection">The connection to use</param>
+        /// <param name="channel">The channel to connect to</param>
+        /// <param name="interactiveGame">The game to use</param>
+        /// <returns>The interactive client for the specified channel and game</returns>
         public static async Task<InteractiveClient> CreateFromChannel(MixerConnection connection, ChannelModel channel, InteractiveGameListingModel interactiveGame)
         {
             Validator.ValidateVariable(connection, "connection");
@@ -73,6 +80,10 @@ namespace Mixer.Base.Clients
             this.webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");
         }
 
+        /// <summary>
+        /// Connects to the channel and game.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
             this.OnDisconnectOccurred -= InteractiveClient_OnDisconnectOccurred;
@@ -99,6 +110,10 @@ namespace Mixer.Base.Clients
             return this.connectSuccessful;
         }
 
+        /// <summary>
+        /// Prepares the client to receive interactive events.
+        /// </summary>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Ready()
         {
             this.authenticateSuccessful = false;
@@ -123,6 +138,10 @@ namespace Mixer.Base.Clients
             return this.authenticateSuccessful;
         }
 
+        /// <summary>
+        /// Gets the current server time.
+        /// </summary>
+        /// <returns>The current time on the server</returns>
         public async Task<DateTimeOffset?> GetTime()
         {
             MethodPacket packet = new MethodPacket() { method = "getTime" };
@@ -134,6 +153,10 @@ namespace Mixer.Base.Clients
             return null;
         }
 
+        /// <summary>
+        /// Gets the allocated memory state for this client.
+        /// </summary>
+        /// <returns>The allocated memory<returns>
         public async Task<InteractiveIssueMemoryWarningModel> GetMemoryStates()
         {
             MethodPacket packet = new MethodPacket() { method = "getMemoryStats" };
@@ -141,13 +164,24 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveIssueMemoryWarningModel>(reply);
         }
 
+        /// <summary>
+        /// Sets the memory throttling for the specified interactive APIs
+        /// </summary>
+        /// <param name="throttling">The throttling to set</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> SetBandwidthThrottle(InteractiveSetBandwidthThrottleModel throttling)
         {
+            Validator.ValidateVariable(throttling, "throttling");
+
             MethodPacket packet = new MethodPacket() { method = "setBandwidthThrottle", parameters = throttling };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Gets the memory throttling for all interactive APIs
+        /// </summary>
+        /// <returns>The memory throttling for all interactive APIs</returns>
         public async Task<InteractiveGetThrottleStateModel> GetThrottleState()
         {
             MethodPacket packet = new MethodPacket() { method = "getThrottleState" };
@@ -159,28 +193,52 @@ namespace Mixer.Base.Clients
             return new InteractiveGetThrottleStateModel();
         }
 
-        public async Task<InteractiveParticipantCollectionModel> GetAllParticipants(uint from = 0) //TODO - TT - Not sure if we need to iterate through entire list here or not.
+        /// <summary>
+        /// Gets the first 100 participants connected based on the specified connection time. For subsequent participants, specify
+        /// a later connection time, typically using the latest connected participant's connection time as the new earliest connection time.
+        /// </summary>
+        /// <param name="startTime">The starting connection time</param>
+        /// <returns>The first 100 participants</returns>
+        public async Task<InteractiveParticipantCollectionModel> GetAllParticipants(DateTimeOffset? startTime = null)
         {
-            /* Spec p.19-20, 'from' is used to indicate earliest connect timestamp of the Participants. 
-             * Initial request should be at 0 and each subsequent call should be max participant 'connectedAt' per result set */
+            if (startTime == null)
+            {
+                startTime = DateTimeOffset.MinValue;
+            }
+
             JObject parameters = new JObject();
-            parameters.Add("from", from);
+            parameters.Add("from", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startTime.GetValueOrDefault()));
             MethodPacket packet = new MethodPacket() { method = "getAllParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
-        public async Task<InteractiveParticipantCollectionModel> GetActiveParticipants(DateTimeOffset startThreshold)
+        /// <summary>
+        /// Returns a set of participants who have performed an interactive action after the specified start. For subsequent participants, specify
+        /// a later connection time, typically using the latest connected participant's connection time as the new earliest connection time.
+        /// </summary>
+        /// <param name="startTime">The start time for last interaction</param>
+        /// <returns>The set of last interacted participants</returns>
+        public async Task<InteractiveParticipantCollectionModel> GetActiveParticipants(DateTimeOffset startTime)
         {
+            Validator.ValidateVariable(startTime, "startTime");
+
             JObject parameters = new JObject();
-            parameters.Add("threshold", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startThreshold));
+            parameters.Add("threshold", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startTime));
             MethodPacket packet = new MethodPacket() { method = "getActiveParticipants", parameters = parameters };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Updates the specified participants
+        /// </summary>
+        /// <param name="participants">The participants to update</param>
+        /// <returns>The updated participants</returns>
         public async Task<InteractiveParticipantCollectionModel> UpdateParticipants(IEnumerable<InteractiveParticipantModel> participants)
         {
+            Validator.ValidateList(participants, "participants");
+
             JObject parameters = new JObject();
             parameters.Add("participants", JArray.FromObject(participants));
             MethodPacket packet = new MethodPacket() { method = "updateParticipants", parameters = parameters };
@@ -188,8 +246,15 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveParticipantCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Creates the specified groups
+        /// </summary>
+        /// <param name="groups">The groups to create</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> CreateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
+            Validator.ValidateList(groups, "groups");
+
             InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel() { groups = groups.ToList() };
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "createGroups", parameters = parameters };
@@ -197,6 +262,10 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Gets all groups.
+        /// </summary>
+        /// <returns>All groups</returns>
         public async Task<InteractiveGroupCollectionModel> GetGroups()
         {
             MethodPacket packet = new MethodPacket() { method = "getGroups" };
@@ -204,8 +273,15 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Updates the specified groups.
+        /// </summary>
+        /// <param name="groups">The groups to update</param>
+        /// <returns>The updated groups</returns>
         public async Task<InteractiveGroupCollectionModel> UpdateGroups(IEnumerable<InteractiveGroupModel> groups)
         {
+            Validator.ValidateList(groups, "groups");
+
             InteractiveGroupCollectionModel collection = new InteractiveGroupCollectionModel() { groups = groups.ToList() };
             JObject parameters = JObject.FromObject(collection);
             MethodPacket packet = new MethodPacket() { method = "updateGroups", parameters = parameters };
@@ -213,8 +289,17 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveGroupCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Deletes and replaces the specified group
+        /// </summary>
+        /// <param name="groupToDelete">The group to delete</param>
+        /// <param name="groupToReplace">The group to replace with</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteGroup(InteractiveGroupModel groupToDelete, InteractiveGroupModel groupToReplace)
         {
+            Validator.ValidateVariable(groupToDelete, "groupToDelete");
+            Validator.ValidateVariable(groupToReplace, "groupToReplace");
+
             JObject parameters = new JObject();
             parameters.Add("groupID", groupToDelete.groupID);
             parameters.Add("reassignGroupID", groupToReplace.groupID);
@@ -223,8 +308,15 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Creates the specified scenes.
+        /// </summary>
+        /// <param name="scenes">The scenes to create</param>
+        /// <returns>The created scenes</returns>
         public async Task<InteractiveConnectedSceneCollectionModel> CreateScenes(IEnumerable<InteractiveConnectedSceneModel> scenes)
         {
+            Validator.ValidateList(scenes, "scenes");
+
             InteractiveConnectedSceneCollectionModel collection = new InteractiveConnectedSceneCollectionModel();
             foreach (InteractiveConnectedSceneModel scene in scenes)
             {
@@ -238,6 +330,10 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveConnectedSceneCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Gets all scenes.
+        /// </summary>
+        /// <returns>All scenes</returns>
         public async Task<InteractiveConnectedSceneGroupCollectionModel> GetScenes()
         {
             MethodPacket packet = new MethodPacket() { method = "getScenes" };
@@ -245,8 +341,15 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveConnectedSceneGroupCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Updates the specified scenes.
+        /// </summary>
+        /// <param name="scenes">The scenes to update</param>
+        /// <returns>The updated scenes</returns>
         public async Task<InteractiveConnectedSceneCollectionModel> UpdateScenes(IEnumerable<InteractiveConnectedSceneModel> scenes)
         {
+            Validator.ValidateList(scenes, "scenes");
+
             InteractiveConnectedSceneCollectionModel collection = new InteractiveConnectedSceneCollectionModel();
             foreach (InteractiveConnectedSceneModel scene in scenes)
             {
@@ -260,8 +363,17 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveConnectedSceneCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Deletes and replaced the specified scene.
+        /// </summary>
+        /// <param name="sceneToDelete">The scene to delete</param>
+        /// <param name="sceneToReplace">The scene to replace with</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteScene(InteractiveConnectedSceneModel sceneToDelete, InteractiveConnectedSceneModel sceneToReplace)
         {
+            Validator.ValidateVariable(sceneToDelete, "sceneToDelete");
+            Validator.ValidateVariable(sceneToReplace, "sceneToReplace");
+
             JObject parameters = new JObject();
             parameters.Add("sceneID", sceneToDelete.sceneID);
             parameters.Add("reassignSceneID", sceneToReplace.sceneID);
@@ -270,8 +382,17 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Creates the specified controls for the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene to add controls to</param>
+        /// <param name="controls">The controls to create</param>
+        /// <returns>Whether the operation succeed</returns>
         public async Task<bool> CreateControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
+            Validator.ValidateVariable(scene, "scene");
+            Validator.ValidateList(controls, "controls");
+
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
             parameters.Add("controls", JArray.FromObject(controls));
@@ -280,8 +401,17 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Updates the specified controls for the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene to update controls for</param>
+        /// <param name="controls">The controls to update</param>
+        /// <returns>The updated controls</returns>
         public async Task<InteractiveConnectedControlCollectionModel> UpdateControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
+            Validator.ValidateVariable(scene, "scene");
+            Validator.ValidateList(controls, "controls");
+
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
             parameters.Add("controls", JArray.FromObject(controls));
@@ -290,8 +420,17 @@ namespace Mixer.Base.Clients
             return this.GetSpecificReplyResultValue<InteractiveConnectedControlCollectionModel>(reply);
         }
 
+        /// <summary>
+        /// Deletes the specified controls from the specified scene.
+        /// </summary>
+        /// <param name="scene">The scene to delete controls from</param>
+        /// <param name="controls">The controls to delete</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> DeleteControls(InteractiveConnectedSceneModel scene, IEnumerable<InteractiveControlModel> controls)
         {
+            Validator.ValidateVariable(scene, "scene");
+            Validator.ValidateList(controls, "controls");
+
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
             parameters.Add("controlIDs", JArray.FromObject(controls.Select(c => c.controlID)));
@@ -300,8 +439,15 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(reply);
         }
 
+        /// <summary>
+        /// Captures the spark transaction for the specified id.
+        /// </summary>
+        /// <param name="transactionID">The id of the spark transaction</param>
+        /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> CaptureSparkTransaction(string transactionID)
         {
+            Validator.ValidateString(transactionID, "transactionID");
+
             JObject parameters = new JObject();
             parameters.Add("transactionID", transactionID);
             MethodPacket packet = new MethodPacket() { method = "capture", parameters = parameters };
