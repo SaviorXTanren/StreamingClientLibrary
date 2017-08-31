@@ -39,7 +39,13 @@ namespace Mixer.Base.Services
         /// <returns>All game types</returns>
         public async Task<IEnumerable<GameTypeModel>> GetGameTypes(string name, uint maxResults = 0)
         {
-            return await this.GetPagedAsync<GameTypeModel>("types?query=" + name, maxResults);
+            Validator.ValidateString(name, "name");
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("query", name);
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
+
+            return await this.GetPagedAsync<GameTypeModel>("types?" + await content.ReadAsStringAsync(), maxResults);
         }
 
         /// <summary>

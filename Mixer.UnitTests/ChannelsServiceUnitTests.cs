@@ -64,7 +64,7 @@ namespace Mixer.UnitTests
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                string gameName = "Maui";
+                string gameName = "Fortnite";
                 IEnumerable<GameTypeSimpleModel> games = await connection.GameTypes.GetGameTypes(gameName);
 
                 Assert.IsNotNull(games);
