@@ -11,6 +11,7 @@ namespace Mixer.Base.ViewModel.Chat
         Banned,
         User,
         Pro,
+        Follower,
         Subscriber,
         Mod,
         Staff,
@@ -19,7 +20,7 @@ namespace Mixer.Base.ViewModel.Chat
 
     public class ChatUserViewModel : UserViewModel, IEquatable<ChatUserViewModel>
     {
-        public IEnumerable<UserRole> Roles { get; private set; }
+        public List<UserRole> Roles { get; set; }
 
         public UserRole PrimaryRole { get { return this.Roles.Max(); } }
 
@@ -32,17 +33,15 @@ namespace Mixer.Base.ViewModel.Chat
         public ChatUserViewModel(uint id, string username, string[] userRoles)
             : base(id, username)
         {
-            List<UserRole> roles = new List<UserRole>();
+            this.Roles = new List<UserRole>();
 
-            roles.Add(UserRole.User);
-            if (userRoles.Any(r => r.Equals("Owner"))) { roles.Add(UserRole.Streamer); }
-            else if (userRoles.Any(r => r.Equals("Staff"))) { roles.Add(UserRole.Staff); }
-            else if (userRoles.Any(r => r.Equals("Mod"))) { roles.Add(UserRole.Mod); }
-            else if (userRoles.Any(r => r.Equals("Subscriber"))) { roles.Add(UserRole.Subscriber); }
-            else if (userRoles.Any(r => r.Equals("Pro"))) { roles.Add(UserRole.Pro); }
-            else if (userRoles.Any(r => r.Equals("Banned"))) { roles.Add(UserRole.Banned); }
-
-            this.Roles = roles;
+            this.Roles.Add(UserRole.User);
+            if (userRoles.Any(r => r.Equals("Owner"))) { this.Roles.Add(UserRole.Streamer); }
+            else if (userRoles.Any(r => r.Equals("Staff"))) { this.Roles.Add(UserRole.Staff); }
+            else if (userRoles.Any(r => r.Equals("Mod"))) { this.Roles.Add(UserRole.Mod); }
+            else if (userRoles.Any(r => r.Equals("Subscriber"))) { this.Roles.Add(UserRole.Subscriber); }
+            else if (userRoles.Any(r => r.Equals("Pro"))) { this.Roles.Add(UserRole.Pro); }
+            else if (userRoles.Any(r => r.Equals("Banned"))) { this.Roles.Add(UserRole.Banned); }
         }
 
         public new ChatUserModel GetModel()
