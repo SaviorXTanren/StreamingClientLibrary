@@ -14,10 +14,8 @@ namespace Mixer.Base
     public enum OAuthClientScopeEnum
     {
         achievement__view__self,
-        channel__analytics,
         channel__analytics__self,
         channel__costream__self,
-        channel__deleteBanner,
         channel__deleteBanner__self,
         channel__details__self,
         channel__follow__self,
