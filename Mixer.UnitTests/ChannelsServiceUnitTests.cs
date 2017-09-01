@@ -95,6 +95,28 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void CheckIfFollows()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<UserWithChannelModel> followedUsers = await connection.Channels.GetFollowers(channel, 1);
+                Assert.IsNotNull(followedUsers);
+                Assert.IsTrue(followedUsers.Count() > 0);
+
+                UserModel notFollowedUser = await connection.Users.GetUser("ChannelOne");
+                Assert.IsNotNull(notFollowedUser);
+
+                Dictionary<UserModel, bool> follows = await connection.Channels.CheckIfFollows(channel, new List<UserModel>() { followedUsers.First(), notFollowedUser });
+                Assert.IsNotNull(follows);
+                Assert.IsTrue(follows.Count == 2);
+                Assert.IsTrue(follows[followedUsers.First()]);
+                Assert.IsFalse(follows[notFollowedUser]);
+            });
+        }
+
+        [TestMethod]
         public void HostGetUnhostChannel()
         {
             TestWrapper(async (MixerConnection connection) =>

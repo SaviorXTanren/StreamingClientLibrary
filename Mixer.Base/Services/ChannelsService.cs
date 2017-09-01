@@ -3,6 +3,7 @@ using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -53,7 +54,59 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<UserWithChannelModel>> GetFollowers(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
+
             return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow", maxResults);
+        }
+
+        /// <summary>
+        /// Checks if the specified user follows the specified channel
+        /// </summary>
+        /// <param name="channel">The channel to get follows against</param>
+        /// <param name="user">The user to check if they follow</param>
+        /// <returns>Whether the user follows the channel</returns>
+        public async Task<bool> CheckIfFollows(ChannelModel channel, UserModel user)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(user, "user");
+
+            Dictionary<UserModel, bool> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
+            return (results[user]);
+        }
+
+        /// <summary>
+        /// Checks if the specified users follows the specified channel
+        /// </summary>
+        /// <param name="channel">The channel to get follows against</param>
+        /// <param name="users">The users to check if they follow</param>
+        /// <returns>All users checked and whether they follow or not</returns>
+        public async Task<Dictionary<UserModel, bool>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateList(users, "users");
+
+            Dictionary<UserModel, bool> results = new Dictionary<UserModel, bool>();
+            for (int i = 0; i < users.Count(); i += 25)
+            {
+                IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
+
+                string followQuery = "";
+                foreach (UserModel user in userSubset)
+                {
+                    followQuery += "where=id:eq:" + user.id + ",";
+                }
+                followQuery = followQuery.Remove(followQuery.Length - 1);
+
+                IEnumerable<UserWithChannelModel> followUsers = await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow?fields=id&" + followQuery);
+                IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
+                foreach (UserModel user in userSubset)
+                {
+                    results.Add(user, followUserIDs.Contains(user.id));
+                }
+            }
+            return results;
+
+            //IEnumerable<UserWithChannelModel> users = await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow?where=id:eq:" + user.id);
+            //return (users != null && users.Any(u => u.id.Equals(user.id)));
         }
 
         /// <summary>
