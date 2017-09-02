@@ -15,6 +15,7 @@ namespace Mixer.UnitTests
         {
             OAuthClientScopeEnum.channel__details__self,
             OAuthClientScopeEnum.channel__update__self,
+            OAuthClientScopeEnum.channel__analytics__self,
 
             OAuthClientScopeEnum.chat__chat,
             OAuthClientScopeEnum.chat__clear_messages,

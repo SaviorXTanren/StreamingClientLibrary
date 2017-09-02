@@ -51,10 +51,14 @@
     <Compile Include="Clients\InteractiveClient.cs" />
     <Compile Include="Helpers\InteractiveGameHelper.cs" />
     <Compile Include="MixerConnection.cs" />
+    <Compile Include="Model\Channel\ChannelAnalyticModel.cs" />
     <Compile Include="Model\Channel\ChannelChatModel.cs" />
     <Compile Include="Model\Channel\DiscordBotModel.cs" />
     <Compile Include="Model\Channel\DiscordChannelModel.cs" />
     <Compile Include="Model\Channel\DiscordRoleModel.cs" />
+    <Compile Include="Model\Channel\FollowersAnalyticModel.cs" />
+    <Compile Include="Model\Channel\StreamSessionsAnalyticModel.cs" />
+    <Compile Include="Model\Channel\ViewerMetricAnalyticModel.cs" />
     <Compile Include="Model\Chat\ChatClearMessagesEventModel.cs" />
     <Compile Include="Model\Chat\ChatDeleteMessageEventModel.cs" />
     <Compile Include="Model\Chat\ChatMessageEventModel.cs" />

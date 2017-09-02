@@ -3,6 +3,7 @@ using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Game;
 using Mixer.Base.Model.User;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,48 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(channel);
                 Assert.IsTrue(channel.typeId == games.First().id);
+            });
+        }
+
+        [TestMethod]
+        public void GetViewerMetrics()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<ViewerMetricAnalyticModel> viewers = await connection.Channels.GetViewerMetrics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+
+                Assert.IsNotNull(viewers);
+                Assert.IsTrue(viewers.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetStreamSessions()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<StreamSessionsAnalyticModel> streams = await connection.Channels.GetStreamSessions(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+
+                Assert.IsNotNull(streams);
+                Assert.IsTrue(streams.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetFollowerMetrics()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<FollowersAnalyticModel> followers = await connection.Channels.GetFollowerMetrics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+
+                Assert.IsNotNull(followers);
+                Assert.IsTrue(followers.Count() > 0);
             });
         }
 

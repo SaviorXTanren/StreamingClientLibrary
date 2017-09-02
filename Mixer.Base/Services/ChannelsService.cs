@@ -2,6 +2,7 @@
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -41,6 +42,51 @@ namespace Mixer.Base.Services
             ChannelUpdateableModel updateableChannel = JsonHelper.ConvertToDifferentType<ChannelUpdateableModel>(channel);
 
             return await this.PatchAsync<ChannelModel>("channels/" + channel.id, this.CreateContentFromObject(updateableChannel));
+        }
+
+        /// <summary>
+        /// Gets all the viewer metrics from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get viewer metrics for</param>
+        /// <param name="startDate">The start date for viewer metrics</param>
+        /// <param name="endDate">The end date for viewer metrics</param>
+        /// <returns>All viewer metrics during the timespan</returns>
+        public async Task<IEnumerable<ViewerMetricAnalyticModel>> GetViewerMetrics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            return await this.GetPagedAsync<ViewerMetricAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
+        }
+
+        /// <summary>
+        /// Gets all the stream sessions from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get stream sessions for</param>
+        /// <param name="startDate">The start date for stream sessions</param>
+        /// <param name="endDate">The end date for stream sessions</param>
+        /// <returns>All stream sessions during the timespan</returns>
+        public async Task<IEnumerable<StreamSessionsAnalyticModel>> GetStreamSessions(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            return await this.GetPagedAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate));
+        }
+
+        /// <summary>
+        /// Gets all the followers from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get followers for</param>
+        /// <param name="startDate">The start date for followers</param>
+        /// <param name="endDate">The end date for followers</param>
+        /// <returns>All followers during the timespan</returns>
+        public async Task<IEnumerable<FollowersAnalyticModel>> GetFollowerMetrics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            return await this.GetPagedAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -287,6 +333,16 @@ namespace Mixer.Base.Services
                 return invite.ToString();
             }
             return null;
+        }
+
+        private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        {
+            string endDateString = "";
+            if (endDate != null)
+            {
+                endDateString = "&to=" + DateTimeHelper.DateTimeOffsetToISO8601String(endDate.GetValueOrDefault());
+            }
+            return "from=" + DateTimeHelper.DateTimeOffsetToISO8601String(startDate) + endDateString;
         }
     }
 }
