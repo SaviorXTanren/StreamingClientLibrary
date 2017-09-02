@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>mixer-client-csharp</id>
-    <version>0.2.1-beta</version>
+    <version>0.2.2-beta</version>
     <title>Mixer Client Library</title>
     <authors>Matthew Olivo (SaviorXTanren)</authors>
     <owners>Matthew Olivo (SaviorXTanren)</owners>
@@ -16,9 +16,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     </description>
     <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
     <releaseNotes>
-- Usability tweaks to certain service and client APIs
-- Adding intellisense comments for services and clients
-- Minor bug fixes
+- Adding new follower check APIs
+- Adding some channel analytic APIs
     </releaseNotes>
     <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
     <tags>Mixer Streaming Bot Chat Interactive</tags>
