@@ -97,26 +97,26 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get followers for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The users who followed the channel</returns>
-        public async Task<IEnumerable<UserWithChannelModel>> GetFollowers(ChannelModel channel, uint maxResults = 0)
+        public async Task<IEnumerable<FollowerUserModel>> GetFollowers(ChannelModel channel, uint maxResults = 0)
         {
             Validator.ValidateVariable(channel, "channel");
 
-            return await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow", maxResults);
+            return await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow", maxResults);
         }
 
         /// <summary>
-        /// Checks if the specified user follows the specified channel
+        /// Checks if the specified user follows the specified channel by getting their follow date.
         /// </summary>
         /// <param name="channel">The channel to get follows against</param>
         /// <param name="user">The user to check if they follow</param>
-        /// <returns>Whether the user follows the channel</returns>
-        public async Task<bool> CheckIfFollows(ChannelModel channel, UserModel user)
+        /// <returns>The follow date of the user if they follow the channel</returns>
+        public async Task<DateTimeOffset?> CheckIfFollows(ChannelModel channel, UserModel user)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
 
-            Dictionary<UserModel, bool> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
-            return (results[user]);
+            Dictionary<UserModel, DateTimeOffset?> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
+            return results[user];
         }
 
         /// <summary>
@@ -125,12 +125,12 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get follows against</param>
         /// <param name="users">The users to check if they follow</param>
         /// <returns>All users checked and whether they follow or not</returns>
-        public async Task<Dictionary<UserModel, bool>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
+        public async Task<Dictionary<UserModel, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateList(users, "users");
 
-            Dictionary<UserModel, bool> results = new Dictionary<UserModel, bool>();
+            Dictionary<UserModel, DateTimeOffset?> results = new Dictionary<UserModel, DateTimeOffset?>();
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
@@ -142,17 +142,20 @@ namespace Mixer.Base.Services
                 }
                 followQuery = followQuery.Remove(followQuery.Length - 1);
 
-                IEnumerable<UserWithChannelModel> followUsers = await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow?fields=id&" + followQuery);
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?fields=id,followed&" + followQuery);
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
-                    results.Add(user, followUserIDs.Contains(user.id));
+                    DateTimeOffset? followDate = null;
+                    FollowerUserModel follow = followUsers.FirstOrDefault(u => u.id.Equals(user.id));
+                    if (follow != null)
+                    {
+                        followDate = follow.followed.createdAt;
+                    }
+                    results.Add(user, followDate);
                 }
             }
             return results;
-
-            //IEnumerable<UserWithChannelModel> users = await this.GetPagedAsync<UserWithChannelModel>("channels/" + channel.id + "/follow?where=id:eq:" + user.id);
-            //return (users != null && users.Any(u => u.id.Equals(user.id)));
         }
 
         /// <summary>

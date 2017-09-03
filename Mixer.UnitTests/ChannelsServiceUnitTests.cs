@@ -151,11 +151,11 @@ namespace Mixer.UnitTests
                 UserModel notFollowedUser = await connection.Users.GetUser("ChannelOne");
                 Assert.IsNotNull(notFollowedUser);
 
-                Dictionary<UserModel, bool> follows = await connection.Channels.CheckIfFollows(channel, new List<UserModel>() { followedUsers.First(), notFollowedUser });
+                Dictionary<UserModel, DateTimeOffset?> follows = await connection.Channels.CheckIfFollows(channel, new List<UserModel>() { followedUsers.First(), notFollowedUser });
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count == 2);
-                Assert.IsTrue(follows[followedUsers.First()]);
-                Assert.IsFalse(follows[notFollowedUser]);
+                Assert.IsNotNull(follows[followedUsers.First()]);
+                Assert.IsNull(follows[notFollowedUser]);
             });
         }
 
