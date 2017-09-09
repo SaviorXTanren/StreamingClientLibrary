@@ -204,6 +204,16 @@ namespace Mixer.Base
             return new MixerConnection(token);
         }
 
+        public static async Task<MixerConnection> ConnectViaOAuthToken(OAuthTokenModel token)
+        {
+            Validator.ValidateVariable(token, "token");
+
+            MixerConnection connection = new MixerConnection(token);
+            await connection.RefreshOAuthToken();
+
+            return connection;
+        }
+
         internal static string ConvertClientScopesToString(IEnumerable<OAuthClientScopeEnum> scopes)
         {
             string result = "";
@@ -237,7 +247,19 @@ namespace Mixer.Base
             this.Users = new UsersService(this);
         }
 
-        internal async Task<OAuthTokenModel> GetOAuthTokenModel()
+        public OAuthTokenModel GetOAuthTokenCopy()
+        {
+            return new OAuthTokenModel()
+            {
+                clientID = this.token.clientID,
+                authorizationCode = this.token.authorizationCode,
+                refreshToken = this.token.refreshToken,
+                accessToken = this.token.accessToken,
+                expiresIn = this.token.expiresIn
+            };
+        }
+
+        internal async Task<OAuthTokenModel> GetOAuthToken()
         {
             if (this.token.Expiration < DateTimeOffset.Now)
             {

@@ -56,7 +56,7 @@ namespace Mixer.Base.Clients
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
 
-            OAuthTokenModel authToken = await connection.GetOAuthTokenModel();
+            OAuthTokenModel authToken = await connection.GetOAuthToken();
 
             IEnumerable<string> interactiveConnections = await connection.Interactive.GetInteractiveHosts();
 

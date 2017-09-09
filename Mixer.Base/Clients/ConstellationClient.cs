@@ -132,7 +132,7 @@ namespace Mixer.Base.Clients
         {
             Validator.ValidateVariable(connection, "connection");
 
-            OAuthTokenModel authToken = await connection.GetOAuthTokenModel();
+            OAuthTokenModel authToken = await connection.GetOAuthToken();
 
             return new ConstellationClient(authToken);
         }

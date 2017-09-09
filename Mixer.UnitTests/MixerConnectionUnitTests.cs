@@ -53,14 +53,23 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                OAuthTokenModel token = await connection.GetOAuthTokenModel();
+                OAuthTokenModel token = await connection.GetOAuthToken();
 
                 Assert.IsNotNull(token);
 
                 await connection.RefreshOAuthToken();
-                token = await connection.GetOAuthTokenModel();
+                token = await connection.GetOAuthToken();
 
                 Assert.IsNotNull(token);
+            });
+        }
+
+        [TestMethod]
+        public void ConnectWithOldOAuthToken()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                MixerConnection connection2 = await MixerConnection.ConnectViaOAuthToken(connection.GetOAuthTokenCopy());
             });
         }
     }

@@ -176,7 +176,7 @@ namespace Mixer.Base.Services
         {
             if (this.connection != null)
             {
-                return new HttpClientWrapper(await this.connection.GetOAuthTokenModel());
+                return new HttpClientWrapper(await this.connection.GetOAuthToken());
             }
             return new HttpClientWrapper();
         }
