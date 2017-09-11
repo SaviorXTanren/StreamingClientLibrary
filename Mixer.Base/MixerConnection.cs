@@ -204,12 +204,11 @@ namespace Mixer.Base
             return new MixerConnection(token);
         }
 
-        public static async Task<MixerConnection> ConnectViaOAuthToken(OAuthTokenModel token)
+        public static MixerConnection ConnectViaOAuthToken(OAuthTokenModel token)
         {
             Validator.ValidateVariable(token, "token");
 
             MixerConnection connection = new MixerConnection(token);
-            await connection.RefreshOAuthToken();
 
             return connection;
         }
