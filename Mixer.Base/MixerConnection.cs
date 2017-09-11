@@ -247,6 +247,11 @@ namespace Mixer.Base
             this.Users = new UsersService(this);
         }
 
+        public async Task RefreshOAuthToken()
+        {
+            this.token = await this.OAuth.RefreshToken(this.token);
+        }
+
         public OAuthTokenModel GetOAuthTokenCopy()
         {
             return new OAuthTokenModel()
@@ -266,11 +271,6 @@ namespace Mixer.Base
                 await this.RefreshOAuthToken();
             }
             return this.token;
-        }
-
-        internal async Task RefreshOAuthToken()
-        {
-            this.token = await this.OAuth.RefreshToken(this.token);
         }
     }
 }
