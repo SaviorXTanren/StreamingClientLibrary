@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>mixer-client-csharp</id>
-    <version>0.2.8-beta</version>
+    <version>0.2.9-beta</version>
     <title>Mixer Client Library</title>
     <authors>Matthew Olivo (SaviorXTanren)</authors>
     <owners>Matthew Olivo (SaviorXTanren)</owners>
@@ -16,7 +16,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     </description>
     <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
     <releaseNotes>
-- Removing auto-refreshing of OAuth token when creating a connection using it and instead exposing a method to do it
+- Adding optional refresh of OAuth token when creating a connection from one
     </releaseNotes>
     <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
     <tags>Mixer Streaming Bot Chat Interactive</tags>

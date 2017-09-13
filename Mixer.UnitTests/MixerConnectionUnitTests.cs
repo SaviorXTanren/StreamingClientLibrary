@@ -70,11 +70,11 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                MixerConnection connection2 = MixerConnection.ConnectViaOAuthToken(connection.GetOAuthTokenCopy());
+                MixerConnection connection2 = await MixerConnection.ConnectViaOAuthToken(connection.GetOAuthTokenCopy());
                 await connection2.RefreshOAuthToken();
                 ChannelModel channel = await connection2.Channels.GetChannel("ChannelOne");
 
-                MixerConnection connection3 = MixerConnection.ConnectViaOAuthToken(connection2.GetOAuthTokenCopy());
+                MixerConnection connection3 = await MixerConnection.ConnectViaOAuthToken(connection2.GetOAuthTokenCopy());
                 await connection3.RefreshOAuthToken();
                 channel = await connection3.Channels.GetChannel("ChannelOne");
             });
