@@ -201,10 +201,7 @@ namespace Mixer.Base.Clients
         /// <returns>The first 100 participants</returns>
         public async Task<InteractiveParticipantCollectionModel> GetAllParticipants(DateTimeOffset? startTime = null)
         {
-            if (startTime == null)
-            {
-                startTime = DateTimeOffset.MinValue;
-            }
+            if (startTime == null) { startTime = DateTimeOffset.FromUnixTimeSeconds(0); }
 
             JObject parameters = new JObject();
             parameters.Add("from", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startTime.GetValueOrDefault()));
