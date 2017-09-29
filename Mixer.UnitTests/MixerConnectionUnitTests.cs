@@ -54,12 +54,12 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                OAuthTokenModel token = await connection.GetOAuthToken();
+                OAuthTokenModel token = connection.GetOAuthTokenCopy();
 
                 Assert.IsNotNull(token);
 
                 await connection.RefreshOAuthToken();
-                token = await connection.GetOAuthToken();
+                token = connection.GetOAuthTokenCopy();
 
                 Assert.IsNotNull(token);
             });

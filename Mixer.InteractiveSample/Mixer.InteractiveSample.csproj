@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">
-      <Project>{3D2FD5B5-BEFD-414E-A79F-C26B6842691D}</Project>
+      <Project>{9a4792ad-5e16-4de0-a8f4-0e8021f354e3}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>
   </ItemGroup>

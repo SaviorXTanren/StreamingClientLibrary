@@ -1,172 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D2FD5B5-BEFD-414E-A79F-C26B6842691D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mixer.Base</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Mixer.Base</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <RootNamespace>Mixer.Base</RootNamespace>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</Copyright>
+    <Company>Matthew Olivo</Company>
+    <Authors>Matthew Olivo</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.4.0-beta</Version>
+    <Description>C# client library for Mixer streaming service: https://mixer.com
+      
+For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
+    <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
+    <PackageId>mixer-client-csharp</PackageId>
+    <Product>mixer-client-csharp</Product>
+    <PackageReleaseNotes>- Changing project type to .NET Standard 2.0</PackageReleaseNotes>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
+    <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Content Include="..\LICENSE.txt" Link="LICENSE.txt" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Clients\ChatClient.cs" />
-    <Compile Include="Clients\ConstellationClient.cs" />
-    <Compile Include="Clients\InteractiveClient.cs" />
-    <Compile Include="Helpers\InteractiveGameHelper.cs" />
-    <Compile Include="MixerConnection.cs" />
-    <Compile Include="Model\Channel\ChannelAnalyticModel.cs" />
-    <Compile Include="Model\Channel\ChannelChatModel.cs" />
-    <Compile Include="Model\Channel\DiscordBotModel.cs" />
-    <Compile Include="Model\Channel\DiscordChannelModel.cs" />
-    <Compile Include="Model\Channel\DiscordRoleModel.cs" />
-    <Compile Include="Model\Channel\FollowersAnalyticModel.cs" />
-    <Compile Include="Model\Channel\StreamSessionsAnalyticModel.cs" />
-    <Compile Include="Model\Channel\ViewerMetricAnalyticModel.cs" />
-    <Compile Include="Model\Chat\ChatClearMessagesEventModel.cs" />
-    <Compile Include="Model\Chat\ChatDeleteMessageEventModel.cs" />
-    <Compile Include="Model\Chat\ChatMessageEventModel.cs" />
-    <Compile Include="Model\Chat\ChatPollEventModel.cs" />
-    <Compile Include="Model\Chat\ChatPurgeMessageEventModel.cs" />
-    <Compile Include="Model\Chat\ChatUserEventModel.cs" />
-    <Compile Include="Model\Chat\ChatUserTimeoutEventModel.cs" />
-    <Compile Include="Model\Client\EventPacket.cs" />
-    <Compile Include="Model\Client\MethodPacket.cs" />
-    <Compile Include="Model\Client\ReplyErrorModel.cs" />
-    <Compile Include="Model\Client\ReplyPacket.cs" />
-    <Compile Include="Model\Constellation\ConstellationLiveEventModel.cs" />
-    <Compile Include="Model\Costream\CostreamChannelModel.cs" />
-    <Compile Include="Model\Costream\CostreamLayoutModel.cs" />
-    <Compile Include="Model\Costream\CostreamModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveButtonControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveConnectedSceneModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveConnectionInfoModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveControlPositionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGameListingModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGameModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveJoystickControlModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveParticipantCollectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGetThrottleStateModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGiveInputModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGroupCollectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGroupModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveInputModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveIssueMemoryWarningModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveParticipantModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveRobotConnectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveSceneModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveSetBandwidthThrottleModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveControlCollectionModel.cs" />
-    <Compile Include="Model\Interactive\InteractiveGameVersionModel.cs" />
-    <Compile Include="Model\NotificationModel.cs" />
-    <Compile Include="Model\OAuth\OAuthShortCodeModel.cs" />
-    <Compile Include="Model\OAuth\OAuthTokenModel.cs" />
-    <Compile Include="Model\Teams\TeamMembershipExpandedModel.cs" />
-    <Compile Include="Model\Teams\TeamMembershipModel.cs" />
-    <Compile Include="Model\Teams\TeamModel.cs" />
-    <Compile Include="Model\User\FollowerUserModel.cs" />
-    <Compile Include="Model\User\PrivatePopulatedUserModel.cs" />
-    <Compile Include="Model\User\PrivateUserModel.cs" />
-    <Compile Include="Model\User\UserLogModel.cs" />
-    <Compile Include="Model\User\UserPreferencesModel.cs" />
-    <Compile Include="Model\User\UserWithChannelModel.cs" />
-    <Compile Include="Model\User\UserWithGroupsModel.cs" />
-    <Compile Include="Model\Client\WebSocketPacket.cs" />
-    <Compile Include="Services\ChannelsService.cs" />
-    <Compile Include="Model\Channel\ChannelAdvancedModel.cs" />
-    <Compile Include="Model\Channel\ChannelModel.cs" />
-    <Compile Include="Model\Channel\ChannelPreferencesModel.cs" />
-    <Compile Include="Model\Channel\ExpandedChannelModel.cs" />
-    <Compile Include="Model\Channel\FollowModel.cs" />
-    <Compile Include="Model\Game\GameTypeModel.cs" />
-    <Compile Include="Model\Game\GameTypeSimpleModel.cs" />
-    <Compile Include="Model\ResourceModel.cs" />
-    <Compile Include="Model\TimeStampedModel.cs" />
-    <Compile Include="Model\User\ChatUserModel.cs" />
-    <Compile Include="Model\User\SocialInfoModel.cs" />
-    <Compile Include="Model\User\UserGroupModel.cs" />
-    <Compile Include="Model\User\UserModel.cs" />
-    <Compile Include="Services\ChatsService.cs" />
-    <Compile Include="Services\CostreamService.cs" />
-    <Compile Include="Services\InteractiveService.cs" />
-    <Compile Include="Services\OAuthService.cs" />
-    <Compile Include="Services\ServiceBase.cs" />
-    <Compile Include="Services\TeamsService.cs" />
-    <Compile Include="Services\GameTypesService.cs" />
-    <Compile Include="Services\UsersService.cs" />
-    <Compile Include="Util\DateTimeHelper.cs" />
-    <Compile Include="Util\EnumHelper.cs" />
-    <Compile Include="Util\JsonHelper.cs" />
-    <Compile Include="Util\NameAttribute.cs" />
-    <Compile Include="Util\ReplyPacketException.cs" />
-    <Compile Include="Util\RestServiceRequestException.cs" />
-    <Compile Include="Util\Validator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\HttpClientWrapper.cs" />
-    <Compile Include="Clients\WebSocketClientBase.cs" />
-    <Compile Include="Web\HttpListenerServerBase.cs" />
-    <Compile Include="Web\OAuthHttpListenerServer.cs" />
+    <None Include="..\README.md" Link="README.md" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="..\README.md">
-      <Link>README.md</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Mixer.Base.nuspec" />
-    <None Include="packages.config" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE.txt">
-      <Link>LICENSE.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)..\README.md $(TargetDir)readme.txt</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(ProjectDir)..\README.md $(TargetDir)readme.txt" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

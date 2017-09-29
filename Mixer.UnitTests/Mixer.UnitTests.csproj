@@ -69,13 +69,13 @@
     <Compile Include="UsersServiceUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">
-      <Project>{3d2fd5b5-befd-414e-a79f-c26b6842691d}</Project>
-      <Name>Mixer.Base</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">
+      <Project>{9a4792ad-5e16-4de0-a8f4-0e8021f354e3}</Project>
+      <Name>Mixer.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
