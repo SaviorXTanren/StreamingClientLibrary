@@ -1,4 +1,4 @@
-+[![NuGet](https://img.shields.io/nuget/v/mixer-client-csharp.svg?style=flat)](https://www.nuget.org/packages/mixer-client-csharp)
+[![NuGet](https://img.shields.io/nuget/v/mixer-client-csharp.svg?style=flat)](https://www.nuget.org/packages/mixer-client-csharp)
 
 # mixer-client-csharp
 A C# client library for the Mixer streaming service

@@ -158,16 +158,16 @@ namespace Mixer.Base.Clients
 
             await this.ConnectInternal("wss://constellation.mixer.com");
 
-            await this.WaitForResponse(() => { return this.connectSuccessful; });
+            await this.WaitForResponse(() => { return this.Connected; });
 
             this.OnEventOccurred -= ConstellationClient_HelloMethodHandler;
 
-            if (this.connectSuccessful)
+            if (this.Connected)
             {
                 this.OnEventOccurred += ConstellationClient_OnEventOccurred;
             }
 
-            return this.connectSuccessful;
+            return this.Connected;
         }
 
         /// <summary>
@@ -230,8 +230,8 @@ namespace Mixer.Base.Clients
             JToken authenticationValue;
             if (e.eventName.Equals("hello") && e.data.TryGetValue("authenticated", out authenticationValue) && (bool)authenticationValue)
             {
-                this.connectSuccessful = true;
-                this.authenticateSuccessful = true;
+                this.Connected = true;
+                this.Authenticated = true;
             }
         }
     }

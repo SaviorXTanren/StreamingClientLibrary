@@ -80,16 +80,16 @@ namespace Mixer.Base.Clients
 
             await this.ConnectInternal(this.channelChat.endpoints[endpointToUse]);
 
-            await this.WaitForResponse(() => { return this.connectSuccessful; });
+            await this.WaitForResponse(() => { return this.Connected; });
 
             this.OnEventOccurred -= ConnectEventHandler;
 
-            if (this.connectSuccessful)
+            if (this.Connected)
             {
                 this.OnEventOccurred += ChatClient_OnEventOccurred;
             }
 
-            return this.connectSuccessful;
+            return this.Connected;
         }
 
         /// <summary>
@@ -104,16 +104,16 @@ namespace Mixer.Base.Clients
                 arguments = new JArray() { this.Channel.id.ToString(), this.User.id.ToString(), this.channelChat.authkey },
             };
 
-            this.authenticateSuccessful = false;
+            this.Authenticated = false;
             this.OnReplyOccurred += AuthenticateEventHandler;
 
             await this.Send(packet, checkIfAuthenticated: false);
 
-            await this.WaitForResponse(() => { return this.authenticateSuccessful; });
+            await this.WaitForResponse(() => { return this.Authenticated; });
 
             this.OnReplyOccurred -= AuthenticateEventHandler;
 
-            return this.authenticateSuccessful;
+            return this.Authenticated;
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Mixer.Base.Clients
         {
             if (e.eventName.Equals("WelcomeEvent"))
             {
-                this.connectSuccessful = true;
+                this.Connected = true;
             }
         }
 
@@ -260,7 +260,7 @@ namespace Mixer.Base.Clients
             JToken value;
             if (e.id == (this.CurrentPacketID - 1) && e.dataObject.TryGetValue("authenticated", out value) && (bool)value)
             {
-                this.authenticateSuccessful = true;
+                this.Authenticated = true;
             }
         }
 

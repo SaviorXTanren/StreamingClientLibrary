@@ -26,8 +26,8 @@ namespace Mixer.Base.Clients
         protected ClientWebSocket webSocket = new ClientWebSocket();
         private UTF8Encoding encoder = new UTF8Encoding();
 
-        protected bool connectSuccessful { get; set; }
-        protected bool authenticateSuccessful { get; set; }
+        public bool Connected { get; protected set; }
+        public bool Authenticated { get; protected set; }
 
         private int bufferSize = 4096 * 20;
 
@@ -79,12 +79,12 @@ namespace Mixer.Base.Clients
 
         protected async Task Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
-            if (!this.connectSuccessful)
+            if (!this.Connected)
             {
                 throw new InvalidOperationException("Client is not connected");
             }
 
-            if (checkIfAuthenticated && !this.authenticateSuccessful)
+            if (checkIfAuthenticated && !this.Authenticated)
             {
                 throw new InvalidOperationException("Client is not authenticated");
             }
@@ -259,6 +259,7 @@ namespace Mixer.Base.Clients
 
         private void DisconnectOccurred(WebSocketReceiveResult result)
         {
+            this.Connected = this.Authenticated = false;
             if (this.OnDisconnectOccurred != null)
             {
                 this.OnDisconnectOccurred(this, result.CloseStatus.GetValueOrDefault());

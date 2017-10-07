@@ -96,16 +96,16 @@ namespace Mixer.Base.Clients
 
             await this.ConnectInternal(this.interactiveConnections.ElementAt(endpointToUse));
 
-            await this.WaitForResponse(() => { return this.connectSuccessful; });
+            await this.WaitForResponse(() => { return this.Connected; });
 
             this.OnMethodOccurred -= InteractiveClient_HelloMethodHandler;
 
-            if (this.connectSuccessful)
+            if (this.Connected)
             {
                 this.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
             }
 
-            return this.connectSuccessful;
+            return this.Connected;
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Ready()
         {
-            this.authenticateSuccessful = false;
+            this.Authenticated = false;
 
             this.OnMethodOccurred += InteractiveClient_ReadyMethodHandler;
 
@@ -129,11 +129,11 @@ namespace Mixer.Base.Clients
 
             await this.Send(packet, checkIfAuthenticated: false);
 
-            await this.WaitForResponse(() => { return this.authenticateSuccessful; });
+            await this.WaitForResponse(() => { return this.Authenticated; });
 
             this.OnMethodOccurred -= InteractiveClient_ReadyMethodHandler;
 
-            return this.authenticateSuccessful;
+            return this.Authenticated;
         }
 
         /// <summary>
@@ -522,7 +522,7 @@ namespace Mixer.Base.Clients
         {
             if (e.method.Equals("hello"))
             {
-                this.connectSuccessful = true;
+                this.Connected = true;
             }
         }
 
@@ -531,7 +531,7 @@ namespace Mixer.Base.Clients
             JToken value;
             if (e.method.Equals("onReady") && e.parameters.TryGetValue("isReady", out value) && (bool)value)
             {
-                this.authenticateSuccessful = true;
+                this.Authenticated = true;
             }
         }
     }
