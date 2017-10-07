@@ -73,7 +73,7 @@ namespace Mixer.Sample
             if (this.connection != null)
             {
                 this.user = await this.connection.Users.GetCurrentUser();
-                this.channel = await this.connection.Channels.GetChannel("ChannelOne");
+                this.channel = await this.connection.Channels.GetChannel(this.user.username);
 
                 this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.channel);
 
