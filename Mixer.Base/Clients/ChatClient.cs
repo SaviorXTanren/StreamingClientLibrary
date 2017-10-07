@@ -70,7 +70,6 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
-            this.OnDisconnectOccurred -= ChatClient_OnDisconnectOccurred;
             this.OnEventOccurred -= ChatClient_OnEventOccurred;
 
             int totalEndpoints = this.channelChat.endpoints.Count();
@@ -87,7 +86,6 @@ namespace Mixer.Base.Clients
 
             if (this.connectSuccessful)
             {
-                this.OnDisconnectOccurred += ChatClient_OnDisconnectOccurred;
                 this.OnEventOccurred += ChatClient_OnEventOccurred;
             }
 
@@ -303,16 +301,6 @@ namespace Mixer.Base.Clients
                 case "ClearMessages":
                     this.SendSpecificEvent(eventPacket, this.OnClearMessagesOccurred);
                     break;
-            }
-        }
-
-        private async void ChatClient_OnDisconnectOccurred(object sender, WebSocketCloseStatus e)
-        {
-            this.connectSuccessful = false;
-            this.authenticateSuccessful = false;
-            if (await this.Connect())
-            {
-                await this.Authenticate();
             }
         }
     }

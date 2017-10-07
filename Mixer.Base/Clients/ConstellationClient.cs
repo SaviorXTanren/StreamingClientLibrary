@@ -152,7 +152,6 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
-            this.OnDisconnectOccurred -= ConstellationClient_OnDisconnectOccurred;
             this.OnEventOccurred -= ConstellationClient_OnEventOccurred;
 
             this.OnEventOccurred += ConstellationClient_HelloMethodHandler;
@@ -165,7 +164,6 @@ namespace Mixer.Base.Clients
 
             if (this.connectSuccessful)
             {
-                this.OnDisconnectOccurred += ConstellationClient_OnDisconnectOccurred;
                 this.OnEventOccurred += ConstellationClient_OnEventOccurred;
             }
 
@@ -235,13 +233,6 @@ namespace Mixer.Base.Clients
                 this.connectSuccessful = true;
                 this.authenticateSuccessful = true;
             }
-        }
-
-        private async void ConstellationClient_OnDisconnectOccurred(object sender, WebSocketCloseStatus e)
-        {
-            this.connectSuccessful = false;
-            this.authenticateSuccessful = false;
-            await this.Connect();
         }
     }
 }

@@ -86,7 +86,6 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
-            this.OnDisconnectOccurred -= InteractiveClient_OnDisconnectOccurred;
             this.OnMethodOccurred -= InteractiveClient_OnMethodOccurred;
 
             int totalEndpoints = this.interactiveConnections.Count();
@@ -103,7 +102,6 @@ namespace Mixer.Base.Clients
 
             if (this.connectSuccessful)
             {
-                this.OnDisconnectOccurred += InteractiveClient_OnDisconnectOccurred;
                 this.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
             }
 
@@ -534,16 +532,6 @@ namespace Mixer.Base.Clients
             if (e.method.Equals("onReady") && e.parameters.TryGetValue("isReady", out value) && (bool)value)
             {
                 this.authenticateSuccessful = true;
-            }
-        }
-
-        private async void InteractiveClient_OnDisconnectOccurred(object sender, WebSocketCloseStatus e)
-        {
-            this.connectSuccessful = false;
-            this.authenticateSuccessful = false;
-            if (await this.Connect())
-            {
-                await this.Ready();
             }
         }
     }

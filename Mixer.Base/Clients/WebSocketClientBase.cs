@@ -1,5 +1,4 @@
 ﻿using Mixer.Base.Model.Client;
-using Mixer.Base.Model.Interactive;
 using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
