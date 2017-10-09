@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -165,6 +164,10 @@ namespace Mixer.Base.Clients
             if (this.Connected)
             {
                 this.OnEventOccurred += ConstellationClient_OnEventOccurred;
+                if (this.Authenticated)
+                {
+                    this.StartBackgroundPing();
+                }
             }
 
             return this.Connected;
@@ -213,6 +216,11 @@ namespace Mixer.Base.Clients
 
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyNoErrors(reply);
+        }
+
+        protected override async Task<bool> KeepAlivePing()
+        {
+            return await this.Ping();
         }
 
         private void ConstellationClient_OnEventOccurred(object sender, EventPacket eventPacket)

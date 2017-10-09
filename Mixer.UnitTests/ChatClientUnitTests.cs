@@ -43,6 +43,18 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void Ping()
+        {
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
+            {
+                await this.AuthenticateChat(chatClient);
+
+                bool ping = await chatClient.Ping();
+                Assert.IsTrue(ping);
+            });
+        }
+
+        [TestMethod]
         public void SendMessage()
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>

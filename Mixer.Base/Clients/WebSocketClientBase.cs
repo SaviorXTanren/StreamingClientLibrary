@@ -31,6 +31,8 @@ namespace Mixer.Base.Clients
 
         private int bufferSize = 4096 * 20;
 
+        private CancellationTokenSource tokenSource;
+
         public WebSocketClientBase()
         {
             this.CurrentPacketID = 0;
@@ -97,6 +99,8 @@ namespace Mixer.Base.Clients
 
             this.CurrentPacketID++;
         }
+
+        protected abstract Task<bool> KeepAlivePing();
 
         protected async Task<ReplyPacket> SendAndListen(MethodPacket packet, bool checkIfAuthenticated = true)
         {
@@ -182,6 +186,27 @@ namespace Mixer.Base.Clients
             }
         }
 
+        protected void StartBackgroundPing()
+        {
+            this.tokenSource = new CancellationTokenSource();
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    if (!await this.KeepAlivePing())
+                    {
+                        this.DisconnectOccurred(WebSocketCloseStatus.ProtocolError);
+                    }
+                    await Task.Delay(30000);
+                }
+            }, this.tokenSource.Token);
+        }
+
+        protected void StopBackgroundPing()
+        {
+            this.tokenSource.Cancel();
+        }
+
         private async Task ReceiveInternal()
         {
             await Task.Delay(100);
@@ -242,7 +267,7 @@ namespace Mixer.Base.Clients
                         }
                         else
                         {
-                            this.DisconnectOccurred(result);
+                            this.DisconnectOccurred(result.CloseStatus);
                         }
                     }
                 }
@@ -257,12 +282,13 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private void DisconnectOccurred(WebSocketReceiveResult result)
+        private void DisconnectOccurred(WebSocketCloseStatus? result)
         {
             this.Connected = this.Authenticated = false;
+            this.StopBackgroundPing();
             if (this.OnDisconnectOccurred != null)
             {
-                this.OnDisconnectOccurred(this, result.CloseStatus.GetValueOrDefault());
+                this.OnDisconnectOccurred(this, result.GetValueOrDefault());
             }
         }
     }

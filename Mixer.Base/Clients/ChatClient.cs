@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -113,7 +112,27 @@ namespace Mixer.Base.Clients
 
             this.OnReplyOccurred -= AuthenticateEventHandler;
 
+            if (this.Authenticated)
+            {
+                this.StartBackgroundPing();
+            }
+
             return this.Authenticated;
+        }
+
+        /// <summary>
+        /// Pings the Mixer Chat service
+        /// </summary>
+        /// <returns>Whether the service can be contacted or not</returns>
+        public async Task<bool> Ping()
+        {
+            MethodPacket packet = new MethodPacket()
+            {
+                method = "ping",
+                arguments = new JArray(),
+            };
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.VerifyNoErrors(reply);
         }
 
         /// <summary>
@@ -245,6 +264,11 @@ namespace Mixer.Base.Clients
             };
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.VerifyDataExists(reply);
+        }
+
+        protected override async Task<bool> KeepAlivePing()
+        {
+            return await this.Ping();
         }
 
         private void ConnectEventHandler(object sender, EventPacket e)

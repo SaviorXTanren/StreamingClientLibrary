@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -132,6 +131,11 @@ namespace Mixer.Base.Clients
             await this.WaitForResponse(() => { return this.Authenticated; });
 
             this.OnMethodOccurred -= InteractiveClient_ReadyMethodHandler;
+
+            if (this.Authenticated)
+            {
+                this.StartBackgroundPing();
+            }
 
             return this.Authenticated;
         }
@@ -516,6 +520,16 @@ namespace Mixer.Base.Clients
                     this.SendSpecificMethod(methodPacket, this.OnGiveInput);
                     break;
             }
+        }
+
+        protected override async Task<bool> KeepAlivePing()
+        {
+            DateTimeOffset? dateTime = await this.GetTime();
+            if (dateTime != null)
+            {
+                return DateTimeOffset.UtcNow.Date.Equals(dateTime.GetValueOrDefault().Date);
+            }
+            return false;
         }
 
         private void InteractiveClient_HelloMethodHandler(object sender, MethodPacket e)
