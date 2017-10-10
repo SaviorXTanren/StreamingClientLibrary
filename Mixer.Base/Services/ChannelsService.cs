@@ -262,6 +262,32 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Adds and removes the specified roles for the specified user.
+        /// </summary>
+        /// <param name="channel">The channel to update the user for</param>
+        /// <param name="user">The user to update</param>
+        /// <param name="rolesToAdd">The roles to add</param>
+        /// <param name="rolesToRemove">The roles to remove</param>
+        /// <returns>The updated user with their roles</returns>
+        public async Task<bool> UpdateUserRoles(ChannelModel channel, UserModel user, IEnumerable<string> rolesToAdd = null, IEnumerable<string> rolesToRemove = null)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(user, "user");
+
+            if (rolesToAdd == null && rolesToRemove == null)
+            {
+                throw new ArgumentException("rolesToAdd or rolesToRemove must not be null");
+            }
+
+            JObject obj = new JObject();
+            if (rolesToAdd != null) { obj.Add("add", JToken.FromObject(rolesToAdd)); };
+            if (rolesToRemove != null) { obj.Add("remove", JToken.FromObject(rolesToRemove)); }
+
+            HttpResponseMessage response = await this.PatchAsync("channels/" + channel.id + "/users/" + user.id, this.CreateContentFromObject(obj));
+            return (response.StatusCode == System.Net.HttpStatusCode.OK);
+        }
+
+        /// <summary>
         /// Gets the Discord bot information for the specified channel.
         /// </summary>
         /// <param name="channel">The channel to get Discord bot information for</param>

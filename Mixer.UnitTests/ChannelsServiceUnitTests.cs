@@ -242,6 +242,36 @@ namespace Mixer.UnitTests
             });
         }
 
+        [TestMethod]
+        public void UpdateUserRoles()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                UserModel user = await connection.Users.GetUser("ChannelOne");
+
+                Assert.IsNotNull(user);
+
+                bool result = await connection.Channels.UpdateUserRoles(channel, user, new List<string>() { "Mod" }, null);
+
+                Assert.IsTrue(result);
+
+                IEnumerable<UserWithGroupsModel> userRoles = await connection.Channels.GetUsersWithRoles(channel, "Mod");
+
+                Assert.IsNotNull(userRoles);
+                Assert.IsTrue(userRoles.Any(ug => ug.username.Equals("ChannelOne")));
+
+                result = await connection.Channels.UpdateUserRoles(channel, user, null, new List<string>() { "Mod" });
+
+                Assert.IsTrue(result);
+
+                userRoles = await connection.Channels.GetUsersWithRoles(channel, "Mod");
+
+                Assert.IsNotNull(userRoles);
+                Assert.IsFalse(userRoles.Any(ug => ug.username.Equals("ChannelOne")));
+            });
+        }
 
         [TestMethod]
         public void GetUpdateDiscord()
