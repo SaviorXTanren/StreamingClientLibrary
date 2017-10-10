@@ -193,7 +193,7 @@ namespace Mixer.Base.Clients
             {
                 while (true)
                 {
-                    if (!await this.KeepAlivePing())
+                    if (this.tokenSource.IsCancellationRequested || !await this.KeepAlivePing())
                     {
                         this.DisconnectOccurred(WebSocketCloseStatus.ProtocolError);
                     }
