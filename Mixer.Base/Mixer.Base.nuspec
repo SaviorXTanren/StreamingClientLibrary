@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>mixer-client-csharp</id>
-    <version>0.3.3.1-beta</version>
+    <version>0.3.4-beta</version>
     <title>Mixer Client Library</title>
     <authors>Matthew Olivo (SaviorXTanren)</authors>
     <owners>Matthew Olivo (SaviorXTanren)</owners>
@@ -16,8 +16,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     </description>
     <summary>C# client library for Mixer streaming service: https://mixer.com</summary>
     <releaseNotes>
-- Adding background pinging for all web socket clients to help keep socket connection open
-- Adding UpdateUserRoles() Channels API
+- Adding semaphore lock to prevent multiple Send calls from going off at the same time
+- Fixing bugs with the getTime API result checks
     </releaseNotes>
     <copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017</copyright>
     <tags>Mixer Streaming Bot Chat Interactive</tags>
