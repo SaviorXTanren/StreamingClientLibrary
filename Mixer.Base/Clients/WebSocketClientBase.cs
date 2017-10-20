@@ -29,9 +29,10 @@ namespace Mixer.Base.Clients
         public bool Connected { get; protected set; }
         public bool Authenticated { get; protected set; }
 
-        private int bufferSize = 4096 * 20;
+        private const int bufferSize = 1000000;
 
         private CancellationTokenSource tokenSource;
+        private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
 
         public WebSocketClientBase()
         {
@@ -104,6 +105,8 @@ namespace Mixer.Base.Clients
 
         protected async Task<ReplyPacket> SendAndListen(MethodPacket packet, bool checkIfAuthenticated = true)
         {
+            await this.sendSemaphore.WaitAsync();
+
             uint packetID = this.CurrentPacketID;
             ReplyPacket replyPacket = null;
 
@@ -122,6 +125,8 @@ namespace Mixer.Base.Clients
             await this.WaitForResponse(() => { return (replyPacket != null); });
 
             this.OnReplyOccurred -= listener;
+
+            this.sendSemaphore.Release();
 
             return replyPacket;
         }
@@ -214,7 +219,7 @@ namespace Mixer.Base.Clients
             {
                 if (this.webSocket.State == WebSocketState.Open)
                 {
-                    byte[] buffer = new byte[this.bufferSize];
+                    byte[] buffer = new byte[WebSocketClientBase.bufferSize];
                     WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
                     if (result != null)
@@ -270,6 +275,14 @@ namespace Mixer.Base.Clients
                             this.DisconnectOccurred(result.CloseStatus);
                         }
                     }
+                }
+                else if (this.webSocket.State == WebSocketState.CloseReceived || this.webSocket.State == WebSocketState.Closed)
+                {
+                    this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
+                }
+                else if (this.webSocket.State == WebSocketState.Aborted)
+                {
+                    this.DisconnectOccurred(this.webSocket.CloseStatus);
                 }
             }
         }

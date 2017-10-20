@@ -152,7 +152,7 @@ namespace Mixer.UnitTests
                 DateTimeOffset? dateTime = await interactiveClient.GetTime();
 
                 Assert.IsNotNull(dateTime);
-                Assert.IsTrue(DateTimeOffset.UtcNow.Date.Equals(dateTime.GetValueOrDefault().Date));
+                Assert.IsTrue(DateTimeOffset.Now.Date.Equals(dateTime.GetValueOrDefault().Date));
             });
         }
 

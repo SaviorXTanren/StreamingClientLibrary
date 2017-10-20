@@ -527,7 +527,7 @@ namespace Mixer.Base.Clients
             DateTimeOffset? dateTime = await this.GetTime();
             if (dateTime != null)
             {
-                return DateTimeOffset.UtcNow.Date.Equals(dateTime.GetValueOrDefault().Date);
+                return DateTimeOffset.Now.Date.Equals(dateTime.GetValueOrDefault().Date);
             }
             return false;
         }
