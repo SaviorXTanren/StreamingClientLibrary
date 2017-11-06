@@ -28,12 +28,17 @@ namespace Mixer.Base.Util
 
         public static IEnumerable<string> GetEnumNames<T>()
         {
+            return EnumHelper.GetEnumNames(EnumHelper.GetEnumList<T>());
+        }
+
+        public static IEnumerable<T> GetEnumList<T>()
+        {
             List<T> values = new List<T>();
             foreach (T value in Enum.GetValues(typeof(T)))
             {
                 values.Add(value);
             }
-            return EnumHelper.GetEnumNames(values);
+            return values;
         }
 
         public static T GetEnumValueFromString<T>(string str)
