@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>mixer-client-csharp</id>
-    <version>0.4.0-beta</version>
+    <version>0.4.0.1-beta</version>
     <title>Mixer Client Library</title>
     <authors>Matthew Olivo (SaviorXTanren)</authors>
     <owners>Matthew Olivo (SaviorXTanren)</owners>
