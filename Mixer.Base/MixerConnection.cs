@@ -163,17 +163,17 @@ namespace Mixer.Base
             return url + "?" + await content.ReadAsStringAsync();
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string loginSuccessHtmlPageFilePath = null)
         {
-            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes);
+            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, loginSuccessHtmlPageFilePath);
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string loginSuccessHtmlPageFilePath = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(OAUTH_LOCALHOST_URL);
+            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(OAUTH_LOCALHOST_URL, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL);
