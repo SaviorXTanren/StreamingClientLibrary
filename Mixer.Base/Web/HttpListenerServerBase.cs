@@ -13,6 +13,7 @@ namespace Mixer.Base.Web
 
         private HttpListener listener;
         private Thread listenerThread;
+        private CancellationTokenSource listenerThreadCancellationTokenSource = new CancellationTokenSource();
 
         public HttpListenerServerBase(string address)
         {
@@ -32,7 +33,7 @@ namespace Mixer.Base.Web
 
         public void End()
         {
-            this.listenerThread.Abort();
+            this.listenerThreadCancellationTokenSource.Cancel();
             this.listener.Abort();
         }
 
@@ -44,11 +45,15 @@ namespace Mixer.Base.Web
 
         private void Listen(object s)
         {
-            while (true)
+            while (!this.listenerThreadCancellationTokenSource.IsCancellationRequested)
             {
+                this.listenerThreadCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                 var result = this.listener.BeginGetContext(this.ListenerCallback, this.listener);
                 result.AsyncWaitHandle.WaitOne();
             }
+
+            this.listenerThreadCancellationTokenSource.Token.ThrowIfCancellationRequested();
         }
 
         private void ListenerCallback(IAsyncResult result)

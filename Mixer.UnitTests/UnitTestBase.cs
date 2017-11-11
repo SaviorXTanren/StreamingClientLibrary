@@ -3,14 +3,14 @@ using Mixer.Base;
 using Mixer.Base.Model.Client;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Threading.Tasks;
 
 namespace Mixer.UnitTests
 {
     public abstract class UnitTestBase
     {
-        public static readonly string clientID = ConfigurationManager.AppSettings["ClientID"];
+        public const string clientID = "a95a8520f369fdd46d08aba183953c5c8a4c3822affec476";
+
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
             OAuthClientScopeEnum.channel__details__self,

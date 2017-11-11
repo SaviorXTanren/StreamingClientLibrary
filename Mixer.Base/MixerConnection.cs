@@ -177,8 +177,8 @@ namespace Mixer.Base
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL);
-
-            Process.Start(url);
+            ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };
+            Process.Start(startInfo);
 
             string authorizationCode = await oauthServer.WaitForAuthorizationCode();
             oauthServer.End();
