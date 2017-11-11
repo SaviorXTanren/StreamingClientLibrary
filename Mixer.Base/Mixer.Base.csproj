@@ -8,14 +8,14 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.4.0.1-beta</Version>
+    <Version>0.4.0.2-beta</Version>
     <Description>C# client library for Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Changing project type to .NET Standard 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>- Adding Chat &amp; Channel APIs for getting a single user</PackageReleaseNotes>
     <AssemblyVersion>0.4.0.1</AssemblyVersion>
     <FileVersion>0.4.0.1</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
