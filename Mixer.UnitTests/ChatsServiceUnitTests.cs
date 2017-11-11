@@ -42,6 +42,11 @@ namespace Mixer.UnitTests
                 IEnumerable<ChatUserModel> users = await connection.Chats.GetUsers(channel);
 
                 Assert.IsNotNull(users);
+
+                if (users.Count() > 0)
+                {
+                    ChatUserModel user = await connection.Chats.GetUser(channel, users.First().userId.GetValueOrDefault());
+                }
             });
         }
     }

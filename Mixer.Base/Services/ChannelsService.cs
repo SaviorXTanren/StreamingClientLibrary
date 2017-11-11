@@ -246,6 +246,19 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets the specified user and any roles they may have for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get users for</param>
+        /// <param name="userID">The ID of the user to search for</param>
+        /// <returns>The user with roles for the channel</returns>
+        public async Task<UserWithGroupsModel> GetUser(ChannelModel channel, uint userID)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            IEnumerable<UserWithGroupsModel> users = await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users?where=id:eq:" + userID);
+            return users.FirstOrDefault();
+        }
+
+        /// <summary>
         /// Gets all of the users who have the specified role for the specified channel. The search can be limited to a maximum number
         /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
         /// threshold and slightly more than the maximum number may be returned.

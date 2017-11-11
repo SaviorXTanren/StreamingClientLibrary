@@ -2,6 +2,7 @@
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
@@ -22,6 +23,19 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetAsync<ChannelChatModel>("chats/" + channel.id);
+        }
+
+        /// <summary>
+        /// Gets the specified user ID's chat information in relation to the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get chat users for</param>
+        /// <param name="userID">The ID of the user</param>
+        /// <returns>The chat information for the specified user</returns>liter
+        public async Task<ChatUserModel> GetUser(ChannelModel channel, uint userID)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            IEnumerable<ChatUserModel> users = await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users?where=id:eq:" + userID);
+            return users.FirstOrDefault();
         }
 
         /// <summary>

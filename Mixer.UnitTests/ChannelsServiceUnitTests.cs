@@ -239,6 +239,11 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(users);
                 Assert.IsTrue(users.Count() > 0);
+
+                UserWithGroupsModel user = await connection.Channels.GetUser(channel, users.First().id);
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > 0);
             });
         }
 
