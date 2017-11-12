@@ -13,7 +13,6 @@ namespace Mixer.Base.Web
         private string address;
 
         private HttpListener listener;
-        private Thread listenerThread;
         private CancellationTokenSource listenerThreadCancellationTokenSource = new CancellationTokenSource();
 
         public HttpListenerServerBase(string address)
