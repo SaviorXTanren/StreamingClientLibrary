@@ -55,13 +55,17 @@ namespace Mixer.UnitTests
             TestWrapper(async (MixerConnection connection) =>
             {
                 OAuthTokenModel token = connection.GetOAuthTokenCopy();
-
                 Assert.IsNotNull(token);
+
+                ChannelModel channel = await connection.Channels.GetChannel("ChannelOne");
+                Assert.IsNotNull(channel);
 
                 await connection.RefreshOAuthToken();
                 token = connection.GetOAuthTokenCopy();
-
                 Assert.IsNotNull(token);
+
+                channel = await connection.Channels.GetChannel("ChannelOne");
+                Assert.IsNotNull(channel);
             });
         }
 
