@@ -98,8 +98,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mixer.Base\Mixer.Base.csproj">
-      <Project>{9a4792ad-5e16-4de0-a8f4-0e8021f354e3}</Project>
+    <ProjectReference Include="..\..\Mixer.Base\Mixer.Base.csproj">
+      <Project>{2442fcd3-f207-41d8-a42b-aa2b34b66b86}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mixer.ChatSample\Mixer.ChatSample.csproj">

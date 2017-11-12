@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Mixer.Base.Web
@@ -27,8 +28,7 @@ namespace Mixer.Base.Web
             this.listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
 
             this.listener.Start();
-            this.listenerThread = new Thread(new ParameterizedThreadStart(this.Listen));
-            this.listenerThread.Start();
+            Task.Factory.StartNew(this.Listen, listenerThreadCancellationTokenSource.Token);
         }
 
         public void End()
