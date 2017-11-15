@@ -31,9 +31,6 @@ namespace Mixer.Base.Clients
 
         private const int bufferSize = 1000000;
 
-        private CancellationTokenSource tokenSource;
-        private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
-
         public WebSocketClientBase()
         {
             this.CurrentPacketID = 0;
@@ -80,7 +77,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        protected async Task Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        protected async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             if (!this.Connected)
             {
@@ -99,20 +96,19 @@ namespace Mixer.Base.Clients
             await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
 
             this.CurrentPacketID++;
+
+            return packet.id;
         }
 
-        protected abstract Task<bool> KeepAlivePing();
-
-        protected async Task<ReplyPacket> SendAndListen(MethodPacket packet, bool checkIfAuthenticated = true)
+        protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
-            await this.sendSemaphore.WaitAsync();
+            uint? id = null;
 
-            uint packetID = this.CurrentPacketID;
             ReplyPacket replyPacket = null;
 
             EventHandler<ReplyPacket> listener = new EventHandler<ReplyPacket>(delegate (object sender, ReplyPacket reply)
             {
-                if (reply.id == packetID)
+                if (id != null && reply.id == id)
                 {
                     replyPacket = reply;
                 }
@@ -120,15 +116,19 @@ namespace Mixer.Base.Clients
 
             this.OnReplyOccurred += listener;
 
-            await this.Send(packet, checkIfAuthenticated);
+            id = await this.Send(packet, checkIfAuthenticated);
 
             await this.WaitForResponse(() => { return (replyPacket != null); });
 
             this.OnReplyOccurred -= listener;
 
-            this.sendSemaphore.Release();
-
             return replyPacket;
+        }
+
+        protected async Task<T> SendAndListen<T>(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        {
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<T>(reply);
         }
 
         protected bool VerifyDataExists(ReplyPacket replyPacket)
@@ -185,31 +185,10 @@ namespace Mixer.Base.Clients
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)
         {
-            for (int i = 0; i < 10 && !valueToCheck(); i++)
+            for (int i = 0; i < 500 && !valueToCheck(); i++)
             {
-                await Task.Delay(500);
+                await Task.Delay(10);
             }
-        }
-
-        protected void StartBackgroundPing()
-        {
-            this.tokenSource = new CancellationTokenSource();
-            Task.Run(async () =>
-            {
-                while (true)
-                {
-                    if (this.tokenSource.IsCancellationRequested || !await this.KeepAlivePing())
-                    {
-                        this.DisconnectOccurred(WebSocketCloseStatus.ProtocolError);
-                    }
-                    await Task.Delay(30000);
-                }
-            }, this.tokenSource.Token);
-        }
-
-        protected void StopBackgroundPing()
-        {
-            this.tokenSource.Cancel();
         }
 
         private async Task ReceiveInternal()
@@ -298,7 +277,6 @@ namespace Mixer.Base.Clients
         private void DisconnectOccurred(WebSocketCloseStatus? result)
         {
             this.Connected = this.Authenticated = false;
-            this.StopBackgroundPing();
             if (this.OnDisconnectOccurred != null)
             {
                 this.OnDisconnectOccurred(this, result.GetValueOrDefault());

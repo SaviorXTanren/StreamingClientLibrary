@@ -20,6 +20,7 @@ namespace Mixer.UnitTests
         private const string JoystickControlID = "MixerUnitTestJoystickControl";
 
         private static InteractiveGameListingModel testGameListing;
+        private static InteractiveClient interactiveClient;
 
         public static InteractiveButtonControlModel CreateTestButton()
         {
@@ -104,6 +105,11 @@ namespace Mixer.UnitTests
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
                 testGameListing = await InteractiveServiceUnitTests.CreateTestGame(connection, channel);
+
+                interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, testGameListing);
+
+                Assert.IsTrue(await interactiveClient.Connect());
+                Assert.IsTrue(await interactiveClient.Ready());
             });
         }
 
@@ -112,6 +118,8 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
+                await interactiveClient.Disconnect();
+
                 await InteractiveServiceUnitTests.DeleteTestGame(connection, testGameListing);
             });
         }
@@ -123,36 +131,16 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void ConnectToInteractive()
-        {
-            this.InteractiveWrapper((MixerConnection connection, InteractiveClient interactiveClient) =>
-            {
-                return Task.FromResult(0);
-            });
-        }
-
-        [TestMethod]
-        public void ReadyInteractive()
-        {
-            this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
-            {
-                await this.ReadyInteractive(interactiveClient);
-            });
-        }
-
-        [TestMethod]
         public void GetTime()
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 DateTimeOffset? dateTime = await interactiveClient.GetTime();
 
                 Assert.IsNotNull(dateTime);
-                Assert.IsTrue(DateTimeOffset.Now.Date.Equals(dateTime.GetValueOrDefault().Date));
+                Assert.IsTrue(DateTimeOffset.Now.Year.Equals(dateTime.GetValueOrDefault().Year));
             });
         }
 
@@ -161,14 +149,11 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 InteractiveIssueMemoryWarningModel memoryWarning = await interactiveClient.GetMemoryStates();
 
                 Assert.IsNotNull(memoryWarning);
-                Assert.IsTrue(memoryWarning.totalBytes > 0);
                 Assert.IsNotNull(memoryWarning.resources);
             });
         }
@@ -178,14 +163,12 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 InteractiveSetBandwidthThrottleModel bandwidthThrottle = new InteractiveSetBandwidthThrottleModel();
                 bandwidthThrottle.AddThrottle("giveInput", 10000000, 3000000);
 
-                bool result = await interactiveClient.SetBandwidthThrottle(bandwidthThrottle);
+                bool result = await interactiveClient.SetBandwidthThrottleWithResponse(bandwidthThrottle);
 
                 Assert.IsTrue(result);
 
@@ -203,8 +186,6 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 InteractiveParticipantCollectionModel participants = await interactiveClient.GetAllParticipants();
@@ -219,8 +200,6 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 DateTimeOffset dateTime = DateTimeOffset.Now;
@@ -236,8 +215,6 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
                 InteractiveParticipantCollectionModel participants = await interactiveClient.GetAllParticipants();
@@ -247,7 +224,7 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                participants = await interactiveClient.UpdateParticipants(participants.participants);
+                participants = await interactiveClient.UpdateParticipantsWithResponse(participants.participants);
 
                 Assert.IsNotNull(participants);
                 Assert.IsNotNull(participants.participants);
@@ -259,8 +236,6 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
@@ -271,7 +246,7 @@ namespace Mixer.UnitTests
                     sceneID = testScene.sceneID
                 };
 
-                bool result = await interactiveClient.CreateGroups(new List<InteractiveGroupModel>() { testGroup });
+                bool result = await interactiveClient.CreateGroupsWithResponse(new List<InteractiveGroupModel>() { testGroup });
 
                 Assert.IsTrue(result);
 
@@ -288,7 +263,7 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                groups = await interactiveClient.UpdateGroups(new List<InteractiveGroupModel>() { testGroup });
+                groups = await interactiveClient.UpdateGroupsWithResponse(new List<InteractiveGroupModel>() { testGroup });
 
                 Assert.IsNotNull(groups);
                 Assert.IsNotNull(groups.groups);
@@ -298,7 +273,7 @@ namespace Mixer.UnitTests
 
                 this.ClearPackets();
 
-                result = await interactiveClient.DeleteGroup(testGroup, defaultGroup);
+                result = await interactiveClient.DeleteGroupWithResponse(testGroup, defaultGroup);
 
                 Assert.IsTrue(result);
 
@@ -311,13 +286,11 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
 
-                InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.UpdateScenes(new List<InteractiveConnectedSceneModel>() { testScene });
+                InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.UpdateScenesWithResponse(new List<InteractiveConnectedSceneModel>() { testScene });
 
                 Assert.IsNotNull(scenes);
                 Assert.IsNotNull(scenes.scenes);
@@ -334,8 +307,6 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 InteractiveConnectedSceneModel testScene = await this.CreateScene(interactiveClient);
 
                 this.ClearPackets();
@@ -343,7 +314,7 @@ namespace Mixer.UnitTests
                 InteractiveControlModel testControl = InteractiveClientUnitTests.CreateTestButton();
 
                 List<InteractiveControlModel> controls = new List<InteractiveControlModel>() { testControl, InteractiveClientUnitTests.CreateTestJoystick() };
-                bool result = await interactiveClient.CreateControls(testScene, controls);
+                bool result = await interactiveClient.CreateControlsWithResponse(testScene, controls);
 
                 Assert.IsTrue(result);
 
@@ -352,7 +323,7 @@ namespace Mixer.UnitTests
                 Assert.IsNotNull(testControl);
 
                 controls = new List<InteractiveControlModel>() { testControl };
-                InteractiveConnectedControlCollectionModel controlCollection = await interactiveClient.UpdateControls(testScene, controls);
+                InteractiveConnectedControlCollectionModel controlCollection = await interactiveClient.UpdateControlsWithResponse(testScene, controls);
 
                 Assert.IsNotNull(controlCollection);
                 Assert.IsNotNull(controlCollection.buttons);
@@ -361,7 +332,7 @@ namespace Mixer.UnitTests
                 testControl = testScene.buttons.FirstOrDefault(c => c.controlID.Equals(ButtonControlID));
                 Assert.IsNotNull(testControl);
 
-                result = await interactiveClient.DeleteControls(testScene, controls);
+                result = await interactiveClient.DeleteControlsWithResponse(testScene, controls);
 
                 Assert.IsTrue(result);
 
@@ -377,11 +348,9 @@ namespace Mixer.UnitTests
         {
             this.InteractiveWrapper(async (MixerConnection connection, InteractiveClient interactiveClient) =>
             {
-                await this.ReadyInteractive(interactiveClient);
-
                 this.ClearPackets();
 
-                bool result = await interactiveClient.CaptureSparkTransaction(Guid.Empty.ToString());
+                bool result = await interactiveClient.CaptureSparkTransactionWithResponse(Guid.Empty.ToString());
 
                 Assert.IsTrue(result);
             });
@@ -391,33 +360,21 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
-
-                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, testGameListing);
-
-                Assert.IsTrue(await interactiveClient.Connect());
-
                 interactiveClient.OnReplyOccurred += InteractiveClient_OnReplyOccurred;
                 interactiveClient.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
 
                 await function(connection, interactiveClient);
 
-                await interactiveClient.Disconnect();
+                interactiveClient.OnReplyOccurred -= InteractiveClient_OnReplyOccurred;
+                interactiveClient.OnMethodOccurred -= InteractiveClient_OnMethodOccurred;
             });
-        }
-
-        private async Task ReadyInteractive(InteractiveClient interactiveClient)
-        {
-            this.ClearPackets();
-
-            Assert.IsTrue(await interactiveClient.Ready());
         }
 
         private async Task<InteractiveConnectedSceneModel> CreateScene(InteractiveClient interactiveClient)
         {
             this.ClearPackets();
 
-            InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.CreateScenes(new List<InteractiveConnectedSceneModel>() { new InteractiveConnectedSceneModel() { sceneID = SceneID } });
+            InteractiveConnectedSceneCollectionModel scenes = await interactiveClient.CreateScenesWithResponse(new List<InteractiveConnectedSceneModel>() { new InteractiveConnectedSceneModel() { sceneID = SceneID } });
 
             Assert.IsNotNull(scenes);
             Assert.IsNotNull(scenes.scenes);
@@ -457,7 +414,7 @@ namespace Mixer.UnitTests
 
             InteractiveConnectedSceneModel backupScene = scenes.scenes.FirstOrDefault(s => s.sceneID.Equals("default"));
 
-            bool result = await interactiveClient.DeleteScene(scene, backupScene);
+            bool result = await interactiveClient.DeleteSceneWithResponse(scene, backupScene);
 
             Assert.IsTrue(result);
         }

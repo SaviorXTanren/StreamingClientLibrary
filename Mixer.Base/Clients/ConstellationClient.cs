@@ -164,10 +164,6 @@ namespace Mixer.Base.Clients
             if (this.Connected)
             {
                 this.OnEventOccurred += ConstellationClient_OnEventOccurred;
-                if (this.Authenticated)
-                {
-                    this.StartBackgroundPing();
-                }
             }
 
             return this.Connected;
@@ -179,9 +175,17 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Ping()
         {
-            MethodPacket packet = new MethodPacket() { method = "ping" };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
+            return this.VerifyNoErrors(await this.SendAndListen(new MethodPacket("ping")));
+        }
+
+        /// <summary>
+        /// Subscribes to the specified events.
+        /// </summary>
+        /// <param name="events">The events to subscribe to</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task SubscribeToEvents(IEnumerable<ConstellationEventType> events)
+        {
+            await this.Send(this.BuildSubscribeToEventsPacket(events));
         }
 
         /// <summary>
@@ -189,16 +193,28 @@ namespace Mixer.Base.Clients
         /// </summary>
         /// <param name="events">The events to subscribe to</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> SubscribeToEvents(IEnumerable<ConstellationEventType> events)
+        public async Task<bool> SubscribeToEventsWithResponse(IEnumerable<ConstellationEventType> events)
         {
+            return this.VerifyNoErrors(await this.SendAndListen(this.BuildSubscribeToEventsPacket(events)));
+        }
+
+        private MethodPacket BuildSubscribeToEventsPacket(IEnumerable<ConstellationEventType> events)
+        {
+            Validator.ValidateList(events, "events");
             IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
+            JObject parameters = new JObject();
+            parameters.Add("events", new JArray(eventStrings));
+            return new MethodParamsPacket("livesubscribe", parameters);
+        }
 
-            MethodPacket packet = new MethodPacket() { method = "livesubscribe" };
-            packet.parameters = new JObject();
-            packet.parameters.Add("events", new JArray(eventStrings));
-
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
+        /// <summary>
+        /// Unsubscribes from the specified events.
+        /// </summary>
+        /// <param name="events">The events to unsubscribe from</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task UnsubscribeToEvents(IEnumerable<ConstellationEventType> events)
+        {
+            await this.Send(this.BuildUnsubscribeToEventsPacket(events));
         }
 
         /// <summary>
@@ -206,21 +222,18 @@ namespace Mixer.Base.Clients
         /// </summary>
         /// <param name="events">The events to unsubscribe from</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> UnsubscribeToEvents(IEnumerable<ConstellationEventType> events)
+        public async Task<bool> UnsubscribeToEventsWithResponse(IEnumerable<ConstellationEventType> events)
         {
-            IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
-
-            MethodPacket packet = new MethodPacket() { method = "liveunsubscribe" };
-            packet.parameters = new JObject();
-            packet.parameters.Add("events", new JArray(eventStrings));
-
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
+            return this.VerifyNoErrors(await this.SendAndListen(this.BuildUnsubscribeToEventsPacket(events)));
         }
 
-        protected override async Task<bool> KeepAlivePing()
+        private MethodPacket BuildUnsubscribeToEventsPacket(IEnumerable<ConstellationEventType> events)
         {
-            return await this.Ping();
+            Validator.ValidateList(events, "events");
+            IEnumerable<string> eventStrings = ConstellationClient.ConvertEventTypesToStrings(events);
+            JObject parameters = new JObject();
+            parameters.Add("events", new JArray(eventStrings));
+            return new MethodParamsPacket("liveunsubscribe", parameters);
         }
 
         private void ConstellationClient_OnEventOccurred(object sender, EventPacket eventPacket)

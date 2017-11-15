@@ -11,6 +11,8 @@ namespace Mixer.Base.Model.Client
             this.arguments = new JArray();
         }
 
+        public MethodPacket(string method) : this() { this.method = method; }
+
         public string method { get; set; }
 
         public bool discard { get; set; }
@@ -19,5 +21,25 @@ namespace Mixer.Base.Model.Client
 
         [JsonProperty("params")]
         public JObject parameters { get; set; }
+    }
+
+    public class MethodArgPacket : MethodPacket
+    {
+        public MethodArgPacket(string method, JArray arguments)
+            : base()
+        {
+            this.method = method;
+            this.arguments = arguments;
+        }
+    }
+
+    public class MethodParamsPacket : MethodPacket
+    {
+        public MethodParamsPacket(string method, JObject parameters)
+            : base()
+        {
+            this.method = method;
+            this.parameters = parameters;
+        }
     }
 }

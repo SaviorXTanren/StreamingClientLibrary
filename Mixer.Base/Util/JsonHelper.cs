@@ -9,9 +9,12 @@ namespace Mixer.Base.Util
         public static List<T> ConvertJArrayToTypedArray<T>(JArray array)
         {
             List<T> results = new List<T>();
-            foreach (JToken token in array)
+            if (array != null)
             {
-                results.Add(token.ToObject<T>());
+                foreach (JToken token in array)
+                {
+                    results.Add(token.ToObject<T>());
+                }
             }
             return results;
         }

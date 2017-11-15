@@ -131,11 +131,6 @@ namespace Mixer.InteractiveSample
 
             if (e.input.eventType.Equals("mousedown") && e.transactionID != null)
             {
-                if (await this.interactiveClient.CaptureSparkTransaction(e.transactionID))
-                {
-                    this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
-                }
-
                 InteractiveConnectedButtonControlModel button = this.buttons.FirstOrDefault(b => b.controlID.Equals(e.input.controlID));
                 if (button != null)
                 {
@@ -144,10 +139,12 @@ namespace Mixer.InteractiveSample
                     {
                         button.cooldown = DateTimeHelper.DateTimeOffsetToUnixTimestamp(DateTimeOffset.Now.AddSeconds(10));
                         await this.interactiveClient.UpdateControls(scene, new List<InteractiveConnectedButtonControlModel>() { button });
-
                         this.InteractiveDataTextBlock.Text += "Sent 10 second cooldown to button: " + e.input.controlID + Environment.NewLine;
                     }
                 }
+
+                await this.interactiveClient.CaptureSparkTransaction(e.transactionID);
+                this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
             }
         }
 

@@ -112,11 +112,6 @@ namespace Mixer.Base.Clients
 
             this.OnReplyOccurred -= AuthenticateEventHandler;
 
-            if (this.Authenticated)
-            {
-                this.StartBackgroundPing();
-            }
-
             return this.Authenticated;
         }
 
@@ -126,13 +121,17 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the service can be contacted or not</returns>
         public async Task<bool> Ping()
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "ping",
-                arguments = new JArray(),
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
+            return this.VerifyNoErrors(await this.SendAndListen(new MethodPacket("ping")));
+        }
+
+        /// <summary>
+        /// Sends a message.
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task SendMessage(string message)
+        {
+            await this.Send(this.CreateSendMessagePacket(message));
         }
 
         /// <summary>
@@ -140,15 +139,26 @@ namespace Mixer.Base.Clients
         /// </summary>
         /// <param name="message">The message to send</param>
         /// <returns>The event of the message</returns>
-        public async Task<ChatMessageEventModel> SendMessage(string message)
+        public async Task<ChatMessageEventModel> SendMessageWithResponse(string message)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "msg",
-                arguments = new JArray() { message },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);    
+            return await this.SendAndListen<ChatMessageEventModel>(this.CreateSendMessagePacket(message));
+        }
+
+        private MethodPacket CreateSendMessagePacket(string message)
+        {
+            Validator.ValidateString(message, "message");
+            return new MethodArgPacket("msg", new JArray() { message });
+        }
+
+        /// <summary>
+        /// Sends a whisper to the specified username.
+        /// </summary>
+        /// <param name="username">The username to whisper</param>
+        /// <param name="message">The message to send</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task Whisper(string username, string message)
+        {
+            await this.Send(this.BuildWhisperPacket(username, message));
         }
 
         /// <summary>
@@ -157,15 +167,28 @@ namespace Mixer.Base.Clients
         /// <param name="username">The username to whisper</param>
         /// <param name="message">The message to send</param>
         /// <returns>The event of the whisper</returns>
-        public async Task<ChatMessageEventModel> Whisper(string username, string message)
+        public async Task<ChatMessageEventModel> WhisperWithResponse(string username, string message)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "whisper",
-                arguments = new JArray() { username, message },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.GetSpecificReplyResultValue<ChatMessageEventModel>(reply);
+            return await this.SendAndListen<ChatMessageEventModel>(this.BuildWhisperPacket(username, message));
+        }
+
+        private MethodPacket BuildWhisperPacket(string username, string message)
+        {
+            Validator.ValidateString(username, "username");
+            Validator.ValidateString(message, "message");
+            return new MethodArgPacket("whisper", new JArray() { username, message });
+        }
+
+        /// <summary>
+        /// Starts a vote.
+        /// </summary>
+        /// <param name="question">The question to ask</param>
+        /// <param name="options">The available choices to select from</param>
+        /// <param name="durationInSeconds">The duration in seconds</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task StartVote(string question, IEnumerable<string> options, uint durationInSeconds)
+        {
+            await this.Send(this.BuildStartVotePacket(question, options, durationInSeconds));
         }
 
         /// <summary>
@@ -175,15 +198,26 @@ namespace Mixer.Base.Clients
         /// <param name="options">The available choices to select from</param>
         /// <param name="durationInSeconds">The duration in seconds</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> StartVote(string question, IEnumerable<string> options, uint durationInSeconds)
+        public async Task<bool> StartVoteWithResponse(string question, IEnumerable<string> options, uint durationInSeconds)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "vote:start",
-                arguments = new JArray() { question, new JArray() { options }, durationInSeconds },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyDataExists(reply);
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildStartVotePacket(question, options, durationInSeconds)));
+        }
+
+        private MethodPacket BuildStartVotePacket(string question, IEnumerable<string> options, uint durationInSeconds)
+        {
+            Validator.ValidateString(question, "question");
+            Validator.ValidateList(options, "options");
+            return new MethodArgPacket("vote:start", new JArray() { question, new JArray() { options }, durationInSeconds });
+        }
+
+        /// <summary>
+        /// Selects an choice for the current vote
+        /// </summary>
+        /// <param name="optionIndex">The index of the choice</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task ChooseVote(uint optionIndex)
+        {
+            await this.Send(this.BuildChooseVotePacket(optionIndex));
         }
 
         /// <summary>
@@ -191,15 +225,25 @@ namespace Mixer.Base.Clients
         /// </summary>
         /// <param name="optionIndex">The index of the choice</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> ChooseVote(uint optionIndex)
+        public async Task<bool> ChooseVoteWithResponse(uint optionIndex)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "vote:choose",
-                arguments = new JArray() { optionIndex },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyDataExists(reply);
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildChooseVotePacket(optionIndex)));
+        }
+
+        private MethodPacket BuildChooseVotePacket(uint optionIndex)
+        {
+            return new MethodArgPacket("vote:choose", new JArray() { optionIndex });
+        }
+
+        /// <summary>
+        /// Times out the user for the specified duration.
+        /// </summary>
+        /// <param name="username">The username to time out</param>
+        /// <param name="durationInSeconds">The duration of the time out</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task TimeoutUser(string username, uint durationInSeconds)
+        {
+            await this.Send(this.BuildTimeoutUserPacket(username, durationInSeconds));
         }
 
         /// <summary>
@@ -208,15 +252,25 @@ namespace Mixer.Base.Clients
         /// <param name="username">The username to time out</param>
         /// <param name="durationInSeconds">The duration of the time out</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> TimeoutUser(string username, uint durationInSeconds)
+        public async Task<bool> TimeoutUserWithResponse(string username, uint durationInSeconds)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "timeout",
-                arguments = new JArray() { username, durationInSeconds.ToString() },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyDataExists(reply);
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildTimeoutUserPacket(username, durationInSeconds)));
+        }
+
+        private MethodPacket BuildTimeoutUserPacket(string username, uint durationInSeconds)
+        {
+            Validator.ValidateString(username, "username");
+            return new MethodArgPacket("timeout", new JArray() { username, durationInSeconds.ToString() });
+        }
+
+        /// <summary>
+        /// Purges all messages in chat from the specified user.
+        /// </summary>
+        /// <param name="username">The username to purge</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task PurgeUser(string username)
+        {
+            await this.Send(this.BuildPurgeUserPacket(username));
         }
 
         /// <summary>
@@ -224,51 +278,63 @@ namespace Mixer.Base.Clients
         /// </summary>
         /// <param name="username">The username to purge</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> PurgeUser(string username)
+        public async Task<bool> PurgeUserWithResponse(string username)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "purge",
-                arguments = new JArray() { username },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyNoErrors(reply);
+            return this.VerifyNoErrors(await this.SendAndListen(this.BuildPurgeUserPacket(username)));
+        }
+
+        private MethodPacket BuildPurgeUserPacket(string username)
+        {
+            Validator.ValidateString(username, "username");
+            return new MethodArgPacket("purge", new JArray() { username });
         }
 
         /// <summary>
         /// Deletes the specified message.
         /// </summary>
         /// <param name="messageID">The id of the message to delete</param>
-        /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> DeleteMessage(Guid messageID)
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task DeleteMessage(Guid messageID)
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "deleteMessage",
-                arguments = new JArray() { messageID },
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyDataExists(reply);
+            await this.Send(this.BuildDeleteMessagePacket(messageID));
+        }
+
+        /// <summary>
+        /// Deletes the specified message.
+        /// </summary>
+        /// <param name="messageID">The id of the message to delete</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task<bool> DeleteMessageWithResponse(Guid messageID)
+        {
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildDeleteMessagePacket(messageID)));
+        }
+
+        private MethodPacket BuildDeleteMessagePacket(Guid messageID)
+        {
+            return new MethodArgPacket("deleteMessage", new JArray() { messageID });
+        }
+
+        /// <summary>
+        /// Clears all messages from chat.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task ClearMessages()
+        {
+            await this.Send(this.BuildClearMessagesPacket());
         }
 
         /// <summary>
         /// Clears all messages from chat.
         /// </summary>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> ClearMessages()
+        public async Task<bool> ClearMessagesWithResponse()
         {
-            MethodPacket packet = new MethodPacket()
-            {
-                method = "clearMessages",
-                arguments = new JArray(),
-            };
-            ReplyPacket reply = await this.SendAndListen(packet);
-            return this.VerifyDataExists(reply);
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildClearMessagesPacket()));
         }
 
-        protected override async Task<bool> KeepAlivePing()
+        private MethodPacket BuildClearMessagesPacket()
         {
-            return await this.Ping();
+            return new MethodArgPacket("clearMessages", new JArray() { });
         }
 
         private void ConnectEventHandler(object sender, EventPacket e)

@@ -16,7 +16,31 @@ namespace Mixer.UnitTests
     [TestClass]
     public class ChatClientUnitTests : UnitTestBase
     {
-        List<ChatMessageEventModel> messages = new List<ChatMessageEventModel>();
+        private static ChatClient chatClient;
+
+        private List<ChatMessageEventModel> messages = new List<ChatMessageEventModel>();
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+                chatClient = await ChatClient.CreateFromChannel(connection, channel);
+
+                Assert.IsTrue(await chatClient.Connect());
+                Assert.IsTrue(await chatClient.Authenticate());
+            });
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                await chatClient.Disconnect();
+            });
+        }
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,21 +58,10 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void AuthenticateToChat()
-        {
-            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
-            {
-                await this.AuthenticateChat(chatClient);
-            });
-        }
-
-        [TestMethod]
         public void Ping()
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
-
                 bool ping = await chatClient.Ping();
                 Assert.IsTrue(ping);
             });
@@ -68,12 +81,10 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
-
                 this.ClearAllPackets();
 
                 string messageText = "Hello World!";
-                ChatMessageEventModel message = await chatClient.Whisper(chatClient.User.username, messageText);
+                ChatMessageEventModel message = await chatClient.WhisperWithResponse(chatClient.User.username, messageText);
 
                 this.ValidateMessage(chatClient, message, messageText);
 
@@ -86,16 +97,14 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
-
                 this.ClearAllPackets();
 
-                bool result = await chatClient.StartVote("Turkey or Ham?", new List<string>() { "Turkey", "Ham" }, 30);
+                bool result = await chatClient.StartVoteWithResponse("Turkey or Ham?", new List<string>() { "Turkey", "Ham" }, 30);
                 Assert.IsTrue(result);
 
                 this.ClearAllPackets();
 
-                result = await chatClient.ChooseVote(0);
+                result = await chatClient.ChooseVoteWithResponse(0);
                 Assert.IsTrue(result);
             });
         }
@@ -108,13 +117,11 @@ namespace Mixer.UnitTests
         {
             this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
             {
-                await this.AuthenticateChat(chatClient);
-
                 this.ClearAllPackets();
 
                 UserModel user = await connection.Users.GetUser("SXTBot");
 
-                bool result = await chatClient.TimeoutUser(user.username, 60);
+                bool result = await chatClient.TimeoutUserWithResponse(user.username, 60);
                 Assert.IsTrue(result);
             });
         }
@@ -130,7 +137,7 @@ namespace Mixer.UnitTests
 
                 UserModel user = await connection.Users.GetUser("SXTBot");
 
-                bool result = await chatClient.PurgeUser(user.username);
+                bool result = await chatClient.PurgeUserWithResponse(user.username);
                 Assert.IsTrue(result);
             });
         }
@@ -146,7 +153,7 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                bool result = await chatClient.DeleteMessage(message.id);
+                bool result = await chatClient.DeleteMessageWithResponse(message.id);
                 Assert.IsTrue(result);
             });
         }
@@ -160,32 +167,24 @@ namespace Mixer.UnitTests
 
                 this.ClearAllPackets();
 
-                bool result = await chatClient.ClearMessages();
+                bool result = await chatClient.ClearMessagesWithResponse();
                 Assert.IsTrue(result);
             });
         }
 
-        private async Task AuthenticateChat(ChatClient chatClient)
-        {
-            this.ClearAllPackets();
-
-            Assert.IsTrue(await chatClient.Authenticate());
-        }
-
         private async Task SendBasicMessage(ChatClient chatClient)
         {
-            await this.AuthenticateChat(chatClient);
-
             this.ClearAllPackets();
 
             string messageText = "Hello World!";
-            ChatMessageEventModel message = await chatClient.SendMessage(messageText);
+            ChatMessageEventModel message = await chatClient.SendMessageWithResponse(messageText);
 
             this.ValidateMessage(chatClient, message, messageText);
         }
 
         private void ValidateMessage(ChatClient chatClient, ChatMessageEventModel message, string messageText)
         {
+            Assert.IsNotNull(message);
             Assert.IsTrue(message.user_name.ToString().Equals(chatClient.User.username));
             Assert.IsTrue(message.message.message.First().text.Equals(messageText));
         }
@@ -196,22 +195,17 @@ namespace Mixer.UnitTests
             {
                 this.ClearAllPackets();
 
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
-                ChatClient chatClient = await ChatClient.CreateFromChannel(connection, channel);
-
                 chatClient.OnReplyOccurred += ChatClient_OnReplyOccurred;
                 chatClient.OnEventOccurred += ChatClient_OnEventOccurred;
                 chatClient.OnDisconnectOccurred += ChatClient_DisconnectOccurred;
-
                 chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
-
-                this.ClearPackets();
-
-                Assert.IsTrue(await chatClient.Connect());
 
                 await function(connection, chatClient);
 
-                await chatClient.Disconnect();
+                chatClient.OnReplyOccurred -= ChatClient_OnReplyOccurred;
+                chatClient.OnEventOccurred -= ChatClient_OnEventOccurred;
+                chatClient.OnDisconnectOccurred -= ChatClient_DisconnectOccurred;
+                chatClient.OnMessageOccurred -= ChatClient_MessageOccurred;
             });
         }
 

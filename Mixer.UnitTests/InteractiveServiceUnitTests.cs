@@ -13,15 +13,25 @@ namespace Mixer.UnitTests
     [TestClass]
     public class InteractiveServiceUnitTests : UnitTestBase
     {
+        private const string InteractiveGameName = "Mixer C# Unit Tests Game";
+
         private static InteractiveGameListingModel testGameListing;
 
         public static async Task<InteractiveGameListingModel> CreateTestGame(MixerConnection connection, ChannelModel channel)
         {
             UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
 
+            IEnumerable<InteractiveGameListingModel> gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+            InteractiveGameListingModel previousTestGame = gameListings.FirstOrDefault(g => g.name.Equals(InteractiveServiceUnitTests.InteractiveGameName));
+            if (previousTestGame != null)
+            {
+                await InteractiveServiceUnitTests.DeleteTestGame(connection, previousTestGame);
+            }
+
             InteractiveGameModel game = new InteractiveGameModel()
             {
-                name = "Test Game",
+                name = InteractiveServiceUnitTests.InteractiveGameName,
                 ownerId = user.id,             
             };
             game = await connection.Interactive.CreateInteractiveGame(game);
@@ -35,7 +45,7 @@ namespace Mixer.UnitTests
             Assert.IsNotNull(game);
             Assert.IsTrue(game.id > 0);
 
-            IEnumerable<InteractiveGameListingModel> gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
+            gameListings = await connection.Interactive.GetOwnedInteractiveGames(channel);
 
             Assert.IsNotNull(gameListings);
             Assert.IsTrue(gameListings.Count() > 0);
