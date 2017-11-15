@@ -10,7 +10,7 @@ using System.Configuration;
 using System.Linq;
 using System.Windows;
 
-namespace Mixer.Sample
+namespace Mixer.ChatSample.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -7,8 +7,8 @@
     <ProjectGuid>{2AC15800-AFE0-405C-AB3B-ED8F2182145E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mixer.LargeChat</RootNamespace>
-    <AssemblyName>Mixer.LargeChat</AssemblyName>
+    <RootNamespace>Mixer.LargeChat.WPF</RootNamespace>
+    <AssemblyName>Mixer.LargeChat.WPF</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -101,13 +102,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mixer.Base\Mixer.Base.csproj">
+    <ProjectReference Include="..\..\..\Mixer.Base\Mixer.Base.csproj">
       <Project>{2442fcd3-f207-41d8-a42b-aa2b34b66b86}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mixer.ChatSample\Mixer.ChatSample.csproj">
+    <ProjectReference Include="..\Mixer.ChatSample.WPF\Mixer.ChatSample.WPF.csproj">
       <Project>{850b4e8c-9f48-4593-ad7d-ff920f02cecc}</Project>
-      <Name>Mixer.ChatSample</Name>
+      <Name>Mixer.ChatSample.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

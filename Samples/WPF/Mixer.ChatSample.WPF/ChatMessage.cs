@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace Mixer.Sample
+namespace Mixer.ChatSample.WPF
 {
     public class ChatMessage
     {

@@ -10,7 +10,7 @@ using System.Configuration;
 using System.Linq;
 using System.Windows;
 
-namespace Mixer.InteractiveSample
+namespace Mixer.InteractiveSample.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

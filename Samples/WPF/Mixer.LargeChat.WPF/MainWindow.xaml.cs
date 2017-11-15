@@ -4,7 +4,7 @@ using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.OAuth;
 using Mixer.Base.Model.User;
-using Mixer.Sample;
+using Mixer.ChatSample.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Mixer.LargeChat
+namespace Mixer.LargeChat.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

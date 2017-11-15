@@ -13,11 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixer.Base", "..\Mixer.Base
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixer.UnitTests", "..\Mixer.UnitTests\Mixer.UnitTests.csproj", "{DAFC9BE4-32D1-43AC-8B3B-DCE905F5971E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.ChatSample", "Mixer.ChatSample\Mixer.ChatSample.csproj", "{850B4E8C-9F48-4593-AD7D-FF920F02CECC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{2F4C36B4-3682-4AC0-9A14-CAF05C2551A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.InteractiveSample", "Mixer.InteractiveSample\Mixer.InteractiveSample.csproj", "{0171C0F8-995D-4085-89E4-ADFDD921BDB5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{65185958-5835-4180-BD31-90B8055439CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.LargeChat", "Mixer.LargeChat\Mixer.LargeChat.csproj", "{2AC15800-AFE0-405C-AB3B-ED8F2182145E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.ChatSample.WPF", "WPF\Mixer.ChatSample.WPF\Mixer.ChatSample.WPF.csproj", "{850B4E8C-9F48-4593-AD7D-FF920F02CECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.InteractiveSample.WPF", "WPF\Mixer.InteractiveSample.WPF\Mixer.InteractiveSample.WPF.csproj", "{0171C0F8-995D-4085-89E4-ADFDD921BDB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.LargeChat.WPF", "WPF\Mixer.LargeChat.WPF\Mixer.LargeChat.WPF.csproj", "{2AC15800-AFE0-405C-AB3B-ED8F2182145E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +74,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{850B4E8C-9F48-4593-AD7D-FF920F02CECC} = {2F4C36B4-3682-4AC0-9A14-CAF05C2551A5}
+		{0171C0F8-995D-4085-89E4-ADFDD921BDB5} = {2F4C36B4-3682-4AC0-9A14-CAF05C2551A5}
+		{2AC15800-AFE0-405C-AB3B-ED8F2182145E} = {2F4C36B4-3682-4AC0-9A14-CAF05C2551A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FE2C578-F9C3-42C1-AE95-BFB0C4A0E927}

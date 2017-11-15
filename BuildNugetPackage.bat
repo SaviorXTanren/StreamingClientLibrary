@@ -1,1 +1,0 @@
-%~dp0nuget.exe pack Mixer.Base\Mixer.Base.nuspec

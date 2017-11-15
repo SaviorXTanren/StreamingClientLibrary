@@ -2,7 +2,7 @@
 using Mixer.Base.Model.User;
 using System.Linq;
 
-namespace Mixer.Sample
+namespace Mixer.ChatSample.WPF
 {
     public enum UserRole
     {
