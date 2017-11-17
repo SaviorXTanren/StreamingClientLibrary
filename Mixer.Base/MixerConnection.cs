@@ -135,12 +135,12 @@ namespace Mixer.Base
             return null;
         }
 
-        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri)
+        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri, bool forceApprovalPrompt = false)
         {
             return await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, null, scopes, redirectUri);
         }
 
-        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri)
+        public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri, bool forceApprovalPrompt = false)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
@@ -161,17 +161,22 @@ namespace Mixer.Base
                 parameters.Add("client_secret", clientSecret);
             }
 
+            if (forceApprovalPrompt)
+            {
+                parameters.Add("approval_prompt", "force");
+            }
+
             FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
 
             return url + "?" + await content.ReadAsStringAsync();
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string loginSuccessHtmlPageFilePath = null)
         {
-            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, loginSuccessHtmlPageFilePath);
+            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, loginSuccessHtmlPageFilePath);
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string loginSuccessHtmlPageFilePath = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
@@ -179,7 +184,7 @@ namespace Mixer.Base
             OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(OAUTH_LOCALHOST_URL, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
-            string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL);
+            string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL, forceApprovalPrompt);
             ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };
             Process.Start(startInfo);
 
