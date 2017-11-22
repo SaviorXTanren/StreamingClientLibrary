@@ -193,12 +193,14 @@ namespace Mixer.Base.Clients
 
         private async Task ReceiveInternal()
         {
+            byte[] buffer = new byte[WebSocketClientBase.bufferSize];
+
             await Task.Delay(100);
             while (this.webSocket != null)
             {
                 if (this.webSocket.State == WebSocketState.Open)
                 {
-                    byte[] buffer = new byte[WebSocketClientBase.bufferSize];
+                    Array.Clear(buffer, 0, buffer.Length);
                     WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
                     if (result != null)
