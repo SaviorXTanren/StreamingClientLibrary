@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AEEF5528-E4F8-4BE5-95F4-682EA399DFC4}</ProjectGuid>
+    <ProjectGuid>{AFDF771F-00E6-42E6-8A77-AFCEABF87904}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Mixer.InteractiveSample.Console</RootNamespace>
-    <AssemblyName>Mixer.InteractiveSample.Console</AssemblyName>
+    <RootNamespace>Mixer.ChatSample.Console</RootNamespace>
+    <AssemblyName>Mixer.ChatSample.Console</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -54,7 +54,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mixer.Base\Mixer.Base.csproj">
+    <ProjectReference Include="..\..\..\Mixer.Base\Mixer.Base.csproj">
       <Project>{2442fcd3-f207-41d8-a42b-aa2b34b66b86}</Project>
       <Name>Mixer.Base</Name>
     </ProjectReference>

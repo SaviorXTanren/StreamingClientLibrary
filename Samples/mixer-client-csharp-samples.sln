@@ -23,9 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.InteractiveSample.WPF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.LargeChat.WPF", "WPF\Mixer.LargeChat.WPF\Mixer.LargeChat.WPF.csproj", "{2AC15800-AFE0-405C-AB3B-ED8F2182145E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.ChatSample.Console", "Mixer.ChatSample.Console\Mixer.ChatSample.Console.csproj", "{AFDF771F-00E6-42E6-8A77-AFCEABF87904}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.ChatSample.Console", "Console\Mixer.ChatSample.Console\Mixer.ChatSample.Console.csproj", "{AFDF771F-00E6-42E6-8A77-AFCEABF87904}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.InteractiveSample.Console", "Mixer.InteractiveSample.Console\Mixer.InteractiveSample.Console.csproj", "{AEEF5528-E4F8-4BE5-95F4-682EA399DFC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixer.InteractiveSample.Console", "Console\Mixer.InteractiveSample.Console\Mixer.InteractiveSample.Console.csproj", "{AEEF5528-E4F8-4BE5-95F4-682EA399DFC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
