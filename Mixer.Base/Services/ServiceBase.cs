@@ -50,40 +50,40 @@ namespace Mixer.Base.Services
             return await this.ProcessStringResponse(await this.GetAsync(requestUri));
         }
 
-        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 0)
+        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1)
         {
             List<T> results = new List<T>();
             int currentPage = 0;
             int pageTotal = 0;
 
-            while (currentPage <= pageTotal && (maxResults == 0 || results.Count < maxResults))
+            while (currentPage <= pageTotal && results.Count < maxResults)
             {
                 string currentRequestUri = requestUri;
-                if (currentRequestUri.Contains("?"))
+                if (pageTotal > 0)
                 {
-                    currentRequestUri += "&";
+                    if (currentRequestUri.Contains("?"))
+                    {
+                        currentRequestUri += "&";
+                    }
+                    else
+                    {
+                        currentRequestUri += "?";
+                    }
+                    currentRequestUri += "page=" + currentPage;
                 }
-                else
-                {
-                    currentRequestUri += "?";
-                }
-                currentRequestUri += "page=" + currentPage;
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
-                if (pageTotal == 0)
+                IEnumerable<string> linkValues;
+                if (response.Headers.TryGetValues("link", out linkValues))
                 {
-                    IEnumerable<string> linkValues;
-                    if (response.Headers.TryGetValues("link", out linkValues))
+                    Regex regex = new Regex(RequestLastPageRegexString);
+                    Match match = regex.Match(linkValues.First());
+                    if (match != null && match.Success)
                     {
-                        Regex regex = new Regex(RequestLastPageRegexString);
-                        Match match = regex.Match(linkValues.First());
-                        if (match != null && match.Success)
-                        {
-                            string matchValue = match.Captures[0].Value;
-                            matchValue = matchValue.Substring(5);
-                            matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
-                            pageTotal = int.Parse(matchValue);
-                        }
+                        string matchValue = match.Captures[0].Value;
+                        matchValue = matchValue.Substring(5);
+                        matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
+                        pageTotal = int.Parse(matchValue);
                     }
                 }
 

@@ -35,7 +35,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>A list of currently online channels</returns>
-        public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(uint maxResults = 0)
+        public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(uint maxResults = 1)
         {
             return await this.GetPagedAsync<ExpandedChannelModel>("channels", maxResults);
         }
@@ -109,7 +109,7 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get followers for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The users who followed the channel</returns>
-        public async Task<IEnumerable<FollowerUserModel>> GetFollowers(ChannelModel channel, uint maxResults = 0)
+        public async Task<IEnumerable<FollowerUserModel>> GetFollowers(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
 
@@ -213,7 +213,7 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get hosters for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The hosting channels</returns>
-        public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel, uint maxResults = 0)
+        public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters", maxResults);
@@ -251,7 +251,7 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get users for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The users with roles for the channel</returns>
-        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, uint maxResults = 0)
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", maxResults);
@@ -279,7 +279,7 @@ namespace Mixer.Base.Services
         /// <param name="role">The role to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The users with roles for the channel</returns>
-        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, string role, uint maxResults = 0)
+        public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, string role, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateString(role, "role");

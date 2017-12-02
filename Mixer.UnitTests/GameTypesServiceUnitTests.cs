@@ -15,8 +15,12 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
+                IEnumerable<GameTypeModel> gameTypes = await connection.GameTypes.GetGameTypes(100);
+                Assert.IsNotNull(gameTypes);
+                Assert.IsTrue(gameTypes.Count() >= 100);
+
                 string gameName = "Web Show";
-                IEnumerable<GameTypeModel> gameTypes = await connection.GameTypes.GetGameTypes(gameName, 1);
+                gameTypes = await connection.GameTypes.GetGameTypes(gameName, 1);
 
                 Assert.IsNotNull(gameTypes);
                 Assert.IsTrue(gameTypes.Count() > 0);

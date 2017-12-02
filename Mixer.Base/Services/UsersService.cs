@@ -109,7 +109,7 @@ namespace Mixer.Base.Services
         /// <param name="user">The user to get follows for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All users that the specified user follows</returns>
-        public async Task<IEnumerable<ChannelAdvancedModel>> GetFollows(UserModel user, uint maxResults = 0)
+        public async Task<IEnumerable<ChannelAdvancedModel>> GetFollows(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", maxResults);
@@ -123,7 +123,7 @@ namespace Mixer.Base.Services
         /// <param name="user">The user to get logs for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All logs for the specified user</returns>
-        public async Task<IEnumerable<UserLogModel>> GetLogs(UserModel user, uint maxResults = 0)
+        public async Task<IEnumerable<UserLogModel>> GetLogs(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedAsync<UserLogModel>("users/" + user.id + "/log", maxResults);
@@ -137,7 +137,7 @@ namespace Mixer.Base.Services
         /// <param name="user">The user to get notifications for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All notifications for the specified user</returns>
-        public async Task<IEnumerable<NotificationModel>> GetNotifications(UserModel user, uint maxResults = 0)
+        public async Task<IEnumerable<NotificationModel>> GetNotifications(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedAsync<NotificationModel>("users/" + user.id + "/notifications", maxResults);

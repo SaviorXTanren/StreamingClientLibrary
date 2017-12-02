@@ -24,7 +24,7 @@ namespace Mixer.Base.Services
         /// <param name="name">The name of the game to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All game types</returns>
-        public async Task<IEnumerable<GameTypeModel>> GetGameTypes(uint maxResults = 0)
+        public async Task<IEnumerable<GameTypeModel>> GetGameTypes(uint maxResults = 1)
         {
             return await this.GetPagedAsync<GameTypeModel>("types", maxResults);
         }
@@ -37,7 +37,7 @@ namespace Mixer.Base.Services
         /// <param name="name">The name of the game to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All game types</returns>
-        public async Task<IEnumerable<GameTypeModel>> GetGameTypes(string name, uint maxResults = 0)
+        public async Task<IEnumerable<GameTypeModel>> GetGameTypes(string name, uint maxResults = 1)
         {
             Validator.ValidateString(name, "name");
 
@@ -56,7 +56,7 @@ namespace Mixer.Base.Services
         /// <param name="gameType">The game type to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All channels with the specified game type</returns>
-        public async Task<IEnumerable<ChannelModel>> GetChannelsByGameType(GameTypeSimpleModel gameType, uint maxResults = 0)
+        public async Task<IEnumerable<ChannelModel>> GetChannelsByGameType(GameTypeSimpleModel gameType, uint maxResults = 1)
         {
             Validator.ValidateVariable(gameType, "gameType");
 

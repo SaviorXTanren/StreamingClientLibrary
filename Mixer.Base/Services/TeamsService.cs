@@ -20,7 +20,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All teams</returns>
-        public async Task<IEnumerable<TeamModel>> GetTeams(uint maxResults = 0)
+        public async Task<IEnumerable<TeamModel>> GetTeams(uint maxResults = 1)
         {
             return await this.GetPagedAsync<TeamModel>("teams", maxResults);
         }
@@ -44,7 +44,7 @@ namespace Mixer.Base.Services
         /// <param name="team">The team to get users for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The users</returns>
-        public async Task<IEnumerable<UserWithChannelModel>> GetTeamUsers(TeamModel team, uint maxResults = 0)
+        public async Task<IEnumerable<UserWithChannelModel>> GetTeamUsers(TeamModel team, uint maxResults = 1)
         {
             return await this.GetPagedAsync<UserWithChannelModel>("teams/" + team.id.ToString() + "/users", maxResults);
         }

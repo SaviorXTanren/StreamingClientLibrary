@@ -46,7 +46,7 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get chat users for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The chat users</returns>
-        public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 0)
+        public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users", maxResults);
