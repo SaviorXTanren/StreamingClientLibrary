@@ -29,6 +29,18 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets a list of currently online channels. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A list of currently online channels</returns>
+        public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(uint maxResults = 0)
+        {
+            return await this.GetPagedAsync<ExpandedChannelModel>("channels", maxResults);
+        }
+
+        /// <summary>
         /// Updates the channel with the information supplied. Only limited information can be updated
         /// via this API. See the ChannelUpdateableModel for the fields that are updateable.
         /// </summary>

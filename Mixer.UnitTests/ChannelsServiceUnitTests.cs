@@ -42,6 +42,17 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetOnlineChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 1);
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+            });
+        }
+
+        [TestMethod]
         public void UpdateChannel()
         {
             TestWrapper(async (MixerConnection connection) =>
