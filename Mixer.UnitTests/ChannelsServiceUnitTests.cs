@@ -46,9 +46,10 @@ namespace Mixer.UnitTests
         {
             TestWrapper(async (MixerConnection connection) =>
             {
-                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 500);
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 150);
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
+                Assert.IsTrue(channels.Select(c => c.id).Distinct().Count() >= 150);
             });
         }
 

@@ -50,7 +50,7 @@ namespace Mixer.Base.Services
             return await this.ProcessStringResponse(await this.GetAsync(requestUri));
         }
 
-        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1)
+        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
         {
             List<T> results = new List<T>();
             int currentPage = 0;
@@ -73,18 +73,25 @@ namespace Mixer.Base.Services
                 }
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
-                IEnumerable<string> linkValues;
-                if (response.Headers.TryGetValues("link", out linkValues))
+                if (linkPagesAvailable)
                 {
-                    Regex regex = new Regex(RequestLastPageRegexString);
-                    Match match = regex.Match(linkValues.First());
-                    if (match != null && match.Success)
+                    IEnumerable<string> linkValues;
+                    if (response.Headers.TryGetValues("link", out linkValues))
                     {
-                        string matchValue = match.Captures[0].Value;
-                        matchValue = matchValue.Substring(5);
-                        matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
-                        pageTotal = int.Parse(matchValue);
+                        Regex regex = new Regex(RequestLastPageRegexString);
+                        Match match = regex.Match(linkValues.First());
+                        if (match != null && match.Success)
+                        {
+                            string matchValue = match.Captures[0].Value;
+                            matchValue = matchValue.Substring(5);
+                            matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
+                            pageTotal = int.Parse(matchValue);
+                        }
                     }
+                }
+                else
+                {
+                    pageTotal++;
                 }
 
                 T[] pagedResults = await this.ProcessResponse<T[]>(response);

@@ -37,7 +37,7 @@ namespace Mixer.Base.Services
         /// <returns>A list of currently online channels</returns>
         public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(uint maxResults = 1)
         {
-            return await this.GetPagedAsync<ExpandedChannelModel>("channels", maxResults);
+            return await this.GetPagedAsync<ExpandedChannelModel>("channels", maxResults, linkPagesAvailable: false);
         }
 
         /// <summary>

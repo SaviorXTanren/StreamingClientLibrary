@@ -8,16 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.5.0.3-beta</Version>
+    <Version>0.5.0.4-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Fixing bug with paged Get calls and tweaks to the maxResults parameter for paged Get calls</PackageReleaseNotes>
-    <AssemblyVersion>0.5.0.3</AssemblyVersion>
-    <FileVersion>0.5.0.3</FileVersion>
+    <PackageReleaseNotes>- Adding fix in for GetChannels() since it's REST API calls do not return the number of pages left, so we must instead manually increment pages until our total is reached.</PackageReleaseNotes>
+    <AssemblyVersion>0.5.0.4</AssemblyVersion>
+    <FileVersion>0.5.0.4</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
