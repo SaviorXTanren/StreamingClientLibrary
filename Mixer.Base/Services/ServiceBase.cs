@@ -3,6 +3,7 @@ using Mixer.Base.Util;
 using Mixer.Base.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,9 @@ namespace Mixer.Base.Services
     public abstract class ServiceBase
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
+
+        public event EventHandler<string> OnSuccessResponseReceived;
+        public event EventHandler<RestServiceRequestException> OnFailureResponseReceived;
 
         private MixerConnection connection;
 
@@ -171,11 +175,20 @@ namespace Mixer.Base.Services
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 string result = await response.Content.ReadAsStringAsync();
+                if (this.OnSuccessResponseReceived != null)
+                {
+                    this.OnSuccessResponseReceived(this, result);
+                }
                 return result;
             }
             else
             {
-                throw new RestServiceRequestException(response);
+                RestServiceRequestException ex = new RestServiceRequestException(response);
+                if (this.OnFailureResponseReceived != null)
+                {
+                    this.OnFailureResponseReceived(this, ex);
+                }
+                throw ex;
             }
         }
 
