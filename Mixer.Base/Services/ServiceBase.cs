@@ -18,6 +18,7 @@ namespace Mixer.Base.Services
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
 
+        public event EventHandler<Tuple<string, HttpContent>> OnRequestSent;
         public event EventHandler<string> OnSuccessResponseReceived;
         public event EventHandler<RestServiceRequestException> OnFailureResponseReceived;
 
@@ -35,6 +36,7 @@ namespace Mixer.Base.Services
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
+                this.LogRequest(requestUri);
                 return await client.GetAsync(requestUri);
             }
         }
@@ -110,6 +112,7 @@ namespace Mixer.Base.Services
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
+                this.LogRequest(requestUri, content);
                 return await client.PostAsync(requestUri, content);
             }
         }
@@ -123,6 +126,7 @@ namespace Mixer.Base.Services
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
+                this.LogRequest(requestUri, content);
                 return await client.PutAsync(requestUri, content);
             }
         }
@@ -138,6 +142,7 @@ namespace Mixer.Base.Services
             {
                 HttpMethod method = new HttpMethod("PATCH");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
+                this.LogRequest(requestUri, content);
                 return await client.SendAsync(request);
             }
         }
@@ -151,6 +156,7 @@ namespace Mixer.Base.Services
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
+                this.LogRequest(requestUri);
                 HttpResponseMessage response = await client.DeleteAsync(requestUri);
                 return (response.StatusCode == HttpStatusCode.NoContent);
             }
@@ -199,6 +205,14 @@ namespace Mixer.Base.Services
                 return new HttpClientWrapper(await this.connection.GetOAuthToken());
             }
             return new HttpClientWrapper();
+        }
+
+        private void LogRequest(string requestUri, HttpContent content = null)
+        {
+            if (this.OnRequestSent != null)
+            {
+                this.OnRequestSent(this, new Tuple<string, HttpContent>(requestUri, content));
+            }
         }
     }
 }
