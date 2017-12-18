@@ -15,21 +15,23 @@ namespace Mixer.Base.Clients
 {
     public abstract class WebSocketClientBase : IDisposable
     {
+        private const int bufferSize = 1000000;
+
         public event EventHandler<MethodPacket> OnMethodOccurred;
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
 
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
+        public bool Connected { get; protected set; }
+        public bool Authenticated { get; protected set; }
+
         internal uint CurrentPacketID { get; private set; }
 
         protected ClientWebSocket webSocket = new ClientWebSocket();
         private UTF8Encoding encoder = new UTF8Encoding();
 
-        public bool Connected { get; protected set; }
-        public bool Authenticated { get; protected set; }
-
-        private const int bufferSize = 1000000;
+        private SemaphoreSlim asyncSemaphore = new SemaphoreSlim(1);
 
         public WebSocketClientBase()
         {
@@ -93,9 +95,17 @@ namespace Mixer.Base.Clients
             string packetJson = JsonConvert.SerializeObject(packet);
             byte[] buffer = this.encoder.GetBytes(packetJson);
 
-            await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+            await this.asyncSemaphore.WaitAsync();
 
-            this.CurrentPacketID++;
+            try
+            {
+                await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            finally
+            {
+                this.CurrentPacketID++;
+                this.asyncSemaphore.Release();
+            }
 
             return packet.id;
         }
