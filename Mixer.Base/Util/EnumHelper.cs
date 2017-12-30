@@ -8,12 +8,16 @@ namespace Mixer.Base.Util
         public static string GetEnumName<T>(T value)
         {
             string name = Enum.GetName(typeof(T), value);
-            NameAttribute[] attributes = (NameAttribute[])typeof(T).GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
-            if (attributes != null && attributes.Length > 0)
+            if (!string.IsNullOrEmpty(name))
             {
-                return attributes[0].Name;
+                NameAttribute[] attributes = (NameAttribute[])typeof(T).GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
+                if (attributes != null && attributes.Length > 0)
+                {
+                    return attributes[0].Name;
+                }
+                return name;
             }
-            return name;
+            return null;
         }
 
         public static IEnumerable<string> GetEnumNames<T>(IEnumerable<T> list)
@@ -21,7 +25,11 @@ namespace Mixer.Base.Util
             List<string> results = new List<string>();
             foreach (T value in list)
             {
-                results.Add(EnumHelper.GetEnumName(value));
+                string name = EnumHelper.GetEnumName(value);
+                if (!string.IsNullOrEmpty(name))
+                {
+                    results.Add(name);
+                }
             }
             return results;
         }
