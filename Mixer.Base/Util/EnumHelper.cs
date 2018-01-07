@@ -10,10 +10,10 @@ namespace Mixer.Base.Util
             string name = Enum.GetName(typeof(T), value);
             if (!string.IsNullOrEmpty(name))
             {
-                NameAttribute[] attributes = (NameAttribute[])typeof(T).GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
-                if (attributes != null && attributes.Length > 0)
+                NameAttribute[] nameAttributes = (NameAttribute[])typeof(T).GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
+                if (nameAttributes != null && nameAttributes.Length > 0)
                 {
-                    return attributes[0].Name;
+                    return nameAttributes[0].Name;
                 }
                 return name;
             }
@@ -34,16 +34,24 @@ namespace Mixer.Base.Util
             return results;
         }
 
-        public static IEnumerable<string> GetEnumNames<T>()
+        public static IEnumerable<string> GetEnumNames<T>(bool includeObsoletes = false)
         {
-            return EnumHelper.GetEnumNames(EnumHelper.GetEnumList<T>());
+            return EnumHelper.GetEnumNames(EnumHelper.GetEnumList<T>(includeObsoletes));
         }
 
-        public static IEnumerable<T> GetEnumList<T>()
+        public static IEnumerable<T> GetEnumList<T>(bool includeObsoletes = false)
         {
             List<T> values = new List<T>();
             foreach (T value in Enum.GetValues(typeof(T)))
             {
+                if (!includeObsoletes)
+                {
+                    var attributes = (ObsoleteAttribute[])value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+                    if (attributes != null && attributes.Length > 0)
+                    {
+                        continue;
+                    }
+                }
                 values.Add(value);
             }
             return values;
