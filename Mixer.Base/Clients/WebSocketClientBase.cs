@@ -47,18 +47,22 @@ namespace Mixer.Base.Clients
             try
             {
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
+                return true;
             }
             catch (WebSocketException ex)
             {
-                WebException webException = (WebException)ex.InnerException;
-                HttpWebResponse response = (HttpWebResponse)webException.Response;
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string responseString = reader.ReadToEnd();
+                if (ex.InnerException is WebException)
+                {
+                    WebException webException = (WebException)ex.InnerException;
+                    HttpWebResponse response = (HttpWebResponse)webException.Response;
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string responseString = reader.ReadToEnd();
 
-                throw new WebSocketException(string.Format("{0} - {1} - {2}", response.StatusCode, response.StatusDescription, responseString), ex);
+                    throw new WebSocketException(string.Format("{0} - {1} - {2}", response.StatusCode, response.StatusDescription, responseString), ex);
+                }
+                throw ex;
             }
-
-            return true;
+            return false;
         }
 
         public async Task Disconnect()
