@@ -15,7 +15,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Bug fix for EnumHelper where value is not a valid enum</PackageReleaseNotes>
+    <PackageReleaseNotes>- Making tweaks to ordering and removing return value of WebSocketClientBase connection logic</PackageReleaseNotes>
     <AssemblyVersion>0.5.0.9</AssemblyVersion>
     <FileVersion>0.5.0.9</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
