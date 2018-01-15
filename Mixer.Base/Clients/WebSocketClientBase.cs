@@ -38,16 +38,15 @@ namespace Mixer.Base.Clients
             this.CurrentPacketID = 0;
         }
 
-        protected async Task<bool> ConnectInternal(string endpoint)
+        protected async Task ConnectInternal(string endpoint)
         {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            this.ReceiveInternal();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
             try
             {
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
-                return true;
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                this.ReceiveInternal();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             catch (WebSocketException ex)
             {
@@ -62,7 +61,6 @@ namespace Mixer.Base.Clients
                 }
                 throw ex;
             }
-            return false;
         }
 
         public async Task Disconnect()
@@ -209,7 +207,6 @@ namespace Mixer.Base.Clients
         {
             byte[] buffer = new byte[WebSocketClientBase.bufferSize];
 
-            await Task.Delay(100);
             while (this.webSocket != null)
             {
                 if (this.webSocket.State == WebSocketState.Open)
