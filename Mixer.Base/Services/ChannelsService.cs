@@ -57,18 +57,18 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Gets all the viewer metrics from the specified channel from the specified start and end dates
+        /// Gets all the viewers from the specified channel from the specified start and end dates
         /// </summary>
-        /// <param name="channel">The channel to get viewer metrics for</param>
-        /// <param name="startDate">The start date for viewer metrics</param>
-        /// <param name="endDate">The end date for viewer metrics</param>
-        /// <returns>All viewer metrics during the timespan</returns>
-        public async Task<IEnumerable<ViewerMetricAnalyticModel>> GetViewerMetrics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        /// <param name="channel">The channel to get viewers for</param>
+        /// <param name="startDate">The start date for viewers</param>
+        /// <param name="endDate">The end date for viewers</param>
+        /// <returns>All viewers during the timespan</returns>
+        public async Task<IEnumerable<ViewerAnalyticModel>> GetViewerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedAsync<ViewerMetricAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -93,12 +93,27 @@ namespace Mixer.Base.Services
         /// <param name="startDate">The start date for followers</param>
         /// <param name="endDate">The end date for followers</param>
         /// <returns>All followers during the timespan</returns>
-        public async Task<IEnumerable<FollowersAnalyticModel>> GetFollowerMetrics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        public async Task<IEnumerable<FollowersAnalyticModel>> GetFollowerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
             return await this.GetPagedAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate));
+        }
+
+        /// <summary>
+        /// Gets all the subscribers from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get subscribers for</param>
+        /// <param name="startDate">The start date for subscribers</param>
+        /// <param name="endDate">The end date for subscribers</param>
+        /// <returns>All subscribers during the timespan</returns>
+        public async Task<IEnumerable<SubscriberAnalyticModel>> GetSubscriberAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "stateDate");
+
+            return await this.GetPagedAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>

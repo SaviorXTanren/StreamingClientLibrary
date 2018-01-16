@@ -94,13 +94,13 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetViewerMetrics()
+        public void GetViewerAnalytics()
         {
             TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<ViewerMetricAnalyticModel> viewers = await connection.Channels.GetViewerMetrics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+                IEnumerable<ViewerAnalyticModel> viewers = await connection.Channels.GetViewerAnalytics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
 
                 Assert.IsNotNull(viewers);
                 Assert.IsTrue(viewers.Count() > 0);
@@ -122,16 +122,30 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
-        public void GetFollowerMetrics()
+        public void GetFollowerAnalytics()
         {
             TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                IEnumerable<FollowersAnalyticModel> followers = await connection.Channels.GetFollowerMetrics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+                IEnumerable<FollowersAnalyticModel> followers = await connection.Channels.GetFollowerAnalytics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
 
                 Assert.IsNotNull(followers);
                 Assert.IsTrue(followers.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetSubscriberAnalytics()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<SubscriberAnalyticModel> subscribers = await connection.Channels.GetSubscriberAnalytics(channel, DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7)));
+
+                Assert.IsNotNull(subscribers);
+                Assert.IsTrue(subscribers.Count() > 0);
             });
         }
 
