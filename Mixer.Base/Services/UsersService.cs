@@ -1,6 +1,7 @@
 ﻿using Mixer.Base.Model;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
+using Mixer.Base.Model.Subscription;
 using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
@@ -113,6 +114,20 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", maxResults);
+        }
+
+        /// <summary>
+        /// Gets all channels that the specified user is subscribed to. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="user">The user to get subscriptions for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All users that the specified user is subscribed to</returns>
+        public async Task<IEnumerable<SubscriptionWithGroupModel>> GetSubscriptions(UserModel user, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            return await this.GetPagedAsync<SubscriptionWithGroupModel>("users/" + user.id + "/subscriptions", maxResults);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using Mixer.Base;
 using Mixer.Base.Model;
 using Mixer.Base.Model.Channel;
+using Mixer.Base.Model.Subscription;
 using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using System.Collections.Generic;
@@ -84,6 +85,20 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetSubscriptions()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
+
+                IEnumerable<SubscriptionWithGroupModel> subs = await connection.Users.GetSubscriptions(user, 1);
+
+                Assert.IsNotNull(subs);
+                Assert.IsTrue(subs.Count() > 0);
             });
         }
 

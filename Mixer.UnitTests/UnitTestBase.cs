@@ -31,6 +31,8 @@ namespace Mixer.UnitTests
             OAuthClientScopeEnum.interactive__manage__self,
             OAuthClientScopeEnum.interactive__robot__self,
 
+            OAuthClientScopeEnum.subscription__view__self,
+
             OAuthClientScopeEnum.user__details__self,
             OAuthClientScopeEnum.user__log__self,
             OAuthClientScopeEnum.user__notification__self,
