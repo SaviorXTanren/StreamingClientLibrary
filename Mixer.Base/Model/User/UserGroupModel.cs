@@ -3,6 +3,6 @@
     public class UserGroupModel : TimeStampedModel
     {
         public uint id { get; set; }
-        public string type { get; set; }
+        public string name { get; set; }
     }
 }
