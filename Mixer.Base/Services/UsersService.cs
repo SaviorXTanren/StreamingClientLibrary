@@ -83,7 +83,7 @@ namespace Mixer.Base.Services
         public async Task<UserModel> GetUser(string username)
         {
             Validator.ValidateString(username, "username");
-            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?where=username:eq:" + username + "&");
+            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?query=" + username);
             if (users.Count() > 0)
             {
                 return users.First();
