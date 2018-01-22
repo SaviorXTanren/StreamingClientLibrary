@@ -17,6 +17,21 @@ namespace Mixer.Base.Services
         public GameTypesService(MixerConnection connection) : base(connection) { }
 
         /// <summary>
+        /// Gets the known game type by its ID.
+        /// </summary>
+        /// <param name="id">The id of the game to search for</param>
+        /// <returns>The matching game type for the ID specified</returns>
+        public async Task<GameTypeModel> GetGameType(uint id)
+        {
+            IEnumerable<GameTypeModel> gamesTypes = await this.GetPagedAsync<GameTypeModel>("types?where=id:eq:" + id);
+            if (gamesTypes.Count() > 0)
+            {
+                return gamesTypes.First();
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets all known game types. The search can be limited to a maximum number of results to speed
         /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.

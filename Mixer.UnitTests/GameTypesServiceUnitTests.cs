@@ -26,6 +26,11 @@ namespace Mixer.UnitTests
                 Assert.IsTrue(gameTypes.Count() > 0);
                 Assert.IsTrue(gameTypes.Any(gt => gt.name.Equals(gameName)));
 
+                GameTypeModel gameType = await connection.GameTypes.GetGameType(gameTypes.First().id);
+
+                Assert.IsNotNull(gameType);
+                Assert.IsTrue(gameType.name.Equals(gameName));
+
                 IEnumerable<ChannelModel> channels = await connection.GameTypes.GetChannelsByGameType(gameTypes.First(), 1);
 
                 Assert.IsNotNull(channels);
