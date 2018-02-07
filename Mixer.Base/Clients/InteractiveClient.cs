@@ -42,7 +42,7 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
-        private uint lastSequenceNumber = 0;
+        private int lastSequenceNumber = 0;
 
         /// <summary>
         /// Creates an interactive client using the specified connection to the specified channel and game.

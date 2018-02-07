@@ -15,7 +15,7 @@ namespace Mixer.Base.Model.Client
 
         public string method { get; set; }
 
-        public uint seq { get; set; }
+        public int seq { get; set; }
 
         public bool discard { get; set; }
 
