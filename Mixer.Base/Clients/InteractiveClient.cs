@@ -582,12 +582,6 @@ namespace Mixer.Base.Clients
             return await base.Send(packet, checkIfAuthenticated);
         }
 
-        protected async override Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
-        {
-            this.AssignLatestSequence(packet);
-            return await base.SendAndListen(packet, checkIfAuthenticated);
-        }
-
         private void AssignLatestSequence(WebSocketPacket packet)
         {
             if (packet is MethodPacket)

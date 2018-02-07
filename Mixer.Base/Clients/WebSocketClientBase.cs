@@ -124,7 +124,7 @@ namespace Mixer.Base.Clients
             return packet.id;
         }
 
-        protected virtual async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             uint? id = null;
 
