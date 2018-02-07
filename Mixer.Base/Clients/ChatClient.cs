@@ -104,13 +104,12 @@ namespace Mixer.Base.Clients
             };
 
             this.Authenticated = false;
-            this.OnReplyOccurred += AuthenticateEventHandler;
 
-            await this.Send(packet, checkIfAuthenticated: false);
-
-            await this.WaitForResponse(() => { return this.Authenticated; });
-
-            this.OnReplyOccurred -= AuthenticateEventHandler;
+            ReplyPacket reply = await this.SendAndListen(packet, checkIfAuthenticated: false);
+            if (reply != null && reply.dataObject.TryGetValue("authenticated", out JToken value))
+            {
+                this.Authenticated = (bool)value;
+            }
 
             return this.Authenticated;
         }
@@ -342,15 +341,6 @@ namespace Mixer.Base.Clients
             if (e.eventName.Equals("WelcomeEvent"))
             {
                 this.Connected = true;
-            }
-        }
-
-        private void AuthenticateEventHandler(object sender, ReplyPacket e)
-        {
-            JToken value;
-            if (e.id == (this.CurrentPacketID - 1) && e.dataObject.TryGetValue("authenticated", out value) && (bool)value)
-            {
-                this.Authenticated = true;
             }
         }
 

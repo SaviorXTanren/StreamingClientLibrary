@@ -27,17 +27,15 @@ namespace Mixer.Base.Clients
         public bool Connected { get; protected set; }
         public bool Authenticated { get; protected set; }
 
-        internal uint CurrentPacketID { get; private set; }
-
         protected ClientWebSocket webSocket = new ClientWebSocket();
         private UTF8Encoding encoder = new UTF8Encoding();
 
-        private SemaphoreSlim asyncSemaphore = new SemaphoreSlim(1);
+        private SemaphoreSlim packetIDSemaphore = new SemaphoreSlim(1);
+        private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
 
-        public WebSocketClientBase()
-        {
-            this.CurrentPacketID = 0;
-        }
+        private int randomPacketIDSeed = (int)DateTime.Now.Ticks;
+
+        public WebSocketClientBase() { }
 
         protected async Task ConnectInternal(string endpoint)
         {
@@ -94,20 +92,28 @@ namespace Mixer.Base.Clients
                 throw new InvalidOperationException("Client is not authenticated");
             }
 
-            packet.id = this.CurrentPacketID;
+            if (packet.id == 0)
+            {
+                await this.packetIDSemaphore.WaitAsync();
+
+                this.randomPacketIDSeed -= 1000;
+                Random random = new Random(this.randomPacketIDSeed);
+                packet.id = (uint)random.Next(100, int.MaxValue);
+
+                this.packetIDSemaphore.Release();
+            }
+
             string packetJson = JsonConvert.SerializeObject(packet);
             byte[] buffer = this.encoder.GetBytes(packetJson);
 
-            await this.asyncSemaphore.WaitAsync();
-
+            await this.sendSemaphore.WaitAsync();
             try
             {
                 await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
             }
             finally
             {
-                this.CurrentPacketID++;
-                this.asyncSemaphore.Release();
+                this.sendSemaphore.Release();
             }
 
             if (this.OnPacketSentOccurred != null)
