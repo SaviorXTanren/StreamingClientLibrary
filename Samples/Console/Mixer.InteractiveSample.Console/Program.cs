@@ -58,26 +58,29 @@ namespace Mixer.InteractiveSample.Console
                     if (Program.interactiveClient.Connect().Result && Program.interactiveClient.Ready().Result)
                     {
                         InteractiveConnectedSceneGroupCollectionModel scenes = Program.interactiveClient.GetScenes().Result;
-                        Program.scenes.AddRange(scenes.scenes);
-
-                        foreach (InteractiveConnectedSceneModel scene in Program.scenes)
+                        if (scenes != null)
                         {
-                            foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                            Program.scenes.AddRange(scenes.scenes);
+
+                            foreach (InteractiveConnectedSceneModel scene in Program.scenes)
                             {
-                                Program.buttons.Add(button);
+                                foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                                {
+                                    Program.buttons.Add(button);
+                                }
+
+                                foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
+                                {
+                                    Program.joysticks.Add(joystick);
+                                }
                             }
 
-                            foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
-                            {
-                                Program.joysticks.Add(joystick);
-                            }
+                            Program.interactiveClient.OnParticipantJoin += InteractiveClient_OnParticipantJoin;
+                            Program.interactiveClient.OnParticipantLeave += InteractiveClient_OnParticipantLeave;
+                            Program.interactiveClient.OnGiveInput += InteractiveClient_OnGiveInput;
+
+                            while (true) { }
                         }
-
-                        Program.interactiveClient.OnParticipantJoin += InteractiveClient_OnParticipantJoin;
-                        Program.interactiveClient.OnParticipantLeave += InteractiveClient_OnParticipantLeave;
-                        Program.interactiveClient.OnGiveInput += InteractiveClient_OnGiveInput;
-
-                        while (true) { }
                     }
                 }
             }

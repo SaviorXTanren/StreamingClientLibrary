@@ -97,18 +97,21 @@ namespace Mixer.InteractiveSample.WPF
                     this.MainGrid.Visibility = Visibility.Visible;
 
                     InteractiveConnectedSceneGroupCollectionModel scenes = await this.interactiveClient.GetScenes();
-                    this.scenes = new List<InteractiveConnectedSceneModel>(scenes.scenes);
-
-                    foreach (InteractiveConnectedSceneModel scene in this.scenes)
+                    if (scenes != null)
                     {
-                        foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
-                        {
-                            this.buttons.Add(button);
-                        }
+                        this.scenes = new List<InteractiveConnectedSceneModel>(scenes.scenes);
 
-                        foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
+                        foreach (InteractiveConnectedSceneModel scene in this.scenes)
                         {
-                            this.joysticks.Add(joystick);
+                            foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                            {
+                                this.buttons.Add(button);
+                            }
+
+                            foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
+                            {
+                                this.joysticks.Add(joystick);
+                            }
                         }
                     }
                 }
