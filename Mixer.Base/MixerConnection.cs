@@ -74,7 +74,7 @@ namespace Mixer.Base
 
     public class MixerConnection
     {
-        public const string OAUTH_LOCALHOST_URL = "http://localhost:8080/";
+        public const string DEFAULT_OAUTH_LOCALHOST_URL = "http://localhost:8919/";
 
         private OAuthTokenModel token;
 
@@ -171,20 +171,20 @@ namespace Mixer.Base
             return url + "?" + await content.ReadAsStringAsync();
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
         {
-            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, loginSuccessHtmlPageFilePath);
+            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, oauthListenerURL: oauthListenerURL, loginSuccessHtmlPageFilePath: loginSuccessHtmlPageFilePath);
         }
 
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(OAUTH_LOCALHOST_URL, loginSuccessHtmlPageFilePath);
+            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(oauthListenerURL, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
-            string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, OAUTH_LOCALHOST_URL, forceApprovalPrompt);
+            string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);
             ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };
             Process.Start(startInfo);
 
@@ -193,7 +193,7 @@ namespace Mixer.Base
 
             if (authorizationCode != null)
             {
-                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode, redirectUrl: OAUTH_LOCALHOST_URL);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode, redirectUrl: oauthListenerURL);
             }
             return null;
         }
