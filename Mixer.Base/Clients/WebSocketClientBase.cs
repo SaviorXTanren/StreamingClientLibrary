@@ -17,6 +17,7 @@ namespace Mixer.Base.Clients
     {
         private const int bufferSize = 1000000;
 
+        public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
         public event EventHandler<MethodPacket> OnMethodOccurred;
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
@@ -107,6 +108,11 @@ namespace Mixer.Base.Clients
             {
                 this.CurrentPacketID++;
                 this.asyncSemaphore.Release();
+            }
+
+            if (this.OnPacketSentOccurred != null)
+            {
+                this.OnPacketSentOccurred(this, packet);
             }
 
             return packet.id;
