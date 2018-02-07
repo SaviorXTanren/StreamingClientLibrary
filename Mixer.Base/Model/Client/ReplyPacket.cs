@@ -6,6 +6,8 @@ namespace Mixer.Base.Model.Client
     {
         public ReplyPacket() { this.type = "reply"; }
 
+        public uint seq { get; set; }
+
         public JToken result { get; set; }
         public JToken error { get; set; }
         public JToken data { get; set; }

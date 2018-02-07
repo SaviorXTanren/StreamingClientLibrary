@@ -82,7 +82,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        protected async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             if (!this.Connected)
             {
@@ -118,7 +118,7 @@ namespace Mixer.Base.Clients
             return packet.id;
         }
 
-        protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        protected virtual async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             uint? id = null;
 

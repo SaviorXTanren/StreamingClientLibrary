@@ -42,6 +42,8 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
+        private uint lastSequenceNumber = 0;
+
         /// <summary>
         /// Creates an interactive client using the specified connection to the specified channel and game.
         /// </summary>
@@ -102,6 +104,7 @@ namespace Mixer.Base.Clients
             if (this.Connected)
             {
                 this.OnMethodOccurred += InteractiveClient_OnMethodOccurred;
+                this.OnReplyOccurred += InteractiveClient_OnReplyOccurred;
             }
 
             return this.Connected;
@@ -573,6 +576,32 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(await this.SendAndListen(this.BuildCaptureSparkTransactionPacket(transactionID)));
         }
 
+        protected async override Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        {
+            this.AssignLatestSequence(packet);
+            return await base.Send(packet, checkIfAuthenticated);
+        }
+
+        protected async override Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        {
+            this.AssignLatestSequence(packet);
+            return await base.SendAndListen(packet, checkIfAuthenticated);
+        }
+
+        private void AssignLatestSequence(WebSocketPacket packet)
+        {
+            if (packet is MethodPacket)
+            {
+                MethodPacket mPacket = (MethodPacket)packet;
+                mPacket.seq = this.lastSequenceNumber;
+            }
+            else if (packet is ReplyPacket)
+            {
+                ReplyPacket rPacket = (ReplyPacket)packet;
+                rPacket.seq = this.lastSequenceNumber;
+            }
+        }
+
         private MethodPacket BuildCaptureSparkTransactionPacket(string transactionID)
         {
             Validator.ValidateString(transactionID, "transactionID");
@@ -583,6 +612,8 @@ namespace Mixer.Base.Clients
 
         private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket methodPacket)
         {
+            this.lastSequenceNumber = Math.Max(methodPacket.seq, this.lastSequenceNumber);
+
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
@@ -647,6 +678,11 @@ namespace Mixer.Base.Clients
                     this.SendSpecificMethod(methodPacket, this.OnGiveInput);
                     break;
             }
+        }
+
+        private void InteractiveClient_OnReplyOccurred(object sender, ReplyPacket e)
+        {
+            this.lastSequenceNumber = Math.Max(e.seq, this.lastSequenceNumber);
         }
 
         private void InteractiveClient_HelloMethodHandler(object sender, MethodPacket e)
