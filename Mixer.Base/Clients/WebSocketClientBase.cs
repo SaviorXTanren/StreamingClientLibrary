@@ -274,16 +274,19 @@ namespace Mixer.Base.Clients
                         else
                         {
                             this.DisconnectOccurred(result.CloseStatus);
+                            return;
                         }
                     }
                 }
                 else if (this.webSocket.State == WebSocketState.CloseReceived || this.webSocket.State == WebSocketState.Closed)
                 {
                     this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
+                    return;
                 }
                 else if (this.webSocket.State == WebSocketState.Aborted)
                 {
                     this.DisconnectOccurred(this.webSocket.CloseStatus);
+                    return;
                 }
             }
         }
