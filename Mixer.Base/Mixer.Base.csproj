@@ -8,17 +8,19 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.5.0.14-beta</Version>
+    <Version>0.5.1.0-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Updating default listening port for OAuth and allowing for custom specification of an OAuth listener URL
-</PackageReleaseNotes>
-    <AssemblyVersion>0.5.0.14</AssemblyVersion>
-    <FileVersion>0.5.0.14</FileVersion>
+    <PackageReleaseNotes>- Adding OnPacketSendOccurred event for WebSocket clients
+- Adding "seq" value to Method &amp; Reply packets for Interactive WebSocket client synchronization
+- Changing WebSocket packet ID to be randomized to ensure better reliability for reply packet listening
+- Altering SendAndListen API for better response time and less reliance on event listener ordering</PackageReleaseNotes>
+    <AssemblyVersion>0.5.1.0</AssemblyVersion>
+    <FileVersion>0.5.1.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
