@@ -34,6 +34,7 @@ namespace Mixer.Base.Clients
         private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
 
         private int randomPacketIDSeed = (int)DateTime.Now.Ticks;
+        private Dictionary<uint, ReplyPacket> replyIDListeners = new Dictionary<uint, ReplyPacket>();
 
         public WebSocketClientBase() { }
 
@@ -92,16 +93,7 @@ namespace Mixer.Base.Clients
                 throw new InvalidOperationException("Client is not authenticated");
             }
 
-            if (packet.id == 0)
-            {
-                await this.packetIDSemaphore.WaitAsync();
-
-                this.randomPacketIDSeed -= 1000;
-                Random random = new Random(this.randomPacketIDSeed);
-                packet.id = (uint)random.Next(100, int.MaxValue);
-
-                this.packetIDSemaphore.Release();
-            }
+            await this.AssignPacketID(packet);
 
             string packetJson = JsonConvert.SerializeObject(packet);
             byte[] buffer = this.encoder.GetBytes(packetJson);
@@ -126,25 +118,24 @@ namespace Mixer.Base.Clients
 
         protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
-            uint? id = null;
-
             ReplyPacket replyPacket = null;
 
-            EventHandler<ReplyPacket> listener = new EventHandler<ReplyPacket>(delegate (object sender, ReplyPacket reply)
+            await this.AssignPacketID(packet);
+            this.replyIDListeners[packet.id] = null;
+
+            await this.Send(packet, checkIfAuthenticated);
+
+            await this.WaitForResponse(() =>
             {
-                if (id != null && reply.id == id)
+                if (this.replyIDListeners.ContainsKey(packet.id) && this.replyIDListeners[packet.id] != null)
                 {
-                    replyPacket = reply;
+                    replyPacket = this.replyIDListeners[packet.id];
+                    return true;
                 }
+                return false;
             });
 
-            this.OnReplyOccurred += listener;
-
-            id = await this.Send(packet, checkIfAuthenticated);
-
-            await this.WaitForResponse(() => { return (replyPacket != null); });
-
-            this.OnReplyOccurred -= listener;
+            this.replyIDListeners.Remove(packet.id);
 
             return replyPacket;
         }
@@ -209,9 +200,9 @@ namespace Mixer.Base.Clients
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)
         {
-            for (int i = 0; i < 500 && !valueToCheck(); i++)
+            for (int i = 0; i < 50 && !valueToCheck(); i++)
             {
-                await Task.Delay(10);
+                await Task.Delay(100);
             }
         }
 
@@ -230,27 +221,27 @@ namespace Mixer.Base.Clients
                     {
                         if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                         {
-                            List<WebSocketPacket> packets = new List<WebSocketPacket>();
-
-                            string jsonBuffer = this.encoder.GetString(buffer);
-                            dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
-
-                            if (jsonObject.Type == JTokenType.Array)
+                            try
                             {
-                                JArray array = JArray.Parse(jsonBuffer);
-                                foreach (JToken token in array.Children())
+                                List<WebSocketPacket> packets = new List<WebSocketPacket>();
+
+                                string jsonBuffer = this.encoder.GetString(buffer);
+                                dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
+
+                                if (jsonObject.Type == JTokenType.Array)
                                 {
-                                    packets.Add(token.ToObject<WebSocketPacket>());
+                                    JArray array = JArray.Parse(jsonBuffer);
+                                    foreach (JToken token in array.Children())
+                                    {
+                                        packets.Add(token.ToObject<WebSocketPacket>());
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
-                            }
+                                else
+                                {
+                                    packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
+                                }
 
-                            foreach (WebSocketPacket packet in packets)
-                            {
-                                try
+                                foreach (WebSocketPacket packet in packets)
                                 {
                                     if (packet.type.Equals("method"))
                                     {
@@ -260,6 +251,12 @@ namespace Mixer.Base.Clients
                                     else if (packet.type.Equals("reply"))
                                     {
                                         ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+
+                                        if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                                        {
+                                            this.replyIDListeners[replyPacket.id] = replyPacket;
+                                        }
+
                                         this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
                                     }
                                     else if (packet.type.Equals("event"))
@@ -268,10 +265,10 @@ namespace Mixer.Base.Clients
                                         this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
                                     }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex);
-                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
                             }
                         }
                         else
@@ -288,6 +285,20 @@ namespace Mixer.Base.Clients
                 {
                     this.DisconnectOccurred(this.webSocket.CloseStatus);
                 }
+            }
+        }
+
+        private async Task AssignPacketID(WebSocketPacket packet)
+        {
+            if (packet.id == 0)
+            {
+                await this.packetIDSemaphore.WaitAsync();
+
+                this.randomPacketIDSeed -= 1000;
+                Random random = new Random(this.randomPacketIDSeed);
+                packet.id = (uint)random.Next(100, int.MaxValue);
+
+                this.packetIDSemaphore.Release();
             }
         }
 
