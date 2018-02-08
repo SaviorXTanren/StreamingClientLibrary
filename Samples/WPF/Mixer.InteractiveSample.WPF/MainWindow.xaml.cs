@@ -114,6 +114,8 @@ namespace Mixer.InteractiveSample.WPF
                             }
                         }
                     }
+
+                    DateTimeOffset? dateTime = await this.interactiveClient.GetTime();
                 }
             }
         }

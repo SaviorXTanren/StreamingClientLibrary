@@ -53,11 +53,13 @@ namespace Mixer.Base.Clients
                 if (ex.InnerException is WebException)
                 {
                     WebException webException = (WebException)ex.InnerException;
-                    HttpWebResponse response = (HttpWebResponse)webException.Response;
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    string responseString = reader.ReadToEnd();
-
-                    throw new WebSocketException(string.Format("{0} - {1} - {2}", response.StatusCode, response.StatusDescription, responseString), ex);
+                    if (webException.Response != null && webException.Response is HttpWebResponse)
+                    {
+                        HttpWebResponse response = (HttpWebResponse)webException.Response;
+                        StreamReader reader = new StreamReader(response.GetResponseStream());
+                        string responseString = reader.ReadToEnd();
+                        throw new WebSocketException(string.Format("{0} - {1} - {2}", response.StatusCode, response.StatusDescription, responseString), ex);
+                    }
                 }
                 throw ex;
             }
@@ -208,6 +210,7 @@ namespace Mixer.Base.Clients
 
         private async Task ReceiveInternal()
         {
+            string jsonBuffer = string.Empty;
             byte[] buffer = new byte[WebSocketClientBase.bufferSize];
 
             while (this.webSocket != null)
@@ -223,47 +226,51 @@ namespace Mixer.Base.Clients
                         {
                             try
                             {
-                                List<WebSocketPacket> packets = new List<WebSocketPacket>();
-
-                                string jsonBuffer = this.encoder.GetString(buffer);
-                                dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
-
-                                if (jsonObject.Type == JTokenType.Array)
+                                jsonBuffer += this.encoder.GetString(buffer);
+                                if (result.EndOfMessage)
                                 {
-                                    JArray array = JArray.Parse(jsonBuffer);
-                                    foreach (JToken token in array.Children())
-                                    {
-                                        packets.Add(token.ToObject<WebSocketPacket>());
-                                    }
-                                }
-                                else
-                                {
-                                    packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
-                                }
+                                    dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
 
-                                foreach (WebSocketPacket packet in packets)
-                                {
-                                    if (packet.type.Equals("method"))
+                                    List<WebSocketPacket> packets = new List<WebSocketPacket>();
+                                    if (jsonObject.Type == JTokenType.Array)
                                     {
-                                        MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
-                                        this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
-                                    }
-                                    else if (packet.type.Equals("reply"))
-                                    {
-                                        ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
-
-                                        if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                                        JArray array = JArray.Parse(jsonBuffer);
+                                        foreach (JToken token in array.Children())
                                         {
-                                            this.replyIDListeners[replyPacket.id] = replyPacket;
+                                            packets.Add(token.ToObject<WebSocketPacket>());
                                         }
-
-                                        this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
                                     }
-                                    else if (packet.type.Equals("event"))
+                                    else
                                     {
-                                        EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
-                                        this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                        packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
                                     }
+
+                                    foreach (WebSocketPacket packet in packets)
+                                    {
+                                        if (packet.type.Equals("method"))
+                                        {
+                                            MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
+                                            this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
+                                        }
+                                        else if (packet.type.Equals("reply"))
+                                        {
+                                            ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+
+                                            if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                                            {
+                                                this.replyIDListeners[replyPacket.id] = replyPacket;
+                                            }
+
+                                            this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
+                                        }
+                                        else if (packet.type.Equals("event"))
+                                        {
+                                            EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
+                                            this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                        }
+                                    }
+
+                                    jsonBuffer = string.Empty;
                                 }
                             }
                             catch (Exception ex)
