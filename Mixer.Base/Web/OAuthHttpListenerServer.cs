@@ -38,12 +38,9 @@ namespace Mixer.Base.Web
                 int endIndex = token.IndexOf("&");
                 if (endIndex > 0)
                 {
-                    this.OAuthTokenModel = token.Substring(0, endIndex);
+                    token = token.Substring(0, endIndex);
                 }
-                else
-                {
-                    this.OAuthTokenModel = token.Substring(0);
-                }
+                this.OAuthTokenModel = token;
 
                 result = defaultSuccessResponse;
                 if (this.loginSuccessHtmlPageFilePath != null && File.Exists(this.loginSuccessHtmlPageFilePath))
