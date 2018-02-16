@@ -7,17 +7,15 @@ namespace Mixer.Base.Web
 {
     public class HttpClientWrapper : HttpClient
     {
-        private const string MixerRestAPIBaseAddress = "https://mixer.com/api/v1/";
-
-        public HttpClientWrapper()
+        public HttpClientWrapper(string baseAddress)
             : base()
         {
-            this.BaseAddress = new Uri(MixerRestAPIBaseAddress);
+            this.BaseAddress = new Uri(baseAddress);
             this.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public HttpClientWrapper(OAuthTokenModel token)
-            : this()
+        public HttpClientWrapper(string baseAddress, OAuthTokenModel token)
+            : this(baseAddress)
         {
             this.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.accessToken);
         }

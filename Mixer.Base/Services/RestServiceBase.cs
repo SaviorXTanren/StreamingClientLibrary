@@ -160,6 +160,8 @@ namespace Mixer.Base.Services
 
         protected abstract Task<OAuthTokenModel> GetOAuthToken();
 
+        protected abstract string GetBaseAddress();
+
         private async Task<T> ProcessResponse<T>(HttpResponseMessage response)
         {
             return JsonConvert.DeserializeObject<T>(await this.ProcessStringResponse(response));
@@ -197,9 +199,9 @@ namespace Mixer.Base.Services
             OAuthTokenModel token = await this.GetOAuthToken();
             if (token != null)
             {
-                return new HttpClientWrapper(token);
+                return new HttpClientWrapper(this.GetBaseAddress(), token);
             }
-            return new HttpClientWrapper();
+            return new HttpClientWrapper(this.GetBaseAddress());
         }
 
         private void LogRequest(string requestUri, HttpContent content = null)

@@ -6,6 +6,8 @@ namespace Mixer.Base.Services
 {
     public abstract class MixerServiceBase : RestServiceBase
     {
+        private const string MixerRestAPIBaseAddress = "https://mixer.com/api/v1/";
+
         private MixerConnection connection;
 
         public MixerServiceBase(MixerConnection connection)
@@ -24,5 +26,7 @@ namespace Mixer.Base.Services
             }
             return null;
         }
+
+        protected override string GetBaseAddress() { return MixerServiceBase.MixerRestAPIBaseAddress; }
     }
 }
