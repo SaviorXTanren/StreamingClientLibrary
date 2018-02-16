@@ -35,7 +35,15 @@ namespace Mixer.Base.Web
             if (request.RawUrl.Contains(URL_CODE_IDENTIFIER))
             {
                 string token = request.RawUrl.Substring(URL_CODE_IDENTIFIER.Length);
-                this.OAuthTokenModel = token.Substring(0, token.IndexOf("&"));
+                int endIndex = token.IndexOf("&");
+                if (endIndex > 0)
+                {
+                    this.OAuthTokenModel = token.Substring(0, endIndex);
+                }
+                else
+                {
+                    this.OAuthTokenModel = token.Substring(0);
+                }
 
                 result = defaultSuccessResponse;
                 if (this.loginSuccessHtmlPageFilePath != null && File.Exists(this.loginSuccessHtmlPageFilePath))
