@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
 {
-    public abstract class ServiceBase
+    public abstract class RestServiceBase
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
 
@@ -22,15 +22,7 @@ namespace Mixer.Base.Services
         public event EventHandler<string> OnSuccessResponseReceived;
         public event EventHandler<RestServiceRequestException> OnFailureResponseReceived;
 
-        private MixerConnection connection;
-
-        public ServiceBase(MixerConnection connection)
-        {
-            Validator.ValidateVariable(connection, "connection");
-            this.connection = connection;
-        }
-
-        internal ServiceBase() { }
+        public RestServiceBase() { }
 
         protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
@@ -166,6 +158,8 @@ namespace Mixer.Base.Services
 
         protected HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
 
+        protected abstract Task<OAuthTokenModel> GetOAuthToken();
+
         private async Task<T> ProcessResponse<T>(HttpResponseMessage response)
         {
             return JsonConvert.DeserializeObject<T>(await this.ProcessStringResponse(response));
@@ -200,9 +194,10 @@ namespace Mixer.Base.Services
 
         private async Task<HttpClientWrapper> GetHttpClient()
         {
-            if (this.connection != null)
+            OAuthTokenModel token = await this.GetOAuthToken();
+            if (token != null)
             {
-                return new HttpClientWrapper(await this.connection.GetOAuthToken());
+                return new HttpClientWrapper(token);
             }
             return new HttpClientWrapper();
         }

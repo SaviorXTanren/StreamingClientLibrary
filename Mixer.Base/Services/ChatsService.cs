@@ -10,7 +10,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for Chat-based services.
     /// </summary>
-    public class ChatsService : ServiceBase
+    public class ChatsService : MixerServiceBase
     {
         public ChatsService(MixerConnection connection) : base(connection) { }
 

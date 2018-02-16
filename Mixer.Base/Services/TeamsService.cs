@@ -9,7 +9,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for team-based services.
     /// </summary>
-    public class TeamsService : ServiceBase
+    public class TeamsService : MixerServiceBase
     {
         public TeamsService(MixerConnection connection) : base(connection) { }
 

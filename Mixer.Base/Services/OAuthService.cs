@@ -11,7 +11,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for OAuth-based services.
     /// </summary>
-    public class OAuthService : ServiceBase
+    public class OAuthService : MixerServiceBase
     {
         public OAuthService(MixerConnection connection) : base(connection) { }
 

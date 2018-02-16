@@ -12,7 +12,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for costream-based services.
     /// </summary>
-    public class CostreamService : ServiceBase
+    public class CostreamService : MixerServiceBase
     {
         public CostreamService(MixerConnection connection) : base(connection) { }
 

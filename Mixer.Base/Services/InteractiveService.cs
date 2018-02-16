@@ -10,7 +10,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for interactive-based services.
     /// </summary>
-    public class InteractiveService : ServiceBase
+    public class InteractiveService : MixerServiceBase
     {
         public InteractiveService(MixerConnection connection) : base(connection) { }
 

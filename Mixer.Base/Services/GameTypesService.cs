@@ -12,7 +12,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for game type-based services.
     /// </summary>
-    public class GameTypesService : ServiceBase
+    public class GameTypesService : MixerServiceBase
     {
         public GameTypesService(MixerConnection connection) : base(connection) { }
 

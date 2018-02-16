@@ -14,7 +14,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for user-based services.
     /// </summary>
-    public class UsersService : ServiceBase
+    public class UsersService : MixerServiceBase
     {
         public UsersService(MixerConnection connection) : base(connection) { }
 

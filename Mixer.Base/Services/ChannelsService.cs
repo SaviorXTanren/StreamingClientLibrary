@@ -13,7 +13,7 @@ namespace Mixer.Base.Services
     /// <summary>
     /// The APIs for Channel-based services.
     /// </summary>
-    public class ChannelsService : ServiceBase
+    public class ChannelsService : MixerServiceBase
     {
         public ChannelsService(MixerConnection connection) : base(connection) { }
 
