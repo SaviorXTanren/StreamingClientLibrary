@@ -24,7 +24,7 @@ namespace Mixer.Base.Services
 
         public RestServiceBase() { }
 
-        protected async Task<HttpResponseMessage> GetAsync(string requestUri)
+        public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
@@ -33,22 +33,22 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<T> GetAsync<T>(string requestUri)
+        public async Task<T> GetAsync<T>(string requestUri)
         {
             return await this.ProcessResponse<T>(await this.GetAsync(requestUri));
         }
 
-        protected async Task<JObject> GetJObjectAsync(string requestUri)
+        public async Task<JObject> GetJObjectAsync(string requestUri)
         {
             return await this.ProcessJObjectResponse(await this.GetAsync(requestUri));
         }
 
-        protected async Task<string> GetStringAsync(string requestUri)
+        public async Task<string> GetStringAsync(string requestUri)
         {
             return await this.ProcessStringResponse(await this.GetAsync(requestUri));
         }
 
-        protected async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
+        public async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
         {
             List<T> results = new List<T>();
             int currentPage = 0;
@@ -100,7 +100,7 @@ namespace Mixer.Base.Services
             return results;
         }
 
-        protected async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
@@ -109,12 +109,12 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<T> PostAsync<T>(string requestUri, HttpContent content)
+        public async Task<T> PostAsync<T>(string requestUri, HttpContent content)
         {
             return await this.ProcessResponse<T>(await this.PostAsync(requestUri, content));
         }
 
-        protected async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
+        public async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
@@ -123,12 +123,12 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<T> PutAsync<T>(string requestUri, HttpContent content)
+        public async Task<T> PutAsync<T>(string requestUri, HttpContent content)
         {
             return await this.ProcessResponse<T>(await this.PutAsync(requestUri, content));
         }
 
-        protected async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
+        public async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
@@ -139,12 +139,12 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
+        public async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
         {
             return await this.ProcessResponse<T>(await this.PatchAsync(requestUri, content));
         }
 
-        protected async Task<bool> DeleteAsync(string requestUri)
+        public async Task<bool> DeleteAsync(string requestUri)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
@@ -154,9 +154,9 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected HttpContent CreateContentFromObject(object obj) { return this.CreateContentFromString(JsonConvert.SerializeObject(obj)); }
+        public HttpContent CreateContentFromObject(object obj) { return this.CreateContentFromString(JsonConvert.SerializeObject(obj)); }
 
-        protected HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
+        public HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
 
         protected abstract Task<OAuthTokenModel> GetOAuthToken();
 
