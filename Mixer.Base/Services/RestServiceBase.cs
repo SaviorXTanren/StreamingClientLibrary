@@ -71,6 +71,10 @@ namespace Mixer.Base.Services
                 }
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
+                T[] pagedResults = await this.ProcessResponse<T[]>(response);
+                results.AddRange(pagedResults);
+                currentPage++;
+
                 if (linkPagesAvailable)
                 {
                     IEnumerable<string> linkValues;
@@ -87,14 +91,10 @@ namespace Mixer.Base.Services
                         }
                     }
                 }
-                else
+                else if (pagedResults.Count() > 0)
                 {
                     pageTotal++;
                 }
-
-                T[] pagedResults = await this.ProcessResponse<T[]>(response);
-                results.AddRange(pagedResults);
-                currentPage++;
             }
 
             return results;
