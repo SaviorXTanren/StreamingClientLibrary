@@ -4,7 +4,6 @@ using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Game;
 using Mixer.Base.Model.User;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +37,23 @@ namespace Mixer.UnitTests
             TestWrapper(async (MixerConnection connection) =>
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+            });
+        }
+
+        [TestMethod]
+        public void GetChannelDetails()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                UserModel user = await connection.Users.GetCurrentUser();
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > (uint)0);
+
+                ChannelDetailsModel channelDetails = await connection.Channels.GetChannelDetails(user.username);
+
+                Assert.IsNotNull(channelDetails);
+                Assert.IsTrue(channelDetails.id > (uint)0);
             });
         }
 

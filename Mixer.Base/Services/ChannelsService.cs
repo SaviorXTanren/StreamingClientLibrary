@@ -41,6 +41,17 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets more detailed information of channel with the specified channel name.
+        /// </summary>
+        /// <param name="channelName">The name of the channel (also the name of the user account)</param>
+        /// <returns>An detailed channel</returns>
+        public async Task<ChannelDetailsModel> GetChannelDetails(string channelName)
+        {
+            Validator.ValidateString(channelName, "channelName");
+            return await this.GetAsync<ChannelDetailsModel>("channels/" + channelName + "/details");
+        }
+
+        /// <summary>
         /// Updates the channel with the information supplied. Only limited information can be updated
         /// via this API. See the ChannelUpdateableModel for the fields that are updateable.
         /// </summary>
