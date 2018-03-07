@@ -16,6 +16,7 @@ namespace Mixer.Base.Clients
     public abstract class WebSocketClientBase : IDisposable
     {
         private const int bufferSize = 1000000;
+        private const string ClientNotConnectedExceptionMessage = "Client is not connected";
 
         public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
         public event EventHandler<MethodPacket> OnMethodOccurred;
@@ -104,6 +105,19 @@ namespace Mixer.Base.Clients
             try
             {
                 await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message) && ex.Message.Contains(ClientNotConnectedExceptionMessage))
+                {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    this.DisconnectOccurred(WebSocketCloseStatus.Empty);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+                else
+                {
+                    throw;
+                }
             }
             finally
             {
