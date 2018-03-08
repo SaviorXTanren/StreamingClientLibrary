@@ -46,7 +46,9 @@ namespace Mixer.Base.Clients
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                this.ReceiveInternal();
+                this.Receive();
+
+                this.CheckIfOpen();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             catch (WebSocketException ex)
@@ -66,15 +68,29 @@ namespace Mixer.Base.Clients
             }
         }
 
-        public async Task Disconnect()
+        public Task Disconnect()
         {
             try
             {
-                await this.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                this.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 this.Dispose();
             }
             catch (Exception) { }
+            return Task.FromResult(0);
         }
+
+        public WebSocketState GetState()
+        {
+            if (this.webSocket != null)
+            {
+                return this.webSocket.State;
+            }
+            return WebSocketState.Closed;
+        }
+
+        public bool IsOpen() { return (this.GetState() == WebSocketState.Open || this.GetState() == WebSocketState.Connecting); }
 
         public void Dispose()
         {
@@ -222,23 +238,32 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private async Task ReceiveInternal()
+        private async Task CheckIfOpen()
+        {
+            while (this.IsOpen())
+            {
+                await Task.Delay(10000);
+            }
+            this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
+        }
+
+        private async Task Receive()
         {
             string jsonBuffer = string.Empty;
             byte[] buffer = new byte[WebSocketClientBase.bufferSize];
 
             while (this.webSocket != null)
             {
-                if (this.webSocket.State == WebSocketState.Open)
+                if (this.IsOpen())
                 {
-                    Array.Clear(buffer, 0, buffer.Length);
-                    WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-                    if (result != null)
+                    try
                     {
-                        if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
+                        Array.Clear(buffer, 0, buffer.Length);
+                        WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                        if (result != null)
                         {
-                            try
+                            if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                             {
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
@@ -287,27 +312,30 @@ namespace Mixer.Base.Clients
                                     jsonBuffer = string.Empty;
                                 }
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                Console.WriteLine(ex);
+                                this.DisconnectOccurred(result.CloseStatus);
+                                return;
                             }
                         }
-                        else
-                        {
-                            this.DisconnectOccurred(result.CloseStatus);
-                            return;
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
                     }
                 }
-                else if (this.webSocket.State == WebSocketState.CloseReceived || this.webSocket.State == WebSocketState.Closed)
+                else
                 {
-                    this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
-                    return;
-                }
-                else if (this.webSocket.State == WebSocketState.Aborted)
-                {
-                    this.DisconnectOccurred(this.webSocket.CloseStatus);
-                    return;
+                    if (this.GetState() == WebSocketState.Aborted)
+                    {
+                        this.DisconnectOccurred(this.webSocket.CloseStatus);
+                        return;
+                    }
+                    else
+                    {
+                        this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
+                        return;
+                    }
                 }
             }
         }
