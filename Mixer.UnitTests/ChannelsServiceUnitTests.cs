@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mixer.Base;
+using Mixer.Base.Model.Broadcast;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Game;
 using Mixer.Base.Model.User;
@@ -366,6 +367,23 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(invite);
                 Assert.IsTrue(invite.Length > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetChannelBroadcast()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(channel.id > (uint)0);
+
+                BroadcastModel broadcast = await connection.Channels.GetCurrentBroadcast(channel);
+
+                Assert.IsNotNull(broadcast);
+                Assert.AreEqual(channel.id, broadcast.channelId);
             });
         }
     }

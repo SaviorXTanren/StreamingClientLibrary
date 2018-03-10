@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Model.Channel;
+﻿using Mixer.Base.Model.Broadcast;
+using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
@@ -413,6 +414,16 @@ namespace Mixer.Base.Services
                 return invite.ToString();
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets latest or ongoing broadcast from the channel.
+        /// </summary>
+        /// <param name="channel">The channel to get broadcast for</param>
+        /// <returns>The latest or ongoing broadcast for the specified channel</returns>
+        public async Task<BroadcastModel> GetCurrentBroadcast(ChannelModel channel)
+        {
+            return await this.GetAsync<BroadcastModel>("channels/" + channel.id + "/broadcast");
         }
 
         private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
