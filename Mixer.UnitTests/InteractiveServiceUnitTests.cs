@@ -165,6 +165,25 @@ namespace Mixer.UnitTests
             });
         }
 
+
+        [TestMethod]
+        public void GetInteractiveVersion()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetOwnedInteractiveGames(channel);
+
+                Assert.IsNotNull(games);
+                Assert.IsTrue(games.Count() > 0);
+
+                InteractiveGameVersionModel version = await connection.Interactive.GetInteractiveGameVersion(games.First().versions.First());
+
+                Assert.IsNotNull(version);
+            });
+        }
+
         [TestMethod]
         public void CreateGetUpdateDeleteGame()
         {

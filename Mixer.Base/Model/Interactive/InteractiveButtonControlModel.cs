@@ -15,5 +15,12 @@
         public string text { get; set; }
         public int cost { get; set; }
         public int keyCode { get; set; }
+
+        public string textSize { get; set; }
+        public string textColor { get; set; }
+        public string focusColor { get; set; }
+        public string accentColor { get; set; }
+        public string borderColor { get; set; }
+        public string backgroundColor { get; set; }
     }
 }
