@@ -19,6 +19,16 @@ namespace Mixer.Base.Services
         public ChannelsService(MixerConnection connection) : base(connection) { }
 
         /// <summary>
+        /// Gets the channel with the specified channel ID.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <returns>An expanded channel</returns>
+        public async Task<ExpandedChannelModel> GetChannel(uint channelID)
+        {
+            return await this.GetAsync<ExpandedChannelModel>("channels/" + channelID.ToString());
+        }
+
+        /// <summary>
         /// Gets the channel with the specified channel name.
         /// </summary>
         /// <param name="channelName">The name of the channel (also the name of the user account)</param>
@@ -42,10 +52,20 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets more detailed information of channel with the specified channel ID.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <returns>A detailed channel</returns>
+        public async Task<ChannelDetailsModel> GetChannelDetails(uint channelID)
+        {
+            return await this.GetAsync<ChannelDetailsModel>("channels/" + channelID.ToString() + "/details");
+        }
+
+        /// <summary>
         /// Gets more detailed information of channel with the specified channel name.
         /// </summary>
         /// <param name="channelName">The name of the channel (also the name of the user account)</param>
-        /// <returns>An detailed channel</returns>
+        /// <returns>A detailed channel</returns>
         public async Task<ChannelDetailsModel> GetChannelDetails(string channelName)
         {
             Validator.ValidateString(channelName, "channelName");

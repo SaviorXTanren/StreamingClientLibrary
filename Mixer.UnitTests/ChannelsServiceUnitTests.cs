@@ -42,6 +42,28 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetChannelByID()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                UserModel user = await connection.Users.GetCurrentUser();
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > (uint)0);
+
+                ChannelModel channel = await connection.Channels.GetChannel(user.username);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(channel.id > (uint)0);
+
+                channel = await connection.Channels.GetChannel(channel.id);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(channel.id > (uint)0);
+            });
+        }
+
+        [TestMethod]
         public void GetChannelDetails()
         {
             TestWrapper(async (MixerConnection connection) =>
