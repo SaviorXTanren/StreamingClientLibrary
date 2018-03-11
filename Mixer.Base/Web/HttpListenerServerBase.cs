@@ -36,6 +36,21 @@ namespace Mixer.Base.Web
             this.listener.Abort();
         }
 
+        protected virtual void RequestReceived(HttpListenerContext context, string data)
+        {
+            string streamResult = string.Empty;
+            HttpStatusCode code = this.RequestReceived(context.Request, data, out streamResult);
+
+            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+            context.Response.StatusCode = (int)code;
+            context.Response.StatusDescription = code.ToString();
+
+            byte[] buffer = Encoding.UTF8.GetBytes(streamResult);
+            context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+            context.Response.Close();
+        }
+
         protected virtual HttpStatusCode RequestReceived(HttpListenerRequest request, string data, out string result)
         {
             result = string.Empty;
@@ -65,17 +80,7 @@ namespace Mixer.Base.Web
 
                 var cleanedData = HttpUtility.UrlDecode(data_text);
 
-                string streamResult = string.Empty;
-                HttpStatusCode code = this.RequestReceived(context.Request, cleanedData, out streamResult);
-
-                context.Response.Headers["Access-Control-Allow-Origin"] = "*";
-                context.Response.StatusCode = (int)code;
-                context.Response.StatusDescription = code.ToString();
-
-                byte[] buffer = Encoding.UTF8.GetBytes(streamResult);
-                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-                context.Response.Close();
+                this.RequestReceived(context, cleanedData);
             }
             catch (Exception) { }
         }
