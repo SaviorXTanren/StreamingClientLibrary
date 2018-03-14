@@ -252,75 +252,82 @@ namespace Mixer.Base.Clients
             string jsonBuffer = string.Empty;
             byte[] buffer = new byte[WebSocketClientBase.bufferSize];
 
-            while (this.IsOpen())
+            try
             {
-                try
+                while (this.IsOpen())
                 {
-                    Array.Clear(buffer, 0, buffer.Length);
-                    WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-                    if (result != null)
+                    try
                     {
-                        if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
+                        Array.Clear(buffer, 0, buffer.Length);
+                        WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                        if (result != null)
                         {
-                            jsonBuffer += this.encoder.GetString(buffer);
-                            if (result.EndOfMessage)
+                            if (result.CloseStatus == null || result.CloseStatus != WebSocketCloseStatus.Empty)
                             {
-                                dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
-
-                                List<WebSocketPacket> packets = new List<WebSocketPacket>();
-                                if (jsonObject.Type == JTokenType.Array)
+                                jsonBuffer += this.encoder.GetString(buffer);
+                                if (result.EndOfMessage)
                                 {
-                                    JArray array = JArray.Parse(jsonBuffer);
-                                    foreach (JToken token in array.Children())
-                                    {
-                                        packets.Add(token.ToObject<WebSocketPacket>());
-                                    }
-                                }
-                                else
-                                {
-                                    packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
-                                }
+                                    dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
 
-                                foreach (WebSocketPacket packet in packets)
-                                {
-                                    if (packet.type.Equals("method"))
+                                    List<WebSocketPacket> packets = new List<WebSocketPacket>();
+                                    if (jsonObject.Type == JTokenType.Array)
                                     {
-                                        MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
-                                        this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
-                                    }
-                                    else if (packet.type.Equals("reply"))
-                                    {
-                                        ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
-
-                                        if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                                        JArray array = JArray.Parse(jsonBuffer);
+                                        foreach (JToken token in array.Children())
                                         {
-                                            this.replyIDListeners[replyPacket.id] = replyPacket;
+                                            packets.Add(token.ToObject<WebSocketPacket>());
                                         }
-
-                                        this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
                                     }
-                                    else if (packet.type.Equals("event"))
+                                    else
                                     {
-                                        EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
-                                        this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                        packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
                                     }
-                                }
 
-                                jsonBuffer = string.Empty;
+                                    foreach (WebSocketPacket packet in packets)
+                                    {
+                                        if (packet.type.Equals("method"))
+                                        {
+                                            MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
+                                            this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
+                                        }
+                                        else if (packet.type.Equals("reply"))
+                                        {
+                                            ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+
+                                            if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                                            {
+                                                this.replyIDListeners[replyPacket.id] = replyPacket;
+                                            }
+
+                                            this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
+                                        }
+                                        else if (packet.type.Equals("event"))
+                                        {
+                                            EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
+                                            this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
+                                        }
+                                    }
+
+                                    jsonBuffer = string.Empty;
+                                }
+                            }
+                            else
+                            {
+                                this.DisconnectOccurred(result.CloseStatus);
+                                return;
                             }
                         }
-                        else
-                        {
-                            this.DisconnectOccurred(result.CloseStatus);
-                            return;
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             if (this.GetState() == WebSocketState.Aborted)
