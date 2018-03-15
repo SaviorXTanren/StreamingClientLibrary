@@ -270,6 +270,8 @@ namespace Mixer.Base.Clients
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
                                 {
+                                    jsonBuffer = jsonBuffer.Substring(0, jsonBuffer.IndexOf('\0'));
+
                                     if (this.OnPacketReceivedOccurred != null)
                                     {
                                         this.OnPacketReceivedOccurred(this, jsonBuffer);
