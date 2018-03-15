@@ -298,12 +298,12 @@ namespace Mixer.Base.Clients
                                     {
                                         if (packet.type.Equals("method"))
                                         {
-                                            MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(jsonBuffer);
+                                            MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(packetData);
                                             this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
                                         }
                                         else if (packet.type.Equals("reply"))
                                         {
-                                            ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(jsonBuffer);
+                                            ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(packetData);
 
                                             if (this.replyIDListeners.ContainsKey(replyPacket.id))
                                             {
@@ -314,12 +314,10 @@ namespace Mixer.Base.Clients
                                         }
                                         else if (packet.type.Equals("event"))
                                         {
-                                            EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(jsonBuffer);
+                                            EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(packetData);
                                             this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
                                         }
                                     }
-
-                                    jsonBuffer = string.Empty;
                                 }
                             }
                             else
