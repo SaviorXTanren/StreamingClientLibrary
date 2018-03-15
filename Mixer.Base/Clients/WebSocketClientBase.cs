@@ -19,6 +19,8 @@ namespace Mixer.Base.Clients
         private const string ClientNotConnectedExceptionMessage = "Client is not connected";
 
         public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
+
+        public event EventHandler<string> OnPacketReceivedOccurred;
         public event EventHandler<MethodPacket> OnMethodOccurred;
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
@@ -268,6 +270,11 @@ namespace Mixer.Base.Clients
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
                                 {
+                                    if (this.OnPacketReceivedOccurred != null)
+                                    {
+                                        this.OnPacketReceivedOccurred(this, jsonBuffer);
+                                    }
+
                                     dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
 
                                     List<WebSocketPacket> packets = new List<WebSocketPacket>();
