@@ -270,19 +270,20 @@ namespace Mixer.Base.Clients
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
                                 {
-                                    jsonBuffer = jsonBuffer.Substring(0, jsonBuffer.IndexOf('\0'));
+                                    string packetData = jsonBuffer.Substring(0, jsonBuffer.IndexOf('\0'));
+                                    jsonBuffer = string.Empty;
 
                                     if (this.OnPacketReceivedOccurred != null)
                                     {
-                                        this.OnPacketReceivedOccurred(this, jsonBuffer);
+                                        this.OnPacketReceivedOccurred(this, packetData);
                                     }
 
-                                    dynamic jsonObject = JsonConvert.DeserializeObject(jsonBuffer);
+                                    dynamic jsonObject = JsonConvert.DeserializeObject(packetData);
 
                                     List<WebSocketPacket> packets = new List<WebSocketPacket>();
                                     if (jsonObject.Type == JTokenType.Array)
                                     {
-                                        JArray array = JArray.Parse(jsonBuffer);
+                                        JArray array = JArray.Parse(packetData);
                                         foreach (JToken token in array.Children())
                                         {
                                             packets.Add(token.ToObject<WebSocketPacket>());
@@ -290,7 +291,7 @@ namespace Mixer.Base.Clients
                                     }
                                     else
                                     {
-                                        packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(jsonBuffer));
+                                        packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(packetData));
                                     }
 
                                     foreach (WebSocketPacket packet in packets)
