@@ -21,9 +21,6 @@ namespace Mixer.Base.Clients
         public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
 
         public event EventHandler<string> OnPacketReceivedOccurred;
-        public event EventHandler<MethodPacket> OnMethodOccurred;
-        public event EventHandler<ReplyPacket> OnReplyOccurred;
-        public event EventHandler<EventPacket> OnEventOccurred;
 
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
@@ -101,6 +98,8 @@ namespace Mixer.Base.Clients
                 this.webSocket.Dispose();
             }
         }
+
+        protected abstract void ProcessReceivedPacket(string packetJSON);
 
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
@@ -216,27 +215,27 @@ namespace Mixer.Base.Clients
             return default(T);
         }
 
-        protected void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
-            }
-        }
-
-        protected void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()));
-            }
-        }
-
         protected async Task WaitForResponse(Func<bool> valueToCheck)
         {
             for (int i = 0; i < 50 && !valueToCheck(); i++)
             {
                 await Task.Delay(100);
+            }
+        }
+
+        protected void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
+        {
+            if (eventHandler != null)
+            {
+                eventHandler(this, packet);
+            }
+        }
+
+        protected void AddReplyPacketForListeners(ReplyPacket packet)
+        {
+            if (this.replyIDListeners.ContainsKey(packet.id))
+            {
+                this.replyIDListeners[packet.id] = packet;
             }
         }
 
@@ -270,54 +269,14 @@ namespace Mixer.Base.Clients
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
                                 {
-                                    string packetData = jsonBuffer.Substring(0, jsonBuffer.IndexOf('\0'));
-                                    jsonBuffer = string.Empty;
-
                                     if (this.OnPacketReceivedOccurred != null)
                                     {
-                                        this.OnPacketReceivedOccurred(this, packetData);
+                                        this.OnPacketReceivedOccurred(this, jsonBuffer);
                                     }
 
-                                    dynamic jsonObject = JsonConvert.DeserializeObject(packetData);
+                                    this.ProcessReceivedPacket(jsonBuffer);
 
-                                    List<WebSocketPacket> packets = new List<WebSocketPacket>();
-                                    if (jsonObject.Type == JTokenType.Array)
-                                    {
-                                        JArray array = JArray.Parse(packetData);
-                                        foreach (JToken token in array.Children())
-                                        {
-                                            packets.Add(token.ToObject<WebSocketPacket>());
-                                        }
-                                    }
-                                    else
-                                    {
-                                        packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(packetData));
-                                    }
-
-                                    foreach (WebSocketPacket packet in packets)
-                                    {
-                                        if (packet.type.Equals("method"))
-                                        {
-                                            MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(packetData);
-                                            this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
-                                        }
-                                        else if (packet.type.Equals("reply"))
-                                        {
-                                            ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(packetData);
-
-                                            if (this.replyIDListeners.ContainsKey(replyPacket.id))
-                                            {
-                                                this.replyIDListeners[replyPacket.id] = replyPacket;
-                                            }
-
-                                            this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
-                                        }
-                                        else if (packet.type.Equals("event"))
-                                        {
-                                            EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(packetData);
-                                            this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
-                                        }
-                                    }
+                                    jsonBuffer = string.Empty;
                                 }
                             }
                             else
@@ -359,14 +318,6 @@ namespace Mixer.Base.Clients
                 packet.id = (uint)random.Next(100, int.MaxValue);
 
                 this.packetIDSemaphore.Release();
-            }
-        }
-
-        private void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
-        {
-            if (eventHandler != null)
-            {
-                eventHandler(this, packet);
             }
         }
 

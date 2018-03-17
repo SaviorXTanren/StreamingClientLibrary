@@ -105,7 +105,7 @@ namespace Mixer.Base.Clients
         }
     }
 
-    public class ConstellationClient : WebSocketClientBase
+    public class ConstellationClient : MixerWebSocketClientBase
     {
         internal static IEnumerable<string> ConvertEventTypesToStrings(IEnumerable<ConstellationEventType> eventTypes)
         {

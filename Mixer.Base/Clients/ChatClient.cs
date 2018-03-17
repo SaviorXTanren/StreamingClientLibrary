@@ -14,7 +14,7 @@ namespace Mixer.Base.Clients
     /// <summary>
     /// The real-time client for Chat interactions.
     /// </summary>
-    public class ChatClient : WebSocketClientBase
+    public class ChatClient : MixerWebSocketClientBase
     {
         public event EventHandler<ChatMessageEventModel> OnMessageOccurred;
 
