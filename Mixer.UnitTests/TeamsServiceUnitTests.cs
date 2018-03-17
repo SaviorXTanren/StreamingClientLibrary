@@ -25,6 +25,11 @@ namespace Mixer.UnitTests
                 Assert.IsNotNull(team);
                 Assert.IsTrue(team.id > 0);
 
+                team = await connection.Teams.GetTeam(team.name);
+
+                Assert.IsNotNull(team);
+                Assert.IsTrue(team.id > 0);
+
                 IEnumerable<UserModel> users = await connection.Teams.GetTeamUsers(team, 1);
 
                 Assert.IsNotNull(users);

@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Mixer.Base.Services
 {
@@ -157,6 +158,8 @@ namespace Mixer.Base.Services
         public HttpContent CreateContentFromObject(object obj) { return this.CreateContentFromString(JsonConvert.SerializeObject(obj)); }
 
         public HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
+
+        public string EncodeString(string str) { return HttpUtility.UrlEncode(str); }
 
         protected abstract Task<OAuthTokenModel> GetOAuthToken();
 

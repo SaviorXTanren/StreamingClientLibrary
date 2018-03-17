@@ -2,6 +2,7 @@
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
@@ -34,6 +35,18 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(id, "id");
             return await this.GetAsync<TeamModel>("teams/" + id.ToString());
+        }
+
+        /// <summary>
+        /// Gets the team with the specified name.
+        /// </summary>
+        /// <param name="name">The id of the team</param>
+        /// <returns>The team</returns>
+        public async Task<TeamModel> GetTeam(string name)
+        {
+            Validator.ValidateVariable(name, "name");
+            IEnumerable<TeamModel> results = await this.GetPagedAsync<TeamModel>("teams?where=name:eq:" + this.EncodeString(name));
+            return results.FirstOrDefault();
         }
 
         /// <summary>
