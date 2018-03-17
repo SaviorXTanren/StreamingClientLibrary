@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
@@ -28,7 +29,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        protected override void ProcessReceivedPacket(string packetJSON)
+        protected override Task ProcessReceivedPacket(string packetJSON)
         {
             dynamic jsonObject = JsonConvert.DeserializeObject(packetJSON);
 
@@ -65,6 +66,8 @@ namespace Mixer.Base.Clients
                     this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
                 }
             }
+
+            return Task.FromResult(0);
         }
     }
 }

@@ -99,7 +99,7 @@ namespace Mixer.Base.Clients
             }
         }
 
-        protected abstract void ProcessReceivedPacket(string packetJSON);
+        protected abstract Task ProcessReceivedPacket(string packetJSON);
 
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
@@ -274,7 +274,7 @@ namespace Mixer.Base.Clients
                                         this.OnPacketReceivedOccurred(this, jsonBuffer);
                                     }
 
-                                    this.ProcessReceivedPacket(jsonBuffer);
+                                    await this.ProcessReceivedPacket(jsonBuffer);
 
                                     jsonBuffer = string.Empty;
                                 }
