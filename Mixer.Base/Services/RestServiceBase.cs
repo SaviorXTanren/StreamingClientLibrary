@@ -161,21 +161,17 @@ namespace Mixer.Base.Services
 
         public string EncodeString(string str) { return HttpUtility.UrlEncode(str); }
 
-        protected abstract Task<OAuthTokenModel> GetOAuthToken();
-
-        protected abstract string GetBaseAddress();
-
-        private async Task<T> ProcessResponse<T>(HttpResponseMessage response)
+        public async Task<T> ProcessResponse<T>(HttpResponseMessage response)
         {
             return JsonConvert.DeserializeObject<T>(await this.ProcessStringResponse(response));
         }
 
-        private async Task<JObject> ProcessJObjectResponse(HttpResponseMessage response)
+        public async Task<JObject> ProcessJObjectResponse(HttpResponseMessage response)
         {
             return JObject.Parse(await this.ProcessStringResponse(response));
         }
 
-        private async Task<string> ProcessStringResponse(HttpResponseMessage response)
+        public async Task<string> ProcessStringResponse(HttpResponseMessage response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -197,7 +193,7 @@ namespace Mixer.Base.Services
             }
         }
 
-        private async Task<HttpClientWrapper> GetHttpClient()
+        protected async Task<HttpClientWrapper> GetHttpClient()
         {
             OAuthTokenModel token = await this.GetOAuthToken();
             if (token != null)
@@ -206,6 +202,10 @@ namespace Mixer.Base.Services
             }
             return new HttpClientWrapper(this.GetBaseAddress());
         }
+
+        protected abstract Task<OAuthTokenModel> GetOAuthToken();
+
+        protected abstract string GetBaseAddress();
 
         private void LogRequest(string requestUri, HttpContent content = null)
         {
