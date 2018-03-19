@@ -12,6 +12,6 @@
 
         public InteractiveJoystickControlModel() { this.kind = JoystickControlKind; }
 
-        public int sampleRate { get; set; }
+        public int? sampleRate { get; set; }
     }
 }

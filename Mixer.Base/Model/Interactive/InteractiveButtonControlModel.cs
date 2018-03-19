@@ -13,8 +13,8 @@
         public InteractiveButtonControlModel() { this.kind = ButtonControlKind; }
 
         public string text { get; set; }
-        public int cost { get; set; }
-        public int keyCode { get; set; }
+        public int? cost { get; set; }
+        public int? keyCode { get; set; }
 
         public string textSize { get; set; }
         public string textColor { get; set; }
