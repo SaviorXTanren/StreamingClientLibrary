@@ -71,9 +71,7 @@ namespace Mixer.Base.Clients
         {
             this.OnEventOccurred -= ChatClient_OnEventOccurred;
 
-            int totalEndpoints = this.channelChat.endpoints.Count();
-            Random random = new Random();
-            int endpointToUse = random.Next() % totalEndpoints;
+            int endpointToUse = Math.Min(3, this.channelChat.endpoints.Count());
 
             this.OnEventOccurred += ConnectEventHandler;
 

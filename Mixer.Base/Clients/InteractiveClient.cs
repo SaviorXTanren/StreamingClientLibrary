@@ -89,9 +89,7 @@ namespace Mixer.Base.Clients
         {
             this.OnMethodOccurred -= InteractiveClient_OnMethodOccurred;
 
-            int totalEndpoints = this.interactiveConnections.Count();
-            Random random = new Random();
-            int endpointToUse = random.Next() % totalEndpoints;
+            int endpointToUse = Math.Min(3, this.interactiveConnections.Count());
 
             this.OnMethodOccurred += InteractiveClient_HelloMethodHandler;
 
