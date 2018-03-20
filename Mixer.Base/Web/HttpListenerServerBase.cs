@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mixer.Base.Util;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -82,7 +83,7 @@ namespace Mixer.Base.Web
 
                 this.RequestReceived(context, cleanedData);
             }
-            catch (Exception) { }
+            catch (Exception ex) { Logger.Log(ex); }
         }
     }
 }

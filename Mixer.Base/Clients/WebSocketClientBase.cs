@@ -76,7 +76,7 @@ namespace Mixer.Base.Clients
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 this.Dispose();
             }
-            catch (Exception) { }
+            catch (Exception ex) { Logger.Log(ex); }
             return Task.FromResult(0);
         }
 
@@ -125,6 +125,7 @@ namespace Mixer.Base.Clients
             }
             catch (InvalidOperationException ex)
             {
+                Logger.Log(ex);
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.Contains(ClientNotConnectedExceptionMessage))
                 {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -288,13 +289,13 @@ namespace Mixer.Base.Clients
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex);
+                        Logger.Log(ex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Logger.Log(ex);
             }
 
             if (this.GetState() == WebSocketState.Aborted)
