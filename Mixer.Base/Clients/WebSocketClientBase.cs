@@ -1,7 +1,6 @@
 ﻿using Mixer.Base.Model.Client;
 using Mixer.Base.Util;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
-    public abstract class WebSocketClientBase : IDisposable
+    public abstract class WebSocketClientBase
     {
         private const int bufferSize = 1000000;
         private const string ClientNotConnectedExceptionMessage = "Client is not connected";
@@ -24,10 +23,7 @@ namespace Mixer.Base.Clients
 
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
-        public bool Connected { get; protected set; }
-        public bool Authenticated { get; protected set; }
-
-        protected ClientWebSocket webSocket = new ClientWebSocket();
+        protected ClientWebSocket webSocket;
         private UTF8Encoding encoder = new UTF8Encoding();
 
         private SemaphoreSlim packetIDSemaphore = new SemaphoreSlim(1);
@@ -42,12 +38,11 @@ namespace Mixer.Base.Clients
         {
             try
             {
+                this.webSocket = new ClientWebSocket();
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 this.Receive();
-
-                this.CheckIfOpen();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             catch (WebSocketException ex)
@@ -74,7 +69,7 @@ namespace Mixer.Base.Clients
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 this.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                this.Dispose();
+                this.webSocket = null;
             }
             catch (Exception ex) { Logger.Log(ex); }
             return Task.FromResult(0);
@@ -91,28 +86,10 @@ namespace Mixer.Base.Clients
 
         public bool IsOpen() { return (this.GetState() == WebSocketState.Open || this.GetState() == WebSocketState.Connecting); }
 
-        public void Dispose()
-        {
-            if (this.webSocket != null)
-            {
-                this.webSocket.Dispose();
-            }
-        }
-
         protected abstract Task ProcessReceivedPacket(string packetJSON);
 
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
-            if (!this.Connected)
-            {
-                throw new InvalidOperationException("Client is not connected");
-            }
-
-            if (checkIfAuthenticated && !this.Authenticated)
-            {
-                throw new InvalidOperationException("Client is not authenticated");
-            }
-
             await this.AssignPacketID(packet);
 
             string packetJson = JsonConvert.SerializeObject(packet);
@@ -240,13 +217,12 @@ namespace Mixer.Base.Clients
             }
         }
 
-        private async Task CheckIfOpen()
+        protected virtual void DisconnectOccurred(WebSocketCloseStatus? result)
         {
-            while (this.IsOpen())
+            if (this.OnDisconnectOccurred != null)
             {
-                await Task.Delay(10000);
+                this.OnDisconnectOccurred(this, result.GetValueOrDefault());
             }
-            this.DisconnectOccurred(WebSocketCloseStatus.NormalClosure);
         }
 
         private async Task Receive()
@@ -319,15 +295,6 @@ namespace Mixer.Base.Clients
                 packet.id = (uint)random.Next(100, int.MaxValue);
 
                 this.packetIDSemaphore.Release();
-            }
-        }
-
-        private void DisconnectOccurred(WebSocketCloseStatus? result)
-        {
-            this.Connected = this.Authenticated = false;
-            if (this.OnDisconnectOccurred != null)
-            {
-                this.OnDisconnectOccurred(this, result.GetValueOrDefault());
             }
         }
     }
