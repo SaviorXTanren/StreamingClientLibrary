@@ -38,7 +38,7 @@ namespace Mixer.Base.Clients
         {
             try
             {
-                this.webSocket = new ClientWebSocket();
+                this.webSocket = this.CreateWebSocket();
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -87,6 +87,11 @@ namespace Mixer.Base.Clients
         public bool IsOpen() { return (this.GetState() == WebSocketState.Open || this.GetState() == WebSocketState.Connecting); }
 
         protected abstract Task ProcessReceivedPacket(string packetJSON);
+
+        protected virtual ClientWebSocket CreateWebSocket()
+        {
+            return new ClientWebSocket();
+        }
 
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {

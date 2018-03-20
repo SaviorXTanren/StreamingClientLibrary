@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -42,6 +43,8 @@ namespace Mixer.Base.Clients
 
         private IEnumerable<string> interactiveConnections;
 
+        private string oauthAccessToken;
+
         private int lastSequenceNumber = 0;
 
         /// <summary>
@@ -75,10 +78,7 @@ namespace Mixer.Base.Clients
             this.InteractiveGame = interactiveGame;
             this.interactiveConnections = interactiveConnections;
 
-            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", authToken.accessToken);
-            this.webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
-            this.webSocket.Options.SetRequestHeader("X-Interactive-Version", this.InteractiveGame.versions.OrderByDescending(v => v.versionOrder).First().id.ToString());
-            this.webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");
+            this.oauthAccessToken = authToken.accessToken;
         }
 
         /// <summary>
@@ -250,6 +250,18 @@ namespace Mixer.Base.Clients
         public async Task<InteractiveParticipantCollectionModel> UpdateParticipantsWithResponse(IEnumerable<InteractiveParticipantModel> participants)
         {
             return await this.SendAndListen<InteractiveParticipantCollectionModel>(this.BuildUpdateParticipantsPacket(participants));
+        }
+
+        protected override ClientWebSocket CreateWebSocket()
+        {
+            ClientWebSocket webSocket = base.CreateWebSocket();
+
+            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", this.oauthAccessToken);
+            webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
+            webSocket.Options.SetRequestHeader("X-Interactive-Version", this.InteractiveGame.versions.OrderByDescending(v => v.versionOrder).First().id.ToString());
+            webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");
+
+            return webSocket;
         }
 
         private MethodPacket BuildUpdateParticipantsPacket(IEnumerable<InteractiveParticipantModel> participants)

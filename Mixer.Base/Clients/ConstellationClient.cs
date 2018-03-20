@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -107,6 +108,8 @@ namespace Mixer.Base.Clients
 
     public class ConstellationClient : MixerWebSocketClientBase
     {
+        private string oauthAccessToken;
+
         internal static IEnumerable<string> ConvertEventTypesToStrings(IEnumerable<ConstellationEventType> eventTypes)
         {
             List<string> stringEventTypes = new List<string>();
@@ -140,9 +143,7 @@ namespace Mixer.Base.Clients
         {
             Validator.ValidateVariable(authToken, "authToken");
 
-            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", authToken.accessToken);
-            this.webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
-            this.webSocket.Options.SetRequestHeader("X-Is-Bot", true.ToString());
+            this.oauthAccessToken = authToken.accessToken;
         }
 
         /// <summary>
@@ -225,6 +226,17 @@ namespace Mixer.Base.Clients
         public async Task<bool> UnsubscribeToEventsWithResponse(IEnumerable<ConstellationEventType> events)
         {
             return this.VerifyNoErrors(await this.SendAndListen(this.BuildUnsubscribeToEventsPacket(events)));
+        }
+
+        protected override ClientWebSocket CreateWebSocket()
+        {
+            ClientWebSocket webSocket = base.CreateWebSocket();
+
+            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Bearer", this.oauthAccessToken);
+            webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
+            webSocket.Options.SetRequestHeader("X-Is-Bot", true.ToString());
+
+            return webSocket;
         }
 
         private MethodPacket BuildUnsubscribeToEventsPacket(IEnumerable<ConstellationEventType> events)
