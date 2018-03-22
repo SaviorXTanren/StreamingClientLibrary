@@ -15,6 +15,9 @@ namespace Mixer.Base.Clients
         public bool Connected { get; protected set; }
         public bool Authenticated { get; protected set; }
 
+        public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
+        public event EventHandler<WebSocketPacket> OnPacketReceivedOccurred;
+
         public event EventHandler<MethodPacket> OnMethodOccurred;
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
@@ -40,6 +43,11 @@ namespace Mixer.Base.Clients
             string packetJson = JsonConvert.SerializeObject(packet);
 
             await this.Send(packetJson, checkIfAuthenticated);
+
+            if (this.OnPacketSentOccurred != null)
+            {
+                this.OnPacketSentOccurred(this, packet);
+            }
 
             return packet.id;
         }
@@ -112,6 +120,11 @@ namespace Mixer.Base.Clients
 
             foreach (WebSocketPacket packet in packets)
             {
+                if (this.OnPacketReceivedOccurred != null)
+                {
+                    this.OnPacketReceivedOccurred(this, packet);
+                }
+
                 if (packet.type.Equals("method"))
                 {
                     MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(packetJSON);

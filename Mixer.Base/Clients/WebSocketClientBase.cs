@@ -13,8 +13,8 @@ namespace Mixer.Base.Clients
     {
         private const int bufferSize = 1000000;
 
-        public event EventHandler<string> OnPacketSentOccurred;
-        public event EventHandler<string> OnPacketReceivedOccurred;
+        public event EventHandler<string> OnSentOccurred;
+        public event EventHandler<string> OnReceivedOccurred;
 
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
@@ -125,9 +125,9 @@ namespace Mixer.Base.Clients
                 this.webSocketSemaphore.Release();
             }
 
-            if (this.OnPacketSentOccurred != null)
+            if (this.OnSentOccurred != null)
             {
-                this.OnPacketSentOccurred(this, packet);
+                this.OnSentOccurred(this, packet);
             };
         }
 
@@ -196,9 +196,9 @@ namespace Mixer.Base.Clients
                                 jsonBuffer += this.encoder.GetString(buffer);
                                 if (result.EndOfMessage)
                                 {
-                                    if (this.OnPacketReceivedOccurred != null)
+                                    if (this.OnReceivedOccurred != null)
                                     {
-                                        this.OnPacketReceivedOccurred(this, jsonBuffer);
+                                        this.OnReceivedOccurred(this, jsonBuffer);
                                     }
 
                                     await this.ProcessReceivedPacket(jsonBuffer);
