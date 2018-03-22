@@ -17,6 +17,7 @@ namespace Mixer.Base.Clients
         public event EventHandler<string> OnReceivedOccurred;
 
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
+        public event EventHandler OnReconnectionOccurred;
 
         private string endpoint;
         private bool autoReconnect;
@@ -163,6 +164,11 @@ namespace Mixer.Base.Clients
             this.webSocketSemaphore.Release();
 
             Logger.Log("Reconnection successful");
+
+            if (this.OnReconnectionOccurred != null)
+            {
+                this.OnReconnectionOccurred(this, new EventArgs());
+            }
         }
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)
