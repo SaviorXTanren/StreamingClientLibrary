@@ -1,14 +1,16 @@
 ﻿using Mixer.Base.Model.Client;
+using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
-    public abstract class MixerWebSocketClientBase : WebSocketClientBase
+    public class MixerWebSocketClientBase : WebSocketClientBase
     {
         public bool Connected { get; protected set; }
         public bool Authenticated { get; protected set; }
@@ -17,7 +19,11 @@ namespace Mixer.Base.Clients
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
 
-        protected override async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        private SemaphoreSlim packetIDSemaphore = new SemaphoreSlim(1);
+        private int randomPacketIDSeed = (int)DateTime.Now.Ticks;
+        private Dictionary<uint, ReplyPacket> replyIDListeners = new Dictionary<uint, ReplyPacket>();
+
+        protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             if (!this.Connected)
             {
@@ -29,22 +35,60 @@ namespace Mixer.Base.Clients
                 throw new InvalidOperationException("Client is not authenticated");
             }
 
-            return await base.Send(packet, checkIfAuthenticated);
+            await this.AssignPacketID(packet);
+
+            string packetJson = JsonConvert.SerializeObject(packet);
+
+            await this.Send(packetJson, checkIfAuthenticated);
+
+            return packet.id;
+        }
+
+        protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        {
+            ReplyPacket replyPacket = null;
+
+            await this.AssignPacketID(packet);
+            this.replyIDListeners[packet.id] = null;
+
+            await this.Send(packet, checkIfAuthenticated);
+
+            await this.WaitForResponse(() =>
+            {
+                if (this.replyIDListeners.ContainsKey(packet.id) && this.replyIDListeners[packet.id] != null)
+                {
+                    replyPacket = this.replyIDListeners[packet.id];
+                    return true;
+                }
+                return false;
+            });
+
+            this.replyIDListeners.Remove(packet.id);
+
+            return replyPacket;
+        }
+
+        protected async Task<T> SendAndListen<T>(WebSocketPacket packet, bool checkIfAuthenticated = true)
+        {
+            ReplyPacket reply = await this.SendAndListen(packet);
+            return this.GetSpecificReplyResultValue<T>(reply);
         }
 
         protected void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
         {
-            if (eventHandler != null)
-            {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()));
-            }
+            this.SendSpecificPacket(JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()), eventHandler);
         }
 
         protected void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
         {
+            this.SendSpecificPacket(JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()), eventHandler);
+        }
+
+        protected void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
+        {
             if (eventHandler != null)
             {
-                eventHandler(this, JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()));
+                eventHandler(this, packet);
             }
         }
 
@@ -89,10 +133,68 @@ namespace Mixer.Base.Clients
             return Task.FromResult(0);
         }
 
+        protected void AddReplyPacketForListeners(ReplyPacket packet)
+        {
+            if (this.replyIDListeners.ContainsKey(packet.id))
+            {
+                this.replyIDListeners[packet.id] = packet;
+            }
+        }
+
+        protected bool VerifyDataExists(ReplyPacket replyPacket)
+        {
+            return (replyPacket != null && replyPacket.data != null && !string.IsNullOrEmpty(replyPacket.data.ToString()));
+        }
+
+        protected bool VerifyNoErrors(ReplyPacket replyPacket)
+        {
+            if (replyPacket == null)
+            {
+                return false;
+            }
+            if (replyPacket.errorObject != null)
+            {
+                throw new ReplyPacketException(JsonConvert.DeserializeObject<ReplyErrorModel>(replyPacket.error.ToString()));
+            }
+            return true;
+        }
+
+        protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
+        {
+            this.VerifyNoErrors(replyPacket);
+
+            if (replyPacket != null)
+            {
+                if (replyPacket.resultObject != null)
+                {
+                    return JsonConvert.DeserializeObject<T>(replyPacket.resultObject.ToString());
+                }
+                else if (replyPacket.dataObject != null)
+                {
+                    return JsonConvert.DeserializeObject<T>(replyPacket.dataObject.ToString());
+                }
+            }
+            return default(T);
+        }
+
         protected override void DisconnectOccurred(WebSocketCloseStatus? result)
         {
             this.Connected = this.Authenticated = false;
             base.DisconnectOccurred(result);
+        }
+
+        private async Task AssignPacketID(WebSocketPacket packet)
+        {
+            if (packet.id == 0)
+            {
+                await this.packetIDSemaphore.WaitAsync();
+
+                this.randomPacketIDSeed -= 1000;
+                Random random = new Random(this.randomPacketIDSeed);
+                packet.id = (uint)random.Next(100, int.MaxValue);
+
+                this.packetIDSemaphore.Release();
+            }
         }
     }
 }

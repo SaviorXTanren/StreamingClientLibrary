@@ -84,16 +84,27 @@ namespace Mixer.Base.Clients
         /// <summary>
         /// Connects to the channel and game.
         /// </summary>
+        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> Connect()
+        public async Task<bool> Connect(bool autoReconnect = true)
+        {
+            int endpointToUse = Math.Min(3, this.interactiveConnections.Count());
+            return await this.Connect(this.interactiveConnections.ElementAt(endpointToUse), autoReconnect);
+        }
+
+        /// <summary>
+        /// Connects to the Constellation service.
+        /// </summary>
+        /// <param name="endpoint">The endpoint to connect to</param>
+        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public override async Task<bool> Connect(string endpoint, bool autoReconnect = true)
         {
             this.OnMethodOccurred -= InteractiveClient_OnMethodOccurred;
 
-            int endpointToUse = Math.Min(3, this.interactiveConnections.Count());
-
             this.OnMethodOccurred += InteractiveClient_HelloMethodHandler;
 
-            await this.ConnectInternal(this.interactiveConnections.ElementAt(endpointToUse));
+            await base.Connect(endpoint, autoReconnect);
 
             await this.WaitForResponse(() => { return this.Connected; });
 

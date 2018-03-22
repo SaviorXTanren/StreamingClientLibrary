@@ -149,14 +149,26 @@ namespace Mixer.Base.Clients
         /// <summary>
         /// Connects to the Constellation service.
         /// </summary>
+        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> Connect()
+        public async Task<bool> Connect(bool autoReconnect = true)
+        {
+            return await this.Connect("wss://constellation.mixer.com", autoReconnect);
+        }
+
+        /// <summary>
+        /// Connects to the Constellation service.
+        /// </summary>
+        /// <param name="endpoint">The endpoint to connect to</param>
+        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public override async Task<bool> Connect(string endpoint, bool autoReconnect = true)
         {
             this.OnEventOccurred -= ConstellationClient_OnEventOccurred;
 
             this.OnEventOccurred += ConstellationClient_HelloMethodHandler;
 
-            await this.ConnectInternal("wss://constellation.mixer.com");
+            await base.Connect(endpoint, autoReconnect);
 
             await this.WaitForResponse(() => { return this.Connected; });
 
