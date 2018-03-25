@@ -70,7 +70,7 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect(bool autoReconnect = true)
         {
-            int endpointToUse = Math.Min(3, this.channelChat.endpoints.Count());
+            int endpointToUse = Math.Min(2, this.channelChat.endpoints.Count());
             return await this.Connect(this.channelChat.endpoints[endpointToUse], autoReconnect);
         }
 

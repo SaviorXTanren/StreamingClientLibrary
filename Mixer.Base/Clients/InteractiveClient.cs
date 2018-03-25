@@ -88,7 +88,7 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect(bool autoReconnect = true)
         {
-            int endpointToUse = Math.Min(3, this.interactiveConnections.Count());
+            int endpointToUse = Math.Min(2, this.interactiveConnections.Count());
             return await this.Connect(this.interactiveConnections.ElementAt(endpointToUse), autoReconnect);
         }
 
