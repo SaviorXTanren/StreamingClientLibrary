@@ -277,7 +277,7 @@ namespace Mixer.Base
 
         internal async Task<OAuthTokenModel> GetOAuthToken()
         {
-            if (this.token.Expiration < DateTimeOffset.Now)
+            if (this.token.ExpirationDateTime < DateTimeOffset.Now)
             {
                 await this.RefreshOAuthToken();
             }

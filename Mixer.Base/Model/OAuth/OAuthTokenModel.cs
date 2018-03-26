@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Runtime.Serialization;
 
 namespace Mixer.Base.Model.OAuth
 {
@@ -15,7 +16,14 @@ namespace Mixer.Base.Model.OAuth
         [JsonProperty("expires_in")]
         public int expiresIn { get; set; }
 
+        [DataMember]
+        public DateTimeOffset AcquiredDateTime { get; set; }
         [JsonIgnore]
-        public DateTimeOffset Expiration { get { return DateTimeOffset.Now.AddSeconds(this.expiresIn); } }
+        public DateTimeOffset ExpirationDateTime { get { return this.AcquiredDateTime.AddSeconds(this.expiresIn); } }
+
+        public OAuthTokenModel()
+        {
+            this.AcquiredDateTime = DateTimeOffset.Now;
+        }
     }
 }
