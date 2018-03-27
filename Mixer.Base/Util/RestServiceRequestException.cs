@@ -6,6 +6,8 @@ namespace Mixer.Base.Util
 {
     public class RestServiceRequestException : HttpRequestException
     {
+        public string Request { get; set; }
+
         public HttpStatusCode StatusCode { get; private set; }
 
         public string Reason { get; private set; }
@@ -21,9 +23,15 @@ namespace Mixer.Base.Util
         public RestServiceRequestException(HttpResponseMessage response)
             : this(response.ReasonPhrase)
         {
+            this.Request = response.RequestMessage.RequestUri.ToString();
             this.StatusCode = response.StatusCode;
             this.Reason = response.ReasonPhrase;
             this.Content = response.Content.ReadAsStringAsync().Result;
+        }
+
+        public override string ToString()
+        {
+            return this.Request + Environment.NewLine + base.ToString();
         }
     }
 }
