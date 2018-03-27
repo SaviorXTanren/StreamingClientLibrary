@@ -36,8 +36,8 @@ namespace Mixer.Base.Clients
 
         [Name("Interactive Connected")]
         interactive__id__connect,
-        [Name("Interactive Disconnected")]
-        interactive__id__disconnected,
+        [Name("Interactive Disconnect")]
+        interactive__id__disconnect,
 
         [Name("Team Deleted")]
         team__id__deleted,
