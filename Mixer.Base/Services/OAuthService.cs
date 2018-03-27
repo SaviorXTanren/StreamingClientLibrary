@@ -76,7 +76,7 @@ namespace Mixer.Base.Services
                 payload["redirect_uri"] = redirectUrl;
             }
 
-            OAuthTokenModel token = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload));
+            OAuthTokenModel token = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload), autoRefreshToken: false);
             token.clientID = clientID;
             token.authorizationCode = authorizationCode;
             return token;
@@ -96,7 +96,7 @@ namespace Mixer.Base.Services
             payload["client_id"] = token.clientID;
             payload["refresh_token"] = token.refreshToken;
 
-            OAuthTokenModel newToken = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload));
+            OAuthTokenModel newToken = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload), autoRefreshToken: false);
             newToken.clientID = token.clientID;
             newToken.authorizationCode = token.authorizationCode;
             return newToken;

@@ -18,11 +18,11 @@ namespace Mixer.Base.Services
 
         internal MixerServiceBase() { }
 
-        protected override async Task<OAuthTokenModel> GetOAuthToken()
+        protected override async Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true)
         {
             if (this.connection != null)
             {
-                return await this.connection.GetOAuthToken();
+                return await this.connection.GetOAuthToken(autoRefreshToken);
             }
             return null;
         }

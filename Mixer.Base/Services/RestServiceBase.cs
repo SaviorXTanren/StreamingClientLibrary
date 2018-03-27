@@ -101,18 +101,18 @@ namespace Mixer.Base.Services
             return results;
         }
 
-        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, bool autoRefreshToken = true)
         {
-            using (HttpClientWrapper client = await this.GetHttpClient())
+            using (HttpClientWrapper client = await this.GetHttpClient(autoRefreshToken))
             {
                 this.LogRequest(requestUri, content);
                 return await client.PostAsync(requestUri, content);
             }
         }
 
-        public async Task<T> PostAsync<T>(string requestUri, HttpContent content)
+        public async Task<T> PostAsync<T>(string requestUri, HttpContent content, bool autoRefreshToken = true)
         {
-            return await this.ProcessResponse<T>(await this.PostAsync(requestUri, content));
+            return await this.ProcessResponse<T>(await this.PostAsync(requestUri, content, autoRefreshToken));
         }
 
         public async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
@@ -193,9 +193,9 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<HttpClientWrapper> GetHttpClient()
+        protected async Task<HttpClientWrapper> GetHttpClient(bool autoRefreshToken = true)
         {
-            OAuthTokenModel token = await this.GetOAuthToken();
+            OAuthTokenModel token = await this.GetOAuthToken(autoRefreshToken);
             if (token != null)
             {
                 return new HttpClientWrapper(this.GetBaseAddress(), token);
@@ -203,7 +203,7 @@ namespace Mixer.Base.Services
             return new HttpClientWrapper(this.GetBaseAddress());
         }
 
-        protected abstract Task<OAuthTokenModel> GetOAuthToken();
+        protected abstract Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true);
 
         protected abstract string GetBaseAddress();
 

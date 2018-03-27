@@ -275,9 +275,9 @@ namespace Mixer.Base
             };
         }
 
-        internal async Task<OAuthTokenModel> GetOAuthToken()
+        internal async Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true)
         {
-            if (this.token.ExpirationDateTime < DateTimeOffset.Now)
+            if (autoRefreshToken && this.token.ExpirationDateTime < DateTimeOffset.Now)
             {
                 await this.RefreshOAuthToken();
             }
