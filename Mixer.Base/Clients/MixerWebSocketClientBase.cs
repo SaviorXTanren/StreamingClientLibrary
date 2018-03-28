@@ -42,7 +42,7 @@ namespace Mixer.Base.Clients
 
             string packetJson = JsonConvert.SerializeObject(packet);
 
-            await this.Send(packetJson, checkIfAuthenticated);
+            await this.Send(packetJson);
 
             if (this.OnPacketSentOccurred != null)
             {
@@ -190,10 +190,10 @@ namespace Mixer.Base.Clients
             return default(T);
         }
 
-        protected override void DisconnectOccurred(WebSocketCloseStatus? result)
+        protected override void DisconnectOccurred(WebSocketCloseStatus closeStatus)
         {
             this.Connected = this.Authenticated = false;
-            base.DisconnectOccurred(result);
+            base.DisconnectOccurred(closeStatus);
         }
 
         private async Task AssignPacketID(WebSocketPacket packet)
