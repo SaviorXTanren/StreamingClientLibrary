@@ -86,7 +86,7 @@ namespace Mixer.Base.Clients
 
             this.OnEventOccurred += ConnectEventHandler;
 
-            await base.Connect(endpoint);
+            await base.Connect(endpoint, autoReconnect);
 
             await this.WaitForResponse(() => { return this.Connected; });
 
