@@ -34,11 +34,6 @@ namespace Mixer.Base.Clients
         [Name("Channel Updated")]
         channel__id__update,
 
-        [Name("Interactive Connected")]
-        interactive__id__connect,
-        [Name("Interactive Disconnect")]
-        interactive__id__disconnect,
-
         [Name("Team Deleted")]
         team__id__deleted,
         [Name("Team Member Accepted")]
