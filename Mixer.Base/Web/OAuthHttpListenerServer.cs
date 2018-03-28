@@ -29,12 +29,14 @@ namespace Mixer.Base.Web
             return this.OAuthTokenModel;
         }
 
-        protected override HttpStatusCode RequestReceived(HttpListenerRequest request, string data, out string result)
+        protected override async Task ProcessConnection(HttpListenerContext listenerContext)
         {
-            result = "OK";
-            if (request.RawUrl.Contains(URL_CODE_IDENTIFIER))
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            string result = string.Empty;
+
+            if (listenerContext.Request.RawUrl.Contains(URL_CODE_IDENTIFIER))
             {
-                string token = request.RawUrl.Substring(URL_CODE_IDENTIFIER.Length);
+                string token = listenerContext.Request.RawUrl.Substring(URL_CODE_IDENTIFIER.Length);
                 int endIndex = token.IndexOf("&");
                 if (endIndex > 0)
                 {
@@ -42,13 +44,15 @@ namespace Mixer.Base.Web
                 }
                 this.OAuthTokenModel = token;
 
+                statusCode = HttpStatusCode.OK;
                 result = defaultSuccessResponse;
                 if (this.loginSuccessHtmlPageFilePath != null && File.Exists(this.loginSuccessHtmlPageFilePath))
                 {
                     result = File.ReadAllText(this.loginSuccessHtmlPageFilePath);
                 }
             }
-            return HttpStatusCode.OK;
+
+            await this.CloseConnection(listenerContext, statusCode, result);
         }
     }
 }

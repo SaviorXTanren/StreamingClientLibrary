@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -13,77 +12,80 @@ namespace Mixer.Base.Web
     {
         private string address;
 
-        private HttpListener listener;
-        private CancellationTokenSource listenerThreadCancellationTokenSource = new CancellationTokenSource();
+        private HttpListener httpListener;
 
-        public HttpListenerServerBase(string address)
+        public HttpListenerServerBase(string address) { this.address = address; }
+
+        public bool Start()
         {
-            this.address = address;
-            this.listener = new HttpListener();
-        }
+            try
+            {
+                this.httpListener = new HttpListener();
+                this.httpListener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
+                this.httpListener.Prefixes.Add(this.address);
 
-        public void Start()
-        {
-            this.listener.Prefixes.Add(this.address);
-            this.listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
+                this.httpListener.Start();
 
-            this.listener.Start();
-            Task.Factory.StartNew(this.Listen, listenerThreadCancellationTokenSource.Token);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                this.WaitForConnection();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+                return true;
+            }
+            catch (Exception ex) { Logger.Log(ex); }
+
+            this.End();
+
+            return false;
         }
 
         public void End()
         {
-            this.listenerThreadCancellationTokenSource.Cancel();
-            this.listener.Abort();
-        }
-
-        protected virtual void RequestReceived(HttpListenerContext context, string data)
-        {
-            string streamResult = string.Empty;
-            HttpStatusCode code = this.RequestReceived(context.Request, data, out streamResult);
-
-            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
-            context.Response.StatusCode = (int)code;
-            context.Response.StatusDescription = code.ToString();
-
-            byte[] buffer = Encoding.UTF8.GetBytes(streamResult);
-            context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            context.Response.Close();
-        }
-
-        protected virtual HttpStatusCode RequestReceived(HttpListenerRequest request, string data, out string result)
-        {
-            result = string.Empty;
-            return HttpStatusCode.OK;
-        }
-
-        private void Listen(object s)
-        {
-            while (!this.listenerThreadCancellationTokenSource.IsCancellationRequested)
+            try
             {
-                this.listenerThreadCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                var result = this.listener.BeginGetContext(this.ListenerCallback, this.listener);
-                result.AsyncWaitHandle.WaitOne();
+                if (this.httpListener != null)
+                {
+                    this.httpListener.Stop();
+                }
             }
-
-            this.listenerThreadCancellationTokenSource.Token.ThrowIfCancellationRequested();
+            catch (Exception ex) { Logger.Log(ex); }
+            this.httpListener = null;
         }
 
-        private void ListenerCallback(IAsyncResult result)
+        protected abstract Task ProcessConnection(HttpListenerContext listenerContext);
+
+        protected async Task WaitForConnection()
         {
             try
             {
-                var context = listener.EndGetContext(result);
-                Thread.Sleep(1000);
-                var data_text = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding).ReadToEnd();
-
-                var cleanedData = HttpUtility.UrlDecode(data_text);
-
-                this.RequestReceived(context, cleanedData);
+                while (this.httpListener != null && this.httpListener.IsListening)
+                {
+                    try
+                    {
+                        HttpListenerContext listenerContext = await this.httpListener.GetContextAsync();
+                        await this.ProcessConnection(listenerContext);
+                        listenerContext.Response.Close();
+                    }
+                    catch (Exception ex) { Logger.Log(ex); }
+                }
             }
             catch (Exception ex) { Logger.Log(ex); }
+        }
+
+        protected async Task<string> GetRequestData(HttpListenerContext listenerContext)
+        {
+            string data = await new StreamReader(listenerContext.Request.InputStream, listenerContext.Request.ContentEncoding).ReadToEndAsync();
+            return HttpUtility.UrlDecode(data);
+        }
+
+        protected async Task CloseConnection(HttpListenerContext listenerContext, HttpStatusCode statusCode, string result)
+        {
+            listenerContext.Response.Headers["Access-Control-Allow-Origin"] = "*";
+            listenerContext.Response.StatusCode = (int)statusCode;
+            listenerContext.Response.StatusDescription = statusCode.ToString();
+
+            byte[] buffer = Encoding.UTF8.GetBytes(result);
+            await listenerContext.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
         }
     }
 }
