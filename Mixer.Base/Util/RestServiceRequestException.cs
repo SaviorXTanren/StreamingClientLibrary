@@ -31,7 +31,7 @@ namespace Mixer.Base.Util
 
         public override string ToString()
         {
-            return this.Request + Environment.NewLine + base.ToString();
+            return this.Request + Environment.NewLine + this.Content + Environment.NewLine + base.ToString();
         }
     }
 }
