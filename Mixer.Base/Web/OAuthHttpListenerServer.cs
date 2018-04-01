@@ -34,25 +34,38 @@ namespace Mixer.Base.Web
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             string result = string.Empty;
 
-            if (listenerContext.Request.RawUrl.Contains(URL_CODE_IDENTIFIER))
+            string token = this.GetIdentifierValue(listenerContext, URL_CODE_IDENTIFIER);
+            if (!string.IsNullOrEmpty(token))
             {
-                string token = listenerContext.Request.RawUrl.Substring(URL_CODE_IDENTIFIER.Length);
-                int endIndex = token.IndexOf("&");
-                if (endIndex > 0)
-                {
-                    token = token.Substring(0, endIndex);
-                }
-                this.OAuthTokenModel = token;
-
                 statusCode = HttpStatusCode.OK;
                 result = defaultSuccessResponse;
                 if (this.loginSuccessHtmlPageFilePath != null && File.Exists(this.loginSuccessHtmlPageFilePath))
                 {
                     result = File.ReadAllText(this.loginSuccessHtmlPageFilePath);
                 }
+
+                this.OAuthTokenModel = token;
             }
 
             await this.CloseConnection(listenerContext, statusCode, result);
+        }
+
+        protected string GetIdentifierValue(HttpListenerContext listenerContext, string identifier)
+        {
+            if (listenerContext.Request.RawUrl.Contains(identifier))
+            {
+                int startIndex = listenerContext.Request.RawUrl.IndexOf(identifier);
+
+                string token = listenerContext.Request.RawUrl.Substring(startIndex + identifier.Length);
+
+                int endIndex = token.IndexOf("&");
+                if (endIndex > 0)
+                {
+                    token = token.Substring(0, endIndex);
+                }
+                return token;
+            }
+            return null;
         }
     }
 }
