@@ -193,7 +193,11 @@ namespace Mixer.Base.Services
             }
         }
 
-        protected async Task<HttpClientWrapper> GetHttpClient(bool autoRefreshToken = true)
+        protected abstract Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true);
+
+        protected abstract string GetBaseAddress();
+
+        protected virtual async Task<HttpClientWrapper> GetHttpClient(bool autoRefreshToken = true)
         {
             OAuthTokenModel token = await this.GetOAuthToken(autoRefreshToken);
             if (token != null)
@@ -202,10 +206,6 @@ namespace Mixer.Base.Services
             }
             return new HttpClientWrapper(this.GetBaseAddress());
         }
-
-        protected abstract Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true);
-
-        protected abstract string GetBaseAddress();
 
         private void LogRequest(string requestUri, HttpContent content = null)
         {
