@@ -132,12 +132,14 @@ namespace Mixer.Base.Web
                     catch (Exception ex)
                     {
                         Logger.Log(ex);
+                        closeStatus = WebSocketCloseStatus.InternalServerError;
                     }
                 }
             }
             catch (Exception ex)
             {
                 Logger.Log(ex);
+                closeStatus = WebSocketCloseStatus.InternalServerError;
             }
 
             return closeStatus;

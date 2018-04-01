@@ -66,27 +66,25 @@ namespace Mixer.Base.Clients
         /// <summary>
         /// Connects to the channel Chat service.
         /// </summary>
-        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> Connect(bool autoReconnect = true)
+        public async Task<bool> Connect()
         {
             int endpointToUse = Math.Min(2, this.channelChat.endpoints.Count());
-            return await this.Connect(this.channelChat.endpoints[endpointToUse], autoReconnect);
+            return await this.Connect(this.channelChat.endpoints[endpointToUse]);
         }
 
         /// <summary>
         /// Connects to the channel Chat service.
         /// </summary>
         /// <param name="endpoint">The endpoint to connect to</param>
-        /// <param name="autoReconnect">Whether to auto-reconnect the web socket on bad disconnection</param>
         /// <returns>Whether the operation succeeded</returns>
-        public override async Task<bool> Connect(string endpoint, bool autoReconnect = true)
+        public override async Task<bool> Connect(string endpoint)
         {
             this.OnEventOccurred -= ChatClient_OnEventOccurred;
 
             this.OnEventOccurred += ConnectEventHandler;
 
-            await base.Connect(endpoint, autoReconnect);
+            await base.Connect(endpoint);
 
             await this.WaitForResponse(() => { return this.Connected; });
 
