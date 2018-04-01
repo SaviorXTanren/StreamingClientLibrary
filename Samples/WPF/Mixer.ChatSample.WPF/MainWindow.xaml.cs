@@ -77,6 +77,7 @@ namespace Mixer.ChatSample.WPF
 
                 this.chatClient = await ChatClient.CreateFromChannel(this.connection, this.channel);
 
+                this.chatClient.OnDisconnectOccurred += ChatClient_OnDisconnectOccurred;
                 this.chatClient.OnMessageOccurred += ChatClient_MessageOccurred;
                 this.chatClient.OnUserJoinOccurred += ChatClient_UserJoinOccurred;
                 this.chatClient.OnUserLeaveOccurred += ChatClient_UserLeaveOccurred;
@@ -140,6 +141,20 @@ namespace Mixer.ChatSample.WPF
         }
 
         #region Chat Event Handler
+
+        private async void ChatClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        {
+            this.chatMessages.Add(new ChatMessage("SYSTEM", "Disconnection Occurred, attempting reconnection..."));
+
+            System.Console.WriteLine();
+
+            do
+            {
+                await ChatClient.Reconnect(this.chatClient);
+            } while (!await this.chatClient.Authenticate());
+
+            this.chatMessages.Add(new ChatMessage("SYSTEM", "Reconnection successful"));
+        }
 
         private void ChatClient_MessageOccurred(object sender, ChatMessageEventModel e)
         {

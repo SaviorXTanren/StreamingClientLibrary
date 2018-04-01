@@ -26,6 +26,17 @@ namespace Mixer.Base.Clients
         private int randomPacketIDSeed = (int)DateTime.Now.Ticks;
         private Dictionary<uint, ReplyPacket> replyIDListeners = new Dictionary<uint, ReplyPacket>();
 
+        /// <summary>
+        /// Disconnects the web socket.
+        /// </summary>
+        /// <param name="closeStatus">Optional status to send to partner web socket as to why the web socket is being closed</param>
+        /// <returns>A task for the closing of the web socket</returns>
+        public override Task Disconnect(WebSocketCloseStatus closeStatus = WebSocketCloseStatus.NormalClosure)
+        {
+            this.Connected = this.Authenticated = false;
+            return base.Disconnect(closeStatus);
+        }
+
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             if (!this.Connected)
@@ -188,12 +199,6 @@ namespace Mixer.Base.Clients
                 }
             }
             return default(T);
-        }
-
-        protected override void DisconnectOccurred(WebSocketCloseStatus closeStatus)
-        {
-            this.Connected = this.Authenticated = false;
-            base.DisconnectOccurred(closeStatus);
         }
 
         private async Task AssignPacketID(WebSocketPacket packet)

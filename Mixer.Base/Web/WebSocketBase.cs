@@ -14,6 +14,9 @@ namespace Mixer.Base.Web
         public event EventHandler<string> OnSentOccurred;
         public event EventHandler<string> OnReceivedOccurred;
 
+        /// <summary>
+        /// Occurs when this web socket experiences an unexpected disconnection.
+        /// </summary>
         public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
 
         protected WebSocket webSocket;
@@ -22,25 +25,31 @@ namespace Mixer.Base.Web
 
         protected SemaphoreSlim webSocketSemaphore = new SemaphoreSlim(1);
 
-        public Task Disconnect(WebSocketCloseStatus closeStatus = WebSocketCloseStatus.NormalClosure)
+        /// <summary>
+        /// Disconnects the web socket.
+        /// </summary>
+        /// <param name="closeStatus">Optional status to send to partner web socket as to why the web socket is being closed</param>
+        /// <returns>A task for the closing of the web socket</returns>
+        public virtual Task Disconnect(WebSocketCloseStatus closeStatus = WebSocketCloseStatus.NormalClosure)
         {
             if (this.webSocket != null)
             {
                 try
                 {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    this.webSocket.CloseAsync(closeStatus, string.Empty, CancellationToken.None);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    this.webSocket.CloseAsync(closeStatus, string.Empty, CancellationToken.None).Wait(1);
                 }
                 catch (Exception ex) { Logger.Log(ex); }
             }
             this.webSocket = null;
 
-            this.DisconnectOccurred(closeStatus);
-
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Sends a text packet to the connected web socket.
+        /// </summary>
+        /// <param name="packet">The text packet to send</param>
+        /// <returns>A task for the sending of the packet</returns>
         public virtual async Task Send(string packet)
         {
             byte[] buffer = this.encoder.GetBytes(packet);
@@ -49,10 +58,7 @@ namespace Mixer.Base.Web
 
             try
             {
-                if (this.IsOpen())
-                {
-                    await this.SendInternal(buffer);
-                }
+                await this.SendInternal(buffer);
             }
             finally
             {
@@ -65,8 +71,16 @@ namespace Mixer.Base.Web
             };
         }
 
+        /// <summary>
+        /// Gets whether the web socket is currently open.
+        /// </summary>
+        /// <returns>Whether the web socket is currently open</returns>
         public bool IsOpen() { return (this.GetState() == WebSocketState.Open || this.GetState() == WebSocketState.Connecting); }
 
+        /// <summary>
+        /// Gets the current state of the web socket.
+        /// </summary>
+        /// <returns>The current state of the web socket</returns>
         public WebSocketState GetState()
         {
             if (this.webSocket != null)
@@ -81,14 +95,6 @@ namespace Mixer.Base.Web
         protected abstract Task SendInternal(byte[] buffer);
 
         protected abstract Task ProcessReceivedPacket(string packetJSON);
-
-        protected virtual void DisconnectOccurred(WebSocketCloseStatus closeStatus)
-        {
-            if (this.OnDisconnectOccurred != null)
-            {
-                this.OnDisconnectOccurred(this, closeStatus);
-            }
-        }
 
         protected virtual async Task<WebSocketCloseStatus> Receive()
         {
@@ -142,7 +148,26 @@ namespace Mixer.Base.Web
                 closeStatus = WebSocketCloseStatus.InternalServerError;
             }
 
+            if (closeStatus != WebSocketCloseStatus.NormalClosure)
+            {
+                await this.DisconnectAndFireEvent(closeStatus);
+            }
+            else
+            {
+                await this.Disconnect(closeStatus);
+            }
+
             return closeStatus;
+        }
+
+        protected async Task DisconnectAndFireEvent(WebSocketCloseStatus closeStatus = WebSocketCloseStatus.NormalClosure)
+        {
+            await this.Disconnect(closeStatus);
+
+            if (this.OnDisconnectOccurred != null)
+            {
+                Task.Run(() => { this.OnDisconnectOccurred(this, closeStatus); }).Wait(1);
+            }
         }
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)

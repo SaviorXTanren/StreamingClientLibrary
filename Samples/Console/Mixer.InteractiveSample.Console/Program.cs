@@ -75,6 +75,7 @@ namespace Mixer.InteractiveSample.Console
                                 }
                             }
 
+                            Program.interactiveClient.OnDisconnectOccurred += InteractiveClient_OnDisconnectOccurred;
                             Program.interactiveClient.OnParticipantJoin += InteractiveClient_OnParticipantJoin;
                             Program.interactiveClient.OnParticipantLeave += InteractiveClient_OnParticipantLeave;
                             Program.interactiveClient.OnGiveInput += InteractiveClient_OnGiveInput;
@@ -84,6 +85,18 @@ namespace Mixer.InteractiveSample.Console
                     }
                 }
             }
+        }
+
+        private static async void InteractiveClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        {
+            System.Console.WriteLine("Disconnection Occurred, attempting reconnection...");
+
+            do
+            {
+                await InteractiveClient.Reconnect(Program.interactiveClient);
+            } while (!await Program.interactiveClient.Ready());
+
+            System.Console.WriteLine("Reconnection successful");
         }
 
         private static void InteractiveClient_OnParticipantJoin(object sender, InteractiveParticipantCollectionModel e)

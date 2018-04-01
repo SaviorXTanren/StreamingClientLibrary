@@ -1,4 +1,5 @@
-﻿using Mixer.Base.Web;
+﻿using Mixer.Base.Util;
+using Mixer.Base.Web;
 using System;
 using System.IO;
 using System.Net;
@@ -10,13 +11,35 @@ namespace Mixer.Base.Clients
 {
     public abstract class WebSocketClientBase : WebSocketBase
     {
+        protected static async Task ReconnectionHelper(WebSocketClientBase client)
+        {
+            bool reconnectionSuccessful = false;
+            do
+            {
+                try
+                {
+                    await client.Disconnect();
+
+                    await Task.Delay(1000);
+
+                    reconnectionSuccessful = await client.Connect(client.Endpoint);
+                }
+                catch (Exception ex) { Logger.Log(ex); }
+            } while (!reconnectionSuccessful);
+        }
+
         protected new ClientWebSocket webSocket;
 
-        private string endpoint;
+        public string Endpoint { get; private set; }
 
+        /// <summary>
+        /// Connects the web socket to the server.
+        /// </summary>
+        /// <param name="endpoint">The endpoint to connect to</param>
+        /// <returns>Whether the connection was successful</returns>
         public virtual async Task<bool> Connect(string endpoint)
         {
-            this.endpoint = endpoint;
+            this.Endpoint = endpoint;
 
             try
             {
@@ -25,7 +48,7 @@ namespace Mixer.Base.Clients
 
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
 
-                this.Receive().Wait(1000);
+                this.Receive().Wait(1);
 
                 return true;
             }
@@ -49,10 +72,7 @@ namespace Mixer.Base.Clients
 
         protected override async Task SendInternal(byte[] buffer)
         {
-            if (this.IsOpen())
-            {
-                await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-            }
+            await this.webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         protected virtual ClientWebSocket CreateWebSocket()

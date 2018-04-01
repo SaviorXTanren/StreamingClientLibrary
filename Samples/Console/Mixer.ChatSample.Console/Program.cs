@@ -3,14 +3,19 @@ using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.User;
+using Mixer.Base.Util;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mixer.ChatSample.Console
 {
     public class Program
     {
+        private static ChatClient chatClient;
+
         public static void Main(string[] args)
         {
             List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
@@ -56,8 +61,9 @@ namespace Mixer.ChatSample.Console
                 System.Console.WriteLine();
                 System.Console.WriteLine("Connecting to channel chat...");
 
-                ChatClient chatClient = ChatClient.CreateFromChannel(connection, channel).Result;
+                chatClient = ChatClient.CreateFromChannel(connection, channel).Result;
 
+                chatClient.OnDisconnectOccurred += ChatClient_OnDisconnectOccurred;
                 chatClient.OnMessageOccurred += ChatClient_OnMessageOccurred;
                 chatClient.OnUserJoinOccurred += ChatClient_OnUserJoinOccurred;
                 chatClient.OnUserLeaveOccurred += ChatClient_OnUserLeaveOccurred;
@@ -73,6 +79,18 @@ namespace Mixer.ChatSample.Console
                     while (true) { }
                 }
             }
+        }
+
+        private static async void ChatClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        {
+            System.Console.WriteLine("Disconnection Occurred, attempting reconnection...");
+
+            do
+            {
+                await ChatClient.Reconnect(chatClient);
+            } while (!await chatClient.Authenticate());
+
+            System.Console.WriteLine("Reconnection successful");
         }
 
         private static void ChatClient_OnMessageOccurred(object sender, ChatMessageEventModel e)

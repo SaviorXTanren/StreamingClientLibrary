@@ -16,6 +16,15 @@ namespace Mixer.Base.Clients
     /// </summary>
     public class ChatClient : MixerWebSocketClientBase
     {
+        /// <summary>
+        /// Helper method to handle the reconnection of a web socket client. This method will return when
+        /// a connection is able to successfully be established via the Connect() method. This method
+        /// WILL NOT call any subsequent establishment methods (EX: Authenticate(), Ready(), etc).
+        /// </summary>
+        /// <param name="client">The web socket client to reconnect</param>
+        /// <returns>A task for the reconnection of the websocket</returns>
+        public static async Task Reconnect(ChatClient client) { await WebSocketClientBase.ReconnectionHelper(client); }
+
         public event EventHandler<ChatMessageEventModel> OnMessageOccurred;
 
         public event EventHandler<ChatUserEventModel> OnUserJoinOccurred;

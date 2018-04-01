@@ -148,9 +148,18 @@ namespace Mixer.LargeChat.WPF
 
         #region Chat Event Handler
 
-        private void ChatClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        private async void ChatClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
         {
-            this.AddChatMessage(new ChatMessage("ERROR", "DISCONNECTED FROM CHAT"));
+            this.chatMessages.Add(new ChatMessage("SYSTEM", "Disconnection Occurred, attempting reconnection..."));
+
+            System.Console.WriteLine();
+
+            do
+            {
+                await ChatClient.Reconnect(this.chatClient);
+            } while (!await this.chatClient.Authenticate());
+
+            this.chatMessages.Add(new ChatMessage("SYSTEM", "Reconnection successful"));
         }
 
         private void ChatClient_MessageOccurred(object sender, ChatMessageEventModel e)

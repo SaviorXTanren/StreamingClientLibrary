@@ -83,6 +83,7 @@ namespace Mixer.InteractiveSample.WPF
 
                 if (await this.interactiveClient.Connect() && await this.interactiveClient.Ready())
                 {
+                    this.interactiveClient.OnDisconnectOccurred += InteractiveClient_OnDisconnectOccurred;
                     this.interactiveClient.OnGiveInput += InteractiveClient_OnGiveInput;
                     this.interactiveClient.OnGroupCreate += InteractiveClient_OnGroupCreate;
                     this.interactiveClient.OnGroupDelete += InteractiveClient_OnGroupDelete;
@@ -129,6 +130,18 @@ namespace Mixer.InteractiveSample.WPF
         }
 
         #region Event Methods
+
+        private async void InteractiveClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
+        {
+            this.InteractiveDataTextBlock.Text += "Disconnection Occurred, attempting reconnection..." + Environment.NewLine;
+
+            do
+            {
+                await InteractiveClient.Reconnect(this.interactiveClient);
+            } while (!await this.interactiveClient.Ready());
+
+            this.InteractiveDataTextBlock.Text += "Reconnection successful" + Environment.NewLine;
+        }
 
         private async void InteractiveClient_OnGiveInput(object sender, InteractiveGiveInputModel e)
         {
