@@ -8,19 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.1.1-beta</Version>
+    <Version>0.6.1.2-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Making GetHttpClient() method on RestServiceBase virtual
-- Removing autoReconnect logic and pushing it back up to client's responsibility
-- Adding static reconnection helper method for client assistance
-- Updating samples to use reconnection helper</PackageReleaseNotes>
-    <AssemblyVersion>0.6.1.1</AssemblyVersion>
-    <FileVersion>0.6.1.1</FileVersion>
+    <PackageReleaseNotes>- Adding GetIdentifierValue() method to retrieve other URL identifiers for OAuth listening</PackageReleaseNotes>
+    <AssemblyVersion>0.6.1.2</AssemblyVersion>
+    <FileVersion>0.6.1.2</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
