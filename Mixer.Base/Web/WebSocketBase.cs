@@ -100,6 +100,7 @@ namespace Mixer.Base.Web
         {
             string jsonBuffer = string.Empty;
             byte[] buffer = new byte[WebSocketBase.bufferSize];
+            ArraySegment<byte> arrayBuffer = new ArraySegment<byte>(buffer);
 
             WebSocketCloseStatus closeStatus = WebSocketCloseStatus.NormalClosure;
 
@@ -110,13 +111,17 @@ namespace Mixer.Base.Web
                     try
                     {
                         Array.Clear(buffer, 0, buffer.Length);
-                        WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                        WebSocketReceiveResult result = await this.webSocket.ReceiveAsync(arrayBuffer, CancellationToken.None);
 
                         if (result != null)
                         {
-                            if (result.CloseStatus == null || result.CloseStatus == WebSocketCloseStatus.Empty)
+                            if (result.MessageType == WebSocketMessageType.Close || (result.CloseStatus != null && result.CloseStatus.GetValueOrDefault() != WebSocketCloseStatus.Empty))
                             {
-                                jsonBuffer += this.encoder.GetString(buffer);
+                                closeStatus = result.CloseStatus.GetValueOrDefault();
+                            }
+                            else if (result.MessageType == WebSocketMessageType.Text)
+                            {
+                                jsonBuffer += this.encoder.GetString(buffer, 0, result.Count);
                                 if (result.EndOfMessage)
                                 {
                                     if (this.OnReceivedOccurred != null)
@@ -125,13 +130,12 @@ namespace Mixer.Base.Web
                                     }
 
                                     await this.ProcessReceivedPacket(jsonBuffer);
-
                                     jsonBuffer = string.Empty;
                                 }
                             }
                             else
                             {
-                                closeStatus = result.CloseStatus.GetValueOrDefault();
+                                Logger.Log("Unsupported packet received");
                             }
                         }
                     }
@@ -139,6 +143,7 @@ namespace Mixer.Base.Web
                     {
                         Logger.Log(ex);
                         closeStatus = WebSocketCloseStatus.InternalServerError;
+                        jsonBuffer = string.Empty;
                     }
                 }
             }
