@@ -75,7 +75,11 @@ namespace Mixer.Base.Web
         /// Gets whether the web socket is currently open.
         /// </summary>
         /// <returns>Whether the web socket is currently open</returns>
-        public bool IsOpen() { return (this.GetState() == WebSocketState.Open || this.GetState() == WebSocketState.Connecting); }
+        public bool IsOpen()
+        {
+            WebSocketState state = this.GetState();
+            return (state == WebSocketState.Open || state == WebSocketState.Connecting);
+        }
 
         /// <summary>
         /// Gets the current state of the web socket.
@@ -83,10 +87,14 @@ namespace Mixer.Base.Web
         /// <returns>The current state of the web socket</returns>
         public WebSocketState GetState()
         {
-            if (this.webSocket != null)
+            try
             {
-                return this.webSocket.State;
+                if (this.webSocket != null && this.webSocket.CloseStatus != null && this.webSocket.CloseStatus == WebSocketCloseStatus.Empty)
+                {
+                    return this.webSocket.State;
+                }
             }
+            finally { }
             return WebSocketState.Closed;
         }
 
