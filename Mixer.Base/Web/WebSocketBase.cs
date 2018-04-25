@@ -89,7 +89,7 @@ namespace Mixer.Base.Web
         {
             try
             {
-                if (this.webSocket != null && this.webSocket.CloseStatus != null && this.webSocket.CloseStatus == WebSocketCloseStatus.Empty)
+                if (this.webSocket != null && (this.webSocket.CloseStatus == null || this.webSocket.CloseStatus == WebSocketCloseStatus.Empty))
                 {
                     return this.webSocket.State;
                 }
