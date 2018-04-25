@@ -33,6 +33,6 @@ namespace Mixer.Base.Model.Channel
         public uint? coverId { get; set; }
         public uint? thumbnailId { get; set; }
         public Guid? costreamId { get; set; }
-        public uint hosteeId { get; set; }
+        public uint? hosteeId { get; set; }
     }
 }
