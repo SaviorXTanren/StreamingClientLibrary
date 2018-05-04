@@ -22,5 +22,6 @@
         public string accentColor { get; set; }
         public string borderColor { get; set; }
         public string backgroundColor { get; set; }
+        public string backgroundImage { get; set; }
     }
 }
