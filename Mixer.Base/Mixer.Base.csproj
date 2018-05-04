@@ -8,21 +8,20 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.1.6-beta</Version>
+    <Version>0.6.1.7-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding hosteeId to ChannelModel
-- Making ReconnectionHelper static method public
-- Add exception squashing in WebSocketBase GetState() method to reduce exceptions logged</PackageReleaseNotes>
-    <AssemblyVersion>0.6.1.6</AssemblyVersion>
-    <FileVersion>0.6.1.6</FileVersion>
+    <PackageReleaseNotes>- Adding Background Image field for Interactive Buttons</PackageReleaseNotes>
+    <AssemblyVersion>0.6.1.7</AssemblyVersion>
+    <FileVersion>0.6.1.7</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
