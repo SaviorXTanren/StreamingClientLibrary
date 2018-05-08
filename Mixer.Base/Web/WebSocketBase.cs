@@ -75,11 +75,7 @@ namespace Mixer.Base.Web
         /// Gets whether the web socket is currently open.
         /// </summary>
         /// <returns>Whether the web socket is currently open</returns>
-        public bool IsOpen()
-        {
-            WebSocketState state = this.GetState();
-            return (state == WebSocketState.Open || state == WebSocketState.Connecting);
-        }
+        public bool IsOpen() { return this.GetState() == WebSocketState.Open; }
 
         /// <summary>
         /// Gets the current state of the web socket.

@@ -48,6 +48,8 @@ namespace Mixer.Base.Clients
 
                 await this.webSocket.ConnectAsync(new Uri(endpoint), CancellationToken.None);
 
+                await Task.Delay(1000);
+
                 this.Receive().Wait(1);
 
                 return true;
