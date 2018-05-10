@@ -18,6 +18,7 @@ namespace Mixer.UnitTests
             OAuthClientScopeEnum.channel__analytics__self,
             OAuthClientScopeEnum.channel__streamKey__self,
 
+            OAuthClientScopeEnum.chat__bypass_slowchat,
             OAuthClientScopeEnum.chat__chat,
             OAuthClientScopeEnum.chat__clear_messages,
             OAuthClientScopeEnum.chat__connect,
