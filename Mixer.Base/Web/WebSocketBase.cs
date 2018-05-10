@@ -65,10 +65,8 @@ namespace Mixer.Base.Web
                 this.webSocketSemaphore.Release();
             }
 
-            if (this.OnSentOccurred != null)
-            {
-                this.OnSentOccurred(this, packet);
-            };
+            this.OnSentOccurred?.Invoke(this, packet);
+            ;
         }
 
         /// <summary>
@@ -128,10 +126,7 @@ namespace Mixer.Base.Web
                                 jsonBuffer += this.encoder.GetString(buffer, 0, result.Count);
                                 if (result.EndOfMessage)
                                 {
-                                    if (this.OnReceivedOccurred != null)
-                                    {
-                                        this.OnReceivedOccurred(this, jsonBuffer);
-                                    }
+                                    this.OnReceivedOccurred?.Invoke(this, jsonBuffer);
 
                                     await this.ProcessReceivedPacket(jsonBuffer);
                                     jsonBuffer = string.Empty;
@@ -143,6 +138,7 @@ namespace Mixer.Base.Web
                             }
                         }
                     }
+                    catch (TaskCanceledException) { }
                     catch (Exception ex)
                     {
                         Logger.Log(ex);
@@ -173,10 +169,7 @@ namespace Mixer.Base.Web
         {
             await this.Disconnect(closeStatus);
 
-            if (this.OnDisconnectOccurred != null)
-            {
-                Task.Run(() => { this.OnDisconnectOccurred(this, closeStatus); }).Wait(1);
-            }
+            Task.Run(() => { this.OnDisconnectOccurred?.Invoke(this, closeStatus); }).Wait(1);
         }
 
         protected async Task WaitForResponse(Func<bool> valueToCheck)

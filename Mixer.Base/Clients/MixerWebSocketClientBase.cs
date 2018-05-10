@@ -22,9 +22,8 @@ namespace Mixer.Base.Clients
         public event EventHandler<ReplyPacket> OnReplyOccurred;
         public event EventHandler<EventPacket> OnEventOccurred;
 
-        private SemaphoreSlim packetIDSemaphore = new SemaphoreSlim(1);
-        private int randomPacketIDSeed = (int)DateTime.Now.Ticks;
-        private Dictionary<uint, ReplyPacket> replyIDListeners = new Dictionary<uint, ReplyPacket>();
+        private int currentPacketId = 0;
+        private readonly Dictionary<uint, ReplyPacket> replyIDListeners = new Dictionary<uint, ReplyPacket>();
 
         /// <summary>
         /// Disconnects the web socket.
@@ -49,16 +48,13 @@ namespace Mixer.Base.Clients
                 throw new InvalidOperationException("Client is not authenticated");
             }
 
-            await this.AssignPacketID(packet);
+            this.AssignPacketID(packet);
 
             string packetJson = JsonConvert.SerializeObject(packet);
 
             await this.Send(packetJson);
 
-            if (this.OnPacketSentOccurred != null)
-            {
-                this.OnPacketSentOccurred(this, packet);
-            }
+            this.OnPacketSentOccurred?.Invoke(this, packet);
 
             return packet.id;
         }
@@ -67,7 +63,7 @@ namespace Mixer.Base.Clients
         {
             ReplyPacket replyPacket = null;
 
-            await this.AssignPacketID(packet);
+            this.AssignPacketID(packet);
             this.replyIDListeners[packet.id] = null;
 
             await this.Send(packet, checkIfAuthenticated);
@@ -105,10 +101,7 @@ namespace Mixer.Base.Clients
 
         protected void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
         {
-            if (eventHandler != null)
-            {
-                eventHandler(this, packet);
-            }
+            eventHandler?.Invoke(this, packet);
         }
 
         protected override Task ProcessReceivedPacket(string packetJSON)
@@ -131,10 +124,7 @@ namespace Mixer.Base.Clients
 
             foreach (WebSocketPacket packet in packets)
             {
-                if (this.OnPacketReceivedOccurred != null)
-                {
-                    this.OnPacketReceivedOccurred(this, packet);
-                }
+                this.OnPacketReceivedOccurred?.Invoke(this, packet);
 
                 if (packet.type.Equals("method"))
                 {
@@ -201,17 +191,13 @@ namespace Mixer.Base.Clients
             return default(T);
         }
 
-        private async Task AssignPacketID(WebSocketPacket packet)
+        private void AssignPacketID(WebSocketPacket packet)
         {
-            if (packet.id == 0)
+            // This while loop is to protected from the packet ID wrapping around.
+            // This is highly unlikely as it would require more than 4 billion packets to be sent.
+            while (packet.id == 0)
             {
-                await this.packetIDSemaphore.WaitAsync();
-
-                this.randomPacketIDSeed -= 1000;
-                Random random = new Random(this.randomPacketIDSeed);
-                packet.id = (uint)random.Next(100, int.MaxValue);
-
-                this.packetIDSemaphore.Release();
+                packet.id = (uint)Interlocked.Increment(ref currentPacketId);
             }
         }
     }
