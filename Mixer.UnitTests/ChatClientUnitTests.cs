@@ -88,7 +88,7 @@ namespace Mixer.UnitTests
 
                 this.ValidateMessage(chatClient, message, messageText);
 
-                Assert.IsTrue(message.target.ToString().Equals(chatClient.User.username));
+                Assert.AreEqual(message.target.ToString(), chatClient.User.username, true);
             });
         }
 
@@ -185,7 +185,7 @@ namespace Mixer.UnitTests
         private void ValidateMessage(ChatClient chatClient, ChatMessageEventModel message, string messageText)
         {
             Assert.IsNotNull(message);
-            Assert.IsTrue(message.user_name.ToString().Equals(chatClient.User.username));
+            Assert.AreEqual(message.user_name.ToString(), chatClient.User.username, true);
             Assert.IsTrue(message.message.message.First().text.Equals(messageText));
         }
 
