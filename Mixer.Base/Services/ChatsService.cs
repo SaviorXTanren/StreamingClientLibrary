@@ -34,8 +34,7 @@ namespace Mixer.Base.Services
         public async Task<ChatUserModel> GetUser(ChannelModel channel, uint userID)
         {
             Validator.ValidateVariable(channel, "channel");
-            IEnumerable<ChatUserModel> users = await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users?where=id:eq:" + userID);
-            return users.FirstOrDefault();
+            return await this.GetAsync<ChatUserModel>("chats/" + channel.id + "/users/" + userID);
         }
 
         /// <summary>
