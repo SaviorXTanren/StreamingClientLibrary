@@ -17,6 +17,8 @@ namespace Mixer.InteractiveSample.Console
         private static List<InteractiveConnectedSceneModel> scenes = new List<InteractiveConnectedSceneModel>();
         private static List<InteractiveConnectedButtonControlModel> buttons = new List<InteractiveConnectedButtonControlModel>();
         private static List<InteractiveConnectedJoystickControlModel> joysticks = new List<InteractiveConnectedJoystickControlModel>();
+        private static List<InteractiveConnectedLabelControlModel> labels = new List<InteractiveConnectedLabelControlModel>();
+        private static List<InteractiveConnectedTextBoxControlModel> textBoxes = new List<InteractiveConnectedTextBoxControlModel>();
 
         public static void Main(string[] args)
         {
@@ -73,6 +75,23 @@ namespace Mixer.InteractiveSample.Console
                                 {
                                     Program.joysticks.Add(joystick);
                                 }
+
+                                foreach (InteractiveConnectedLabelControlModel label in scene.labels)
+                                {
+                                    Program.labels.Add(label);
+                                }
+
+                                foreach (InteractiveConnectedTextBoxControlModel textBox in scene.textBoxes)
+                                {
+                                    Program.textBoxes.Add(textBox);
+                                }
+
+                                foreach (InteractiveControlModel control in scene.allControls)
+                                {
+                                    control.disabled = false;
+                                }
+
+                                Program.interactiveClient.UpdateControls(scene, scene.allControls).Wait();
                             }
 
                             Program.interactiveClient.OnDisconnectOccurred += InteractiveClient_OnDisconnectOccurred;

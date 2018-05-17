@@ -29,6 +29,8 @@ namespace Mixer.InteractiveSample.WPF
 
         private List<InteractiveConnectedButtonControlModel> buttons = new List<InteractiveConnectedButtonControlModel>();
         private List<InteractiveConnectedJoystickControlModel> joysticks = new List<InteractiveConnectedJoystickControlModel>();
+        private List<InteractiveConnectedLabelControlModel> labels = new List<InteractiveConnectedLabelControlModel>();
+        private List<InteractiveConnectedTextBoxControlModel> textBoxes = new List<InteractiveConnectedTextBoxControlModel>();
 
         public MainWindow()
         {
@@ -113,6 +115,23 @@ namespace Mixer.InteractiveSample.WPF
                             {
                                 this.joysticks.Add(joystick);
                             }
+
+                            foreach (InteractiveConnectedLabelControlModel label in scene.labels)
+                            {
+                                this.labels.Add(label);
+                            }
+
+                            foreach (InteractiveConnectedTextBoxControlModel textBox in scene.textBoxes)
+                            {
+                                this.textBoxes.Add(textBox);
+                            }
+
+                            foreach (InteractiveControlModel control in scene.allControls)
+                            {
+                                control.disabled = false;
+                            }
+
+                            await this.interactiveClient.UpdateControls(scene, scene.allControls);
                         }
                     }
 

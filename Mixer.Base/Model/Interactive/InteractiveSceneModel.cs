@@ -14,5 +14,6 @@ namespace Mixer.Base.Model.Interactive
         public InteractiveSceneModel() { }
 
         public string sceneID { get; set; }
+        public string etag { get; set; }
     }
 }
