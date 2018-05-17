@@ -48,6 +48,7 @@ namespace Mixer.Base.Web
                     this.httpListener.Stop();
                 }
             }
+            catch (HttpListenerException) { }
             catch (Exception ex) { Logger.Log(ex); }
             this.httpListener = null;
         }
@@ -66,6 +67,7 @@ namespace Mixer.Base.Web
                         await this.ProcessConnection(listenerContext);
                         listenerContext.Response.Close();
                     }
+                    catch (HttpListenerException) { }
                     catch (Exception ex) { Logger.Log(ex); }
                 }
             }
