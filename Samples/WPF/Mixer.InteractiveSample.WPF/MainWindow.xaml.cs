@@ -106,32 +106,35 @@ namespace Mixer.InteractiveSample.WPF
 
                         foreach (InteractiveConnectedSceneModel scene in this.scenes)
                         {
-                            foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                            if (scene.allControls.Count() > 0)
                             {
-                                this.buttons.Add(button);
-                            }
+                                foreach (InteractiveConnectedButtonControlModel button in scene.buttons)
+                                {
+                                    this.buttons.Add(button);
+                                }
 
-                            foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
-                            {
-                                this.joysticks.Add(joystick);
-                            }
+                                foreach (InteractiveConnectedJoystickControlModel joystick in scene.joysticks)
+                                {
+                                    this.joysticks.Add(joystick);
+                                }
 
-                            foreach (InteractiveConnectedLabelControlModel label in scene.labels)
-                            {
-                                this.labels.Add(label);
-                            }
+                                foreach (InteractiveConnectedLabelControlModel label in scene.labels)
+                                {
+                                    this.labels.Add(label);
+                                }
 
-                            foreach (InteractiveConnectedTextBoxControlModel textBox in scene.textBoxes)
-                            {
-                                this.textBoxes.Add(textBox);
-                            }
+                                foreach (InteractiveConnectedTextBoxControlModel textBox in scene.textBoxes)
+                                {
+                                    this.textBoxes.Add(textBox);
+                                }
 
-                            foreach (InteractiveControlModel control in scene.allControls)
-                            {
-                                control.disabled = false;
-                            }
+                                foreach (InteractiveControlModel control in scene.allControls)
+                                {
+                                    control.disabled = false;
+                                }
 
-                            await this.interactiveClient.UpdateControls(scene, scene.allControls);
+                                await this.interactiveClient.UpdateControls(scene, scene.allControls);
+                            }
                         }
                     }
 
