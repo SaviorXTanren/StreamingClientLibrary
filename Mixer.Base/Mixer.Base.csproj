@@ -8,17 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.2.0-beta</Version>
+    <Version>0.6.2.1-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding support for Interactive Text Boxes
-- Updating samples to include Text Boxes</PackageReleaseNotes>
-    <AssemblyVersion>0.6.2.0</AssemblyVersion>
-    <FileVersion>0.6.2.0</FileVersion>
+    <PackageReleaseNotes>- Update follow query to bypass caches</PackageReleaseNotes>
+    <AssemblyVersion>0.6.2.1</AssemblyVersion>
+    <FileVersion>0.6.2.1</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
