@@ -194,14 +194,9 @@ namespace Mixer.Base.Services
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
 
-                string followQuery = "";
-                foreach (UserModel user in userSubset)
-                {
-                    followQuery += "where=id:eq:" + user.id + ",";
-                }
-                followQuery = followQuery.Remove(followQuery.Length - 1);
+                string followQuery = string.Join(",", userSubset.Select(user => $"where=id:eq:{user.id}"));
 
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?fields=id,followed&" + followQuery);
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&" + followQuery);
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
