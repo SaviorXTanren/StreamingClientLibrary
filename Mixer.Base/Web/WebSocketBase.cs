@@ -21,8 +21,6 @@ namespace Mixer.Base.Web
 
         protected WebSocket webSocket;
 
-        protected UTF8Encoding encoder = new UTF8Encoding();
-
         protected SemaphoreSlim webSocketSemaphore = new SemaphoreSlim(1);
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace Mixer.Base.Web
         /// <returns>A task for the sending of the packet</returns>
         public virtual async Task Send(string packet)
         {
-            byte[] buffer = this.encoder.GetBytes(packet);
+            byte[] buffer = Encoding.UTF8.GetBytes(packet);
 
             await this.webSocketSemaphore.WaitAsync();
 
@@ -123,7 +121,7 @@ namespace Mixer.Base.Web
                             }
                             else if (result.MessageType == WebSocketMessageType.Text)
                             {
-                                jsonBuffer += this.encoder.GetString(buffer, 0, result.Count);
+                                jsonBuffer += Encoding.UTF8.GetString(buffer, 0, result.Count);
                                 if (result.EndOfMessage)
                                 {
                                     this.OnReceivedOccurred?.Invoke(this, jsonBuffer);
