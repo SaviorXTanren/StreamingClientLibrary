@@ -23,5 +23,7 @@
         public string borderColor { get; set; }
         public string backgroundColor { get; set; }
         public string backgroundImage { get; set; }
+
+        public string tooltip { get; set; }
     }
 }
