@@ -1,5 +1,6 @@
 ﻿using Mixer.Base.Model.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mixer.Base.Model.Interactive
 {
@@ -22,5 +23,7 @@ namespace Mixer.Base.Model.Interactive
         public double y { get; set; }
 
         public string value { get; set; }
+
+        public JObject meta { get; set; }
     }
 }
