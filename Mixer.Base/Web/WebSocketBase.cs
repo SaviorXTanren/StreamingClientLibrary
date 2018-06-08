@@ -67,7 +67,6 @@ namespace Mixer.Base.Web
             }
 
             this.OnSentOccurred?.Invoke(this, packet);
-            ;
         }
 
         /// <summary>
