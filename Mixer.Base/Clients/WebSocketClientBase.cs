@@ -52,7 +52,7 @@ namespace Mixer.Base.Clients
 
                 this.Receive().Wait(1);
 
-                return true;
+                return IsOpen();
             }
             catch (Exception ex)
             {

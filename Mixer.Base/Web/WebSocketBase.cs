@@ -34,7 +34,10 @@ namespace Mixer.Base.Web
             {
                 try
                 {
-                    this.webSocket.CloseAsync(closeStatus, string.Empty, CancellationToken.None).Wait(1);
+                    if (GetState() != WebSocketState.Closed)
+                    {
+                        this.webSocket.CloseAsync(closeStatus, string.Empty, CancellationToken.None).Wait(1);
+                    }
                 }
                 catch (Exception ex) { Logger.Log(ex); }
             }
