@@ -11,23 +11,6 @@ namespace Mixer.Base.Clients
 {
     public abstract class WebSocketClientBase : WebSocketBase
     {
-        public static async Task ReconnectionHelper(WebSocketClientBase client)
-        {
-            bool reconnectionSuccessful = false;
-            do
-            {
-                try
-                {
-                    await client.Disconnect();
-
-                    await Task.Delay(1000);
-
-                    reconnectionSuccessful = await client.Connect(client.Endpoint);
-                }
-                catch (Exception ex) { Logger.Log(ex); }
-            } while (!reconnectionSuccessful);
-        }
-
         protected new ClientWebSocket webSocket;
 
         public string Endpoint { get; private set; }

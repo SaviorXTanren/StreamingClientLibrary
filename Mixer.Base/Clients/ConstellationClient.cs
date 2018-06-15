@@ -104,15 +104,6 @@ namespace Mixer.Base.Clients
 
     public class ConstellationClient : MixerWebSocketClientBase
     {
-        /// <summary>
-        /// Helper method to handle the reconnection of a web socket client. This method will return when
-        /// a connection is able to successfully be established via the Connect() method. This method
-        /// WILL NOT call any subsequent establishment methods (EX: Authenticate(), Ready(), etc).
-        /// </summary>
-        /// <param name="client">The web socket client to reconnect</param>
-        /// <returns>A task for the reconnection of the websocket</returns>
-        public static async Task Reconnect(ConstellationClient client) { await WebSocketClientBase.ReconnectionHelper(client); }
-
         private string oauthAccessToken;
 
         internal static IEnumerable<string> ConvertEventTypesToStrings(IEnumerable<ConstellationEventType> eventTypes)
