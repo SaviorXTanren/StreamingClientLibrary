@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Mixer.ChatSample.WPF
@@ -150,8 +151,9 @@ namespace Mixer.ChatSample.WPF
 
             do
             {
-                await ChatClient.Reconnect(this.chatClient);
-            } while (!await this.chatClient.Authenticate());
+                await Task.Delay(2500);
+            }
+            while (!await this.chatClient.Connect() && !await this.chatClient.Authenticate());
 
             this.chatMessages.Add(new ChatMessage("SYSTEM", "Reconnection successful"));
         }

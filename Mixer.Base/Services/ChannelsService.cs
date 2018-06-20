@@ -52,6 +52,16 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets a list of the currently featured channels. This API "appears" to only return regular, partnered channels and
+        /// does not return "business" channels (EX: Xbox Ambassadors channel).
+        /// </summary>
+        /// <returns>A list of the currently featured online channels</returns>
+        public async Task<IEnumerable<ExpandedChannelModel>> GetFeaturedChannels()
+        {
+            return await this.GetPagedAsync<ExpandedChannelModel>("channels?where=featured:eq:true", 100, linkPagesAvailable: false);
+        }
+
+        /// <summary>
         /// Gets more detailed information of channel with the specified channel ID.
         /// </summary>
         /// <param name="channelID">The ID of the channel</param>

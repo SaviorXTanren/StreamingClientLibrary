@@ -87,8 +87,9 @@ namespace Mixer.ChatSample.Console
 
             do
             {
-                await ChatClient.Reconnect(chatClient);
-            } while (!await chatClient.Authenticate());
+                await Task.Delay(2500);
+            }
+            while (!await Program.chatClient.Connect() && !await Program.chatClient.Authenticate());
 
             System.Console.WriteLine("Reconnection successful");
         }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Mixer.InteractiveSample.WPF
@@ -159,8 +160,9 @@ namespace Mixer.InteractiveSample.WPF
 
             do
             {
-                await InteractiveClient.Reconnect(this.interactiveClient);
-            } while (!await this.interactiveClient.Ready());
+                await Task.Delay(2500);
+            }
+            while (!await this.interactiveClient.Connect() && !await this.interactiveClient.Ready());
 
             this.InteractiveDataTextBlock.Text += "Reconnection successful" + Environment.NewLine;
         }

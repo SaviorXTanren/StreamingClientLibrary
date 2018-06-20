@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mixer.InteractiveSample.Console
 {
@@ -112,8 +113,9 @@ namespace Mixer.InteractiveSample.Console
 
             do
             {
-                await InteractiveClient.Reconnect(Program.interactiveClient);
-            } while (!await Program.interactiveClient.Ready());
+                await Task.Delay(2500);
+            }
+            while (!await Program.interactiveClient.Connect() && !await Program.interactiveClient.Ready());
 
             System.Console.WriteLine("Reconnection successful");
         }

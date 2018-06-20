@@ -81,6 +81,18 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetFeaturedChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetFeaturedChannels();
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+                Assert.IsTrue(channels.Select(c => c.id).Distinct().Count() >= 1);
+            });
+        }
+
+        [TestMethod]
         public void GetOnlineChannels()
         {
             TestWrapper(async (MixerConnection connection) =>

@@ -146,7 +146,7 @@ namespace Mixer.Base.Clients
         /// Connects to the Constellation service.
         /// </summary>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> Connect(bool autoReconnect = true)
+        public async Task<bool> Connect()
         {
             return await this.Connect("wss://constellation.mixer.com");
         }

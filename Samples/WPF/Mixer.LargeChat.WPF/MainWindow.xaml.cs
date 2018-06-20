@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -156,8 +157,9 @@ namespace Mixer.LargeChat.WPF
 
             do
             {
-                await ChatClient.Reconnect(this.chatClient);
-            } while (!await this.chatClient.Authenticate());
+                await Task.Delay(2500);
+            }
+            while (!await this.chatClient.Connect() && !await this.chatClient.Authenticate());
 
             this.chatMessages.Add(new ChatMessage("SYSTEM", "Reconnection successful"));
         }

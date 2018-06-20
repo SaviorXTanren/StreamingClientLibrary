@@ -85,7 +85,7 @@ namespace Mixer.Base.Clients
         /// Connects to the channel and game.
         /// </summary>
         /// <returns>Whether the operation succeeded</returns>
-        public async Task<bool> Connect(bool autoReconnect = true)
+        public async Task<bool> Connect()
         {
             int endpointToUse = Math.Min(2, this.interactiveConnections.Count());
             return await this.Connect(this.interactiveConnections.ElementAt(endpointToUse));
