@@ -8,17 +8,17 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.2.4-beta</Version>
+    <Version>0.6.2.5-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding meta property to GiveInput
-- Add extra handling around WebSocket disconnection</PackageReleaseNotes>
-    <AssemblyVersion>0.6.2.4</AssemblyVersion>
-    <FileVersion>0.6.2.4</FileVersion>
+    <PackageReleaseNotes>- Adding GetFeaturedChannels() API
+- Removing ReconnectionHelper methods</PackageReleaseNotes>
+    <AssemblyVersion>0.6.2.5</AssemblyVersion>
+    <FileVersion>0.6.2.5</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
