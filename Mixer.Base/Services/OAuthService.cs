@@ -64,6 +64,19 @@ namespace Mixer.Base.Services
         /// <returns></returns>
         public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string authorizationCode, string redirectUrl = null)
         {
+            return await this.GetOAuthTokenModel(clientID, null, authorizationCode, redirectUrl);
+        }
+
+        /// <summary>
+        /// Creates an OAuth token for authenticating with the Mixer services.
+        /// </summary>
+        /// <param name="clientID">The id of the client application</param>
+        /// <param name="clientSecret">The secret key of the client application</param>
+        /// <param name="authorizationCode">The authorization code</param>
+        /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
+        /// <returns></returns>
+        public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
+        {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(authorizationCode, "authorizationCode");
 
@@ -71,6 +84,10 @@ namespace Mixer.Base.Services
             payload["grant_type"] = "authorization_code";
             payload["client_id"] = clientID;
             payload["code"] = authorizationCode;
+            if (!string.IsNullOrEmpty(clientSecret))
+            {
+                payload["client_secret"] = clientSecret;
+            }
             if (!string.IsNullOrEmpty(redirectUrl))
             {
                 payload["redirect_uri"] = redirectUrl;

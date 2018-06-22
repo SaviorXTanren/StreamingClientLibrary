@@ -130,7 +130,7 @@ namespace Mixer.Base
 
             if (!string.IsNullOrEmpty(authorizationCode))
             {
-                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode);
             }
             return null;
         }
@@ -193,18 +193,23 @@ namespace Mixer.Base
 
             if (authorizationCode != null)
             {
-                return await MixerConnection.ConnectViaAuthorizationCode(clientID, authorizationCode, redirectUrl: oauthListenerURL);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, redirectUrl: oauthListenerURL);
             }
             return null;
         }
 
         public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode, string redirectUrl = null)
         {
+            return await MixerConnection.ConnectViaAuthorizationCode(clientID, null, authorizationCode, redirectUrl);
+        }
+
+        public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
+        {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(authorizationCode, "authorizationCode");
 
             OAuthService oauthService = new OAuthService();
-            OAuthTokenModel token = await oauthService.GetOAuthTokenModel(clientID, authorizationCode, redirectUrl);
+            OAuthTokenModel token = await oauthService.GetOAuthTokenModel(clientID, clientSecret, authorizationCode, redirectUrl);
             if (token == null)
             {
                 throw new InvalidOperationException("OAuth token was not acquired");
