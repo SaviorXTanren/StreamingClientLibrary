@@ -95,6 +95,7 @@ namespace Mixer.Base.Services
 
             OAuthTokenModel token = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload), autoRefreshToken: false);
             token.clientID = clientID;
+            token.clientSecret = clientSecret;
             token.authorizationCode = authorizationCode;
             return token;
         }
@@ -111,6 +112,10 @@ namespace Mixer.Base.Services
             JObject payload = new JObject();
             payload["grant_type"] = "refresh_token";
             payload["client_id"] = token.clientID;
+            if (!string.IsNullOrEmpty(token.clientSecret))
+            {
+                payload["client_secret"] = token.clientSecret;
+            }
             payload["refresh_token"] = token.refreshToken;
 
             OAuthTokenModel newToken = await this.PostAsync<OAuthTokenModel>("oauth/token", this.CreateContentFromObject(payload), autoRefreshToken: false);

@@ -7,6 +7,7 @@ namespace Mixer.Base.Model.OAuth
     public class OAuthTokenModel
     {
         public string clientID { get; set; }
+        public string clientSecret { get; set; }
         public string authorizationCode { get; set; }
 
         [JsonProperty("refresh_token")]
