@@ -130,7 +130,7 @@ namespace Mixer.Base
 
             if (!string.IsNullOrEmpty(authorizationCode))
             {
-                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, authorizationCode);
             }
             return null;
         }
