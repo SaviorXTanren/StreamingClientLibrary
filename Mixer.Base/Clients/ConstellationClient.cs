@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
@@ -24,8 +23,6 @@ namespace Mixer.Base.Clients
         channel__id__hosted,
         [Name("Channel Unhosted")]
         channel__id__unhosted,
-        [Name("Channel Status")]
-        channel__id__status,
         [Name("Channel Subscribed")]
         channel__id__subscribed,
         [Name("Channel Resubscribed")]
