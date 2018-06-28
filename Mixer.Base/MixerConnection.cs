@@ -78,8 +78,10 @@ namespace Mixer.Base
 
         private OAuthTokenModel token;
 
+        public BroadcastsService Broadcasts { get; private set; }
         public ChannelsService Channels { get; private set; }
         public ChatsService Chats { get; private set; }
+        public ClipsService Clips { get; private set; }
         public CostreamService Costream { get; private set; }
         public InteractiveService Interactive { get; private set; }
         public OAuthService OAuth { get; private set; }
@@ -253,8 +255,10 @@ namespace Mixer.Base
 
             this.token = token;
 
+            this.Broadcasts = new BroadcastsService(this);
             this.Channels = new ChannelsService(this);
             this.Chats = new ChatsService(this);
+            this.Clips = new ClipsService(this);
             this.Costream = new CostreamService(this);
             this.Interactive = new InteractiveService(this);
             this.OAuth = new OAuthService(this);
