@@ -173,7 +173,7 @@ namespace Mixer.Base.Services
 
         public async Task<string> ProcessStringResponse(HttpResponseMessage response)
         {
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
             {
                 string result = await response.Content.ReadAsStringAsync();
                 if (this.OnSuccessResponseReceived != null)
