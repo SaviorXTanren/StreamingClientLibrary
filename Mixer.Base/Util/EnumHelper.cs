@@ -46,8 +46,7 @@ namespace Mixer.Base.Util
             {
                 if (!includeObsoletes)
                 {
-                    var attributes = (ObsoleteAttribute[])value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-                    if (attributes != null && attributes.Length > 0)
+                    if (EnumHelper.IsObsolete(value))
                     {
                         continue;
                     }
@@ -67,6 +66,16 @@ namespace Mixer.Base.Util
                 }
             }
             return default(T);
+        }
+
+        public static bool IsObsolete<T>(T value)
+        {
+            var attributes = (ObsoleteAttribute[])value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+            if (attributes != null && attributes.Length > 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
