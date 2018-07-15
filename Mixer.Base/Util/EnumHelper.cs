@@ -73,9 +73,9 @@ namespace Mixer.Base.Util
             var attributes = (ObsoleteAttribute[])value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(ObsoleteAttribute), false);
             if (attributes != null && attributes.Length > 0)
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }
