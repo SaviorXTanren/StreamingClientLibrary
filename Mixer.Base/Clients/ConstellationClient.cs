@@ -23,6 +23,9 @@ namespace Mixer.Base.Clients
         channel__id__hosted,
         [Name("Channel Unhosted")]
         channel__id__unhosted,
+        [Name("Channel Status")]
+        [Obsolete]
+        channel__id__status,
         [Name("Channel Subscribed")]
         channel__id__subscribed,
         [Name("Channel Resubscribed")]
