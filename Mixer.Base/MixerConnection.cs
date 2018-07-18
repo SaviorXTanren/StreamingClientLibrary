@@ -88,6 +88,7 @@ namespace Mixer.Base
         public TeamsService Teams { get; private set; }
         public GameTypesService GameTypes { get; private set; }
         public UsersService Users { get; private set; }
+        public TestStreamsService TestStreams { get; private set; }
 
         /// <summary>
         /// NOTE: There is a known issue with the Mixer APIs where authenticating with a short code as opposed to the regular OAuth process, where certain
@@ -265,6 +266,7 @@ namespace Mixer.Base
             this.Teams = new TeamsService(this);
             this.GameTypes = new GameTypesService(this);
             this.Users = new UsersService(this);
+            this.TestStreams = new TestStreamsService(this);
         }
 
         public async Task RefreshOAuthToken()
