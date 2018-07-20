@@ -451,6 +451,18 @@ namespace Mixer.Base.Services
             return await this.GetAsync<BroadcastModel>("channels/" + channel.id + "/broadcast");
         }
 
+        /// <summary>
+        /// Gets a list of the channel VOD recordings.
+        /// </summary>
+        /// <param name="channel">The channel to get recordings for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A list of the channel recordings</returns>
+        public async Task<IEnumerable<ChannelRecordingModel>> GetRecordings(ChannelModel channel, uint maxResults = 1)
+        {
+            return await this.GetPagedAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
+        }
+
+
         private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {
             string endDateString = "";
