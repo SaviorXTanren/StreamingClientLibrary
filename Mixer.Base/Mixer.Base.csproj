@@ -15,9 +15,11 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding test streams API</PackageReleaseNotes>
-    <AssemblyVersion>0.6.4.1</AssemblyVersion>
-    <FileVersion>0.6.4.1</FileVersion>
+    <PackageReleaseNotes>- Changing ChatClient connection to use random selection as opposed to 3rd listed connection as Chat endpoints do not order based off of server load like Interactive endpoints do
+- Added OAuthClientScopeEnum for clips
+- Added Channel Recording models</PackageReleaseNotes>
+    <AssemblyVersion>0.6.5.0</AssemblyVersion>
+    <FileVersion>0.6.5.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
