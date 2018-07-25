@@ -420,5 +420,22 @@ namespace Mixer.UnitTests
                 Assert.AreEqual(channel.id, broadcast.channelId);
             });
         }
+
+        [TestMethod]
+        public void GetChannelRecordings()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(channel.id > (uint)0);
+
+                IEnumerable<ChannelRecordingModel> recordings = await connection.Channels.GetRecordings(channel);
+
+                Assert.IsNotNull(recordings);
+                Assert.IsTrue(recordings.Count() > 0);
+            });
+        }
     }
 }

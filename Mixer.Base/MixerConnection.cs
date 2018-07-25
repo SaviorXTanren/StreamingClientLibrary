@@ -26,6 +26,8 @@ namespace Mixer.Base
         channel__partnership__self,
         channel__streamKey__self,
         channel__update__self,
+        channel__clip__create__self,
+        channel__clip__delete__self,
         chat__bypass_links,
         chat__bypass_slowchat,
         chat__change_ban,
