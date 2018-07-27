@@ -87,7 +87,8 @@ namespace Mixer.Base.Clients
         /// <returns>Whether the operation succeeded</returns>
         public async Task<bool> Connect()
         {
-            int endpointToUse = Math.Min(2, this.interactiveConnections.Count());
+            Random random = new Random();
+            int endpointToUse = random.Next(this.interactiveConnections.Count());
             return await this.Connect(this.interactiveConnections.ElementAt(endpointToUse));
         }
 
