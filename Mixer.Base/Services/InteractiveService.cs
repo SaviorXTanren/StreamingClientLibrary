@@ -95,7 +95,17 @@ namespace Mixer.Base.Services
         public async Task<InteractiveGameModel> GetInteractiveGame(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");
-            return await this.GetAsync<InteractiveGameModel>("interactive/games/" + game.id);
+            return await this.GetInteractiveGame(game.id);
+        }
+
+        /// <summary>
+        /// Gets the specified interactive game.
+        /// </summary>
+        /// <param name="gameID">The ID of the interactive game to get</param>
+        /// <returns></returns>
+        public async Task<InteractiveGameModel> GetInteractiveGame(uint gameID)
+        {
+            return await this.GetAsync<InteractiveGameModel>("interactive/games/" + gameID);
         }
 
         /// <summary>
@@ -118,6 +128,17 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(game, "game");
             return await this.DeleteAsync("interactive/games/" + game.id);
+        }
+
+        /// <summary>
+        /// Gets the interactive game versions for the specified game.
+        /// </summary>
+        /// <param name="game">The interactive game to get versions for</param>
+        /// <returns>The interactive game versions</returns>
+        public async Task<IEnumerable<InteractiveGameVersionModel>> GetInteractiveGameVersions(InteractiveGameModel game)
+        {
+            Validator.ValidateVariable(game, "game");
+            return await this.GetPagedAsync<InteractiveGameVersionModel>("interactive/games/" + game.id + "/versions");
         }
 
         /// <summary>
