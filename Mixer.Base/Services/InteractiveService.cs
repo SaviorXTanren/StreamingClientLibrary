@@ -62,7 +62,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameListingModel>> GetOwnedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetAsync<IEnumerable<InteractiveGameListingModel>>("interactive/games/owned?user=" + channel.userId);
+            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/owned?user=" + channel.userId);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameListingModel>> GetSharedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetAsync<IEnumerable<InteractiveGameListingModel>>("interactive/games/shared?user=" + channel.userId);
+            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/shared?user=" + channel.userId);
         }
 
         /// <summary>
@@ -139,7 +139,17 @@ namespace Mixer.Base.Services
         public async Task<InteractiveGameVersionModel> GetInteractiveGameVersion(InteractiveGameVersionModel version)
         {
             Validator.ValidateVariable(version, "version");
-            return await this.GetAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id);
+            return await this.GetInteractiveGameVersion(version.id);
+        }
+
+        /// <summary>
+        /// Gets the specified interactive game version.
+        /// </summary>
+        /// <param name="versionID">The ID of the interactive game version to get</param>
+        /// <returns>The interactive game version</returns>
+        public async Task<InteractiveGameVersionModel> GetInteractiveGameVersion(uint versionID)
+        {
+            return await this.GetAsync<InteractiveGameVersionModel>("interactive/versions/" + versionID);
         }
 
         /// <summary>
