@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.5.2-beta</Version>
+    <Version>0.6.5.3-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
@@ -18,9 +18,10 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageReleaseNotes>- Changing GetInteractiveGames to be Paged calls
 - Adding GetInteractiveGameVersion() where you can specify just the version ID
 - Switching Interactive client over to using randomized connection instead of 3rd server on the list
-- Adding GetInteractiveGame() &amp; GetInteractiveGameVersions() APIs for querying up from a Game Version ID</PackageReleaseNotes>
-    <AssemblyVersion>0.6.5.2</AssemblyVersion>
-    <FileVersion>0.6.5.2</FileVersion>
+- Adding GetInteractiveGame() &amp; GetInteractiveGameVersions() APIs for querying up from a Game Version ID
+- Adding the ability to supply a specific version when connecting an Interactive game</PackageReleaseNotes>
+    <AssemblyVersion>0.6.5.3</AssemblyVersion>
+    <FileVersion>0.6.5.3</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
