@@ -54,9 +54,9 @@ namespace Mixer.UnitTests
                     clipDurationInSeconds = 30
                 };
 
-                bool clipCreateResult = await connection.Clips.CreateClip(clipRequest);
+                ClipModel createdClip = await connection.Clips.CreateClip(clipRequest);
 
-                Assert.IsTrue(clipCreateResult);
+                Assert.IsNotNull(createdClip);
             });
         }
     }

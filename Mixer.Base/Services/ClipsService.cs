@@ -33,13 +33,12 @@ namespace Mixer.Base.Services
         /// Creates a clip with the specified request data.
         /// </summary>
         /// <param name="clipRequest">The request data for the clip</param>
-        /// <returns>Whether the clip request was processed successfully</returns>
-        public async Task<bool> CreateClip(ClipRequestModel clipRequest)
+        /// <returns>The clip information if the request was processed successfully</returns>
+        public async Task<ClipModel> CreateClip(ClipRequestModel clipRequest)
         {
             Validator.ValidateVariable(clipRequest, "clipRequest");
 
-            HttpResponseMessage response = await this.PostAsync("clips/create", this.CreateContentFromObject(clipRequest));
-            return response.IsSuccessStatusCode;
+            return await this.PostAsync<ClipModel>("clips/create", this.CreateContentFromObject(clipRequest));
         }
 
         /// <summary>
