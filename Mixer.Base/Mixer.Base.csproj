@@ -8,16 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.5.4-beta</Version>
+    <Version>0.6.5.5-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding optional share code parameter for connecting to interactive games that are shared to a user</PackageReleaseNotes>
-    <AssemblyVersion>0.6.5.4</AssemblyVersion>
-    <FileVersion>0.6.5.4</FileVersion>
+    <PackageReleaseNotes>- Changing clip creation API to return clip information</PackageReleaseNotes>
+    <AssemblyVersion>0.6.5.5</AssemblyVersion>
+    <FileVersion>0.6.5.5</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
