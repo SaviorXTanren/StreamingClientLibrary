@@ -41,6 +41,7 @@ namespace Mixer.Base.Clients
         public ChannelModel Channel { get; private set; }
         public InteractiveGameModel InteractiveGame { get; private set; }
         public InteractiveGameVersionModel Version { get; private set; }
+        public string ShareCode { get; private set; }
 
         private IEnumerable<string> interactiveConnections;
 
@@ -80,14 +81,33 @@ namespace Mixer.Base.Clients
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
             Validator.ValidateVariable(version, "version");
 
+            return await InteractiveClient.CreateFromChannel(connection, channel, interactiveGame, version, null);
+        }
+
+        /// <summary>
+        /// Creates an interactive client using the specified connection to the specified channel and game.
+        /// </summary>
+        /// <param name="connection">The connection to use</param>
+        /// <param name="channel">The channel to connect to</param>
+        /// <param name="interactiveGame">The game to use</param>
+        /// <param name="version">The version of the game to use</param>
+        /// <param name="shareCode">The share code used to connect to a game shared with you</param>
+        /// <returns>The interactive client for the specified channel and game</returns>
+        public static async Task<InteractiveClient> CreateFromChannel(MixerConnection connection, ChannelModel channel, InteractiveGameModel interactiveGame, InteractiveGameVersionModel version, string shareCode)
+        {
+            Validator.ValidateVariable(connection, "connection");
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(interactiveGame, "interactiveGame");
+            Validator.ValidateVariable(version, "version");
+
             OAuthTokenModel authToken = await connection.GetOAuthToken();
 
             IEnumerable<string> interactiveConnections = await connection.Interactive.GetInteractiveHosts();
 
-            return new InteractiveClient(channel, interactiveGame, version, authToken, interactiveConnections);
+            return new InteractiveClient(channel, interactiveGame, version, shareCode, authToken, interactiveConnections);
         }
 
-        private InteractiveClient(ChannelModel channel, InteractiveGameModel interactiveGame, InteractiveGameVersionModel version, OAuthTokenModel authToken, IEnumerable<string> interactiveConnections)
+        private InteractiveClient(ChannelModel channel, InteractiveGameModel interactiveGame, InteractiveGameVersionModel version, string shareCode, OAuthTokenModel authToken, IEnumerable<string> interactiveConnections)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(interactiveGame, "interactiveGame");
@@ -98,6 +118,7 @@ namespace Mixer.Base.Clients
             this.Channel = channel;
             this.InteractiveGame = interactiveGame;
             this.Version = version;
+            this.ShareCode = shareCode;
             this.interactiveConnections = interactiveConnections;
 
             this.oauthAccessToken = authToken.accessToken;
@@ -290,6 +311,10 @@ namespace Mixer.Base.Clients
             webSocket.Options.SetRequestHeader("Authorization", authHeader.ToString());
             webSocket.Options.SetRequestHeader("X-Interactive-Version", this.Version.id.ToString());
             webSocket.Options.SetRequestHeader("X-Protocol-Version", "2.0");
+            if (!string.IsNullOrEmpty(this.ShareCode))
+            {
+                webSocket.Options.SetRequestHeader("X-Interactive-Sharecode", this.ShareCode);
+            }
 
             return webSocket;
         }
