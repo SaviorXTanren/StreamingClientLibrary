@@ -17,8 +17,6 @@ namespace Mixer.Base.Clients
         [Name("Announcements")]
         announcement__announce,
 
-        [Name("Channel Direct Purchased")]
-        channel__id__directPurchased,
         [Name("Channel Followed")]
         channel__id__followed,
         [Name("Channel Hosted")]
@@ -66,6 +64,9 @@ namespace Mixer.Base.Clients
         user__id__teamRemoved,
         [Name("User Updated")]
         user__id__update,
+
+        [Name("Channel Direct Purchased")]
+        channel__id__directPurchased,
     }
 
     /// <summary>
