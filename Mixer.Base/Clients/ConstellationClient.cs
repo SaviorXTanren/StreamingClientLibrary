@@ -64,6 +64,9 @@ namespace Mixer.Base.Clients
         user__id__teamRemoved,
         [Name("User Updated")]
         user__id__update,
+
+        [Name("Channel Direct Purchased")]
+        channel__id__directPurchased,
     }
 
     /// <summary>

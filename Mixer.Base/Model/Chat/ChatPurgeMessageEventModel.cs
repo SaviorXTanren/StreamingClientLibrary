@@ -3,6 +3,6 @@
     public class ChatPurgeMessageEventModel
     {
         public uint user_id { get; set; }
-        public ChatClearMessagesEventModel moderator { get; set; }
+        public ChatMessageUserModel moderator { get; set; }
     }
 }
