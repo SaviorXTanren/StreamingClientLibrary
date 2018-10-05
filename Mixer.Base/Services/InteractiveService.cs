@@ -77,6 +77,18 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets all of the games where the channel owner has editor permissions.
+        /// </summary>
+        /// <param name="channel">The channel to get games for</param>
+        /// <returns>The games that have editor perssions set for the Channel Owner</returns>
+        public async Task<IEnumerable<InteractiveGameListingModel>> GetEditorInteractiveGames(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/editor?user=" + channel.userId);
+        }
+
+
+        /// <summary>
         /// Creates the specified interactive game.
         /// </summary>
         /// <param name="game">The interactive game to create</param>
