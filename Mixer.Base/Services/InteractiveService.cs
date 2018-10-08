@@ -80,7 +80,7 @@ namespace Mixer.Base.Services
         /// Gets all of the games where the channel owner has editor permissions.
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
-        /// <returns>The games that have editor perssions set for the Channel Owner</returns>
+        /// <returns>The games that have editor permissions set for the Channel Owner</returns>
         public async Task<IEnumerable<InteractiveGameListingModel>> GetEditorInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
