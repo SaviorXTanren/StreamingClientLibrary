@@ -165,6 +165,19 @@ namespace Mixer.UnitTests
             });
         }
 
+        [TestMethod]
+        public void GetEditorInteractiveGames()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<InteractiveGameListingModel> games = await connection.Interactive.GetEditorInteractiveGames(channel);
+
+                Assert.IsNotNull(games);
+            });
+        }
+
 
         [TestMethod]
         public void GetInteractiveVersion()
