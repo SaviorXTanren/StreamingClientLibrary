@@ -26,15 +26,33 @@ namespace Mixer.Base.Web
 
                 this.httpListener.Start();
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                this.WaitForConnection();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        while (this.httpListener != null && this.httpListener.IsListening)
+                        {
+                            try
+                            {
+                                HttpListenerContext context = this.httpListener.GetContext();
+                                Task.Factory.StartNew(async (ctx) =>
+                                {
+                                    await this.ProcessConnection((HttpListenerContext)ctx);
+                                    ((HttpListenerContext)ctx).Response.Close();
+                                }, context, TaskCreationOptions.LongRunning);
+                            }
+                            catch (HttpListenerException) { }
+                            catch (Exception ex) { Logger.Log(ex); }
+                        }
+                    }
+                    catch (Exception ex) { Logger.Log(ex); }
+
+                    this.End();
+                }, TaskCreationOptions.LongRunning);
 
                 return true;
             }
             catch (Exception ex) { Logger.Log(ex); }
-
-            this.End();
 
             return false;
         }
@@ -54,25 +72,6 @@ namespace Mixer.Base.Web
         }
 
         protected abstract Task ProcessConnection(HttpListenerContext listenerContext);
-
-        protected async Task WaitForConnection()
-        {
-            try
-            {
-                while (this.httpListener != null && this.httpListener.IsListening)
-                {
-                    try
-                    {
-                        HttpListenerContext listenerContext = await this.httpListener.GetContextAsync();
-                        await this.ProcessConnection(listenerContext);
-                        listenerContext.Response.Close();
-                    }
-                    catch (HttpListenerException) { }
-                    catch (Exception ex) { Logger.Log(ex); }
-                }
-            }
-            catch (Exception ex) { Logger.Log(ex); }
-        }
 
         protected async Task<string> GetRequestData(HttpListenerContext listenerContext)
         {
