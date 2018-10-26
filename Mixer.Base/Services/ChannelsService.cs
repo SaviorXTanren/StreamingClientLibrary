@@ -40,6 +40,28 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets a list of channels that are online based on the user's ID.
+        /// </summary>
+        /// <param name="userIDs">The list of user IDs to get channels for</param>
+        /// <returns>A list of currently online channels</returns>
+        public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(IEnumerable<uint> channelIDs)
+        {
+            Validator.ValidateList(channelIDs, "channelIDs");
+            return await this.GetAsync<IEnumerable<ExpandedChannelModel>>("channels?where=id:in:" + string.Join(";", channelIDs));
+        }
+
+        /// <summary>
+        /// Gets a list of channels that are online based on the user's ID.
+        /// </summary>
+        /// <param name="userIDs">The list of user IDs to get channels for</param>
+        /// <returns>A list of currently online channels</returns>
+        public async Task<IEnumerable<ExpandedChannelModel>> GetChannelsFromUsers(IEnumerable<uint> userIDs)
+        {
+            Validator.ValidateList(userIDs, "userIDs");
+            return await this.GetAsync<IEnumerable<ExpandedChannelModel>>("channels?where=userId:in:" + string.Join(";", userIDs));
+        }
+
+        /// <summary>
         /// Gets a list of currently online channels. The search can be limited to a maximum number of results to speed up
         /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.

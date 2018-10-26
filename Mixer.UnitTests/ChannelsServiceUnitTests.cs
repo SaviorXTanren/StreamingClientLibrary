@@ -105,6 +105,21 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(new List<uint>() { 41088881, 10961439, 31961586 });
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+
+                channels = await connection.Channels.GetChannelsFromUsers(new List<uint>() { 49048475, 14128065, 39072213 });
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+            });
+        }
+
+        [TestMethod]
         public void UpdateChannel()
         {
             TestWrapper(async (MixerConnection connection) =>
