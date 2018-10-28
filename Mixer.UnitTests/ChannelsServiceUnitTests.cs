@@ -452,5 +452,22 @@ namespace Mixer.UnitTests
                 Assert.IsTrue(recordings.Count() > 0);
             });
         }
+
+        [TestMethod]
+        public void GetChannelEmoticons()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+                UserModel user = await connection.Users.GetCurrentUser();
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > (uint)0);
+
+                IEnumerable<EmoticonPackModel> emoticonPacks = await connection.Channels.GetEmoticons(channel, user);
+
+                Assert.IsNotNull(emoticonPacks);
+            });
+        }
     }
 }

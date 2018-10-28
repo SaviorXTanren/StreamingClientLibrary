@@ -35,7 +35,6 @@ namespace Mixer.Base.Services
         /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.
         /// </summary>
-        /// <param name="name">The name of the game to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All game types</returns>
         public async Task<IEnumerable<GameTypeModel>> GetGameTypes(uint maxResults = 1)
