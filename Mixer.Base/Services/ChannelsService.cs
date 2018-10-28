@@ -206,8 +206,8 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
 
-            Dictionary<UserModel, DateTimeOffset?> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
-            return results[user];
+            Dictionary<uint, DateTimeOffset?> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
+            return results[user.id];
         }
 
         /// <summary>
@@ -216,19 +216,16 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get follows against</param>
         /// <param name="users">The users to check if they follow</param>
         /// <returns>All users checked and whether they follow or not</returns>
-        public async Task<Dictionary<UserModel, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
+        public async Task<Dictionary<uint, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateList(users, "users");
 
-            Dictionary<UserModel, DateTimeOffset?> results = new Dictionary<UserModel, DateTimeOffset?>();
+            Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-
-                string followQuery = string.Join(",", userSubset.Select(user => $"where=id:eq:{user.id}"));
-
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&" + followQuery);
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(",", userSubset.Select(u => u.id)));
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
@@ -238,7 +235,7 @@ namespace Mixer.Base.Services
                     {
                         followDate = follow.followed.createdAt;
                     }
-                    results.Add(user, followDate);
+                    results.Add(user.id, followDate);
                 }
             }
             return results;
