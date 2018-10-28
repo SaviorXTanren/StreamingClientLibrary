@@ -16,21 +16,64 @@ namespace Mixer.Base.Clients
     /// </summary>
     public class ChatClient : MixerWebSocketClientBase
     {
+        /// <summary>
+        /// This event is triggered when a new chat message arrives.
+        /// </summary>
         public event EventHandler<ChatMessageEventModel> OnMessageOccurred;
 
+        /// <summary>
+        /// This event is triggered when a new chat message arrives.
+        /// </summary>
         public event EventHandler<ChatUserEventModel> OnUserJoinOccurred;
+
+        /// <summary>
+        /// This event is triggered when a user leaves chat.
+        /// </summary>
         public event EventHandler<ChatUserEventModel> OnUserLeaveOccurred;
+
+        /// <summary>
+        /// This event is triggered when a user in chat is updated.
+        /// </summary>
         public event EventHandler<ChatUserEventModel> OnUserUpdateOccurred;
+
+        /// <summary>
+        /// This event is triggered when a user in chat is timed out.
+        /// </summary>
         public event EventHandler<ChatUserEventModel> OnUserTimeoutOccurred;
 
+        /// <summary>
+        /// This event is triggered when a chat poll starts.
+        /// </summary>
         public event EventHandler<ChatPollEventModel> OnPollStartOccurred;
+
+        /// <summary>
+        /// This event is triggered when a chat poll ends.
+        /// </summary>
         public event EventHandler<ChatPollEventModel> OnPollEndOccurred;
 
+        /// <summary>
+        /// This event is triggered when a chat message is deleted.
+        /// </summary>
         public event EventHandler<ChatDeleteMessageEventModel> OnDeleteMessageOccurred;
+
+        /// <summary>
+        /// This event is triggered when a chat message is purged.
+        /// </summary>
         public event EventHandler<ChatPurgeMessageEventModel> OnPurgeMessageOccurred;
+
+        /// <summary>
+        /// This event is triggered when chat is cleared.
+        /// </summary>
         public event EventHandler<ChatClearMessagesEventModel> OnClearMessagesOccurred;
 
+        /// <summary>
+        /// The channel that for this chat.
+        /// </summary>
         public ChannelModel Channel { get; private set; }
+
+        /// <summary>
+        /// The user this chat belongs to.
+        /// </summary>
         public UserModel User { get; private set; }
 
         private ChannelChatModel channelChat;

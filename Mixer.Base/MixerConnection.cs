@@ -112,6 +112,7 @@ namespace Mixer.Base
         /// OAuth authentication methods.
         /// </summary>
         /// <param name="clientID"></param>
+        /// <param name="clientSecret"></param>
         /// <param name="scopes"></param>
         /// <param name="codeCallback"></param>
         /// <returns></returns>

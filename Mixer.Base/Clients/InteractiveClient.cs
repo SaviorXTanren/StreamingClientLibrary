@@ -206,7 +206,7 @@ namespace Mixer.Base.Clients
         /// <summary>
         /// Gets the allocated memory state for this client.
         /// </summary>
-        /// <returns>The allocated memory<returns>
+        /// <returns>The allocated memory</returns>
         public async Task<InteractiveIssueMemoryWarningModel> GetMemoryStates()
         {
             return await this.SendAndListen<InteractiveIssueMemoryWarningModel>(new MethodPacket("getMemoryStats"));
