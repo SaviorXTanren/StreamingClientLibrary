@@ -40,7 +40,7 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Gets a list of channels that are online based on the channels's ID.
+        /// Gets a list of channels that are online based on the channel ID.
         /// </summary>
         /// <param name="channelIDs">The list of channel IDs to get channels for</param>
         /// <returns>A list of currently online channels</returns>
@@ -487,9 +487,9 @@ namespace Mixer.Base.Services
         /// <summary>
         /// Gets a list of the channel emoticons.
         /// </summary>
-        /// <param name="channel">The channel to get recordings for</param>
+        /// <param name="channel">The channel to get emoticons for</param>
         /// <param name="user">Optional: Viewing user to include user specific emoticons</param>
-        /// <returns>A list of the available emoticons.</returns>
+        /// <returns>A list of the available emoticon packs.</returns>
         public async Task<IEnumerable<EmoticonPackModel>> GetEmoticons(ChannelModel channel, UserModel user = null)
         {
             string uri = $"channels/{channel.id}/emoticons";
