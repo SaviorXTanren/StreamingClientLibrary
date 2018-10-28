@@ -235,7 +235,7 @@ namespace Mixer.Base.Services
                     {
                         followDate = follow.followed.createdAt;
                     }
-                    results.Add(user.id, followDate);
+                    results[user.id] = followDate;
                 }
             }
             return results;
