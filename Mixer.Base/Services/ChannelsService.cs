@@ -40,9 +40,9 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Gets a list of channels that are online based on the user's ID.
+        /// Gets a list of channels that are online based on the channel ID.
         /// </summary>
-        /// <param name="userIDs">The list of user IDs to get channels for</param>
+        /// <param name="channelIDs">The list of channel IDs to get channels for</param>
         /// <returns>A list of currently online channels</returns>
         public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(IEnumerable<uint> channelIDs)
         {
@@ -484,6 +484,22 @@ namespace Mixer.Base.Services
             return await this.GetPagedAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
         }
 
+        /// <summary>
+        /// Gets a list of the channel emoticons.
+        /// </summary>
+        /// <param name="channel">The channel to get emoticons for</param>
+        /// <param name="user">Optional: Viewing user to include user specific emoticons</param>
+        /// <returns>A list of the available emoticon packs.</returns>
+        public async Task<IEnumerable<EmoticonPackModel>> GetEmoticons(ChannelModel channel, UserModel user = null)
+        {
+            string uri = $"channels/{channel.id}/emoticons";
+            if (user != null)
+            {
+                uri += $"?user={user.id}";
+            }
+
+            return await this.GetAsync<IEnumerable<EmoticonPackModel>>(uri);
+        }
 
         private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {
