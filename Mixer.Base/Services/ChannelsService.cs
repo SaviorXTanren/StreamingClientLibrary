@@ -277,7 +277,7 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Unhosts whatever channel the specified channel may be hosting, if any. The search can be limited to a maximum number
+        /// Gets the current channels that are hosting the specified channel. The search can be limited to a maximum number
         /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
         /// threshold and slightly more than the maximum number may be returned.
         /// </summary>
