@@ -243,11 +243,11 @@ namespace Mixer.UnitTests
                 UserModel notFollowedUser = await connection.Users.GetUser("ChannelOne");
                 Assert.IsNotNull(notFollowedUser);
 
-                Dictionary<UserModel, DateTimeOffset?> follows = await connection.Channels.CheckIfFollows(channel, new List<UserModel>() { followedUsers.First(), notFollowedUser });
+                Dictionary<uint, DateTimeOffset?> follows = await connection.Channels.CheckIfFollows(channel, new List<UserModel>() { followedUsers.First(), notFollowedUser });
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count == 2);
-                Assert.IsNotNull(follows[followedUsers.First()]);
-                Assert.IsNull(follows[notFollowedUser]);
+                Assert.IsNotNull(follows[followedUsers.First().id]);
+                Assert.IsNull(follows[notFollowedUser.id]);
             });
         }
 
@@ -450,6 +450,23 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(recordings);
                 Assert.IsTrue(recordings.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetChannelEmoticons()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+                UserModel user = await connection.Users.GetCurrentUser();
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.id > (uint)0);
+
+                IEnumerable<EmoticonPackModel> emoticonPacks = await connection.Channels.GetEmoticons(channel, user);
+
+                Assert.IsNotNull(emoticonPacks);
             });
         }
     }

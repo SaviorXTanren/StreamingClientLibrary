@@ -40,9 +40,9 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Gets a list of channels that are online based on the user's ID.
+        /// Gets a list of channels that are online based on the channel ID.
         /// </summary>
-        /// <param name="userIDs">The list of user IDs to get channels for</param>
+        /// <param name="channelIDs">The list of channel IDs to get channels for</param>
         /// <returns>A list of currently online channels</returns>
         public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(IEnumerable<uint> channelIDs)
         {
@@ -206,8 +206,8 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
 
-            Dictionary<UserModel, DateTimeOffset?> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
-            return results[user];
+            Dictionary<uint, DateTimeOffset?> results = await this.CheckIfFollows(channel, new List<UserModel>() { user });
+            return results[user.id];
         }
 
         /// <summary>
@@ -216,19 +216,16 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get follows against</param>
         /// <param name="users">The users to check if they follow</param>
         /// <returns>All users checked and whether they follow or not</returns>
-        public async Task<Dictionary<UserModel, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
+        public async Task<Dictionary<uint, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateList(users, "users");
 
-            Dictionary<UserModel, DateTimeOffset?> results = new Dictionary<UserModel, DateTimeOffset?>();
+            Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-
-                string followQuery = string.Join(",", userSubset.Select(user => $"where=id:eq:{user.id}"));
-
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&" + followQuery);
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(",", userSubset.Select(u => u.id)));
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
@@ -238,7 +235,7 @@ namespace Mixer.Base.Services
                     {
                         followDate = follow.followed.createdAt;
                     }
-                    results.Add(user, followDate);
+                    results[user.id] = followDate;
                 }
             }
             return results;
@@ -280,7 +277,7 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
-        /// Unhosts whatever channel the specified channel may be hosting, if any. The search can be limited to a maximum number
+        /// Gets the current channels that are hosting the specified channel. The search can be limited to a maximum number
         /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
         /// threshold and slightly more than the maximum number may be returned.
         /// </summary>
@@ -484,6 +481,22 @@ namespace Mixer.Base.Services
             return await this.GetPagedAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
         }
 
+        /// <summary>
+        /// Gets a list of the channel emoticons.
+        /// </summary>
+        /// <param name="channel">The channel to get emoticons for</param>
+        /// <param name="user">Optional: Viewing user to include user specific emoticons</param>
+        /// <returns>A list of the available emoticon packs.</returns>
+        public async Task<IEnumerable<EmoticonPackModel>> GetEmoticons(ChannelModel channel, UserModel user = null)
+        {
+            string uri = $"channels/{channel.id}/emoticons";
+            if (user != null)
+            {
+                uri += $"?user={user.id}";
+            }
+
+            return await this.GetAsync<IEnumerable<EmoticonPackModel>>(uri);
+        }
 
         private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {

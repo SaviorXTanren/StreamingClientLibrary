@@ -67,7 +67,7 @@ namespace Mixer.Base.Services
         /// <summary>
         /// Gets information about the user with the specified id.
         /// </summary>
-        /// <param name="user">The id of the user to get</param>
+        /// <param name="userID">The id of the user to get</param>
         /// <returns>The user's information</returns>
         public async Task<UserWithChannelModel> GetUser(uint userID)
         {
