@@ -67,6 +67,9 @@ namespace Mixer.Base.Clients
 
         [Name("Channel Direct Purchased")]
         channel__id__directPurchased,
+
+        [Name("Channel Patronage Update")]
+        channel__id__patronageUpdate
     }
 
     /// <summary>
