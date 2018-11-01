@@ -67,7 +67,13 @@ namespace Mixer.Base.Clients
 
         [Name("Channel Direct Purchased")]
         channel__id__directPurchased,
-    }
+
+        [Name("Channel Patronage Update")]
+        channel__id__patronageUpdate,
+        
+        [Name("Skill")]
+        channel__id__skill
+}
 
     /// <summary>
     /// The real-time client for Constellation event interactions.
