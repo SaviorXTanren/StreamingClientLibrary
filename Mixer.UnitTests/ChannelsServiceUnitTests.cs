@@ -340,6 +340,23 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void CheckIfUsersHaveRole()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                UserModel modUser = await connection.Users.GetUser("SXTBot");
+                UserModel notModUser = await connection.Users.GetUser("ChannelOne");
+
+                HashSet<uint> usersWithRole = await connection.Channels.CheckIfUsersHaveRole(channel, new List<UserModel>() { modUser, notModUser }, "Mod");
+                Assert.IsNotNull(usersWithRole);
+                Assert.IsTrue(usersWithRole.Count == 1);
+                Assert.IsNotNull(usersWithRole.Contains(modUser.id));
+            });
+        }
+
+        [TestMethod]
         public void UpdateUserRoles()
         {
             TestWrapper(async (MixerConnection connection) =>

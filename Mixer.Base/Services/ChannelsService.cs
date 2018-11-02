@@ -225,7 +225,7 @@ namespace Mixer.Base.Services
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(",", userSubset.Select(u => u.id)));
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
@@ -355,6 +355,32 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateString(role, "role");
             return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, maxResults);
+        }
+
+        /// <summary>
+        /// Checks if the specified users have the specified role for the specified channel
+        /// </summary>
+        /// <param name="channel">The channel to get the roles against</param>
+        /// <param name="users">The users to check if they follow</param>
+        /// <param name="role">The role to search for</param>
+        /// <returns>All users that have the role</returns>
+        public async Task<HashSet<uint>> CheckIfUsersHaveRole(ChannelModel channel, IEnumerable<UserModel> users, string role)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateList(users, "users");
+            Validator.ValidateString(role, "role");
+
+            HashSet<uint> results = new HashSet<uint>();
+            for (int i = 0; i < users.Count(); i += 25)
+            {
+                IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
+                IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                foreach (uint roleUsersIDs in roleUsers.Select(u => u.id))
+                {
+                    results.Add(roleUsersIDs);
+                }
+            }
+            return results;
         }
 
         /// <summary>
