@@ -349,10 +349,10 @@ namespace Mixer.UnitTests
                 UserModel modUser = await connection.Users.GetUser("SXTBot");
                 UserModel notModUser = await connection.Users.GetUser("ChannelOne");
 
-                HashSet<uint> usersWithRole = await connection.Channels.CheckIfUsersHaveRole(channel, new List<UserModel>() { modUser, notModUser }, "Mod");
+                Dictionary<uint, DateTimeOffset?> usersWithRole = await connection.Channels.CheckIfUsersHaveRole(channel, new List<UserModel>() { modUser, notModUser }, "Mod");
                 Assert.IsNotNull(usersWithRole);
                 Assert.IsTrue(usersWithRole.Count == 1);
-                Assert.IsNotNull(usersWithRole.Contains(modUser.id));
+                Assert.IsNotNull(usersWithRole.ContainsKey(modUser.id));
             });
         }
 

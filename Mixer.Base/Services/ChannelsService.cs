@@ -364,20 +364,24 @@ namespace Mixer.Base.Services
         /// <param name="users">The users to check if they follow</param>
         /// <param name="role">The role to search for</param>
         /// <returns>All users that have the role</returns>
-        public async Task<HashSet<uint>> CheckIfUsersHaveRole(ChannelModel channel, IEnumerable<UserModel> users, string role)
+        public async Task<Dictionary<uint, DateTimeOffset?>> CheckIfUsersHaveRole(ChannelModel channel, IEnumerable<UserModel> users, string role)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateList(users, "users");
             Validator.ValidateString(role, "role");
 
-            HashSet<uint> results = new HashSet<uint>();
+            Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
                 IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
-                foreach (uint roleUsersIDs in roleUsers.Select(u => u.id))
+                foreach (UserModel user in userSubset)
                 {
-                    results.Add(roleUsersIDs);
+                    UserWithGroupsModel userGroups = roleUsers.FirstOrDefault(u => u.id.Equals(user.id));
+                    if (userGroups != null)
+                    {
+                        results[user.id] = userGroups.GetCreatedDateForGroupIfCurrent(role);
+                    }
                 }
             }
             return results;
