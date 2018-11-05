@@ -9,21 +9,33 @@ namespace Mixer.Base.Services
     /// </summary>
     public abstract class MixerServiceBase : RestServiceBase
     {
-        private const string MixerRestAPIBaseAddress = "https://mixer.com/api/v1/";
+        private const string MixerRestAPIBaseAddressFormat = "https://mixer.com/api/v{0}/";
 
         private MixerConnection connection;
+        private string baseAddress;
 
         /// <summary>
         /// Creates an instance of the MixerServiceBase.
         /// </summary>
         /// <param name="connection">The Mixer connection to use</param>
-        public MixerServiceBase(MixerConnection connection)
+        public MixerServiceBase(MixerConnection connection) : this(connection, 1) { }
+
+        /// <summary>
+        /// Creates an instance of the MixerServiceBase.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
+        /// <param name="version">The version number of the Mixer API endpoint</param>
+        public MixerServiceBase(MixerConnection connection, int version)
         {
             Validator.ValidateVariable(connection, "connection");
             this.connection = connection;
+            this.baseAddress = string.Format(MixerRestAPIBaseAddressFormat, version);
         }
 
-        internal MixerServiceBase() { }
+        internal MixerServiceBase()
+        {
+            this.baseAddress = string.Format(MixerRestAPIBaseAddressFormat, 1);
+        }
 
         /// <summary>
         /// Gets the OAuth token for the connection of this service.
@@ -43,6 +55,6 @@ namespace Mixer.Base.Services
         /// Gets the base address for all RESTful calls for this service.
         /// </summary>
         /// <returns>The base address for all RESTful calls</returns>
-        protected override string GetBaseAddress() { return MixerServiceBase.MixerRestAPIBaseAddress; }
+        protected override string GetBaseAddress() { return this.baseAddress; }
     }
 }

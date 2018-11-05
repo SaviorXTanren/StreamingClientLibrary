@@ -85,12 +85,13 @@ namespace Mixer.Base
         public ChatsService Chats { get; private set; }
         public ClipsService Clips { get; private set; }
         public CostreamService Costream { get; private set; }
+        public GameTypesService GameTypes { get; private set; }
         public InteractiveService Interactive { get; private set; }
         public OAuthService OAuth { get; private set; }
+        public PatronageService Patronage { get; private set; }
         public TeamsService Teams { get; private set; }
-        public GameTypesService GameTypes { get; private set; }
-        public UsersService Users { get; private set; }
         public TestStreamsService TestStreams { get; private set; }
+        public UsersService Users { get; private set; }
 
         /// <summary>
         /// NOTE: There is a known issue with the Mixer APIs where authenticating with a short code as opposed to the regular OAuth process, where certain
@@ -264,12 +265,13 @@ namespace Mixer.Base
             this.Chats = new ChatsService(this);
             this.Clips = new ClipsService(this);
             this.Costream = new CostreamService(this);
+            this.GameTypes = new GameTypesService(this);
             this.Interactive = new InteractiveService(this);
             this.OAuth = new OAuthService(this);
+            this.Patronage = new PatronageService(this);
             this.Teams = new TeamsService(this);
-            this.GameTypes = new GameTypesService(this);
-            this.Users = new UsersService(this);
             this.TestStreams = new TestStreamsService(this);
+            this.Users = new UsersService(this);
         }
 
         public async Task RefreshOAuthToken()
