@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace Mixer.Base.Model.Chat
@@ -33,10 +34,42 @@ namespace Mixer.Base.Model.Chat
         public CoordinatesModel coords { get; set; }
     }
 
+    /// <summary>
+    /// The contents of a chat message in a channel.
+    /// </summary>
     public class ChatMessageContentsModel
     {
+        /// <summary>
+        /// An array consisting of all elements of the chat message.
+        /// </summary>
         public ChatMessageDataModel[] message { get; set; }
+
+        /// <summary>
+        /// Metadata properties associated with the chat message.
+        /// </summary>
         public JObject meta { get; set; }
+
+        /// <summary>
+        /// Identifies whether the message contains a skill or not.
+        /// </summary>
+        [JsonIgnore]
+        public bool ContainsSkill { get { return this.meta != null && this.meta["is_skill"] != null && (bool)this.meta["is_skill"]; } }
+
+        /// <summary>
+        /// The skill that was used with the chat message, if it exists.
+        /// </summary>
+        [JsonIgnore]
+        public ChatSkillModel Skill
+        {
+            get
+            {
+                if (this.ContainsSkill && this.meta["skill"] != null)
+                {
+                    return this.meta["skill"].ToObject<ChatSkillModel>();
+                }
+                return null;
+            }
+        }
     }
 
     public class ChatMessageEventModel : ChatMessageUserModel
