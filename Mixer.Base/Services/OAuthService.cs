@@ -13,6 +13,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class OAuthService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the OAuthService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public OAuthService(MixerConnection connection) : base(connection) { }
 
         internal OAuthService() : base() { }

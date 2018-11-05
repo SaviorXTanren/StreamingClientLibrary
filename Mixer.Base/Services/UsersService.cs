@@ -16,6 +16,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class UsersService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the UsersService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public UsersService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

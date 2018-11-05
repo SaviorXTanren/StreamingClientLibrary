@@ -14,6 +14,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class CostreamService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the CostreamService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public CostreamService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

@@ -2,7 +2,6 @@
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services
@@ -12,6 +11,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class ChatsService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the ChatsService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public ChatsService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

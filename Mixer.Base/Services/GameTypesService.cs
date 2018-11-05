@@ -13,6 +13,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class GameTypesService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the GameTypesService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public GameTypesService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

@@ -12,6 +12,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class TeamsService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the TeamsService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public TeamsService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

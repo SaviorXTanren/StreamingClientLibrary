@@ -14,6 +14,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class ClipsService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the ClipsService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public ClipsService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

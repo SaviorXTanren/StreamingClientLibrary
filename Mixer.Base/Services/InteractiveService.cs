@@ -12,6 +12,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class InteractiveService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the InteractiveService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public InteractiveService(MixerConnection connection) : base(connection) { }
 
         /// <summary>

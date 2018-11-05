@@ -10,6 +10,10 @@ namespace Mixer.Base.Services
     /// </summary>
     public class TestStreamsService : MixerServiceBase
     {
+        /// <summary>
+        /// Creates an instance of the TestStreamsService.
+        /// </summary>
+        /// <param name="connection">The Mixer connection to use</param>
         public TestStreamsService(MixerConnection connection) : base(connection) { }
 
         /// <summary>
