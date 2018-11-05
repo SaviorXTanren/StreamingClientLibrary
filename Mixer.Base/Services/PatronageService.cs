@@ -34,7 +34,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="patronagePeriodID">The ID of the patronage period</param>
         /// <returns>The details of the patronage period</returns>
-        public async Task<PatronagePeriodModel> GetPatrongagePeriod(Guid patronagePeriodID)
+        public async Task<PatronagePeriodModel> GetPatronagePeriod(Guid patronagePeriodID)
         {
             Validator.ValidateVariable(patronagePeriodID, "patronagePeriodID");
 

@@ -21,7 +21,7 @@ namespace Mixer.UnitTests
 
                 Assert.IsNotNull(patronageStatus);
 
-                PatronagePeriodModel patronagePeriod = await connection.Patronage.GetPatrongagePeriod(patronageStatus.patronagePeriodId);
+                PatronagePeriodModel patronagePeriod = await connection.Patronage.GetPatronagePeriod(patronageStatus.patronagePeriodId);
 
                 Assert.IsNotNull(patronagePeriod);
             });
