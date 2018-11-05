@@ -4,12 +4,34 @@ using System;
 
 namespace Mixer.Base.Model.Chat
 {
+    /// <summary>
+    /// The base class for all chat messages from users.
+    /// </summary>
     public class ChatMessageUserModel
     {
+        /// <summary>
+        /// The source user ID.
+        /// </summary>
         public uint user_id { get; set; }
+
+        /// <summary>
+        /// The source user name.
+        /// </summary>
         public string user_name { get; set; }
+
+        /// <summary>
+        /// The source user roles.
+        /// </summary>
         public string[] user_roles { get; set; }
+
+        /// <summary>
+        /// The source user level.
+        /// </summary>
         public uint user_level { get; set; }
+
+        /// <summary>
+        /// The source user avatar.
+        /// </summary>
         public string user_avatar { get; set; }
     }
 
@@ -72,11 +94,29 @@ namespace Mixer.Base.Model.Chat
         }
     }
 
+    /// <summary>
+    /// This model is used to represent a chat message event from the chat service.
+    /// </summary>
     public class ChatMessageEventModel : ChatMessageUserModel
     {
+        /// <summary>
+        /// The UUID of this message.
+        /// </summary>
         public Guid id { get; set; }
+
+        /// <summary>
+        /// The channel ID this message is associated with.
+        /// </summary>
         public uint channel { get; set; }
+
+        /// <summary>
+        /// The message deatils.
+        /// </summary>
         public ChatMessageContentsModel message { get; set; }
+
+        /// <summary>
+        /// The target of this message if it was a whisper.
+        /// </summary>
         public string target { get; set; }
     }
 }

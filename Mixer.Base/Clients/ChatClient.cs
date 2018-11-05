@@ -393,6 +393,26 @@ namespace Mixer.Base.Clients
         }
 
         /// <summary>
+        /// Retrieves the chat history if available.
+        /// </summary>
+        /// <param name="maxMessages">The number of messages to request. The maximum value is 100.</param>
+        /// <returns>A list of ChatMessageEventModel that represent the chat history.</returns>
+        public async Task<IEnumerable<ChatMessageEventModel>> GetChatHistory(uint maxMessages = 100)
+        {
+            return await this.SendAndListen<IEnumerable<ChatMessageEventModel>>(this.BuildHistoryPacket(maxMessages));
+        }
+
+        private MethodPacket BuildHistoryPacket(uint maxMessages)
+        {
+            if (maxMessages > 100)
+            {
+                maxMessages = 100;
+            }
+
+            return new MethodArgPacket("history", new JArray() { maxMessages });
+        }
+
+        /// <summary>
         /// Cancels an active skill in the channel.
         /// </summary>
         /// <param name="skillExecutionID">The execution ID of the skill</param>

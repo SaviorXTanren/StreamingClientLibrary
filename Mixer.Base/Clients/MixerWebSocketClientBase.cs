@@ -183,6 +183,10 @@ namespace Mixer.Base.Clients
                 {
                     return JsonConvert.DeserializeObject<T>(replyPacket.resultObject.ToString());
                 }
+                else if (replyPacket.data != null && replyPacket.data.Type == JTokenType.Array)
+                {
+                    return JsonConvert.DeserializeObject<T>(replyPacket.data.ToString());
+                }
                 else if (replyPacket.dataObject != null)
                 {
                     return JsonConvert.DeserializeObject<T>(replyPacket.dataObject.ToString());
