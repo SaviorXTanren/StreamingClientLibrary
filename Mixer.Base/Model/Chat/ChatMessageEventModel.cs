@@ -9,6 +9,7 @@ namespace Mixer.Base.Model.Chat
         public string user_name { get; set; }
         public string[] user_roles { get; set; }
         public uint user_level { get; set; }
+        public string user_avatar { get; set; }
     }
 
     public class CoordinatesModel

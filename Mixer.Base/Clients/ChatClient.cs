@@ -67,6 +67,16 @@ namespace Mixer.Base.Clients
         public event EventHandler<ChatClearMessagesEventModel> OnClearMessagesOccurred;
 
         /// <summary>
+        /// This event is triggered when a skill is used.
+        /// </summary>
+        public event EventHandler<ChatSkillAttributionEventModel> OnSkillAttributionOccurred;
+
+        /// <summary>
+        /// This event is triggered when a skill is deleted.
+        /// </summary>
+        public event EventHandler<ChatDeleteSkillAttributionEventModel> OnDeleteSkillAttributionOccurred;
+
+        /// <summary>
         /// The channel that for this chat.
         /// </summary>
         public ChannelModel Channel { get; private set; }
@@ -431,6 +441,13 @@ namespace Mixer.Base.Clients
                     break;
                 case "ClearMessages":
                     this.SendSpecificEvent(eventPacket, this.OnClearMessagesOccurred);
+                    break;
+
+                case "SkillAttribution":
+                    this.SendSpecificEvent(eventPacket, this.OnSkillAttributionOccurred);
+                    break;
+                case "DeleteSkillAttribution":
+                    this.SendSpecificEvent(eventPacket, this.OnDeleteSkillAttributionOccurred);
                     break;
             }
         }
