@@ -392,6 +392,32 @@ namespace Mixer.Base.Clients
             return this.VerifyDataExists(await this.SendAndListen(this.BuildClearMessagesPacket()));
         }
 
+        /// <summary>
+        /// Cancels an active skill in the channel.
+        /// </summary>
+        /// <param name="skillExecutionID">The execution ID of the skill</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task CancelSkill(Guid skillExecutionID)
+        {
+            await this.Send(this.BuildCancelSkillPacket(skillExecutionID));
+        }
+
+        /// <summary>
+        /// Cancels an active skill in the channel.
+        /// </summary>
+        /// <param name="skillExecutionID">The execution ID of the skill</param>
+        /// <returns>Whether the operation succeeded</returns>
+        public async Task<bool> CancelSkillWithResponse(Guid skillExecutionID)
+        {
+            return this.VerifyDataExists(await this.SendAndListen(this.BuildCancelSkillPacket(skillExecutionID)));
+        }
+
+        private MethodPacket BuildCancelSkillPacket(Guid skillExecutionID)
+        {
+            Validator.ValidateVariable(skillExecutionID, "skillExecutionID");
+            return new MethodArgPacket("cancelSkill", new JArray() { skillExecutionID });
+        }
+
         private MethodPacket BuildClearMessagesPacket()
         {
             return new MethodArgPacket("clearMessages", new JArray() { });
