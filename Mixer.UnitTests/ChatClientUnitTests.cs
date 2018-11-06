@@ -172,6 +172,23 @@ namespace Mixer.UnitTests
             });
         }
 
+        [TestMethod]
+        public void GetChatHistory()
+        {
+            this.ChatWrapper(async (MixerConnection connection, ChatClient chatClient) =>
+            {
+                await chatClient.ClearMessagesWithResponse();
+                IEnumerable<ChatMessageEventModel> results = await chatClient.GetChatHistory(50);
+                Assert.IsNotNull(results);
+                Assert.AreEqual(0, results.Count());
+
+                await this.SendBasicMessage(chatClient);
+                results = await chatClient.GetChatHistory(50);
+                Assert.IsNotNull(results);
+                Assert.AreEqual(1, results.Count());
+            });
+        }
+
         private async Task SendBasicMessage(ChatClient chatClient)
         {
             this.ClearAllPackets();
