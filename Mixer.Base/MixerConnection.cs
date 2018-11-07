@@ -89,6 +89,7 @@ namespace Mixer.Base
         public InteractiveService Interactive { get; private set; }
         public OAuthService OAuth { get; private set; }
         public PatronageService Patronage { get; private set; }
+        public SkillsService Skills { get; private set; }
         public TeamsService Teams { get; private set; }
         public TestStreamsService TestStreams { get; private set; }
         public UsersService Users { get; private set; }
@@ -269,6 +270,7 @@ namespace Mixer.Base
             this.Interactive = new InteractiveService(this);
             this.OAuth = new OAuthService(this);
             this.Patronage = new PatronageService(this);
+            this.Skills = new SkillsService(this);
             this.Teams = new TeamsService(this);
             this.TestStreams = new TestStreamsService(this);
             this.Users = new UsersService(this);
