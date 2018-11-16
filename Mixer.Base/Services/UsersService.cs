@@ -87,7 +87,7 @@ namespace Mixer.Base.Services
         public async Task<UserModel> GetUser(string username)
         {
             Validator.ValidateString(username, "username");
-            IEnumerable<UserModel> users = await this.GetPagedAsync<UserModel>("users/search?query=" + username);
+            IEnumerable<UserModel> users = await this.GetPagedNumberAsync<UserModel>("users/search?query=" + username);
             if (users.Count() > 0)
             {
                 return users.First();
@@ -117,7 +117,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<ChannelAdvancedModel>> GetFollows(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", maxResults);
+            return await this.GetPagedNumberAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", maxResults);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<SubscriptionWithGroupModel>> GetSubscriptions(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<SubscriptionWithGroupModel>("users/" + user.id + "/subscriptions", maxResults);
+            return await this.GetPagedNumberAsync<SubscriptionWithGroupModel>("users/" + user.id + "/subscriptions", maxResults);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<UserLogModel>> GetLogs(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<UserLogModel>("users/" + user.id + "/log", maxResults);
+            return await this.GetPagedNumberAsync<UserLogModel>("users/" + user.id + "/log", maxResults);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<NotificationModel>> GetNotifications(UserModel user, uint maxResults = 1)
         {
             Validator.ValidateVariable(user, "user");
-            return await this.GetPagedAsync<NotificationModel>("users/" + user.id + "/notifications", maxResults);
+            return await this.GetPagedNumberAsync<NotificationModel>("users/" + user.id + "/notifications", maxResults);
         }
 
         /// <summary>

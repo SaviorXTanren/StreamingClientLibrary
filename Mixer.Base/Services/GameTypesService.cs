@@ -26,7 +26,7 @@ namespace Mixer.Base.Services
         /// <returns>The matching game type for the ID specified</returns>
         public async Task<GameTypeModel> GetGameType(uint id)
         {
-            IEnumerable<GameTypeModel> gamesTypes = await this.GetPagedAsync<GameTypeModel>("types?where=id:eq:" + id);
+            IEnumerable<GameTypeModel> gamesTypes = await this.GetPagedNumberAsync<GameTypeModel>("types?where=id:eq:" + id);
             if (gamesTypes.Count() > 0)
             {
                 return gamesTypes.First();
@@ -43,7 +43,7 @@ namespace Mixer.Base.Services
         /// <returns>All game types</returns>
         public async Task<IEnumerable<GameTypeModel>> GetGameTypes(uint maxResults = 1)
         {
-            return await this.GetPagedAsync<GameTypeModel>("types", maxResults);
+            return await this.GetPagedNumberAsync<GameTypeModel>("types", maxResults);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Mixer.Base.Services
             parameters.Add("query", name);
             FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
 
-            return await this.GetPagedAsync<GameTypeModel>("types?" + await content.ReadAsStringAsync(), maxResults);
+            return await this.GetPagedNumberAsync<GameTypeModel>("types?" + await content.ReadAsStringAsync(), maxResults);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(gameType, "gameType");
 
-            return await this.GetPagedAsync<ChannelModel>("types/" + gameType.id + "/channels", maxResults);
+            return await this.GetPagedNumberAsync<ChannelModel>("types/" + gameType.id + "/channels", maxResults);
         }
     }
 }

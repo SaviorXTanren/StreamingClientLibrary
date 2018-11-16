@@ -22,6 +22,8 @@ namespace Mixer.Base.Services
     {
         private const string RequestLastPageRegexString = "page=[\\d]+>; rel=\"last\"";
 
+        private const string RequestContinuationTokenPrefixString = "continuationToken=";
+
         /// <summary>
         /// This event occurs when a RESTful request is sent.
         /// </summary>
@@ -91,7 +93,7 @@ namespace Mixer.Base.Services
         /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
         /// <param name="linkPagesAvailable">Whether the link pages header property exists</param>
         /// <returns>A type-casted list of objects of the contents of the response</returns>
-        public async Task<IEnumerable<T>> GetPagedAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
+        public async Task<IEnumerable<T>> GetPagedNumberAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
         {
             List<T> results = new List<T>();
             int currentPage = 0;
@@ -139,6 +141,64 @@ namespace Mixer.Base.Services
                     pageTotal++;
                 }
             }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for paged results.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
+        /// <returns>A type-casted list of objects of the contents of the response</returns>
+        public async Task<IEnumerable<T>> GetPagedContinuationAsync<T>(string requestUri, uint maxResults = 1)
+        {
+            List<T> results = new List<T>();
+            string continuationToken = null;
+
+            do
+            {
+                string currentRequestUri = requestUri;
+                if (!string.IsNullOrEmpty(continuationToken))
+                {
+                    if (currentRequestUri.Contains("?"))
+                    {
+                        currentRequestUri += "&";
+                    }
+                    else
+                    {
+                        currentRequestUri += "?";
+                    }
+                    currentRequestUri += "continuationToken=" + continuationToken;
+                }
+                HttpResponseMessage response = await this.GetAsync(currentRequestUri);
+
+                T[] pagedResults = await this.ProcessResponse<T[]>(response);
+                results.AddRange(pagedResults);
+
+                continuationToken = null;
+
+                IEnumerable<string> linkValues;
+                if (pagedResults.Length > 0 && response.Headers.TryGetValues("link", out linkValues))
+                {
+                    if (linkValues.Count() > 0)
+                    {
+                        string token = linkValues.First();
+                        int tokenStart = token.IndexOf(RequestContinuationTokenPrefixString);
+                        if (tokenStart >= 0)
+                        {
+                            token = token.Substring(tokenStart + RequestContinuationTokenPrefixString.Length);
+                            int tokenEnd = token.IndexOf(">");
+                            if (tokenEnd >= 0)
+                            {
+                                token = token.Substring(0, tokenEnd);
+                            }
+                        }
+
+                        continuationToken = token;
+                    }
+                }
+            } while (results.Count < maxResults && !string.IsNullOrEmpty(continuationToken));
 
             return results;
         }

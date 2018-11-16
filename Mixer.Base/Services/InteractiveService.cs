@@ -66,7 +66,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameListingModel>> GetOwnedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/owned?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<InteractiveGameListingModel>("interactive/games/owned?user=" + channel.userId);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameListingModel>> GetSharedInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/shared?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<InteractiveGameListingModel>("interactive/games/shared?user=" + channel.userId);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameListingModel>> GetEditorInteractiveGames(ChannelModel channel)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<InteractiveGameListingModel>("interactive/games/editor?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<InteractiveGameListingModel>("interactive/games/editor?user=" + channel.userId);
         }
 
 
@@ -154,7 +154,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<InteractiveGameVersionModel>> GetInteractiveGameVersions(InteractiveGameModel game)
         {
             Validator.ValidateVariable(game, "game");
-            return await this.GetPagedAsync<InteractiveGameVersionModel>("interactive/games/" + game.id + "/versions");
+            return await this.GetPagedNumberAsync<InteractiveGameVersionModel>("interactive/games/" + game.id + "/versions");
         }
 
         /// <summary>
