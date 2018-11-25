@@ -27,7 +27,7 @@ namespace Mixer.Base.Services
         /// <returns>All teams</returns>
         public async Task<IEnumerable<TeamModel>> GetTeams(uint maxResults = 1)
         {
-            return await this.GetPagedAsync<TeamModel>("teams", maxResults);
+            return await this.GetPagedNumberAsync<TeamModel>("teams", maxResults);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Mixer.Base.Services
         public async Task<TeamModel> GetTeam(string name)
         {
             Validator.ValidateVariable(name, "name");
-            IEnumerable<TeamModel> results = await this.GetPagedAsync<TeamModel>("teams?where=name:eq:" + this.EncodeString(name));
+            IEnumerable<TeamModel> results = await this.GetPagedNumberAsync<TeamModel>("teams?where=name:eq:" + this.EncodeString(name));
             return results.FirstOrDefault();
         }
 
@@ -63,7 +63,7 @@ namespace Mixer.Base.Services
         /// <returns>The users</returns>
         public async Task<IEnumerable<UserWithChannelModel>> GetTeamUsers(TeamModel team, uint maxResults = 1)
         {
-            return await this.GetPagedAsync<UserWithChannelModel>("teams/" + team.id.ToString() + "/users", maxResults);
+            return await this.GetPagedNumberAsync<UserWithChannelModel>("teams/" + team.id.ToString() + "/users", maxResults);
         }
     }
 }

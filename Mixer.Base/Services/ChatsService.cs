@@ -12,10 +12,42 @@ namespace Mixer.Base.Services
     public class ChatsService : MixerServiceBase
     {
         /// <summary>
+        /// https://dev.mixer.com/content/blog/chatlistdeprecations
+        /// </summary>
+        private class ChatsV2Service : MixerServiceBase
+        {
+            /// <summary>
+            /// Creates an instance of the ChatsV2Service.
+            /// </summary>
+            /// <param name="connection">The Mixer connection to use</param>
+            public ChatsV2Service(MixerConnection connection) : base(connection, 2) { }
+
+            /// <summary>
+            /// Gets the current users connected to chat for the specified channel. The search can be limited to a maximum number
+            /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+            /// threshold and slightly more than the maximum number may be returned.
+            /// </summary>
+            /// <param name="channel">The channel to get chat users for</param>
+            /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+            /// <returns>The chat users</returns>
+            public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 1)
+            {
+                Validator.ValidateVariable(channel, "channel");
+                return await this.GetPagedContinuationAsync<ChatUserModel>("chats/" + channel.id + "/users", maxResults);
+            }
+        }
+
+        private ChatsV2Service chatsV2Service;
+
+        /// <summary>
         /// Creates an instance of the ChatsService.
         /// </summary>
         /// <param name="connection">The Mixer connection to use</param>
-        public ChatsService(MixerConnection connection) : base(connection) { }
+        public ChatsService(MixerConnection connection)
+            : base(connection)
+        {
+            this.chatsV2Service = new ChatsV2Service(connection);
+        }
 
         /// <summary>
         /// Gets the chat information for the specified channel.
@@ -50,8 +82,7 @@ namespace Mixer.Base.Services
         /// <returns>The chat users</returns>
         public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 1)
         {
-            Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<ChatUserModel>("chats/" + channel.id + "/users", maxResults);
+            return await this.chatsV2Service.GetUsers(channel, maxResults);
         }
     }
 }

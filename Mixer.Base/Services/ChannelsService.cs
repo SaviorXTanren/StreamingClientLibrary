@@ -74,7 +74,7 @@ namespace Mixer.Base.Services
         /// <returns>A list of currently online channels</returns>
         public async Task<IEnumerable<ExpandedChannelModel>> GetChannels(uint maxResults = 1)
         {
-            return await this.GetPagedAsync<ExpandedChannelModel>("channels", maxResults, linkPagesAvailable: false);
+            return await this.GetPagedNumberAsync<ExpandedChannelModel>("channels", maxResults, linkPagesAvailable: false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Mixer.Base.Services
         /// <returns>A list of the currently featured online channels</returns>
         public async Task<IEnumerable<ExpandedChannelModel>> GetFeaturedChannels()
         {
-            return await this.GetPagedAsync<ExpandedChannelModel>("channels?where=featured:eq:true", 100, linkPagesAvailable: false);
+            return await this.GetPagedNumberAsync<ExpandedChannelModel>("channels?where=featured:eq:true", 100, linkPagesAvailable: false);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "stateDate");
 
-            return await this.GetPagedAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate));
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(channel, "channel");
 
-            return await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow", maxResults);
+            return await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow", maxResults);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Mixer.Base.Services
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
                 IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
                 foreach (UserModel user in userSubset)
                 {
@@ -291,7 +291,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<ChannelAdvancedModel>> GetHosters(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters", maxResults);
+            return await this.GetPagedNumberAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters", maxResults);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<UserWithGroupsModel>> GetUsersWithRoles(ChannelModel channel, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", maxResults);
+            return await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", maxResults);
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace Mixer.Base.Services
         public async Task<UserWithGroupsModel> GetUser(ChannelModel channel, uint userID)
         {
             Validator.ValidateVariable(channel, "channel");
-            IEnumerable<UserWithGroupsModel> users = await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users?where=id:eq:" + userID);
+            IEnumerable<UserWithGroupsModel> users = await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users?where=id:eq:" + userID);
             return users.FirstOrDefault();
         }
 
@@ -358,7 +358,7 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateString(role, "role");
-            return await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, maxResults);
+            return await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, maxResults);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Mixer.Base.Services
             for (int i = 0; i < users.Count(); i += 25)
             {
                 IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
                 foreach (UserModel user in userSubset)
                 {
                     UserWithGroupsModel userGroups = roleUsers.FirstOrDefault(u => u.id.Equals(user.id));
@@ -512,7 +512,7 @@ namespace Mixer.Base.Services
         /// <returns>A list of the channel recordings</returns>
         public async Task<IEnumerable<ChannelRecordingModel>> GetRecordings(ChannelModel channel, uint maxResults = 1)
         {
-            return await this.GetPagedAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
+            return await this.GetPagedNumberAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
         }
 
         /// <summary>
