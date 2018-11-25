@@ -11,6 +11,9 @@ namespace Mixer.Base.Services
     /// </summary>
     public class ChatsService : MixerServiceBase
     {
+        /// <summary>
+        /// https://dev.mixer.com/content/blog/chatlistdeprecations
+        /// </summary>
         private class ChatsV2Service : MixerServiceBase
         {
             /// <summary>
