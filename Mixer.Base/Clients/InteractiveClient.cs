@@ -3,6 +3,7 @@ using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Model.OAuth;
 using Mixer.Base.Util;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -587,7 +588,7 @@ namespace Mixer.Base.Clients
             Validator.ValidateList(controls, "controls");
             JObject parameters = new JObject();
             parameters.Add("sceneID", scene.sceneID);
-            parameters.Add("controls", JArray.FromObject(controls));
+            parameters.Add("controls", JArray.FromObject(controls, new JsonSerializer { NullValueHandling = NullValueHandling.Ignore }));
             return new MethodParamsPacket("updateControls", parameters);
         }
 
