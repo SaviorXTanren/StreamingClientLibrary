@@ -6,7 +6,7 @@ namespace Mixer.Base.Web
 {
     public class OAuthHttpListenerServer : HttpListenerServerBase
     {
-        public const string URL_CODE_IDENTIFIER = "/?code=";
+        public const string URL_CODE_IDENTIFIER = "code=";
         private const string defaultSuccessResponse = "<!DOCTYPE html><html><body><h1 style=\"text-align:center;\">Logged In Successfully</h1><p style=\"text-align:center;\">You have been logged in, you may now close this webpage</p></body></html>";
 
         private string loginSuccessHtmlPageFilePath = null;
@@ -54,9 +54,13 @@ namespace Mixer.Base.Web
         {
             if (listenerContext.Request.RawUrl.Contains(identifier))
             {
-                int startIndex = listenerContext.Request.RawUrl.IndexOf(identifier);
+                int startIndex = listenerContext.Request.RawUrl.IndexOf("?" + identifier);
+                if (startIndex < 0)
+                {
+                    startIndex = listenerContext.Request.RawUrl.IndexOf("&" + identifier);
+                }
 
-                string token = listenerContext.Request.RawUrl.Substring(startIndex + identifier.Length);
+                string token = listenerContext.Request.RawUrl.Substring(startIndex + identifier.Length + 1);
 
                 int endIndex = token.IndexOf("&");
                 if (endIndex > 0)
