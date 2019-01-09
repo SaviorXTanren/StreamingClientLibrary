@@ -76,22 +76,81 @@ namespace Mixer.Base
 
     public class MixerConnection
     {
+        /// <summary>
+        /// The default OAuth redirect URL used for authentication.
+        /// </summary>
         public const string DEFAULT_OAUTH_LOCALHOST_URL = "http://localhost:8919/";
 
         private OAuthTokenModel token;
 
+        /// <summary>
+        /// APIs for the broadcasts of a channel.
+        /// </summary>
         public BroadcastsService Broadcasts { get; private set; }
+
+        /// <summary>
+        /// APIs for channel information.
+        /// </summary>
         public ChannelsService Channels { get; private set; }
+
+        /// <summary>
+        /// APIs for chat services.
+        /// </summary>
         public ChatsService Chats { get; private set; }
+
+        /// <summary>
+        /// APIs for clip data & creation.
+        /// </summary>
         public ClipsService Clips { get; private set; }
+
+        /// <summary>
+        /// APIs for costream broadcasts.
+        /// </summary>
         public CostreamService Costream { get; private set; }
+
+        /// <summary>
+        /// APIs for game type look up.
+        /// </summary>
         public GameTypesService GameTypes { get; private set; }
+
+        /// <summary>
+        /// APIs for Interactive/MixPlay.
+        /// </summary>
         public InteractiveService Interactive { get; private set; }
+
+        /// <summary>
+        /// APIs for the leaderboards of a channel.
+        /// </summary>
+        public LeaderboardsService Leaderboards { get; private set; }
+
+        /// <summary>
+        /// APIs for OAuth interaction.
+        /// </summary>
         public OAuthService OAuth { get; private set; }
+
+        /// <summary>
+        /// APIs for channel patronage.
+        /// </summary>
         public PatronageService Patronage { get; private set; }
+
+        /// <summary>
+        /// APIs for skills.
+        /// </summary>
         public SkillsService Skills { get; private set; }
+
+        /// <summary>
+        /// APIs for teams.
+        /// </summary>
         public TeamsService Teams { get; private set; }
+
+        /// <summary>
+        /// APIs for test stream setup.
+        /// </summary>
         public TestStreamsService TestStreams { get; private set; }
+
+        /// <summary>
+        /// APIs for user data.
+        /// </summary>
         public UsersService Users { get; private set; }
 
         /// <summary>
@@ -267,6 +326,7 @@ namespace Mixer.Base
             this.Clips = new ClipsService(this);
             this.Costream = new CostreamService(this);
             this.GameTypes = new GameTypesService(this);
+            this.Leaderboards = new LeaderboardsService(this);
             this.Interactive = new InteractiveService(this);
             this.OAuth = new OAuthService(this);
             this.Patronage = new PatronageService(this);
