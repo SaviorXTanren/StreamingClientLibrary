@@ -167,7 +167,7 @@ namespace Mixer.Base.Clients
             this.Authenticated = false;
 
             ReplyPacket reply = await this.SendAndListen(packet, checkIfAuthenticated: false);
-            if (reply != null && reply.dataObject.TryGetValue("authenticated", out JToken value))
+            if (reply != null && reply.dataObject != null && reply.dataObject.TryGetValue("authenticated", out JToken value))
             {
                 this.Authenticated = (bool)value;
             }
