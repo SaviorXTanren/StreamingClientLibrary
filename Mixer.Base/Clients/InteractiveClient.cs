@@ -644,6 +644,28 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(await this.SendAndListen(this.BuildCaptureSparkTransactionPacket(transactionID)));
         }
 
+        /// <summary>
+        /// Sends a broadcast event message to the selected scopes.
+        /// </summary>
+        /// <param name="scopes">A list of 1 or more scopes. For example: everyone, group:[ID], scene:[ID], or participant:[UUID]</param>
+        /// <param name="data">The data to send in the message.</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task BroadcastEvent(IEnumerable<string> scopes, JObject data)
+        {
+            await this.Send(this.BuildBroadcastEventPacket(scopes, data));
+        }
+
+        /// <summary>
+        /// Sends a broadcast event message to the selected scopes.
+        /// </summary>
+        /// <param name="scopes">A list of 1 or more scopes. For example: everyone, group:[ID], scene:[ID], or participant:[UUID]</param>
+        /// <param name="data">The data to send in the message.</param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public async Task<bool> BroadcastEventWithResponse(IEnumerable<string> scopes, JObject data)
+        {
+            return this.VerifyNoErrors(await this.SendAndListen(this.BuildBroadcastEventPacket(scopes, data)));
+        }
+
         protected async override Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             this.AssignLatestSequence(packet);
@@ -670,6 +692,16 @@ namespace Mixer.Base.Clients
             JObject parameters = new JObject();
             parameters.Add("transactionID", transactionID);
             return new MethodParamsPacket("capture", parameters);
+        }
+
+        private MethodPacket BuildBroadcastEventPacket(IEnumerable<string> scopes, JObject data)
+        {
+            Validator.ValidateList<string>(scopes, "scope");
+            Validator.ValidateVariable(data, "data");
+            JObject parameters = new JObject();
+            parameters.Add("scope", new JArray() { scopes });
+            parameters.Add("data", data);
+            return new MethodParamsPacket("broadcastEvent", parameters);
         }
 
         private void InteractiveClient_OnMethodOccurred(object sender, MethodPacket methodPacket)
