@@ -39,8 +39,16 @@ namespace Mixer.Base.Model.Chat
     public class ChatSkillAttributionEventModel : ChatMessageUserModel
     {
         /// <summary>
+        /// The unique, instance ID of skill usage.
+        /// </summary>
+        public Guid id { get; set; }
+        /// <summary>
         /// The skill used.
         /// </summary>
         public ChatSkillModel skill { get; set; }
+        /// <summary>
+        /// The message contents associated with the skill.
+        /// </summary>
+        public ChatMessageContentsModel message { get; set; }
     }
 }
