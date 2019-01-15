@@ -23,7 +23,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get the leaderboard for</param>
         /// <returns>The weekly sparks leaderboard for the channel specified</returns>
-        public async Task<IEnumerable<SparksLeaderboardModel>> GetWeeklyLeaderboard(ChannelModel channel)
+        public async Task<IEnumerable<SparksLeaderboardModel>> GetWeeklySparksLeaderboard(ChannelModel channel)
         {
             return await this.GetAsync<IEnumerable<SparksLeaderboardModel>>("leaderboards/sparks-weekly/channels/" + channel.id.ToString());
         }
@@ -33,7 +33,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get the leaderboard for</param>
         /// <returns>The monthly sparks leaderboard for the channel specified</returns>
-        public async Task<IEnumerable<SparksLeaderboardModel>> GetMonthlyLeaderboard(ChannelModel channel)
+        public async Task<IEnumerable<SparksLeaderboardModel>> GetMonthlySparksLeaderboard(ChannelModel channel)
         {
             return await this.GetAsync<IEnumerable<SparksLeaderboardModel>>("leaderboards/sparks-monthly/channels/" + channel.id.ToString());
         }
@@ -43,7 +43,7 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get the leaderboard for</param>
         /// <returns>The yearly sparks leaderboard for the channel specified</returns>
-        public async Task<IEnumerable<SparksLeaderboardModel>> GetYearlyLeaderboard(ChannelModel channel)
+        public async Task<IEnumerable<SparksLeaderboardModel>> GetYearlySparksLeaderboard(ChannelModel channel)
         {
             return await this.GetAsync<IEnumerable<SparksLeaderboardModel>>("leaderboards/sparks-yearly/channels/" + channel.id.ToString());
         }
@@ -53,9 +53,49 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get the leaderboard for</param>
         /// <returns>The all-time sparks leaderboard for the channel specified</returns>
-        public async Task<IEnumerable<SparksLeaderboardModel>> GetAllTimeLeaderboard(ChannelModel channel)
+        public async Task<IEnumerable<SparksLeaderboardModel>> GetAllTimeSparksLeaderboard(ChannelModel channel)
         {
             return await this.GetAsync<IEnumerable<SparksLeaderboardModel>>("leaderboards/sparks-alltime/channels/" + channel.id.ToString());
+        }
+
+        /// <summary>
+        /// Gets the weekly embers leaderboard for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the leaderboard for</param>
+        /// <returns>The weekly embers leaderboard for the channel specified</returns>
+        public async Task<IEnumerable<EmbersLeaderboardModel>> GetWeeklyEmbersLeaderboard(ChannelModel channel)
+        {
+            return await this.GetAsync<IEnumerable<EmbersLeaderboardModel>>("leaderboards/embers-weekly/channels/" + channel.id.ToString());
+        }
+
+        /// <summary>
+        /// Gets the monthly embers leaderboard for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the leaderboard for</param>
+        /// <returns>The monthly embers leaderboard for the channel specified</returns>
+        public async Task<IEnumerable<EmbersLeaderboardModel>> GetMonthlyEmbersLeaderboard(ChannelModel channel)
+        {
+            return await this.GetAsync<IEnumerable<EmbersLeaderboardModel>>("leaderboards/embers-monthly/channels/" + channel.id.ToString());
+        }
+
+        /// <summary>
+        /// Gets the yearly embers leaderboard for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the leaderboard for</param>
+        /// <returns>The yearly embers leaderboard for the channel specified</returns>
+        public async Task<IEnumerable<EmbersLeaderboardModel>> GetYearlyEmbersLeaderboard(ChannelModel channel)
+        {
+            return await this.GetAsync<IEnumerable<EmbersLeaderboardModel>>("leaderboards/embers-yearly/channels/" + channel.id.ToString());
+        }
+
+        /// <summary>
+        /// Gets the all-time embers leaderboard for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the leaderboard for</param>
+        /// <returns>The all-time embers leaderboard for the channel specified</returns>
+        public async Task<IEnumerable<EmbersLeaderboardModel>> GetAllTimeEmbersLeaderboard(ChannelModel channel)
+        {
+            return await this.GetAsync<IEnumerable<EmbersLeaderboardModel>>("leaderboards/embers-alltime/channels/" + channel.id.ToString());
         }
     }
 }
