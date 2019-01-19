@@ -31,7 +31,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
 
             JObject payload = new JObject() { { "globalLevel", level } };
-            return await this.PostAsync<SkillCatalogModel>("https://mixer.com/api/v1/catalog/skills/channels/" + channel.id + "?locale=en-US", this.CreateContentFromObject(payload));
+            return await this.PostAsync<SkillCatalogModel>("catalog/skills/channels/" + channel.id + "?locale=en-US", this.CreateContentFromObject(payload));
         }
     }
 }
