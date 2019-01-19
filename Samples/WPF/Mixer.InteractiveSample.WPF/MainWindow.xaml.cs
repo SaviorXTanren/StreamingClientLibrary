@@ -156,7 +156,7 @@ namespace Mixer.InteractiveSample.WPF
 
         private async void InteractiveClient_OnDisconnectOccurred(object sender, System.Net.WebSockets.WebSocketCloseStatus e)
         {
-            this.InteractiveDataTextBlock.Text += "Disconnection Occurred, attempting reconnection..." + Environment.NewLine;
+            this.InteractiveDataTextBox.Text += "Disconnection Occurred, attempting reconnection..." + Environment.NewLine;
 
             do
             {
@@ -164,12 +164,12 @@ namespace Mixer.InteractiveSample.WPF
             }
             while (!await this.interactiveClient.Connect() && !await this.interactiveClient.Ready());
 
-            this.InteractiveDataTextBlock.Text += "Reconnection successful" + Environment.NewLine;
+            this.InteractiveDataTextBox.Text += "Reconnection successful" + Environment.NewLine;
         }
 
         private async void InteractiveClient_OnGiveInput(object sender, InteractiveGiveInputModel e)
         {
-            this.InteractiveDataTextBlock.Text += "Input Received: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
+            this.InteractiveDataTextBox.Text += "Input Received: " + e.transactionID + " - " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
 
             if (e.input.eventType.Equals("mousedown") && e.transactionID != null)
             {
@@ -181,12 +181,12 @@ namespace Mixer.InteractiveSample.WPF
                     {
                         button.cooldown = DateTimeHelper.DateTimeOffsetToUnixTimestamp(DateTimeOffset.Now.AddSeconds(10));
                         await this.interactiveClient.UpdateControls(scene, new List<InteractiveConnectedButtonControlModel>() { button });
-                        this.InteractiveDataTextBlock.Text += "Sent 10 second cooldown to button: " + e.input.controlID + Environment.NewLine;
+                        this.InteractiveDataTextBox.Text += "Sent 10 second cooldown to button: " + e.input.controlID + Environment.NewLine;
                     }
                 }
 
-                await this.interactiveClient.CaptureSparkTransaction(e.transactionID);
-                this.InteractiveDataTextBlock.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
+                await this.interactiveClient.CaptureSparkTransactionWithResponse(e.transactionID);
+                this.InteractiveDataTextBox.Text += "Spark Transaction Captured: " + e.participantID + " - " + e.input.eventType + " - " + e.input.controlID + Environment.NewLine;
             }
         }
 
@@ -196,14 +196,14 @@ namespace Mixer.InteractiveSample.WPF
             {
                 foreach (InteractiveGroupModel group in e.groups)
                 {
-                    this.InteractiveDataTextBlock.Text += "Group Created: " + group.groupID + Environment.NewLine;
+                    this.InteractiveDataTextBox.Text += "Group Created: " + group.groupID + Environment.NewLine;
                 }
             }
         }
 
         private void InteractiveClient_OnGroupDelete(object sender, Tuple<InteractiveGroupModel, InteractiveGroupModel> e)
         {
-            this.InteractiveDataTextBlock.Text += "Group Deleted: " + e.Item1 + " - " + e.Item2 + Environment.NewLine;
+            this.InteractiveDataTextBox.Text += "Group Deleted: " + e.Item1 + " - " + e.Item2 + Environment.NewLine;
         }
 
         private void InteractiveClient_OnGroupUpdate(object sender, InteractiveGroupCollectionModel e)
@@ -212,14 +212,14 @@ namespace Mixer.InteractiveSample.WPF
             {
                 foreach (InteractiveGroupModel group in e.groups)
                 {
-                    this.InteractiveDataTextBlock.Text += "Group Updated: " + group.groupID + Environment.NewLine;
+                    this.InteractiveDataTextBox.Text += "Group Updated: " + group.groupID + Environment.NewLine;
                 }
             }
         }
 
         private void InteractiveClient_OnIssueMemoryWarning(object sender, InteractiveIssueMemoryWarningModel e)
         {
-            this.InteractiveDataTextBlock.Text += "Memory Warning Issued: " + e.usedBytes + " bytes used out of " + e.totalBytes + " total bytes" + Environment.NewLine;
+            this.InteractiveDataTextBox.Text += "Memory Warning Issued: " + e.usedBytes + " bytes used out of " + e.totalBytes + " total bytes" + Environment.NewLine;
         }
 
         private void InteractiveClient_OnParticipantJoin(object sender, InteractiveParticipantCollectionModel e)
@@ -228,7 +228,7 @@ namespace Mixer.InteractiveSample.WPF
             {
                 foreach (InteractiveParticipantModel participant in e.participants)
                 {
-                    this.InteractiveDataTextBlock.Text += "Participant Joined: " + participant.username + Environment.NewLine;
+                    this.InteractiveDataTextBox.Text += "Participant Joined: " + participant.username + Environment.NewLine;
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace Mixer.InteractiveSample.WPF
             {
                 foreach (InteractiveParticipantModel participant in e.participants)
                 {
-                    this.InteractiveDataTextBlock.Text += "Participant Left: " + participant.username + Environment.NewLine;
+                    this.InteractiveDataTextBox.Text += "Participant Left: " + participant.username + Environment.NewLine;
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace Mixer.InteractiveSample.WPF
             {
                 foreach (InteractiveParticipantModel participant in e.participants)
                 {
-                    this.InteractiveDataTextBlock.Text += "Participant Updated: " + participant.username + Environment.NewLine;
+                    this.InteractiveDataTextBox.Text += "Participant Updated: " + participant.username + Environment.NewLine;
                 }
             }
         }
