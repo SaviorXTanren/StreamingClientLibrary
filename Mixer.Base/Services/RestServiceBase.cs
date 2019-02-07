@@ -290,13 +290,23 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>Whether the deletion was successful</returns>
-        public async Task<bool> DeleteAsync(string requestUri)
+        public async Task<bool> DeleteAsync(string requestUri, HttpContent content = null)
         {
             using (HttpClientWrapper client = await this.GetHttpClient())
             {
                 this.LogRequest(requestUri);
-                HttpResponseMessage response = await client.DeleteAsync(requestUri);
-                return (response.StatusCode == HttpStatusCode.NoContent);
+                if (content != null)
+                {
+                    HttpMethod method = new HttpMethod("DELETE");
+                    HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    return (response.StatusCode == HttpStatusCode.NoContent);
+                }
+                else
+                {
+                    HttpResponseMessage response = await client.DeleteAsync(requestUri);
+                    return (response.StatusCode == HttpStatusCode.NoContent);
+                }
             }
         }
 

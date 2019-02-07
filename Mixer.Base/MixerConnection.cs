@@ -99,7 +99,7 @@ namespace Mixer.Base
         public ChatsService Chats { get; private set; }
 
         /// <summary>
-        /// APIs for clip data & creation.
+        /// APIs for clip data &amp; creation.
         /// </summary>
         public ClipsService Clips { get; private set; }
 
