@@ -536,7 +536,7 @@ namespace Mixer.Base.Services
         /// Attempts to follow the given channel for a specific user.
         /// </summary>
         /// <param name="channel">The channel to follow</param>
-        /// <param name="user">The user to follow as</param>
+        /// <param name="user">The user trying to follow</param>
         /// <returns>True if successful</returns>
         public async Task<bool> Follow(ChannelModel channel, UserModel user)
         {
@@ -553,8 +553,8 @@ namespace Mixer.Base.Services
         /// <summary>
         /// Attempts to unfollow the given channel for a specific user.
         /// </summary>
-        /// <param name="channel">The channel to follow</param>
-        /// <param name="user">The user to follow as</param>
+        /// <param name="channel">The channel to unfollow</param>
+        /// <param name="user">The user to unfollow</param>
         /// <returns>True if successful</returns>
         public async Task<bool> Unfollow(ChannelModel channel, UserModel user)
         {
