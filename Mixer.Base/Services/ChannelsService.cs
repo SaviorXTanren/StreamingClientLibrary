@@ -532,6 +532,41 @@ namespace Mixer.Base.Services
             return await this.GetAsync<IEnumerable<EmoticonPackModel>>(uri);
         }
 
+        /// <summary>
+        /// Attempts to follow the given channel for a specific user.
+        /// </summary>
+        /// <param name="channel">The channel to follow</param>
+        /// <param name="user">The user trying to follow</param>
+        /// <returns>True if successful</returns>
+        public async Task<bool> Follow(ChannelModel channel, UserModel user)
+        {
+            string uri = $"channels/{channel.id}/follow";
+
+
+            JObject payload = new JObject();
+            payload["user"] = user.id;
+
+            HttpResponseMessage response = await this.PostAsync(uri, this.CreateContentFromObject(payload));
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Attempts to unfollow the given channel for a specific user.
+        /// </summary>
+        /// <param name="channel">The channel to unfollow</param>
+        /// <param name="user">The user to unfollow</param>
+        /// <returns>True if successful</returns>
+        public async Task<bool> Unfollow(ChannelModel channel, UserModel user)
+        {
+            string uri = $"channels/{channel.id}/follow";
+
+
+            JObject payload = new JObject();
+            payload["user"] = user.id;
+
+            return await this.DeleteAsync(uri, this.CreateContentFromObject(payload));
+        }
+
         private string ConstructToAndFromQueryString(DateTimeOffset startDate, DateTimeOffset? endDate = null)
         {
             string endDateString = "";
