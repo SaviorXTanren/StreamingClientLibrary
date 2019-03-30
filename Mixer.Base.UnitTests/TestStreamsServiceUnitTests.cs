@@ -3,7 +3,7 @@ using Mixer.Base;
 using Mixer.Base.Model.TestStreams;
 using Mixer.Base.Model.User;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class TestStreamsServiceUnitTests : UnitTestBase

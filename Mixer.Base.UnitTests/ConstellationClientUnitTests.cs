@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class ConstellationClientUnitTests : UnitTestBase

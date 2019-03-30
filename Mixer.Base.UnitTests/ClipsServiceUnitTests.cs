@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class ClipsServiceUnitTests : UnitTestBase

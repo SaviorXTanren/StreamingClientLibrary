@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class ChatsServiceUnitTests : UnitTestBase

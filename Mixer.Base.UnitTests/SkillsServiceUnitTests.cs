@@ -4,7 +4,7 @@ using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Skills;
 using Mixer.Base.Model.User;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class SkillsServiceUnitTests : UnitTestBase

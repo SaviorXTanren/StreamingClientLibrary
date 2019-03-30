@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     public abstract class UnitTestBase
     {

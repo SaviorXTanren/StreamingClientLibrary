@@ -3,7 +3,7 @@ using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Patronage;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class PatronageServiceUnitTests : UnitTestBase

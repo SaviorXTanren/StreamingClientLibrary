@@ -5,7 +5,7 @@ using Mixer.Base.Model.User;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class TeamsServiceUnitTests : UnitTestBase

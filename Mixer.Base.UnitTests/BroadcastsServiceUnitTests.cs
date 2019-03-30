@@ -3,7 +3,7 @@ using Mixer.Base;
 using Mixer.Base.Model.Broadcast;
 using System;
 
-namespace Mixer.UnitTests
+namespace Mixer.Base.UnitTests
 {
     [TestClass]
     public class BroadcastsServiceUnitTests : UnitTestBase
