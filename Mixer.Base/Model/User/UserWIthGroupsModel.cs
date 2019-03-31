@@ -3,8 +3,14 @@ using System.Linq;
 
 namespace Mixer.Base.Model.User
 {
+    /// <summary>
+    /// A user and the groups they are part of.
+    /// </summary>
     public class UserWithGroupsModel : UserModel
     {
+        /// <summary>
+        /// The groups that the user is a part of.
+        /// </summary>
         public UserGroupModel[] groups { get; set; }
 
         /// <summary>
