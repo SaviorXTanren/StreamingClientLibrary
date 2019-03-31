@@ -2,6 +2,7 @@
 using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -106,20 +107,19 @@ namespace Mixer.Base.Clients
 
         protected override Task ProcessReceivedPacket(string packetJSON)
         {
-            dynamic jsonObject = JsonConvert.DeserializeObject(packetJSON);
-
             List<WebSocketPacket> packets = new List<WebSocketPacket>();
-            if (jsonObject.Type == JTokenType.Array)
+
+            JToken packetToken = JToken.Parse(packetJSON);
+            if (packetToken is JArray)
             {
-                JArray array = JArray.Parse(packetJSON);
-                foreach (JToken token in array.Children())
+                foreach (WebSocketPacket packet in JSONSerializerHelper.DeserializeFromString<List<WebSocketPacket>>(packetJSON))
                 {
-                    packets.Add(token.ToObject<WebSocketPacket>());
+                    packets.Add(packet);
                 }
             }
             else
             {
-                packets.Add(JsonConvert.DeserializeObject<WebSocketPacket>(packetJSON));
+                packets.Add(JSONSerializerHelper.DeserializeFromString<WebSocketPacket>(packetJSON));
             }
 
             foreach (WebSocketPacket packet in packets)

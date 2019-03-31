@@ -39,7 +39,11 @@ For more information, please see our project site: https://github.com/SaviorXTan
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\streaming-client-shared-library\StreamingClient.Base\StreamingClient.Base.csproj" />
   </ItemGroup>
 
 </Project>
