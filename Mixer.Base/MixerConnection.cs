@@ -1,7 +1,7 @@
-﻿using Mixer.Base.Model.OAuth;
-using Mixer.Base.Services;
-using Mixer.Base.Util;
-using Mixer.Base.Web;
+﻿using Mixer.Base.Services;
+using StreamingClient.Base.Model.OAuth;
+using StreamingClient.Base.Util;
+using StreamingClient.Base.Web;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -189,7 +189,7 @@ namespace Mixer.Base
             codeCallback(shortCode);
 
             string authorizationCode = null;
-            for (int i = 0; i < shortCode.expires_in && string.IsNullOrEmpty(authorizationCode); i++)
+            for (int i = 0; i < shortCode.expiresIn && string.IsNullOrEmpty(authorizationCode); i++)
             {
                 await Task.Delay(500);
                 authorizationCode = await oauthService.ValidateShortCode(shortCode);
@@ -197,7 +197,7 @@ namespace Mixer.Base
 
             if (!string.IsNullOrEmpty(authorizationCode))
             {
-                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, authorizationCode);
+                return await MixerConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, redirectUrl: null);
             }
             return null;
         }
@@ -248,7 +248,7 @@ namespace Mixer.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            OAuthHttpListenerServer oauthServer = new OAuthHttpListenerServer(oauthListenerURL, loginSuccessHtmlPageFilePath);
+            LocalOAuthHttpListenerService oauthServer = new LocalOAuthHttpListenerService(oauthListenerURL, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);
@@ -256,7 +256,7 @@ namespace Mixer.Base
             Process.Start(startInfo);
 
             string authorizationCode = await oauthServer.WaitForAuthorizationCode();
-            oauthServer.End();
+            oauthServer.Stop();
 
             if (authorizationCode != null)
             {

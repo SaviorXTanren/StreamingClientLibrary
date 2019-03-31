@@ -1,6 +1,6 @@
-﻿using Mixer.Base.Util;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,13 +30,13 @@ namespace Mixer.Base.Model.Interactive
             }
             set
             {
-                this.buttons = JsonHelper.ConvertJArrayToTypedArray<InteractiveConnectedButtonControlModel>(value).
+                this.buttons = value.ConvertJArrayToTypedArray<InteractiveConnectedButtonControlModel>().
                     Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)).ToList();
-                this.joysticks = JsonHelper.ConvertJArrayToTypedArray<InteractiveConnectedJoystickControlModel>(value).
+                this.joysticks = value.ConvertJArrayToTypedArray<InteractiveConnectedJoystickControlModel>().
                     Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)).ToList();
-                this.labels = JsonHelper.ConvertJArrayToTypedArray<InteractiveConnectedLabelControlModel>(value).
+                this.labels = value.ConvertJArrayToTypedArray<InteractiveConnectedLabelControlModel>().
                     Where(c => c.kind.Equals(InteractiveConnectedLabelControlModel.LabelControlKind)).ToList();
-                this.textBoxes = JsonHelper.ConvertJArrayToTypedArray<InteractiveConnectedTextBoxControlModel>(value).
+                this.textBoxes = value.ConvertJArrayToTypedArray<InteractiveConnectedTextBoxControlModel>().
                     Where(c => c.kind.Equals(InteractiveConnectedTextBoxControlModel.TextBoxControlKind)).ToList();
             }
         }
@@ -92,13 +92,13 @@ namespace Mixer.Base.Model.Interactive
             }
             set
             {
-                this.buttons = JsonHelper.ConvertJArrayToTypedArray<InteractiveButtonControlModel>(value).
+                this.buttons = value.ConvertJArrayToTypedArray<InteractiveButtonControlModel>().
                     Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)).ToList();
-                this.joysticks = JsonHelper.ConvertJArrayToTypedArray<InteractiveJoystickControlModel>(value).
+                this.joysticks = value.ConvertJArrayToTypedArray<InteractiveJoystickControlModel>().
                     Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)).ToList();
-                this.labels = JsonHelper.ConvertJArrayToTypedArray<InteractiveLabelControlModel>(value).
+                this.labels = value.ConvertJArrayToTypedArray<InteractiveLabelControlModel>().
                     Where(c => c.kind.Equals(InteractiveLabelControlModel.LabelControlKind)).ToList();
-                this.textBoxes = JsonHelper.ConvertJArrayToTypedArray<InteractiveTextBoxControlModel>(value).
+                this.textBoxes = value.ConvertJArrayToTypedArray<InteractiveTextBoxControlModel>().
                     Where(c => c.kind.Equals(InteractiveTextBoxControlModel.TextBoxControlKind)).ToList();
             }
         }

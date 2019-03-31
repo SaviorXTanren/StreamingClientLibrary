@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mixer.Base;
 using Mixer.Base.Model.Channel;
-using Mixer.Base.Model.OAuth;
+using StreamingClient.Base.Model.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,7 +20,9 @@ namespace Mixer.Base.UnitTests
                 (OAuthShortCodeModel code) =>
                 {
                     Assert.IsNotNull(code);
-                    Process.Start("https://mixer.com/oauth/shortcode?code=" + code.code);
+
+                    ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = "https://www.mixer.com/oauth/shortcode?code=" + code.code, UseShellExecute = true };
+                    Process.Start(startInfo);
                 }).Result;
 
                 Assert.IsNotNull(connection);

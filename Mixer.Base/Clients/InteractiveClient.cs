@@ -1,10 +1,10 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Interactive;
-using Mixer.Base.Model.OAuth;
-using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Model.OAuth;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,7 +149,7 @@ namespace Mixer.Base.Clients
 
             await base.Connect(endpoint);
 
-            await this.WaitForResponse(() => { return this.Connected; });
+            await this.WaitForSuccess(() => { return this.Connected; });
 
             this.OnMethodOccurred -= InteractiveClient_HelloMethodHandler;
 
@@ -183,7 +183,7 @@ namespace Mixer.Base.Clients
 
             await this.Send(packet, checkIfAuthenticated: false);
 
-            await this.WaitForResponse(() => { return this.Authenticated; });
+            await this.WaitForSuccess(() => { return this.Authenticated; });
 
             this.OnMethodOccurred -= InteractiveClient_ReadyMethodHandler;
 
@@ -199,7 +199,7 @@ namespace Mixer.Base.Clients
             ReplyPacket reply = await this.SendAndListen(new MethodPacket("getTime"));
             if (reply != null && reply.resultObject["time"] != null)
             {
-                return DateTimeHelper.UnixTimestampToDateTimeOffset((long)reply.resultObject["time"]);
+                return DateTimeOffsetExtensions.FromUTCUnixTimeMilliseconds((long)reply.resultObject["time"]);
             }
             return null;
         }
@@ -264,7 +264,7 @@ namespace Mixer.Base.Clients
             if (startTime == null) { startTime = DateTimeOffset.FromUnixTimeSeconds(0); }
 
             JObject parameters = new JObject();
-            parameters.Add("from", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startTime.GetValueOrDefault()));
+            parameters.Add("from", startTime.GetValueOrDefault().ToUnixTimeMilliseconds());
 
             return await this.SendAndListen<InteractiveParticipantCollectionModel>(new MethodParamsPacket("getAllParticipants", parameters));
         }
@@ -279,7 +279,7 @@ namespace Mixer.Base.Clients
         {
             Validator.ValidateVariable(startTime, "startTime");
             JObject parameters = new JObject();
-            parameters.Add("threshold", DateTimeHelper.DateTimeOffsetToUnixTimestamp(startTime));
+            parameters.Add("threshold", startTime.ToUnixTimeMilliseconds());
 
             return await this.SendAndListen<InteractiveParticipantCollectionModel>(new MethodParamsPacket("getActiveParticipants", parameters));
         }
@@ -450,7 +450,7 @@ namespace Mixer.Base.Clients
             foreach (InteractiveConnectedSceneModel scene in scenes)
             {
                 // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveConnectedSceneModel>(scene));
+                collection.scenes.Add(JSONSerializerHelper.Clone<InteractiveConnectedSceneModel>(scene));
             }
             return new MethodParamsPacket("createScenes", JObject.FromObject(collection));
         }
@@ -491,7 +491,7 @@ namespace Mixer.Base.Clients
             foreach (InteractiveConnectedSceneModel scene in scenes)
             {
                 // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-                collection.scenes.Add(JsonHelper.ConvertToDifferentType<InteractiveConnectedSceneModel>(scene));
+                collection.scenes.Add(JSONSerializerHelper.Clone<InteractiveConnectedSceneModel>(scene));
             }
             return new MethodParamsPacket("updateScenes", JObject.FromObject(collection));
         }

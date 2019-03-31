@@ -1,6 +1,6 @@
-﻿using Mixer.Base.Model.OAuth;
-using Mixer.Base.Util;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Model.OAuth;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;

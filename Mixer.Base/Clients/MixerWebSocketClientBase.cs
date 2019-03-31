@@ -3,6 +3,7 @@ using Mixer.Base.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Util;
+using StreamingClient.Base.Web;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
-    public class MixerWebSocketClientBase : WebSocketClientBase
+    public class MixerWebSocketClientBase : ClientWebSocketBase
     {
         public bool Connected { get; protected set; }
         public bool Authenticated { get; protected set; }
@@ -69,7 +70,7 @@ namespace Mixer.Base.Clients
 
             await this.Send(packet, checkIfAuthenticated);
 
-            await this.WaitForResponse(() =>
+            await this.WaitForSuccess(() =>
             {
                 if (this.replyIDListeners.ContainsKey(packet.id) && this.replyIDListeners[packet.id] != null)
                 {
@@ -105,41 +106,44 @@ namespace Mixer.Base.Clients
             eventHandler?.Invoke(this, packet);
         }
 
-        protected override Task ProcessReceivedPacket(string packetJSON)
+        protected override Task ProcessReceivedPacket(string packet)
         {
-            List<WebSocketPacket> packets = new List<WebSocketPacket>();
+            List<JToken> packetJTokens = new List<JToken>();
 
-            JToken packetToken = JToken.Parse(packetJSON);
-            if (packetToken is JArray)
+            JToken packetJToken = JToken.Parse(packet);
+            if (packetJToken is JArray)
             {
-                foreach (WebSocketPacket packet in JSONSerializerHelper.DeserializeFromString<List<WebSocketPacket>>(packetJSON))
+                foreach (JToken t in (JArray)packetJToken)
                 {
-                    packets.Add(packet);
+                    packetJTokens.Add(t);
                 }
             }
             else
             {
-                packets.Add(JSONSerializerHelper.DeserializeFromString<WebSocketPacket>(packetJSON));
+                packetJTokens.Add(packetJToken);
             }
 
-            foreach (WebSocketPacket packet in packets)
+            foreach (JToken token in packetJTokens)
             {
-                this.OnPacketReceivedOccurred?.Invoke(this, packet);
+                WebSocketPacket webSocketPacket = token.ToObject<WebSocketPacket>();
+                string data = JSONSerializerHelper.SerializeToString(token);
 
-                if (packet.type.Equals("method"))
+                this.OnPacketReceivedOccurred?.Invoke(this, webSocketPacket);
+
+                if (webSocketPacket.type.Equals("method"))
                 {
-                    MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(packetJSON);
+                    MethodPacket methodPacket = JsonConvert.DeserializeObject<MethodPacket>(data);
                     this.SendSpecificPacket(methodPacket, this.OnMethodOccurred);
                 }
-                else if (packet.type.Equals("reply"))
+                else if (webSocketPacket.type.Equals("reply"))
                 {
-                    ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(packetJSON);
+                    ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(data);
                     this.AddReplyPacketForListeners(replyPacket);
                     this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
                 }
-                else if (packet.type.Equals("event"))
+                else if (webSocketPacket.type.Equals("event"))
                 {
-                    EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(packetJSON);
+                    EventPacket eventPacket = JsonConvert.DeserializeObject<EventPacket>(data);
                     this.SendSpecificPacket(eventPacket, this.OnEventOccurred);
                 }
             }

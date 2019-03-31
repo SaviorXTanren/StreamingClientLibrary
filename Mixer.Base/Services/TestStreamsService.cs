@@ -1,6 +1,7 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.TestStreams;
 using Mixer.Base.Util;
+using StreamingClient.Base.Util;
 using System.Threading.Tasks;
 
 namespace Mixer.Base.Services

@@ -4,6 +4,7 @@ using Mixer.Base.Model.Client;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,7 +141,7 @@ namespace Mixer.Base.Clients
 
             await base.Connect(endpoint);
 
-            await this.WaitForResponse(() => { return this.Connected; });
+            await this.WaitForSuccess(() => { return this.Connected; });
 
             this.OnEventOccurred -= ConnectEventHandler;
 

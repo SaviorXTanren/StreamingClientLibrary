@@ -2,6 +2,7 @@
 using Mixer.Base.Model.Skills;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Text;

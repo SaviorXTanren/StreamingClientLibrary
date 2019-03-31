@@ -2,6 +2,7 @@
 using Mixer.Base.Model.Interactive;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,28 +18,6 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="connection">The Mixer connection to use</param>
         public InteractiveService(MixerConnection connection) : base(connection) { }
-
-        /// <summary>
-        /// Gets the interactive connection information for the specified channel.
-        /// </summary>
-        /// <param name="channel">The channel to get interactive connection information for</param>
-        /// <returns>The interactive connection information</returns>
-        public async Task<InteractiveConnectionInfoModel> GetInteractiveConnectionInfo(ChannelModel channel)
-        {
-            Validator.ValidateVariable(channel, "channel");
-            return await this.GetAsync<InteractiveConnectionInfoModel>("interactive/" + channel.id);
-        }
-
-        /// <summary>
-        /// Gets the robot interactive connection information for the specified channel.
-        /// </summary>
-        /// <param name="channel">The channel to get robot interactive connection information for</param>
-        /// <returns>The interactive connection information</returns>
-        public async Task<InteractiveRobotConnectionModel> GetInteractiveRobotConnectionInfo(ChannelModel channel)
-        {
-            Validator.ValidateVariable(channel, "channel");
-            return await this.GetAsync<InteractiveRobotConnectionModel>("interactive/" + channel.id + "/robot");
-        }
 
         /// <summary>
         /// Gets the interactive host connection addresses.
@@ -199,7 +178,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(version, "version");
 
             // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-            InteractiveGameVersionUpdateableModel updateableVersion = JsonHelper.ConvertToDifferentType<InteractiveGameVersionUpdateableModel>(version);
+            InteractiveGameVersionUpdateableModel updateableVersion = JSONSerializerHelper.Clone<InteractiveGameVersionUpdateableModel>(version);
             updateableVersion.controls = version.controls;
 
             return await this.PutAsync<InteractiveGameVersionModel>("interactive/versions/" + version.id, this.CreateContentFromObject(updateableVersion));

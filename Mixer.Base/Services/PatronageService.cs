@@ -1,6 +1,7 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Patronage;
 using Mixer.Base.Util;
+using StreamingClient.Base.Util;
 using System;
 using System.Threading.Tasks;
 

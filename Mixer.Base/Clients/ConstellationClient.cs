@@ -1,8 +1,8 @@
 ﻿using Mixer.Base.Model.Client;
 using Mixer.Base.Model.Constellation;
-using Mixer.Base.Model.OAuth;
-using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Model.OAuth;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -289,7 +289,7 @@ namespace Mixer.Base.Clients
 
             await base.Connect(endpoint);
 
-            await this.WaitForResponse(() => { return this.Connected; });
+            await this.WaitForSuccess(() => { return this.Connected; });
 
             this.OnEventOccurred -= ConstellationClient_HelloMethodHandler;
 

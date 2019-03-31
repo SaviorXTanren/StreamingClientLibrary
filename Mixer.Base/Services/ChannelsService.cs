@@ -3,6 +3,7 @@ using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +120,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
 
             // Need to strip out all of the non-updateable fields in order for the API to not return a 403 error
-            ChannelUpdateableModel updateableChannel = JsonHelper.ConvertToDifferentType<ChannelUpdateableModel>(channel);
+            ChannelUpdateableModel updateableChannel = JSONSerializerHelper.Clone<ChannelUpdateableModel>(channel);
 
             return await this.PatchAsync<ChannelModel>("channels/" + channel.id, this.CreateContentFromObject(updateableChannel));
         }
@@ -572,9 +573,9 @@ namespace Mixer.Base.Services
             string endDateString = "";
             if (endDate != null)
             {
-                endDateString = "&to=" + DateTimeHelper.DateTimeOffsetToISO8601String(endDate.GetValueOrDefault());
+                endDateString = "&to=" + endDate.GetValueOrDefault().ToUTCISO8601String();
             }
-            return "from=" + DateTimeHelper.DateTimeOffsetToISO8601String(startDate) + endDateString;
+            return "from=" + startDate.ToUTCISO8601String() + endDateString;
         }
     }
 }

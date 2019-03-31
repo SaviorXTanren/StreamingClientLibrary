@@ -2,6 +2,7 @@
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Clips;
 using Mixer.Base.Util;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;

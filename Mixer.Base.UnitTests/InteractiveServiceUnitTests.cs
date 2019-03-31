@@ -103,31 +103,6 @@ namespace Mixer.Base.UnitTests
         }
 
         [TestMethod]
-        public void GetInteractiveConnections()
-        {
-            TestWrapper(async (MixerConnection connection) =>
-            {
-                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
-
-                InteractiveClient interactiveClient = await InteractiveClient.CreateFromChannel(connection, channel, testGameListing);
-
-                Assert.IsTrue(await interactiveClient.Connect());
-
-                InteractiveConnectionInfoModel interactiveConnection = await connection.Interactive.GetInteractiveConnectionInfo(channel);
-
-                Assert.IsNotNull(interactiveConnection);
-                Assert.IsNotNull(interactiveConnection.address);
-
-                InteractiveRobotConnectionModel robotConnection = await connection.Interactive.GetInteractiveRobotConnectionInfo(channel);
-
-                Assert.IsNotNull(robotConnection);
-                Assert.IsNotNull(robotConnection.address);
-
-                await interactiveClient.Disconnect();
-            });
-        }
-
-        [TestMethod]
         public void GetInteractiveHosts()
         {
             TestWrapper(async (MixerConnection connection) =>

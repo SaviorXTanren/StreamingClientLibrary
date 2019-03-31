@@ -1,6 +1,8 @@
 ﻿using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
+using StreamingClient.Base.Util;
+using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +51,7 @@ namespace Mixer.Base.Services
         public async Task<TeamModel> GetTeam(string name)
         {
             Validator.ValidateVariable(name, "name");
-            IEnumerable<TeamModel> results = await this.GetPagedNumberAsync<TeamModel>("teams?where=name:eq:" + this.EncodeString(name));
+            IEnumerable<TeamModel> results = await this.GetPagedNumberAsync<TeamModel>("teams?where=name:eq:" + AdvancedHttpClient.EncodeString(name));
             return results.FirstOrDefault();
         }
 

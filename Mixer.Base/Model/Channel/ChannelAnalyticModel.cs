@@ -1,4 +1,4 @@
-﻿using Mixer.Base.Util;
+﻿using StreamingClient.Base.Util;
 using System;
 
 namespace Mixer.Base.Model.Channel
@@ -7,6 +7,7 @@ namespace Mixer.Base.Model.Channel
     {
         public uint channel { get; set; }
         public string time { get; set; }
-        public DateTimeOffset dateTime { get { return DateTimeHelper.ISO8601StringToDateTimeOffset(this.time); } }
+
+        public DateTimeOffset DateTime { get { return DateTimeOffsetExtensions.FromUTCISO8601String(this.time); } }
     }
 }

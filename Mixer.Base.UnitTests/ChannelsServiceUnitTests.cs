@@ -88,7 +88,6 @@ namespace Mixer.Base.UnitTests
                 IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetFeaturedChannels();
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
-                Assert.IsTrue(channels.Select(c => c.id).Distinct().Count() >= 1);
             });
         }
 
@@ -100,7 +99,6 @@ namespace Mixer.Base.UnitTests
                 IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 150);
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
-                Assert.IsTrue(channels.Select(c => c.id).Distinct().Count() >= 150);
             });
         }
 
@@ -258,7 +256,7 @@ namespace Mixer.Base.UnitTests
             {
                 ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
 
-                ChannelModel hostChannel = await connection.Channels.GetChannel("Mixer");
+                ChannelModel hostChannel = await connection.Channels.GetChannel("MonsterCat");
 
                 channel = await connection.Channels.SetHostChannel(channel, hostChannel);
 
