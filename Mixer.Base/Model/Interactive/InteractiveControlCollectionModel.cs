@@ -30,13 +30,13 @@ namespace Mixer.Base.Model.Interactive
             }
             set
             {
-                this.buttons = value.ConvertJArrayToTypedArray<InteractiveConnectedButtonControlModel>().
+                this.buttons = value.ToTypedArray<InteractiveConnectedButtonControlModel>().
                     Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)).ToList();
-                this.joysticks = value.ConvertJArrayToTypedArray<InteractiveConnectedJoystickControlModel>().
+                this.joysticks = value.ToTypedArray<InteractiveConnectedJoystickControlModel>().
                     Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)).ToList();
-                this.labels = value.ConvertJArrayToTypedArray<InteractiveConnectedLabelControlModel>().
+                this.labels = value.ToTypedArray<InteractiveConnectedLabelControlModel>().
                     Where(c => c.kind.Equals(InteractiveConnectedLabelControlModel.LabelControlKind)).ToList();
-                this.textBoxes = value.ConvertJArrayToTypedArray<InteractiveConnectedTextBoxControlModel>().
+                this.textBoxes = value.ToTypedArray<InteractiveConnectedTextBoxControlModel>().
                     Where(c => c.kind.Equals(InteractiveConnectedTextBoxControlModel.TextBoxControlKind)).ToList();
             }
         }
@@ -92,13 +92,13 @@ namespace Mixer.Base.Model.Interactive
             }
             set
             {
-                this.buttons = value.ConvertJArrayToTypedArray<InteractiveButtonControlModel>().
+                this.buttons = value.ToTypedArray<InteractiveButtonControlModel>().
                     Where(c => c.kind.Equals(InteractiveButtonControlModel.ButtonControlKind)).ToList();
-                this.joysticks = value.ConvertJArrayToTypedArray<InteractiveJoystickControlModel>().
+                this.joysticks = value.ToTypedArray<InteractiveJoystickControlModel>().
                     Where(c => c.kind.Equals(InteractiveJoystickControlModel.JoystickControlKind)).ToList();
-                this.labels = value.ConvertJArrayToTypedArray<InteractiveLabelControlModel>().
+                this.labels = value.ToTypedArray<InteractiveLabelControlModel>().
                     Where(c => c.kind.Equals(InteractiveLabelControlModel.LabelControlKind)).ToList();
-                this.textBoxes = value.ConvertJArrayToTypedArray<InteractiveTextBoxControlModel>().
+                this.textBoxes = value.ToTypedArray<InteractiveTextBoxControlModel>().
                     Where(c => c.kind.Equals(InteractiveTextBoxControlModel.TextBoxControlKind)).ToList();
             }
         }

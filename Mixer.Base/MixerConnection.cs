@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-[assembly: InternalsVisibleTo("Mixer.UnitTests")]
+[assembly: InternalsVisibleTo("Mixer.Base.UnitTests")]
 
 namespace Mixer.Base
 {
@@ -74,12 +74,20 @@ namespace Mixer.Base
         user__updatePassword__self,
     }
 
+    /// <summary>
+    /// The main connection handler for Mixer.
+    /// </summary>
     public class MixerConnection
     {
         /// <summary>
         /// The default OAuth redirect URL used for authentication.
         /// </summary>
         public const string DEFAULT_OAUTH_LOCALHOST_URL = "http://localhost:8919/";
+
+        /// <summary>
+        /// The default request parameter for the authorization code from the OAuth service.
+        /// </summary>
+        public const string DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER = "code";
 
         private OAuthTokenModel token;
 
@@ -248,7 +256,7 @@ namespace Mixer.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerService oauthServer = new LocalOAuthHttpListenerService(oauthListenerURL, loginSuccessHtmlPageFilePath);
+            LocalOAuthHttpListenerService oauthServer = new LocalOAuthHttpListenerService(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);
@@ -336,22 +344,9 @@ namespace Mixer.Base
             this.Users = new UsersService(this);
         }
 
-        public async Task RefreshOAuthToken()
-        {
-            this.token = await this.OAuth.RefreshToken(this.token);
-        }
+        public async Task RefreshOAuthToken() { this.token = await this.OAuth.RefreshToken(this.token); }
 
-        public OAuthTokenModel GetOAuthTokenCopy()
-        {
-            return new OAuthTokenModel()
-            {
-                clientID = this.token.clientID,
-                authorizationCode = this.token.authorizationCode,
-                refreshToken = this.token.refreshToken,
-                accessToken = this.token.accessToken,
-                expiresIn = this.token.expiresIn
-            };
-        }
+        public OAuthTokenModel GetOAuthTokenCopy() { return JSONSerializerHelper.Clone<OAuthTokenModel>(this.token); }
 
         internal async Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true)
         {

@@ -45,7 +45,7 @@ namespace Mixer.Base.UnitTests
         [TestMethod]
         public void GetAuthorizationCodeURLForOAuth()
         {
-            string url = MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, "http://localhost").Result;
+            string url = MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, MixerConnection.DEFAULT_OAUTH_LOCALHOST_URL).Result;
 
             Assert.IsNotNull(url);
         }
