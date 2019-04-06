@@ -179,7 +179,7 @@ namespace Mixer.InteractiveSample.WPF
                     InteractiveConnectedSceneModel scene = this.scenes.FirstOrDefault(s => s.buttons.Contains(button));
                     if (scene != null)
                     {
-                        button.cooldown = DateTimeHelper.DateTimeOffsetToUnixTimestamp(DateTimeOffset.Now.AddSeconds(10));
+                        button.cooldown = DateTimeOffset.Now.AddSeconds(10).ToUnixTimeMilliseconds();
                         await this.interactiveClient.UpdateControls(scene, new List<InteractiveConnectedButtonControlModel>() { button });
                         this.InteractiveDataTextBox.Text += "Sent 10 second cooldown to button: " + e.input.controlID + Environment.NewLine;
                     }

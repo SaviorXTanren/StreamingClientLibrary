@@ -54,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\streaming-client-shared-library\StreamingClient.Base\StreamingClient.Base.csproj">
+      <Project>{f1974e1e-ec88-4fa9-bb39-e0a38d7de0f9}</Project>
+      <Name>StreamingClient.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Mixer.Base\Mixer.Base.csproj">
       <Project>{2442fcd3-f207-41d8-a42b-aa2b34b66b86}</Project>
       <Name>Mixer.Base</Name>

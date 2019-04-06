@@ -154,7 +154,7 @@ namespace Mixer.InteractiveSample.Console
                     InteractiveConnectedSceneModel scene = Program.scenes.FirstOrDefault(s => s.buttons.Contains(button));
                     if (scene != null)
                     {
-                        button.cooldown = DateTimeHelper.DateTimeOffsetToUnixTimestamp(DateTimeOffset.Now.AddSeconds(10));
+                        button.cooldown = DateTimeOffset.Now.AddSeconds(10).ToUnixTimeMilliseconds();
 
                         Program.interactiveClient.UpdateControls(scene, new List<InteractiveConnectedButtonControlModel>() { button }).Wait();
                         System.Console.WriteLine("Sent 10 second cooldown to button: " + e.input.controlID);
