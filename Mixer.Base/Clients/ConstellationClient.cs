@@ -153,8 +153,19 @@ namespace Mixer.Base.Clients
         /// https://dev.mixer.com/reference/constellation/events/live/channel%20skill
         /// </summary>
         [Name("Channel Skill Used")]
-        channel__id__skill
-}
+        channel__id__skill,
+
+        /// <summary>
+        /// https://dev.mixer.com/reference/constellation/events/live/channel%20subscription%20gifted
+        /// </summary>
+        [Name("Channel Subscription Gifted")]
+        channel__id__subscriptionGifted,
+        /// <summary>
+        /// https://dev.mixer.com/reference/constellation/events/live/user%20subscription%20gifted
+        /// </summary>
+        [Name("User Subscription Gifted")]
+        user__id__subscriptionGifted
+    }
 
     /// <summary>
     /// The real-time client for Constellation event interactions.
