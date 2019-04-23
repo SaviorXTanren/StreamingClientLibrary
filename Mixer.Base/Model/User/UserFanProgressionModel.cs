@@ -1,4 +1,6 @@
-﻿namespace Mixer.Base.Model.User
+﻿using Newtonsoft.Json;
+
+namespace Mixer.Base.Model.User
 {
     /// <summary>
     /// Information about a user's fan progression in a channel.
@@ -28,6 +30,8 @@
     /// </summary>
     public class UserFanProgressionLevelModel
     {
+        private const string AssetURLVariantReplacementText = "{variant}";
+
         /// <summary>
         /// The name of the rank.
         /// </summary>
@@ -60,5 +64,21 @@
         /// The required XP for the next rank.
         /// </summary>
         public uint nextLevelXp { get; set; }
+
+        /// <summary>
+        /// The small version of the asset URL for the rank.
+        /// </summary>
+        [JsonIgnore]
+        public string SmallAssetURL { get { return this.assetsUrl.Replace(AssetURLVariantReplacementText, "small.png"); } }
+        /// <summary>
+        /// The large version of the asset URL for the rank.
+        /// </summary>
+        [JsonIgnore]
+        public string LargeAssetURL { get { return this.assetsUrl.Replace(AssetURLVariantReplacementText, "large.png"); } }
+        /// <summary>
+        /// The large GIF version of the asset URL for the rank.
+        /// </summary>
+        [JsonIgnore]
+        public string LargeGIFAssetURL { get { return this.assetsUrl.Replace(AssetURLVariantReplacementText, "large.gif"); } }
     }
 }
