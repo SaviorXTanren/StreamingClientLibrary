@@ -347,6 +347,19 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets the specified user's fan progression in the channel.
+        /// </summary>
+        /// <param name="channel">The channel to get users for</param>
+        /// <param name="user">The user to get fan progression for</param>
+        /// <returns>The user's fan progression</returns>
+        public async Task<UserFanProgressionModel> GetUserFanProgression(ChannelModel channel, UserModel user)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(user, "user");
+            return await this.GetAsync<UserFanProgressionModel>("ascension/channels/" + channel.id + "/users/" + user.id);
+        }
+
+        /// <summary>
         /// Gets all of the users who have the specified role for the specified channel. The search can be limited to a maximum number
         /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
         /// threshold and slightly more than the maximum number may be returned.
