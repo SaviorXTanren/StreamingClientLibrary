@@ -340,6 +340,25 @@ namespace Mixer.UnitTests
         }
 
         [TestMethod]
+        public void GetUserFanProgression()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                IEnumerable<UserWithGroupsModel> users = await connection.Channels.GetUsersWithRoles(channel, 1);
+
+                Assert.IsNotNull(users);
+                Assert.IsTrue(users.Count() > 0);
+
+                UserFanProgressionModel userFanProgression = await connection.Channels.GetUserFanProgression(channel, users.First());
+
+                Assert.IsNotNull(userFanProgression);
+                Assert.AreEqual(userFanProgression.userId, users.First().id);
+            });
+        }
+
+        [TestMethod]
         public void CheckIfUsersHaveRole()
         {
             TestWrapper(async (MixerConnection connection) =>
