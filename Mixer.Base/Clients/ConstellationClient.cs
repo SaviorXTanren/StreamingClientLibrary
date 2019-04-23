@@ -164,7 +164,12 @@ namespace Mixer.Base.Clients
         /// https://dev.mixer.com/reference/constellation/events/live/user%20subscription%20gifted
         /// </summary>
         [Name("User Subscription Gifted")]
-        user__id__subscriptionGifted
+        user__id__subscriptionGifted,
+        /// <summary>
+        /// https://dev.mixer.com/reference/constellation/events/live/progression%20levelup
+        /// </summary>
+        [Name("Progression Levelup")]
+        progression__id__levelup,
     }
 
     /// <summary>
