@@ -165,10 +165,11 @@ namespace Mixer.Base.Clients
         /// </summary>
         [Name("User Subscription Gifted")]
         user__id__subscriptionGifted,
+
         /// <summary>
         /// https://dev.mixer.com/reference/constellation/events/live/progression%20levelup
         /// </summary>
-        [Name("Progression Levelup")]
+        [Name("Channel Fan Progression Level-Up")]
         progression__id__levelup,
     }
 
