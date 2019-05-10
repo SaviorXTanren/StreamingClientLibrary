@@ -14,65 +14,247 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base
 {
+    /// <summary>
+    /// https://dev.mixer.com/reference/oauth/scopes
+    /// </summary>
     public enum OAuthClientScopeEnum
     {
+        /// <summary>
+        /// View your earned achievements.
+        /// </summary>
         achievement__view__self,
+        /// <summary>
+        /// View your channel analytics.
+        /// </summary>
         channel__analytics__self,
+        /// <summary>
+        /// Manage your costreaming requests.
+        /// </summary>
         channel__costream__self,
+        /// <summary>
+        /// Delete your channel banner
+        /// </summary>
         channel__deleteBanner__self,
+        /// <summary>
+        /// View your channel details.
+        /// </summary>
         channel__details__self,
+        /// <summary>
+        /// Follow and unfollow other channels.
+        /// </summary>
         channel__follow__self,
+        /// <summary>
+        /// Create and view partnership applications.
+        /// </summary>
         channel__partnership,
+        /// <summary>
+        /// Manage your partnership status.
+        /// </summary>
         channel__partnership__self,
+        /// <summary>
+        /// View your channel's stream key.
+        /// </summary>
         channel__streamKey__self,
+        /// <summary>
+        /// Update your channel settings
+        /// </summary>
         channel__update__self,
+        /// <summary>
+        /// Create new clips from videos on your channel.
+        /// </summary>
         channel__clip__create__self,
+        /// <summary>
+        /// Allows deleting existing clips on your channel.
+        /// </summary>
         channel__clip__delete__self,
+        /// <summary>
+        /// Bypasses the catbot chat filter.
+        /// </summary>
+        chat__bypass_catbot,
+        /// <summary>
+        /// Bypass the chat content filter.
+        /// </summary>
+        chat__bypass_filter,
+        /// <summary>
+        /// Bypass links being disallowed in chat.
+        /// </summary>
         chat__bypass_links,
+        /// <summary>
+        /// Bypass slowchat settings on channels.
+        /// </summary>
         chat__bypass_slowchat,
+        /// <summary>
+        /// Cancel a skill.
+        /// </summary>
+        chat__cancel_skill,
+        /// <summary>
+        /// Manage bans in chats.
+        /// </summary>
         chat__change_ban,
+        /// <summary>
+        /// Manage roles in chats.
+        /// </summary>
         chat__change_role,
+        /// <summary>
+        /// Interact with chats on your behalf.
+        /// </summary>
         chat__chat,
+        /// <summary>
+        /// Clear messages in chats where authorized.
+        /// </summary>
         chat__clear_messages,
+        /// <summary>
+        /// Connect to chat.
+        /// </summary>
         chat__connect,
+        /// <summary>
+        /// Edit chat options, including links settings and slowchat.
+        /// </summary>
         chat__edit_options,
+        /// <summary>
+        /// Start a giveaway in chats where authorized.
+        /// </summary>
         chat__giveaway_start,
+        /// <summary>
+        /// Start a poll in chats where authorized.
+        /// </summary>
         chat__poll_start,
+        /// <summary>
+        /// Vote in chat polls.
+        /// </summary>
         chat__poll_vote,
+        /// <summary>
+        /// Clear all messages from a specific user in chat.
+        /// </summary>
         chat__purge,
+        /// <summary>
+        /// Remove own and other's messages in chat.
+        /// </summary>
         chat__remove_message,
+        /// <summary>
+        /// Change timeout settings in chats.
+        /// </summary>
         chat__timeout,
+        /// <summary>
+        /// View deleted messages in chat.
+        /// </summary>
         chat__view_deleted,
+        /// <summary>
+        /// Gives the ability to whisper in a channel
+        /// </summary>
         chat__whisper,
+        /// <summary>
+        /// View your Mixer homepage experience and recommendations.
+        /// </summary>
+        delve__view__self,
+        /// <summary>
+        /// Create, update and delete the interactive games in your account.
+        /// </summary>
         interactive__manage__self,
+        /// <summary>
+        /// Run as an interactive game in your channel.
+        /// </summary>
         interactive__robot__self,
+        /// <summary>
+        /// View the users invoices.
+        /// </summary>
         invoice__view__self,
+        /// <summary>
+        /// View and manage your security log.
+        /// </summary>
         log__view__self,
-        notification__update__self,
-        notification__view__self,
+        /// <summary>
+        /// View and manage your OAuth clients.
+        /// </summary>
+        oauth__manage__self,
+        /// <summary>
+        /// Manage the users VODs.
+        /// </summary>
         recording__manage__self,
+        /// <summary>
+        /// Create redeemables after performing a purchase.
+        /// </summary>
         redeemable__create__self,
+        /// <summary>
+        /// Use users redeemable.
+        /// </summary>
         redeemable__redeem__self,
+        /// <summary>
+        /// View users redeemables.
+        /// </summary>
         redeemable__view__self,
+        /// <summary>
+        /// View emoticons and other graphical resources you have access to.
+        /// </summary>
         resource__find__self,
+        /// <summary>
+        /// Cancel your subscriptions.
+        /// </summary>
         subscription__cancel__self,
+        /// <summary>
+        /// Create new subscriptions.
+        /// </summary>
         subscription__create__self,
+        /// <summary>
+        /// Renew your existing subscriptions.
+        /// </summary>
         subscription__renew__self,
+        /// <summary>
+        /// View who you're subscribed to.
+        /// </summary>
         subscription__view__self,
+        /// <summary>
+        /// Administrate teams the user has rights in.
+        /// </summary>
         team__administer,
+        /// <summary>
+        /// Create, join, leave teams and set the users primary team.
+        /// </summary>
         team__manage__self,
+        /// <summary>
+        /// Cancel pending transactions.
+        /// </summary>
         transaction__cancel__self,
+        /// <summary>
+        /// View your pending transactions.
+        /// </summary>
         transaction__view__self,
-        type__viewHidden,
-        user__analytics__self,
-        user__details__self,
-        user__getDiscordInvite__self,
-        user__log__self,
-        user__notification__self,
-        user__seen__self,
-        user__update__self,
-        user__updatePassword__self,
+        /// <summary>
+        /// Let's you act as this user on other resources.
+        /// </summary>
         user__act_as,
+        /// <summary>
+        /// View your user analytics
+        /// </summary>
+        user__analytics__self,
+        /// <summary>
+        /// View your email address and other private details.
+        /// </summary>
+        user__details__self,
+        /// <summary>
+        /// View users discord invites.
+        /// </summary>
+        user__getDiscordInvite__self,
+        /// <summary>
+        /// View your user security log.
+        /// </summary>
+        user__log__self,
+        /// <summary>
+        /// View and manage your notifications.
+        /// </summary>
+        user__notification__self,
+        /// <summary>
+        /// Mark a VOD as seen for the user.
+        /// </summary>
+        user__seen__self,
+        /// <summary>
+        /// Update your account, including your email but not your password.
+        /// </summary>
+        user__update__self,
+        /// <summary>
+        /// Update your password.
+        /// </summary>
+        user__updatePassword__self,
     }
 
     /// <summary>
