@@ -8,18 +8,17 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.8.4.10-beta</Version>
+    <Version>0.8.4.11-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Adding Channel Fan Progression constellation event
-- Adding Channel Fan Progression API
+    <PackageReleaseNotes>- Adding new user:act_as OAuth scope for moderation &amp; channel editor access
 </PackageReleaseNotes>
-    <AssemblyVersion>0.8.4.10</AssemblyVersion>
-    <FileVersion>0.8.4.10</FileVersion>
+    <AssemblyVersion>0.8.4.11</AssemblyVersion>
+    <FileVersion>0.8.4.11</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
