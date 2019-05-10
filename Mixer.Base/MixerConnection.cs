@@ -72,6 +72,7 @@ namespace Mixer.Base
         user__seen__self,
         user__update__self,
         user__updatePassword__self,
+        user__act_as,
     }
 
     /// <summary>

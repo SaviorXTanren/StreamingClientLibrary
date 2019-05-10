@@ -39,6 +39,8 @@ namespace Mixer.Base.UnitTests
             OAuthClientScopeEnum.user__log__self,
             OAuthClientScopeEnum.user__notification__self,
             OAuthClientScopeEnum.user__update__self,
+
+            OAuthClientScopeEnum.user__act_as,
         };
 
         private static MixerConnection connection;
