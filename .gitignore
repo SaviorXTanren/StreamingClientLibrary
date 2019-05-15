@@ -200,3 +200,4 @@ ModelManifest.xml
 /3DTest/packages
 /nuget.exe
 *.nupkg
+/Samples/packages/*
