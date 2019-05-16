@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.40.0.1572" />
+    <PackageReference Include="Google.Apis.YouTubePartner.v1" Version="1.35.1.1334" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mixer\Mixer.Base\Mixer.Base.csproj" />
+    <ProjectReference Include="..\StreamingClient.Base\StreamingClient.Base.csproj" />
+    <ProjectReference Include="..\Twitch\Twitch.Base\Twitch.Base.csproj" />
+    <ProjectReference Include="..\YouTubeLive\YouTubeLive.Base\YouTubeLive.Base.csproj" />
+  </ItemGroup>
+
+</Project>
