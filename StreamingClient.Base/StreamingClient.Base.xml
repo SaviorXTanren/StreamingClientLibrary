@@ -1,0 +1,1058 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StreamingClient.Base</name>
+    </assembly>
+    <members>
+        <member name="T:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel">
+            <summary>
+            A Short Code used for getting a token from an OAuth service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel.code">
+            <summary>
+            The code that the user must enter to approve the authentication.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel.handle">
+            <summary>
+            The end-URL identifier to use when opening the authentication webpage.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel.expiresIn">
+            <summary>
+            The expiration time of the short code in seconds from when it was obtained.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel.AcquiredDateTime">
+            <summary>
+            The time when the token was obtained.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthShortCodeModel.ExpirationDateTime">
+            <summary>
+            The expiration time of the token.
+            </summary>
+        </member>
+        <member name="T:StreamingClient.Base.Model.OAuth.OAuthTokenModel">
+            <summary>
+            A token received from an OAuth authentication service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.clientID">
+            <summary>
+            The ID of the client service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.clientSecret">
+            <summary>
+            The secret of the client service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.authorizationCode">
+            <summary>
+            The authorization code sent when authenticating against the OAuth service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.refreshToken">
+            <summary>
+            The token used for refreshing the authentication.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.accessToken">
+            <summary>
+            The token used for accessing the OAuth service.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.expiresIn">
+            <summary>
+            The expiration time of the token in seconds from when it was obtained.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.AcquiredDateTime">
+            <summary>
+            The time when the token was obtained.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.ExpirationDateTime">
+            <summary>
+            The expiration time of the token.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Model.OAuth.OAuthTokenModel.#ctor">
+            <summary>
+            Creates a new instance of an OAuth token.
+            </summary>
+        </member>
+        <member name="T:StreamingClient.Base.Services.OAuthRestServiceBase">
+            <summary>
+            An OAuth-based rest service
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.#ctor">
+            <summary>
+            Creates an instance of the OAuthRestServiceBase.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetAsync``1(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetJObjectAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A JObject of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetStringAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A string of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PostAsync``1(System.String,System.Boolean)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PostAsync(System.String,System.Net.Http.HttpContent,System.Boolean)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PostAsync``1(System.String,System.Net.Http.HttpContent,System.Boolean)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PutAsync``1(System.String)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PutAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PutAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PatchAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PATCH REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.PatchAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PATCH REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.DeleteAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a DELETE REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>Whether the deletion was successful</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.DeleteAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a DELETE REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetOAuthToken(System.Boolean)">
+            <summary>
+            Gets the OAuth token for the connection of this service.
+            </summary>
+            <param name="autoRefreshToken">Whether to automatically refresh the OAuth token or not if it has to be</param>
+            <returns>The OAuth token for the connection</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetBaseAddress">
+            <summary>
+            Gets the base address for all RESTful calls for this service.
+            </summary>
+            <returns>The base address for all RESTful calls</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetHttpClient(System.Boolean)">
+            <summary>
+            Gets the HttpClient using the OAuth for the connection of this service.
+            </summary>
+            <param name="autoRefreshToken">Whether to automatically refresh the OAuth token or not if it has to be</param>
+            <returns>The HttpClient for the connection</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.DateTimeOffsetExtensions">
+            <summary>
+            Extension methods for the DateTimeOffset class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.FromUTCUnixTimeMilliseconds(System.Int64)">
+            <summary>
+            Creates a DateTimeOffset from a UTC Unix time in milliseconds.
+            </summary>
+            <param name="milliseconds">The total milliseconds in UTC Unix time</param>
+            <returns>The equivalent DateTimeOffset</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.FromUTCISO8601String(System.String)">
+            <summary>
+            Creates a DateTimeOffset from an ISO 8601 string.
+            </summary>
+            <param name="dateTime">The total milliseconds in ISO 8601 time</param>
+            <returns>The equivalent DateTimeOffset</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.ToUTCISO8601String(System.DateTimeOffset)">
+            <summary>
+            Creates an ISO 8601 string.
+            </summary>
+            <param name="dateTime">The DateTimeOffset to convert</param>
+            <returns>The equivalent ISO 8601 string</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.DictionaryExtensions">
+            <summary>
+            Extension methods for the Dictionary class
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.DictionaryExtensions.GetOrDefault``2(System.Collections.Generic.Dictionary{``0,``1},``0)">
+            <summary>
+            Gets the value at the specified key or the default of the value class type.
+            </summary>
+            <param name="dictionary">The dictionary to search through</param>
+            <param name="key">The key to look up</param>
+            <returns>The value at the specified key or the default of the value class type</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.EnumHelper">
+            <summary>
+            Helper class for interacting with enums.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumName``1(``0)">
+            <summary>
+            Gets the public-facing name of the specified enum from the Name Attribute.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="value">The enum value</param>
+            <returns>The public-facing name of the specified enum</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumNames``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Gets the public-facing name of the specified enums from the Name Attribute.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="list">The enum values</param>
+            <returns>The public-facing name of the specified enums</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumNames``1(System.Boolean)">
+            <summary>
+            Gets the public-facing name of the specified enums from the Name Attribute.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="includeObsoletes">Whether to include obsolete enums</param>
+            <returns>The public-facing name of the specified enums</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumList``1(System.Boolean)">
+            <summary>
+            Gets a list of all available values for an enum type.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="includeObsoletes">Whether to include obsolete enums</param>
+            <returns>The list of all available values for the enum type</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumValueFromString``1(System.String)">
+            <summary>
+            Gets the enum value that matches the specified name.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="str">The name to search for</param>
+            <returns>The enum value that matches the specified name</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.IsObsolete``1(``0)">
+            <summary>
+            Indicates whether an enum value is obsolete.
+            </summary>
+            <typeparam name="T">The type of enum value</typeparam>
+            <param name="value">The enum value</param>
+            <returns>Whether it is obsolete</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.HttpResponseMessageExtensions">
+            <summary>
+            Extension methods for the HttpResponseMessage class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessResponse``1(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Processes and deserializes the HttpResponse into a type-casted object.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessJObjectResponse(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Processes and deserializes the HttpResponse into a JObject.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <returns>A JObject of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessStringResponse(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Processes and deserializes the HttpResponse into a string.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <returns>A string of the contents of the response</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.JArrayExtensions">
+            <summary>
+            Extension methods for the JArray class
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.JArrayExtensions.ToTypedArray``1(Newtonsoft.Json.Linq.JArray)">
+            <summary>
+            Converts a JArray to a typed list of objects.
+            </summary>
+            <typeparam name="T">The type of objects in the array</typeparam>
+            <param name="array">The JArray to convert</param>
+            <returns>The converted list of objects</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.JSONSerializerHelper">
+            <summary>
+            Helper class for handling JSON serialization
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.SerializeToString``1(``0)">
+            <summary>
+            Serializes the specified object to a string
+            </summary>
+            <typeparam name="T">The type of the object</typeparam>
+            <param name="data">The object to serialize</param>
+            <returns>The serialized string</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeFromString``1(System.String)">
+            <summary>
+            Deserialized the specified string to a typed object
+            </summary>
+            <typeparam name="T">The type of the object</typeparam>
+            <param name="data">The string to deserialize</param>
+            <returns>The deserialized object</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeAbstractFromString``1(System.String)">
+            <summary>
+            Deserialized the specified string to an abstract typed object
+            </summary>
+            <typeparam name="T">The type of the object</typeparam>
+            <param name="data">The string to deserialize</param>
+            <returns>The deserialized object</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.Clone``1(System.Object)">
+            <summary>
+            Clones the specified object by serializing &amp; deserializing it.
+            </summary>
+            <typeparam name="T">The type of the object</typeparam>
+            <param name="data">The object to clone</param>
+            <returns>The cloned object</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.LogLevel">
+            <summary>
+            The level of importance of a log
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.LogLevel.Fatal">
+            <summary>
+            A fatal, crashing log
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.LogLevel.Error">
+            <summary>
+            An error log
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.LogLevel.Warning">
+            <summary>
+            A warning log
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.LogLevel.Information">
+            <summary>
+            An informational log
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.LogLevel.Debug">
+            <summary>
+            A debug log
+            </summary>
+        </member>
+        <member name="T:StreamingClient.Base.Util.Log">
+            <summary>
+            A log for the application
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.Log.Level">
+            <summary>
+            The level of the log
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.Log.Message">
+            <summary>
+            The log message
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Log.#ctor">
+            <summary>
+            Creates a new instance of the Log class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Log.#ctor(StreamingClient.Base.Util.LogLevel,System.String)">
+            <summary>
+            Creates a new instance of the Log class.
+            </summary>
+            <param name="level">The level of the log</param>
+            <param name="message">The log message</param>
+        </member>
+        <member name="T:StreamingClient.Base.Util.Logger">
+            <summary>
+            Handles the logging for information.
+            </summary>
+        </member>
+        <member name="E:StreamingClient.Base.Util.Logger.LogOccurred">
+            <summary>
+            Invoked when a log occurrs.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.SetLogLevel(StreamingClient.Base.Util.LogLevel)">
+            <summary>
+            Sets the maximum log level to invoke the event method for.
+            </summary>
+            <param name="level">The maximum level to capture logs for</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.Log(System.String)">
+            <summary>
+            Logs the specified message.
+            </summary>
+            <param name="message">The message to log</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.String)">
+            <summary>
+            Logs the specified message.
+            </summary>
+            <param name="level">The level of the log</param>
+            <param name="message">The message to log</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception)">
+            <summary>
+            Logs the specified exception.
+            </summary>
+            <param name="ex">The exception to log</param>
+        </member>
+        <member name="T:StreamingClient.Base.Util.NameAttribute">
+            <summary>
+            An attribute that tracks the public-facing name of an item.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.NameAttribute.Default">
+            <summary>
+            The default, public-facing name.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.NameAttribute.Name">
+            <summary>
+            The public-facing name of the item.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.NameAttribute.#ctor">
+            <summary>
+            Creates a new instance of the NameAttribute class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.NameAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the NameAttribute class with a specified name.
+            </summary>
+            <param name="name">The public-facing name</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.NameAttribute.Equals(System.Object)">
+            <summary>
+            Checks whether the following objects are equal.
+            </summary>
+            <param name="obj">The other object to check</param>
+            <returns>Whether the two objects are equal</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.NameAttribute.GetHashCode">
+            <summary>
+            Returns the hash code for this string.
+            </summary>
+            <returns>Returns the hash code for this string.</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.NameAttribute.IsDefaultAttribute">
+            <summary>
+            Whether this instance is the default attribute.
+            </summary>
+            <returns>true if this instance is the default attribute for the class; otherwise, false.</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.RestServiceRequestException">
+            <summary>
+            An exception detailing the failure of a REST web request.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Request">
+            <summary>
+            The URL of the request.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.StatusCode">
+            <summary>
+            The result status code.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Reason">
+            <summary>
+            The reason for the failure.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Content">
+            <summary>
+            The content of the response.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor">
+            <summary>
+            Creates a new instance of the RestServiceRequestException.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the RestServiceRequestException with a specified message.
+            </summary>
+            <param name="message">The message of the exception</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of the RestServiceRequestException with a specified message &amp; inner exception.
+            </summary>
+            <param name="message">The message of the exception</param>
+            <param name="inner">The inner exception</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Creates a new instance of the RestServiceRequestException with a web request response.
+            </summary>
+            <param name="response">The response of the failing web request</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.ToString">
+            <summary>
+            Returns a string representation of the object.
+            </summary>
+            <returns>A string representation of the object</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.SemaphoreSlimExtensions">
+            <summary>
+            Extension methods for the SemaphoreSlim class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease(System.Threading.SemaphoreSlim,System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Awaits on a semaphore, runs the specified function, &amp; then releases the semaphore.
+            </summary>
+            <param name="semaphore">The semaphore to await on</param>
+            <param name="function">The function to run</param>
+            <returns>An awaitable task</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease``1(System.Threading.SemaphoreSlim,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Awaits on a semaphore, runs the specified function, &amp; then releases the semaphore.
+            </summary>
+            <param name="semaphore">The semaphore to await on</param>
+            <param name="function">The function to run</param>
+            <returns>An awaitable task of type T</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.StringExtensions">
+            <summary>
+            Extension methods for the String class.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.StringExtensions.ToBase64String(System.String)">
+            <summary>
+            Converts a string to it's base64 equivalent string.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.Validator">
+            <summary>
+            Variable validation helper class
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Validator.Validate(System.Boolean,System.String)">
+            <summary>
+            Validates whether result is true. Throws an ArgumentException if it is not.
+            </summary>
+            <param name="result">The result to check</param>
+            <param name="message">The message to send</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Validator.ValidateString(System.String,System.String)">
+            <summary>
+            Validates whether the specified string has a non-null and non-empty value. Throws an ArgumentException if it does not.
+            </summary>
+            <param name="value">The string to check</param>
+            <param name="name">The name of the string</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Validator.ValidateVariable(System.Object,System.String)">
+            <summary>
+            Validates whether the specified variable is not null. Throws an ArgumentException if it is.
+            </summary>
+            <param name="value">The variable to check</param>
+            <param name="name">The name of the variable</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Validator.ValidateList``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Validates whether the specified list has is not null and empty. Throws an ArgumentException if it is.
+            </summary>
+            <param name="value">The list to check</param>
+            <param name="name">The name of the list</param>
+        </member>
+        <member name="T:StreamingClient.Base.Web.AdvancedHttpClient">
+            <summary>
+            An advanced Http client.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.CreateContentFromObject(System.Object)">
+            <summary>
+            Creates an HttpContent object from the specified object.
+            </summary>
+            <param name="obj">The object to serialize</param>
+            <returns>The HttpContent containing the serialized object</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.CreateContentFromString(System.String)">
+            <summary>
+            Creates an HttpContent object from the specified string.
+            </summary>
+            <param name="str">The string to serialize</param>
+            <returns>The HttpContent containing the serialized string</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.EncodeString(System.String)">
+            <summary>
+            HTTP encodes the specified string.
+            </summary>
+            <param name="str">The string to encode</param>
+            <returns>The HTTP encoded string</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor">
+            <summary>
+            Creates a new instance of the JSONHttpClient.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the JSONHttpClient with a specified base address.
+            </summary>
+            <param name="baseAddress">The base address to use for communication</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the JSONHttpClient with a specified base address &amp; Basic authorization value.
+            </summary>
+            <param name="baseAddress">The base address to use for communication</param>
+            <param name="basicAuthorizationValue">The basic value to include in the authorization header</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the JSONHttpClient with a specified base address &amp; custom authorization type.
+            </summary>
+            <param name="baseAddress">The base address to use for communication</param>
+            <param name="authorizationType">The type of authorization to include in the header</param>
+            <param name="authorizationValue">The value to include in the authorization header</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor(System.String,StreamingClient.Base.Model.OAuth.OAuthTokenModel)">
+            <summary>
+            Creates a new instance of the JSONHttpClient with a specified base address &amp; OAuth token.
+            </summary>
+            <param name="baseAddress">The base address to use for communication</param>
+            <param name="token">The OAuth token to include in the authentication header</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetAsync``1(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetJObjectAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A JObject of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetStringAsync(System.String)">
+            <summary>
+            Performs a GET REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A string of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PostAsync``1(System.String)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PostAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PostAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a POST REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PostFormUrlEncodedAsync``1(System.String,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Performs a POST REST request encoded as a Form URL using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="contentList">The list of key-value pairs to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PutAsync``1(System.String)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PutAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PutAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PUT REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PatchAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PATCH REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.PatchAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a PATCH REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.DeleteAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a DELETE REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>Whether the deletion was successful</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.DeleteAsync``1(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a DELETE REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A type-casted object of the contents of the response</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.DeleteAsyncWithResponse(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Performs a DELETE REST request using the provided request URI.
+            </summary>
+            <param name="requestUri">The request URI to use</param>
+            <param name="content">The content to send</param>
+            <returns>A response message of the request</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Web.ClientWebSocketBase">
+            <summary>
+            Handles web socket communication for client connections.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.ClientWebSocketBase.webSocket">
+            <summary>
+            The web socket connection.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Web.ClientWebSocketBase.Endpoint">
+            <summary>
+            The endpoint to connect.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.ClientWebSocketBase.Connect(System.String)">
+            <summary>
+            Connects the web socket to the server.
+            </summary>
+            <param name="endpoint">The endpoint to connect to</param>
+            <returns>Whether the connection was successful</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.ClientWebSocketBase.SendInternal(System.Byte[])">
+            <summary>
+            Sends the packet of data.
+            </summary>
+            <param name="buffer">The buffer to send</param>
+            <returns>An awaitable task</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.ClientWebSocketBase.CreateWebSocket">
+            <summary>
+            Creates the web socket for connecting with.
+            </summary>
+            <returns>The web socket to use</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Web.LocalHttpListenerServer">
+            <summary>
+            An Http listening service for intercepting requests &amp; processing them.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Web.LocalHttpListenerServer.Address">
+            <summary>
+            The address to be listening for.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the LocalHttpListenerServer class with the specified address.
+            </summary>
+            <param name="address"></param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.Start">
+            <summary>
+            Starts listening for requests.
+            </summary>
+            <returns>Whether the listener started successfully</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.Stop">
+            <summary>
+            Stops listening for requests.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.ProcessConnection(System.Net.HttpListenerContext)">
+            <summary>
+            Processes an http request.
+            </summary>
+            <param name="listenerContext">The context of the request</param>
+            <returns>An awaitable task to process the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.GetRequestParameter(System.Net.HttpListenerContext,System.String)">
+            <summary>
+            Gets a parameter value of the request.
+            </summary>
+            <param name="listenerContext">The request context</param>
+            <param name="parameter">The name of the parameter</param>
+            <returns>The parameter value of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.GetRequestContent(System.Net.HttpListenerContext)">
+            <summary>
+            Gets the content of the request. 
+            </summary>
+            <param name="listenerContext">The request context</param>
+            <returns>The content of the request</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.CloseConnection(System.Net.HttpListenerContext,System.Net.HttpStatusCode,System.String)">
+            <summary>
+            Closes the connection of the request.
+            </summary>
+            <param name="listenerContext">The request context</param>
+            <param name="statusCode">The status code to send</param>
+            <param name="content">The text content to include</param>
+            <returns></returns>
+        </member>
+        <member name="T:StreamingClient.Base.Web.LocalOAuthHttpListenerService">
+            <summary>
+            An Http listening service for processing OAuth requests.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the LocalOAuthHttpListenerService with the specified address.
+            </summary>
+            <param name="address">The address to listen to</param>
+            <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the LocalOAuthHttpListenerService with the specified address &amp; login response.
+            </summary>
+            <param name="address">The address to listen to</param>
+            <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
+            <param name="successResponse">The response to send upon successfully obtaining an authorization token</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.WaitForAuthorizationCode(System.Int32)">
+            <summary>
+            Waits for a successful authorization response from the OAuth service.
+            </summary>
+            <param name="secondsToWait">The total number of seconds to wait</param>
+            <returns>The authorization token from the OAuth service</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.ProcessConnection(System.Net.HttpListenerContext)">
+            <summary>
+            Processes an http request.
+            </summary>
+            <param name="listenerContext">The context of the request</param>
+            <returns>An awaitable task to process the request</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Web.WebSocketBase">
+            <summary>
+            Handles web socket communication for both client &amp; server connections.
+            </summary>
+        </member>
+        <member name="E:StreamingClient.Base.Web.WebSocketBase.OnSentOccurred">
+            <summary>
+            Invoked when a packet is sent.
+            </summary>
+        </member>
+        <member name="E:StreamingClient.Base.Web.WebSocketBase.OnTextReceivedOccurred">
+            <summary>
+            Invoked when a text packet is received.
+            </summary>
+        </member>
+        <member name="E:StreamingClient.Base.Web.WebSocketBase.OnDisconnectOccurred">
+            <summary>
+            Invoked when an unexpected disconnection occurs.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.WebSocketBase.webSocket">
+            <summary>
+            The web socket connection.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.WebSocketBase.webSocketSemaphore">
+            <summary>
+            Locking semaphore to prevent clashing packet sends.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.Disconnect(System.Net.WebSockets.WebSocketCloseStatus)">
+            <summary>
+            Disconnects the web socket.
+            </summary>
+            <param name="closeStatus">Optional status to send to partner web socket as to why the web socket is being closed</param>
+            <returns>A task for the closing of the web socket</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.Send(System.String)">
+            <summary>
+            Sends a text packet to the connected web socket.
+            </summary>
+            <param name="packet">The text packet to send</param>
+            <returns>A task for the sending of the packet</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.IsOpen">
+            <summary>
+            Gets whether the web socket is currently open.
+            </summary>
+            <returns>Whether the web socket is currently open</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.GetState">
+            <summary>
+            Gets the current state of the web socket.
+            </summary>
+            <returns>The current state of the web socket</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.SetWebSocket(System.Net.WebSockets.WebSocket)">
+            <summary>
+            Sets the web socket connection to use.
+            </summary>
+            <param name="webSocket">The web socket connection</param>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.SendInternal(System.Byte[])">
+            <summary>
+            Sends the packet of data.
+            </summary>
+            <param name="buffer">The buffer to send</param>
+            <returns>An awaitable task</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.ProcessReceivedPacket(System.String)">
+            <summary>
+            Processes the received text packet.
+            </summary>
+            <param name="packet">The receive text packet</param>
+            <returns>An awaitable task</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.Receive">
+            <summary>
+            Handles all receiving &amp; processing of packets.
+            </summary>
+            <returns>An awaitable task with the close status of the web socket connection</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.DisconnectAndFireEvent(System.Net.WebSockets.WebSocketCloseStatus)">
+            <summary>
+            Disconnects the web socket connection and fires a disconnection event.
+            </summary>
+            <param name="closeStatus">The close status of the web socket connection</param>
+            <returns>An awaitable task</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.WaitForSuccess(System.Func{System.Boolean},System.Int32)">
+            <summary>
+            Waits for an successful operation to complete.
+            </summary>
+            <param name="valueToCheck">Where the operation was successful</param>
+            <param name="secondsToWait">The total amount of seconds to wait for success</param>
+            <returns>An awaitable task</returns>
+        </member>
+    </members>
+</doc>

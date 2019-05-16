@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0.0</Version>
+    <Authors>Matthew Olivo</Authors>
+    <Company>Matthew Olivo</Company>
+    <Description>C# client library for the Twitch streaming service: https://twitch.tv
+      
+For more information, please see our project site: https://github.com/SaviorXTanren/twitch-client-csharp</Description>
+    <Product>twitch-client-csharp</Product>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/twitch-client-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/twitch-client-csharp</RepositoryUrl>
+    <PackageTags>Twitch Streaming Bot Chat</PackageTags>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/twitch-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\netstandard2.0\Twitch.Base.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
+  </ItemGroup>
+
+</Project>

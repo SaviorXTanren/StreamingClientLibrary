@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Matthew Olivo</Authors>
+    <Version>0.1.0.0</Version>
+    <Product>streaming-client-shared-library</Product>
+    <Description>A library used for multiple streaming libraries to share common code logic.
+
+For more information, please see our project site: https://github.com/SaviorXTanren/streaming-client-shared-library</Description>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/streaming-client-shared-library/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</RepositoryUrl>
+    <PackageTags>Streaming Bot Chat</PackageTags>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>StreamingClient.Base.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\LICENSE.txt" Link="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\README.md" Link="README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+</Project>
