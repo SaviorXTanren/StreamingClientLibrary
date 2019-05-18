@@ -106,7 +106,14 @@ namespace Mixer.Base.Clients
             return new ChatClient(channel, user, chat);
         }
 
-        private ChatClient(ChannelModel channel, UserModel user, ChannelChatModel channelChat)
+        /// <summary>
+        /// Creates a chat client for the specified channel, user, and channel chat.
+        /// </summary>
+        /// <param name="channel">The channel to connect to</param>
+        /// <param name="user">The user to connect as</param>
+        /// <param name="channelChat">The channel chat to connect to</param>
+        /// <returns>The chat client for the specified channel</returns>
+        public ChatClient(ChannelModel channel, UserModel user, ChannelChatModel channelChat)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
