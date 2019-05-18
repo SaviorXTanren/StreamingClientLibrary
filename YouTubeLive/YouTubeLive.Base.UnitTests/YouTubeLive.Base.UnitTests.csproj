@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.40.0.1572" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.40.0.1593" />
     <PackageReference Include="Google.Apis.YouTubePartner.v1" Version="1.35.1.1334" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
