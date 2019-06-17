@@ -26,6 +26,14 @@
         /// </summary>
         public string discord { get; set; }
         /// <summary>
+        /// The Instagram account.
+        /// </summary>
+        public string instagram { get; set; }
+        /// <summary>
+        /// The Patreon account.
+        /// </summary>
+        public string patreon { get; set; }
+        /// <summary>
         /// Additional verified accounts.
         /// </summary>
         public string[] verified { get; set; }
