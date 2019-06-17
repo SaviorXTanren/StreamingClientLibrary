@@ -2,6 +2,7 @@
 using StreamingClient.Base.Services;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -74,6 +75,17 @@ namespace Mixer.Base.Services
                     }
                     currentRequestUri += "page=" + currentPage;
                 }
+
+                if (currentRequestUri.Contains("?"))
+                {
+                    currentRequestUri += "&";
+                }
+                else
+                {
+                    currentRequestUri += "?";
+                }
+                currentRequestUri += "limit=" + Math.Min(maxResults, 100);
+
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
                 T[] pagedResults = await response.ProcessResponse<T[]>();
@@ -131,6 +143,17 @@ namespace Mixer.Base.Services
                     }
                     currentRequestUri += "continuationToken=" + continuationToken;
                 }
+
+                if (currentRequestUri.Contains("?"))
+                {
+                    currentRequestUri += "&";
+                }
+                else
+                {
+                    currentRequestUri += "?";
+                }
+                currentRequestUri += "limit=" + Math.Min(maxResults, 100);
+
                 HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
                 T[] pagedResults = await response.ProcessResponse<T[]>();
