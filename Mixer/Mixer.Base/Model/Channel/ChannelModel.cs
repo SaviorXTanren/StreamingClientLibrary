@@ -27,7 +27,7 @@ namespace Mixer.Base.Model.Channel
         public uint viewersTotal { get; set; }
         public uint viewersCurrent { get; set; }
         public uint numFollowers { get; set; }
-        public int ftl { get; set; }
+        public int? ftl { get; set; }
         public bool hasVod { get; set; }
         public string languageId { get; set; }
         public uint? coverId { get; set; }
