@@ -31,6 +31,8 @@ namespace Mixer.Base.Model.Channel
         public bool? tweetEnabled { get; set; }
         [JsonProperty("channel:tweet:body")]
         public string tweetBody { get; set; }
+        [JsonProperty("hosting:allow")]
+        public bool? hostingAllow { get; set; }
         [JsonProperty("costream:allow")]
         public string costreamAllow { get; set; }
     }
