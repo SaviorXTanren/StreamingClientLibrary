@@ -4,7 +4,6 @@ using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,6 +12,77 @@ using System.Web;
 
 namespace StreamingClient.Base.Web
 {
+    /// <summary>
+    /// The detailing the rate limiting of an Http REST web request.
+    /// </summary>
+    public class HttpRequestRateLimits
+    {
+        /// <summary>
+        /// Mixer's header for the allowed rate limit.
+        /// </summary>
+        public const string MixerRateLimitHeader = "X-Rate-Limit";
+        /// <summary>
+        /// Mixer's header for the rate limit remaining.
+        /// </summary>
+        public const string MixerRateLimitRemainingHeader = "X-RateLimit-Remaining";
+        /// <summary>
+        /// Mixer's header for when the rate limit will reset.
+        /// </summary>
+        public const string MixerRateLimitResetHeader = "X-RateLimit-Reset";
+
+        /// <summary>
+        /// Indicates whether the specified response has the rate limit header.
+        /// </summary>
+        /// <param name="response">The response to check</param>
+        /// <returns>Whether the response has the rate limit header</returns>
+        public static bool HasRateLimitHeader(HttpResponseMessage response) { return !string.IsNullOrEmpty(response.GetHeaderValue(MixerRateLimitHeader)); }
+
+        /// <summary>
+        /// The total number of calls allows to be made against this bucket.
+        /// </summary>
+        public int RateLimitAllowed { get; set; }
+
+        /// <summary>
+        /// The total number of calls remaining before requests will be rate limited.
+        /// </summary>
+        public int RateLimitRemaining { get; set; }
+
+        /// <summary>
+        /// The Unix date time in milliseconds when the rate limit will be reset.
+        /// </summary>
+        public long RateLimitReset { get; set; }
+
+        /// <summary>
+        /// The date time offset when the rate limit will be reset.
+        /// </summary>
+        public DateTimeOffset RateLimitResetDateTime { get { return DateTimeOffsetExtensions.FromUTCUnixTimeMilliseconds(this.RateLimitReset); } }
+
+        /// <summary>
+        /// Creates a new instance of the HttpRateLimitedRestRequestException with a web request response.
+        /// </summary>
+        /// <param name="response">The response of the rate limited web request</param>
+        public HttpRequestRateLimits(HttpResponseMessage response)
+        {
+            string rateLimit = response.GetHeaderValue(MixerRateLimitHeader);
+            if (!string.IsNullOrEmpty(rateLimit) && int.TryParse(rateLimit, out int rateLimitValue))
+            {
+                this.RateLimitAllowed = rateLimitValue;
+            }
+
+            string rateLimitRemaining = response.GetHeaderValue(MixerRateLimitRemainingHeader);
+            if (!string.IsNullOrEmpty(rateLimitRemaining) && int.TryParse(rateLimitRemaining, out int rateLimitRemainingValue))
+            {
+                this.RateLimitRemaining = rateLimitRemainingValue;
+            }
+
+            string rateLimitReset = response.GetHeaderValue(MixerRateLimitResetHeader);
+            if (!string.IsNullOrEmpty(rateLimitReset) && long.TryParse(rateLimitReset, out long rateLimitResetValue))
+            {
+                this.RateLimitReset = rateLimitResetValue;
+            }
+        }
+    }
+
     /// <summary>
     /// An advanced Http client.
     /// </summary>
@@ -38,6 +108,11 @@ namespace StreamingClient.Base.Web
         /// <param name="str">The string to encode</param>
         /// <returns>The HTTP encoded string</returns>
         public static string EncodeString(string str) { return HttpUtility.UrlEncode(str); }
+
+        /// <summary>
+        /// Invoked when an update for rate limiting has occurred.
+        /// </summary>
+        public event EventHandler<HttpRequestRateLimits> RateLimitUpdateOccurred = delegate { };
 
         /// <summary>
         /// Creates a new instance of the JSONHttpClient.
@@ -96,7 +171,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             this.LogRequest(requestUri);
-            return await base.GetAsync(requestUri);
+            HttpResponseMessage response = await base.GetAsync(requestUri);
+            this.CheckForRateLimiting(response);
+            return response;
         }
 
         /// <summary>
@@ -149,7 +226,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             this.LogRequest(requestUri, content);
-            return await base.PostAsync(requestUri, content);
+            HttpResponseMessage response = await base.PostAsync(requestUri, content);
+            this.CheckForRateLimiting(response);
+            return response;
         }
 
         /// <summary>
@@ -199,7 +278,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
         {
             this.LogRequest(requestUri, content);
-            return await base.PutAsync(requestUri, content);
+            HttpResponseMessage response = await base.PutAsync(requestUri, content);
+            this.CheckForRateLimiting(response);
+            return response;
         }
 
         /// <summary>
@@ -224,7 +305,9 @@ namespace StreamingClient.Base.Web
             HttpMethod method = new HttpMethod("PATCH");
             HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
             this.LogRequest(requestUri, content);
-            return await base.SendAsync(request);
+            HttpResponseMessage response = await base.SendAsync(request);
+            this.CheckForRateLimiting(response);
+            return response;
         }
 
         /// <summary>
@@ -275,11 +358,15 @@ namespace StreamingClient.Base.Web
             {
                 HttpMethod method = new HttpMethod("DELETE");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
-                return await base.SendAsync(request);
+                HttpResponseMessage response = await base.SendAsync(request);
+                this.CheckForRateLimiting(response);
+                return response;
             }
             else
             {
-                return await base.DeleteAsync(requestUri);
+                HttpResponseMessage response = await base.DeleteAsync(requestUri);
+                this.CheckForRateLimiting(response);
+                return response;
             }
         }
 
@@ -296,6 +383,18 @@ namespace StreamingClient.Base.Web
             else
             {
                 Logger.Log(LogLevel.Debug, string.Format("Rest API Request: {0}", requestUri));
+            }
+        }
+
+        private void CheckForRateLimiting(HttpResponseMessage response)
+        {
+            if ((int)response.StatusCode == 429)
+            {
+                throw new HttpRateLimitedRestRequestException(response);
+            }
+            else if (HttpRequestRateLimits.HasRateLimitHeader(response))
+            {
+                this.RateLimitUpdateOccurred(this, new HttpRequestRateLimits(response));
             }
         }
     }

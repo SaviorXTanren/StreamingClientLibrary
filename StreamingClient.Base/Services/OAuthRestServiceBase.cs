@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Web;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,6 +12,11 @@ namespace StreamingClient.Base.Services
     /// </summary>
     public abstract class OAuthRestServiceBase
     {
+        /// <summary>
+        /// Invoked when an update for rate limiting has occurred.
+        /// </summary>
+        public event EventHandler<HttpRequestRateLimits> RateLimitUpdateOccurred = delegate { };
+
         /// <summary>
         /// Creates an instance of the OAuthRestServiceBase.
         /// </summary>
@@ -25,7 +31,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.GetAsync(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.GetAsync(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -38,7 +52,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.GetAsync<T>(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.GetAsync<T>(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -51,7 +73,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.GetJObjectAsync(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.GetJObjectAsync(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -64,7 +94,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.GetStringAsync(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.GetStringAsync(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -78,7 +116,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
-                return await client.PostAsync<T>(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PostAsync<T>(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -93,7 +139,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
-                return await client.PostAsync(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PostAsync(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -108,7 +162,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
-                return await client.PostAsync<T>(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PostAsync<T>(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -121,7 +183,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.PutAsync<T>(requestUri);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PutAsync<T>(requestUri);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -135,7 +205,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.PutAsync(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PutAsync(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -149,7 +227,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.PutAsync<T>(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PutAsync<T>(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -163,7 +249,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.PatchAsync(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PatchAsync(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -177,7 +271,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.PatchAsync<T>(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.PatchAsync<T>(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -191,7 +293,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.DeleteAsync(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.DeleteAsync(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -205,7 +315,15 @@ namespace StreamingClient.Base.Services
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
-                return await client.DeleteAsync<T>(requestUri, content);
+                try
+                {
+                    client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
+                    return await client.DeleteAsync<T>(requestUri, content);
+                }
+                finally
+                {
+                    client.RateLimitUpdateOccurred -= Client_RateLimitUpdateOccurred;
+                }
             }
         }
 
@@ -235,6 +353,11 @@ namespace StreamingClient.Base.Services
                 return new AdvancedHttpClient(this.GetBaseAddress(), token);
             }
             return new AdvancedHttpClient(this.GetBaseAddress());
+        }
+
+        private void Client_RateLimitUpdateOccurred(object sender, HttpRequestRateLimits rateLimits)
+        {
+            this.RateLimitUpdateOccurred(this, rateLimits);
         }
     }
 }

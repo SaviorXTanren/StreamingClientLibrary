@@ -34,6 +34,10 @@
         /// </summary>
         public string patreon { get; set; }
         /// <summary>
+        /// The Steam account link.
+        /// </summary>
+        public string steam { get; set; }
+        /// <summary>
         /// Additional verified accounts.
         /// </summary>
         public string[] verified { get; set; }

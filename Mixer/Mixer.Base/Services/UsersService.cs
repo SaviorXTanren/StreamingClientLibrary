@@ -85,10 +85,10 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="username">The username to search for</param>
         /// <returns>The user with the specified username</returns>
-        public async Task<UserModel> GetUser(string username)
+        public async Task<UserWithChannelModel> GetUser(string username)
         {
             Validator.ValidateString(username, "username");
-            IEnumerable<UserModel> users = await this.GetPagedNumberAsync<UserModel>("users/search?query=" + username);
+            IEnumerable<UserWithChannelModel> users = await this.GetPagedNumberAsync<UserWithChannelModel>("users/search?query=" + username);
             if (users.Count() > 0)
             {
                 return users.First();

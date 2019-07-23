@@ -5,9 +5,9 @@ using System.Net.Http;
 namespace StreamingClient.Base.Util
 {
     /// <summary>
-    /// An exception detailing the failure of a REST web request.
+    /// An exception detailing the failure of an Http REST web request.
     /// </summary>
-    public class RestServiceRequestException : HttpRequestException
+    public class HttpRestRequestException : HttpRequestException
     {
         /// <summary>
         /// The URL of the request.
@@ -30,28 +30,28 @@ namespace StreamingClient.Base.Util
         public string Content { get; private set; }
 
         /// <summary>
-        /// Creates a new instance of the RestServiceRequestException.
+        /// Creates a new instance of the HttpRestRequestException.
         /// </summary>
-        public RestServiceRequestException() : base() { }
+        public HttpRestRequestException() : base() { }
 
         /// <summary>
-        /// Creates a new instance of the RestServiceRequestException with a specified message.
+        /// Creates a new instance of the HttpRestRequestException with a specified message.
         /// </summary>
         /// <param name="message">The message of the exception</param>
-        public RestServiceRequestException(string message) : base(message) { }
+        public HttpRestRequestException(string message) : base(message) { }
 
         /// <summary>
-        /// Creates a new instance of the RestServiceRequestException with a specified message &amp; inner exception.
+        /// Creates a new instance of the HttpRestRequestException with a specified message &amp; inner exception.
         /// </summary>
         /// <param name="message">The message of the exception</param>
         /// <param name="inner">The inner exception</param>
-        public RestServiceRequestException(string message, Exception inner) : base(message, inner) { }
+        public HttpRestRequestException(string message, Exception inner) : base(message, inner) { }
 
         /// <summary>
-        /// Creates a new instance of the RestServiceRequestException with a web request response.
+        /// Creates a new instance of the HttpRestRequestException with a web request response.
         /// </summary>
         /// <param name="response">The response of the failing web request</param>
-        public RestServiceRequestException(HttpResponseMessage response)
+        public HttpRestRequestException(HttpResponseMessage response)
             : this(response.ReasonPhrase)
         {
             this.Request = response.RequestMessage.RequestUri.ToString();
