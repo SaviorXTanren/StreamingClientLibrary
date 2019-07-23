@@ -2,6 +2,9 @@
 
 namespace Mixer.Base.Model.Channel
 {
+    /// <summary>
+    /// Channel preferences are a list of options and attributes which control behaviour for the channel. Please see each property for more details.
+    /// </summary>
     public class ChannelPreferencesModel
     {
         /// <summary>
@@ -83,6 +86,11 @@ namespace Mixer.Base.Model.Channel
         /// </summary>
         [JsonProperty("hypezone:allow")]
         public string hypezoneAllow { get; set; }
+        /// <summary>
+        /// Indicates if the channel allows other channels to host it.
+        /// </summary>
+        [JsonProperty("hosting:allow")]
+        public string hostingAllow { get; set; }
         /// <summary>
         /// Allows other streamers to join you in a costream.
         /// </summary>
