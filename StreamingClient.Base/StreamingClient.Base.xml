@@ -89,6 +89,11 @@
             An OAuth-based rest service
             </summary>
         </member>
+        <member name="E:StreamingClient.Base.Services.OAuthRestServiceBase.RateLimitUpdateOccurred">
+            <summary>
+            Invoked when an update for rate limiting has occurred.
+            </summary>
+        </member>
         <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.#ctor">
             <summary>
             Creates an instance of the OAuthRestServiceBase.
@@ -315,10 +320,34 @@
             <param name="value">The enum value</param>
             <returns>Whether it is obsolete</returns>
         </member>
+        <member name="T:StreamingClient.Base.Util.HttpRateLimitedRestRequestException">
+            <summary>
+            An exception detailing the rate limiting of an Http REST web request.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.HttpRateLimitedRestRequestException.RateLimitBucket">
+            <summary>
+            The rate limit bucket that is being throttled.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRateLimitedRestRequestException.#ctor(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Creates a new instance of the HttpRateLimitedRestRequestException with a web request response.
+            </summary>
+            <param name="response">The response of the rate limited web request</param>
+        </member>
         <member name="T:StreamingClient.Base.Util.HttpResponseMessageExtensions">
             <summary>
             Extension methods for the HttpResponseMessage class.
             </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.GetHeaderValue(System.Net.Http.HttpResponseMessage,System.String)">
+            <summary>
+            Gets the first value of the specified header if it exists.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <param name="name">The name of the header</param>
+            <returns>The first value of the specified header if it exists</returns>
         </member>
         <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessResponse``1(System.Net.Http.HttpResponseMessage)">
             <summary>
@@ -340,6 +369,61 @@
             </summary>
             <param name="response">The HttpResponse to process</param>
             <returns>A string of the contents of the response</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.HttpRestRequestException">
+            <summary>
+            An exception detailing the failure of an Http REST web request.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Request">
+            <summary>
+            The URL of the request.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.StatusCode">
+            <summary>
+            The result status code.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Reason">
+            <summary>
+            The reason for the failure.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Content">
+            <summary>
+            The content of the response.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRestRequestException.#ctor">
+            <summary>
+            Creates a new instance of the HttpRestRequestException.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRestRequestException.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the HttpRestRequestException with a specified message.
+            </summary>
+            <param name="message">The message of the exception</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRestRequestException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of the HttpRestRequestException with a specified message &amp; inner exception.
+            </summary>
+            <param name="message">The message of the exception</param>
+            <param name="inner">The inner exception</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRestRequestException.#ctor(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Creates a new instance of the HttpRestRequestException with a web request response.
+            </summary>
+            <param name="response">The response of the failing web request</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpRestRequestException.ToString">
+            <summary>
+            Returns a string representation of the object.
+            </summary>
+            <returns>A string representation of the object</returns>
         </member>
         <member name="T:StreamingClient.Base.Util.JArrayExtensions">
             <summary>
@@ -528,61 +612,6 @@
             </summary>
             <returns>true if this instance is the default attribute for the class; otherwise, false.</returns>
         </member>
-        <member name="T:StreamingClient.Base.Util.RestServiceRequestException">
-            <summary>
-            An exception detailing the failure of a REST web request.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Request">
-            <summary>
-            The URL of the request.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.StatusCode">
-            <summary>
-            The result status code.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Reason">
-            <summary>
-            The reason for the failure.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.RestServiceRequestException.Content">
-            <summary>
-            The content of the response.
-            </summary>
-        </member>
-        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor">
-            <summary>
-            Creates a new instance of the RestServiceRequestException.
-            </summary>
-        </member>
-        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.String)">
-            <summary>
-            Creates a new instance of the RestServiceRequestException with a specified message.
-            </summary>
-            <param name="message">The message of the exception</param>
-        </member>
-        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.String,System.Exception)">
-            <summary>
-            Creates a new instance of the RestServiceRequestException with a specified message &amp; inner exception.
-            </summary>
-            <param name="message">The message of the exception</param>
-            <param name="inner">The inner exception</param>
-        </member>
-        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.#ctor(System.Net.Http.HttpResponseMessage)">
-            <summary>
-            Creates a new instance of the RestServiceRequestException with a web request response.
-            </summary>
-            <param name="response">The response of the failing web request</param>
-        </member>
-        <member name="M:StreamingClient.Base.Util.RestServiceRequestException.ToString">
-            <summary>
-            Returns a string representation of the object.
-            </summary>
-            <returns>A string representation of the object</returns>
-        </member>
         <member name="T:StreamingClient.Base.Util.SemaphoreSlimExtensions">
             <summary>
             Extension methods for the SemaphoreSlim class.
@@ -649,6 +678,59 @@
             <param name="value">The list to check</param>
             <param name="name">The name of the list</param>
         </member>
+        <member name="T:StreamingClient.Base.Web.HttpRequestRateLimits">
+            <summary>
+            The detailing the rate limiting of an Http REST web request.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.HttpRequestRateLimits.MixerRateLimitHeader">
+            <summary>
+            Mixer's header for the allowed rate limit.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.HttpRequestRateLimits.MixerRateLimitRemainingHeader">
+            <summary>
+            Mixer's header for the rate limit remaining.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Web.HttpRequestRateLimits.MixerRateLimitResetHeader">
+            <summary>
+            Mixer's header for when the rate limit will reset.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.HttpRequestRateLimits.HasRateLimitHeader(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Indicates whether the specified response has the rate limit header.
+            </summary>
+            <param name="response">The response to check</param>
+            <returns>Whether the response has the rate limit header</returns>
+        </member>
+        <member name="P:StreamingClient.Base.Web.HttpRequestRateLimits.RateLimitAllowed">
+            <summary>
+            The total number of calls allows to be made against this bucket.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Web.HttpRequestRateLimits.RateLimitRemaining">
+            <summary>
+            The total number of calls remaining before requests will be rate limited.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Web.HttpRequestRateLimits.RateLimitReset">
+            <summary>
+            The Unix date time in milliseconds when the rate limit will be reset.
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Web.HttpRequestRateLimits.RateLimitResetDateTime">
+            <summary>
+            The date time offset when the rate limit will be reset.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Web.HttpRequestRateLimits.#ctor(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Creates a new instance of the HttpRateLimitedRestRequestException with a web request response.
+            </summary>
+            <param name="response">The response of the rate limited web request</param>
+        </member>
         <member name="T:StreamingClient.Base.Web.AdvancedHttpClient">
             <summary>
             An advanced Http client.
@@ -674,6 +756,11 @@
             </summary>
             <param name="str">The string to encode</param>
             <returns>The HTTP encoded string</returns>
+        </member>
+        <member name="E:StreamingClient.Base.Web.AdvancedHttpClient.RateLimitUpdateOccurred">
+            <summary>
+            Invoked when an update for rate limiting has occurred.
+            </summary>
         </member>
         <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.#ctor">
             <summary>
