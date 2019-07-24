@@ -227,23 +227,31 @@ namespace Mixer.Base.Services
             Validator.ValidateList(users, "users");
 
             Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
-            for (int i = 0; i < users.Count(); i += 25)
+            try
             {
-                IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
-                IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
-                foreach (UserModel user in userSubset)
+                for (int i = 0; i < users.Count(); i += 25)
                 {
-                    DateTimeOffset? followDate = null;
-                    FollowerUserModel follow = followUsers.FirstOrDefault(u => u.id.Equals(user.id));
-                    if (follow != null)
+                    IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
+                    IEnumerable<FollowerUserModel> followUsers = await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                    IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
+                    foreach (UserModel user in userSubset)
                     {
-                        followDate = follow.followed.createdAt;
+                        DateTimeOffset? followDate = null;
+                        FollowerUserModel follow = followUsers.FirstOrDefault(u => u.id.Equals(user.id));
+                        if (follow != null)
+                        {
+                            followDate = follow.followed.createdAt;
+                        }
+                        results[user.id] = followDate;
                     }
-                    results[user.id] = followDate;
                 }
+                return results;
             }
-            return results;
+            catch (HttpRateLimitedRestRequestException ex)
+            {
+                ex.PartialData = results;
+                throw;
+            }
         }
 
         /// <summary>
@@ -389,20 +397,28 @@ namespace Mixer.Base.Services
             Validator.ValidateString(role, "role");
 
             Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
-            for (int i = 0; i < users.Count(); i += 25)
+            try
             {
-                IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
-                foreach (UserModel user in userSubset)
+                for (int i = 0; i < users.Count(); i += 25)
                 {
-                    UserWithGroupsModel userGroups = roleUsers.FirstOrDefault(u => u.id.Equals(user.id));
-                    if (userGroups != null)
+                    IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
+                    IEnumerable<UserWithGroupsModel> roleUsers = await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role + "?nonce=" + Guid.NewGuid().ToString() + "&fields=id&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                    foreach (UserModel user in userSubset)
                     {
-                        results[user.id] = userGroups.GetCreatedDateForGroupIfCurrent(role);
+                        UserWithGroupsModel userGroups = roleUsers.FirstOrDefault(u => u.id.Equals(user.id));
+                        if (userGroups != null)
+                        {
+                            results[user.id] = userGroups.GetCreatedDateForGroupIfCurrent(role);
+                        }
                     }
                 }
+                return results;
             }
-            return results;
+            catch (HttpRateLimitedRestRequestException ex)
+            {
+                ex.PartialData = results;
+                throw;
+            }
         }
 
         /// <summary>
@@ -573,7 +589,6 @@ namespace Mixer.Base.Services
         public async Task<bool> Unfollow(ChannelModel channel, UserModel user)
         {
             string uri = $"channels/{channel.id}/follow";
-
 
             JObject payload = new JObject();
             payload["user"] = user.id;

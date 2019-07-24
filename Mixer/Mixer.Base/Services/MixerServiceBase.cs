@@ -86,31 +86,39 @@ namespace Mixer.Base.Services
                 }
                 currentRequestUri += "limit=" + Math.Min(maxResults, 100);
 
-                HttpResponseMessage response = await this.GetAsync(currentRequestUri);
-
-                T[] pagedResults = await response.ProcessResponse<T[]>();
-                results.AddRange(pagedResults);
-                currentPage++;
-
-                if (linkPagesAvailable)
+                try
                 {
-                    IEnumerable<string> linkValues;
-                    if (response.Headers.TryGetValues("link", out linkValues))
+                    HttpResponseMessage response = await this.GetAsync(currentRequestUri);
+
+                    T[] pagedResults = await response.ProcessResponse<T[]>();
+                    results.AddRange(pagedResults);
+                    currentPage++;
+
+                    if (linkPagesAvailable)
                     {
-                        Regex regex = new Regex(RequestLastPageRegexString);
-                        Match match = regex.Match(linkValues.First());
-                        if (match != null && match.Success)
+                        IEnumerable<string> linkValues;
+                        if (response.Headers.TryGetValues("link", out linkValues))
                         {
-                            string matchValue = match.Captures[0].Value;
-                            matchValue = matchValue.Substring(5);
-                            matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
-                            pageTotal = int.Parse(matchValue);
+                            Regex regex = new Regex(RequestLastPageRegexString);
+                            Match match = regex.Match(linkValues.First());
+                            if (match != null && match.Success)
+                            {
+                                string matchValue = match.Captures[0].Value;
+                                matchValue = matchValue.Substring(5);
+                                matchValue = matchValue.Substring(0, matchValue.IndexOf('>'));
+                                pageTotal = int.Parse(matchValue);
+                            }
                         }
                     }
+                    else if (pagedResults.Count() > 0)
+                    {
+                        pageTotal++;
+                    }
                 }
-                else if (pagedResults.Count() > 0)
+                catch (HttpRateLimitedRestRequestException ex)
                 {
-                    pageTotal++;
+                    ex.PartialData = results;
+                    throw;
                 }
             }
 
@@ -154,32 +162,40 @@ namespace Mixer.Base.Services
                 }
                 currentRequestUri += "limit=" + Math.Min(maxResults, 100);
 
-                HttpResponseMessage response = await this.GetAsync(currentRequestUri);
-
-                T[] pagedResults = await response.ProcessResponse<T[]>();
-                results.AddRange(pagedResults);
-
-                continuationToken = null;
-
-                IEnumerable<string> linkValues;
-                if (pagedResults.Length > 0 && response.Headers.TryGetValues("link", out linkValues))
+                try
                 {
-                    if (linkValues.Count() > 0)
-                    {
-                        string token = linkValues.First();
-                        int tokenStart = token.IndexOf(RequestContinuationTokenPrefixString);
-                        if (tokenStart >= 0)
-                        {
-                            token = token.Substring(tokenStart + RequestContinuationTokenPrefixString.Length);
-                            int tokenEnd = token.IndexOf(">");
-                            if (tokenEnd >= 0)
-                            {
-                                token = token.Substring(0, tokenEnd);
-                            }
-                        }
+                    HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
-                        continuationToken = token;
+                    T[] pagedResults = await response.ProcessResponse<T[]>();
+                    results.AddRange(pagedResults);
+
+                    continuationToken = null;
+
+                    IEnumerable<string> linkValues;
+                    if (pagedResults.Length > 0 && response.Headers.TryGetValues("link", out linkValues))
+                    {
+                        if (linkValues.Count() > 0)
+                        {
+                            string token = linkValues.First();
+                            int tokenStart = token.IndexOf(RequestContinuationTokenPrefixString);
+                            if (tokenStart >= 0)
+                            {
+                                token = token.Substring(tokenStart + RequestContinuationTokenPrefixString.Length);
+                                int tokenEnd = token.IndexOf(">");
+                                if (tokenEnd >= 0)
+                                {
+                                    token = token.Substring(0, tokenEnd);
+                                }
+                            }
+
+                            continuationToken = token;
+                        }
                     }
+                }
+                catch (HttpRateLimitedRestRequestException ex)
+                {
+                    ex.PartialData = results;
+                    throw;
                 }
             } while (results.Count < maxResults && !string.IsNullOrEmpty(continuationToken));
 
