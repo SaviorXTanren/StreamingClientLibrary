@@ -12,16 +12,40 @@ using System.Threading.Tasks;
 
 namespace Mixer.Base.Clients
 {
+    /// <summary>
+    /// Mixer-specific implementation of a web socket client.
+    /// </summary>
     public class MixerWebSocketClientBase : ClientWebSocketBase
     {
+        /// <summary>
+        /// Whether the client is connected.
+        /// </summary>
         public bool Connected { get; protected set; }
+        /// <summary>
+        /// Whether the client is authenticated.
+        /// </summary>
         public bool Authenticated { get; protected set; }
 
+        /// <summary>
+        /// Invoked when a packet is sent.
+        /// </summary>
         public event EventHandler<WebSocketPacket> OnPacketSentOccurred;
+        /// <summary>
+        /// Invoked when a packet is received.
+        /// </summary>
         public event EventHandler<WebSocketPacket> OnPacketReceivedOccurred;
 
+        /// <summary>
+        /// Invoked when a method occurs.
+        /// </summary>
         public event EventHandler<MethodPacket> OnMethodOccurred;
+        /// <summary>
+        /// Invoked when a reply occurs.
+        /// </summary>
         public event EventHandler<ReplyPacket> OnReplyOccurred;
+        /// <summary>
+        /// Invoked when an event occurs.
+        /// </summary>
         public event EventHandler<EventPacket> OnEventOccurred;
 
         private int currentPacketId = 0;
@@ -38,6 +62,12 @@ namespace Mixer.Base.Clients
             return base.Disconnect(closeStatus);
         }
 
+        /// <summary>
+        /// Sends a packet to the server.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        /// <param name="checkIfAuthenticated">Whether to check if the client is authenciated</param>
+        /// <returns>An awaitable task with the packet ID</returns>
         protected virtual async Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             if (!this.Connected)
@@ -61,6 +91,12 @@ namespace Mixer.Base.Clients
             return packet.id;
         }
 
+        /// <summary>
+        /// Sends a packet to the server and listens for a reply.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        /// <param name="checkIfAuthenticated">Whether to check if the client is authenciated</param>
+        /// <returns>An awaitable task with the reply packet</returns>
         protected async Task<ReplyPacket> SendAndListen(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             ReplyPacket replyPacket = null;
@@ -85,27 +121,56 @@ namespace Mixer.Base.Clients
             return replyPacket;
         }
 
+        /// <summary>
+        /// Sends a packet to the server and listens for a reply.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        /// <param name="checkIfAuthenticated">Whether to check if the client is authenciated</param>
+        /// <returns>An awaitable task with the reply data</returns>
         protected async Task<T> SendAndListen<T>(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             ReplyPacket reply = await this.SendAndListen(packet);
             return this.GetSpecificReplyResultValue<T>(reply);
         }
 
-        protected void SendSpecificMethod<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
+        /// <summary>
+        /// Invokes the matching event for the specified method packet.
+        /// </summary>
+        /// <typeparam name="T">The type of data</typeparam>
+        /// <param name="methodPacket">The method packet</param>
+        /// <param name="eventHandler">The event handler</param>
+        protected void InvokeMethodPacketEvent<T>(MethodPacket methodPacket, EventHandler<T> eventHandler)
         {
             this.SendSpecificPacket(JsonConvert.DeserializeObject<T>(methodPacket.parameters.ToString()), eventHandler);
         }
 
-        protected void SendSpecificEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
+        /// <summary>
+        /// Invokes the matching event for the specified event packet.
+        /// </summary>
+        /// <typeparam name="T">The type of data</typeparam>
+        /// <param name="eventPacket">The event packet</param>
+        /// <param name="eventHandler">The event handler</param>
+        protected void InvokeEventPacketEvent<T>(EventPacket eventPacket, EventHandler<T> eventHandler)
         {
             this.SendSpecificPacket(JsonConvert.DeserializeObject<T>(eventPacket.data.ToString()), eventHandler);
         }
 
+        /// <summary>
+        /// Invokes the event for the specified packet.
+        /// </summary>
+        /// <typeparam name="T">The type of data</typeparam>
+        /// <param name="packet">The packet</param>
+        /// <param name="eventHandler">The event handler</param>
         protected void SendSpecificPacket<T>(T packet, EventHandler<T> eventHandler)
         {
             eventHandler?.Invoke(this, packet);
         }
 
+        /// <summary>
+        /// Processes a JSON packet received from the server.
+        /// </summary>
+        /// <param name="packet">The packet JSON</param>
+        /// <returns>An awaitable Task</returns>
         protected override Task ProcessReceivedPacket(string packet)
         {
             List<JToken> packetJTokens = new List<JToken>();
@@ -138,7 +203,10 @@ namespace Mixer.Base.Clients
                 else if (webSocketPacket.type.Equals("reply"))
                 {
                     ReplyPacket replyPacket = JsonConvert.DeserializeObject<ReplyPacket>(data);
-                    this.AddReplyPacketForListeners(replyPacket);
+                    if (this.replyIDListeners.ContainsKey(replyPacket.id))
+                    {
+                        this.replyIDListeners[replyPacket.id] = replyPacket;
+                    }
                     this.SendSpecificPacket(replyPacket, this.OnReplyOccurred);
                 }
                 else if (webSocketPacket.type.Equals("event"))
@@ -151,19 +219,21 @@ namespace Mixer.Base.Clients
             return Task.FromResult(0);
         }
 
-        protected void AddReplyPacketForListeners(ReplyPacket packet)
-        {
-            if (this.replyIDListeners.ContainsKey(packet.id))
-            {
-                this.replyIDListeners[packet.id] = packet;
-            }
-        }
-
+        /// <summary>
+        /// Verifies if data exists in the reply packet.
+        /// </summary>
+        /// <param name="replyPacket">The reply packet to check</param>
+        /// <returns>Whether there is data in the reply packet</returns>
         protected bool VerifyDataExists(ReplyPacket replyPacket)
         {
             return (replyPacket != null && replyPacket.data != null && !string.IsNullOrEmpty(replyPacket.data.ToString()));
         }
 
+        /// <summary>
+        /// Verifies if there are no errors in the reply packet.
+        /// </summary>
+        /// <param name="replyPacket">The reply packet to check</param>
+        /// <returns>Whether there are no errors in the reply packet</returns>
         protected bool VerifyNoErrors(ReplyPacket replyPacket)
         {
             if (replyPacket == null)
@@ -177,6 +247,12 @@ namespace Mixer.Base.Clients
             return true;
         }
 
+        /// <summary>
+        /// Gets the specified type data from the reply packet.
+        /// </summary>
+        /// <typeparam name="T">The type to get</typeparam>
+        /// <param name="replyPacket">The reply packet</param>
+        /// <returns>The typed data</returns>
         protected T GetSpecificReplyResultValue<T>(ReplyPacket replyPacket)
         {
             this.VerifyNoErrors(replyPacket);

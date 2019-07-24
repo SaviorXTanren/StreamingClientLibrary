@@ -19,29 +19,83 @@ namespace Mixer.Base.Clients
     /// </summary>
     public class MixPlayClient : MixerWebSocketClientBase
     {
+        /// <summary>
+        /// Invoked when a memory warning is issued.
+        /// </summary>
         public event EventHandler<MixPlayIssueMemoryWarningModel> OnIssueMemoryWarning;
 
+        /// <summary>
+        /// Invoked when a participant leaves.
+        /// </summary>
         public event EventHandler<MixPlayParticipantCollectionModel> OnParticipantLeave;
+        /// <summary>
+        /// Invoked when a participant joins.
+        /// </summary>
         public event EventHandler<MixPlayParticipantCollectionModel> OnParticipantJoin;
+        /// <summary>
+        /// Invoked when a participant is updated.
+        /// </summary>
         public event EventHandler<MixPlayParticipantCollectionModel> OnParticipantUpdate;
 
+        /// <summary>
+        /// Invoked when a group is created.
+        /// </summary>
         public event EventHandler<MixPlayGroupCollectionModel> OnGroupCreate;
+        /// <summary>
+        /// Invoked when a group is deleted.
+        /// </summary>
         public event EventHandler<Tuple<MixPlayGroupModel, MixPlayGroupModel>> OnGroupDelete;
+        /// <summary>
+        /// Invoked when a group is updated.
+        /// </summary>
         public event EventHandler<MixPlayGroupCollectionModel> OnGroupUpdate;
 
+        /// <summary>
+        /// Invoked when a scene is created.
+        /// </summary>
         public event EventHandler<MixPlayConnectedSceneCollectionModel> OnSceneCreate;
+        /// <summary>
+        /// Invoked when a scene is deleted.
+        /// </summary>
         public event EventHandler<Tuple<MixPlayConnectedSceneModel, MixPlayConnectedSceneModel>> OnSceneDelete;
+        /// <summary>
+        /// Invoked when a scene is updated.
+        /// </summary>
         public event EventHandler<MixPlayConnectedSceneCollectionModel> OnSceneUpdate;
 
+        /// <summary>
+        /// Invoked when a control is created.
+        /// </summary>
         public event EventHandler<MixPlayConnectedSceneModel> OnControlCreate;
+        /// <summary>
+        /// Invoked when a control is deleted.
+        /// </summary>
         public event EventHandler<MixPlayConnectedSceneModel> OnControlDelete;
+        /// <summary>
+        /// Invoked when a control is updated.
+        /// </summary>
         public event EventHandler<MixPlayConnectedSceneModel> OnControlUpdate;
 
+        /// <summary>
+        /// Invoked when input is received.
+        /// </summary>
         public event EventHandler<MixPlayGiveInputModel> OnGiveInput;
 
+        /// <summary>
+        /// The channel the MixPlay client is connected to.
+        /// </summary>
         public ChannelModel Channel { get; private set; }
+        /// <summary>
+        /// The MixPlay game that is connected.
+        /// </summary>
         public MixPlayGameModel Game { get; private set; }
+        /// <summary>
+        /// The version of the connected MixPlay game.
+        /// </summary>
         public MixPlayGameVersionModel Version { get; private set; }
+        /// <summary>
+        /// The share code of the MixPlay game.
+        /// </summary>
         public string ShareCode { get; private set; }
 
         private IEnumerable<string> connections;
@@ -304,6 +358,10 @@ namespace Mixer.Base.Clients
             return await this.SendAndListen<MixPlayParticipantCollectionModel>(this.BuildUpdateParticipantsPacket(participants));
         }
 
+        /// <summary>
+        /// Creates the web socket client.
+        /// </summary>
+        /// <returns>The web socket client</returns>
         protected override ClientWebSocket CreateWebSocket()
         {
             ClientWebSocket webSocket = base.CreateWebSocket();
@@ -666,6 +724,12 @@ namespace Mixer.Base.Clients
             return this.VerifyNoErrors(await this.SendAndListen(this.BuildBroadcastEventPacket(scopes, data)));
         }
 
+        /// <summary>
+        /// Sends a MixPlay packet to the server.
+        /// </summary>
+        /// <param name="packet">The packet to send</param>
+        /// <param name="checkIfAuthenticated">Whether to check if the client is authenticated</param>
+        /// <returns>An awaitable task with the packet ID</returns>
         protected async override Task<uint> Send(WebSocketPacket packet, bool checkIfAuthenticated = true)
         {
             this.AssignLatestSequence(packet);
@@ -711,21 +775,21 @@ namespace Mixer.Base.Clients
             switch (methodPacket.method)
             {
                 case "issueMemoryWarning":
-                    this.SendSpecificMethod(methodPacket, this.OnIssueMemoryWarning);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnIssueMemoryWarning);
                     break;
 
                 case "onParticipantLeave":
-                    this.SendSpecificMethod(methodPacket, this.OnParticipantLeave);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnParticipantLeave);
                     break;
                 case "onParticipantJoin":
-                    this.SendSpecificMethod(methodPacket, this.OnParticipantJoin);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnParticipantJoin);
                     break;
                 case "onParticipantUpdate":
-                    this.SendSpecificMethod(methodPacket, this.OnParticipantUpdate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnParticipantUpdate);
                     break;
 
                 case "onGroupCreate":
-                    this.SendSpecificMethod(methodPacket, this.OnGroupCreate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnGroupCreate);
                     break;
                 case "onGroupDelete":
                     if (this.OnGroupDelete != null)
@@ -738,11 +802,11 @@ namespace Mixer.Base.Clients
                     }
                     break;
                 case "onGroupUpdate":
-                    this.SendSpecificMethod(methodPacket, this.OnGroupUpdate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnGroupUpdate);
                     break;
 
                 case "onSceneCreate":
-                    this.SendSpecificMethod(methodPacket, this.OnSceneCreate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnSceneCreate);
                     break;
                 case "onSceneDelete":
                     if (this.OnSceneDelete != null)
@@ -755,21 +819,21 @@ namespace Mixer.Base.Clients
                     }
                     break;
                 case "onSceneUpdate":
-                    this.SendSpecificMethod(methodPacket, this.OnSceneUpdate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnSceneUpdate);
                     break;
 
                 case "onControlCreate":
-                    this.SendSpecificMethod(methodPacket, this.OnControlCreate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnControlCreate);
                     break;
                 case "onControlDelete":
-                    this.SendSpecificMethod(methodPacket, this.OnControlDelete);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnControlDelete);
                     break;
                 case "onControlUpdate":
-                    this.SendSpecificMethod(methodPacket, this.OnControlUpdate);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnControlUpdate);
                     break;
 
                 case "giveInput":
-                    this.SendSpecificMethod(methodPacket, this.OnGiveInput);
+                    this.InvokeMethodPacketEvent(methodPacket, this.OnGiveInput);
                     break;
             }
         }

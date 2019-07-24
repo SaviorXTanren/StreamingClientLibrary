@@ -405,7 +405,7 @@ namespace Mixer.Base.Clients
             switch (eventPacket.eventName)
             {
                 case "live":
-                    this.SendSpecificEvent<ConstellationLiveEventModel>(eventPacket, this.OnSubscribedEventOccurred);
+                    this.InvokeEventPacketEvent<ConstellationLiveEventModel>(eventPacket, this.OnSubscribedEventOccurred);
                     break;
             }
         }

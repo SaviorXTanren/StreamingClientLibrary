@@ -330,6 +330,11 @@
             The rate limit bucket that is being throttled.
             </summary>
         </member>
+        <member name="P:StreamingClient.Base.Util.HttpRateLimitedRestRequestException.PartialData">
+            <summary>
+            Partial data from the request, if any.
+            </summary>
+        </member>
         <member name="M:StreamingClient.Base.Util.HttpRateLimitedRestRequestException.#ctor(System.Net.Http.HttpResponseMessage)">
             <summary>
             Creates a new instance of the HttpRateLimitedRestRequestException with a web request response.
