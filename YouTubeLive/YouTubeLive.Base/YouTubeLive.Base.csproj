@@ -9,7 +9,7 @@
       
 For more information, please see our project site: youtubelive-client-csharp</Description>
     <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
-    <PackageLicenseUrl>https://github.com/SaviorXTanren/youtubelive-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SaviorXTanren/youtubelive-client-csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/youtubelive-client-csharp</RepositoryUrl>
     <PackageTags>YouTube Live Streaming Bot Chat</PackageTags>

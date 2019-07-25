@@ -14,6 +14,11 @@ namespace StreamingClient.Base.Util
         public string RateLimitBucket { get; set; }
 
         /// <summary>
+        /// Partial data from the request, if any.
+        /// </summary>
+        public object PartialData { get; set; }
+
+        /// <summary>
         /// Creates a new instance of the HttpRateLimitedRestRequestException with a web request response.
         /// </summary>
         /// <param name="response">The response of the rate limited web request</param>

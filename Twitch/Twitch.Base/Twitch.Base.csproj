@@ -14,7 +14,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageProjectUrl>https://github.com/SaviorXTanren/twitch-client-csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/twitch-client-csharp</RepositoryUrl>
     <PackageTags>Twitch Streaming Bot Chat</PackageTags>
-    <PackageLicenseUrl>https://github.com/SaviorXTanren/twitch-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

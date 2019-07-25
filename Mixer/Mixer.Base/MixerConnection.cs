@@ -307,7 +307,7 @@ namespace Mixer.Base
         /// <summary>
         /// APIs for Interactive/MixPlay.
         /// </summary>
-        public InteractiveService Interactive { get; private set; }
+        public MixPlayService MixPlay { get; private set; }
 
         /// <summary>
         /// APIs for the leaderboards of a channel.
@@ -349,10 +349,10 @@ namespace Mixer.Base
         /// Chat Client commands will not work (EX: Timeout, Clear Messages, Delete Message, etc). The current work around to this is to use the traditional
         /// OAuth authentication methods.
         /// </summary>
-        /// <param name="clientID"></param>
-        /// <param name="scopes"></param>
-        /// <param name="codeCallback"></param>
-        /// <returns></returns>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="codeCallback">The callback for the short code</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaShortCode(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, Action<OAuthShortCodeModel> codeCallback)
         {
             return await MixerConnection.ConnectViaShortCode(clientID, null, scopes, codeCallback);
@@ -363,11 +363,11 @@ namespace Mixer.Base
         /// Chat Client commands will not work (EX: Timeout, Clear Messages, Delete Message, etc). The current work around to this is to use the traditional
         /// OAuth authentication methods.
         /// </summary>
-        /// <param name="clientID"></param>
-        /// <param name="clientSecret"></param>
-        /// <param name="scopes"></param>
-        /// <param name="codeCallback"></param>
-        /// <returns></returns>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="codeCallback">The callback for the short code</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaShortCode(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, Action<OAuthShortCodeModel> codeCallback)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -393,11 +393,28 @@ namespace Mixer.Base
             return null;
         }
 
+        /// <summary>
+        /// Gets the authorization code URL for the specified parameters.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="redirectUri">The URI to redirect to after authorization</param>
+        /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
+        /// <returns>The authorization code URL</returns>
         public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri, bool forceApprovalPrompt = false)
         {
             return await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, null, scopes, redirectUri, forceApprovalPrompt);
         }
 
+        /// <summary>
+        /// Gets the authorization code URL for the specified parameters.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="redirectUri">The URI to redirect to after authorization</param>
+        /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
+        /// <returns>The authorization code URL</returns>
         public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri, bool forceApprovalPrompt = false)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -429,11 +446,30 @@ namespace Mixer.Base
             return url + "?" + await content.ReadAsStringAsync();
         }
 
+        /// <summary>
+        /// Establishes a connection to Mixer via a localhost OAuth browser.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="oauthListenerURL">The URI to redirect to after authorization</param>
+        /// <param name="loginSuccessHtmlPageFilePath">The HTML to show upon successful login</param>
+        /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
         {
             return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, oauthListenerURL: oauthListenerURL, loginSuccessHtmlPageFilePath: loginSuccessHtmlPageFilePath);
         }
 
+        /// <summary>
+        /// Establishes a connection to Mixer via a localhost OAuth browser.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <param name="scopes">the scopes to request</param>
+        /// <param name="oauthListenerURL">The URI to redirect to after authorization</param>
+        /// <param name="loginSuccessHtmlPageFilePath">The HTML to show upon successful login</param>
+        /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -456,11 +492,26 @@ namespace Mixer.Base
             return null;
         }
 
+        /// <summary>
+        /// Establishes a connection to Mixer via an authorization code
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="authorizationCode">The secret of the client application</param>
+        /// <param name="redirectUrl">The URI to redirect to after authorization</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string authorizationCode, string redirectUrl = null)
         {
             return await MixerConnection.ConnectViaAuthorizationCode(clientID, null, authorizationCode, redirectUrl);
         }
 
+        /// <summary>
+        /// Establishes a connection to Mixer via an authorization code
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <param name="authorizationCode">The secret of the client application</param>
+        /// <param name="redirectUrl">The URI to redirect to after authorization</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaAuthorizationCode(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
         {
             Validator.ValidateString(clientID, "clientID");
@@ -475,6 +526,12 @@ namespace Mixer.Base
             return new MixerConnection(token);
         }
 
+        /// <summary>
+        /// Establishes a connection to Mixer via an OAuth token.
+        /// </summary>
+        /// <param name="token">An OAuth token</param>
+        /// <param name="refreshToken">Whether to refresh the token</param>
+        /// <returns>The connection to Mixer</returns>
         public static async Task<MixerConnection> ConnectViaOAuthToken(OAuthTokenModel token, bool refreshToken = true)
         {
             Validator.ValidateVariable(token, "token");
@@ -518,7 +575,7 @@ namespace Mixer.Base
             this.Costream = new CostreamService(this);
             this.GameTypes = new GameTypesService(this);
             this.Leaderboards = new LeaderboardsService(this);
-            this.Interactive = new InteractiveService(this);
+            this.MixPlay = new MixPlayService(this);
             this.OAuth = new OAuthService(this);
             this.Patronage = new PatronageService(this);
             this.Skills = new SkillsService(this);
@@ -527,8 +584,16 @@ namespace Mixer.Base
             this.Users = new UsersService(this);
         }
 
+        /// <summary>
+        /// Refreshes the OAuth token associated with the connection.
+        /// </summary>
+        /// <returns>An awaitable Task</returns>
         public async Task RefreshOAuthToken() { this.token = await this.OAuth.RefreshToken(this.token); }
 
+        /// <summary>
+        /// Gets a copy of the current OAuth token.
+        /// </summary>
+        /// <returns>A copy of the current OAuth token</returns>
         public OAuthTokenModel GetOAuthTokenCopy() { return JSONSerializerHelper.Clone<OAuthTokenModel>(this.token); }
 
         internal async Task<OAuthTokenModel> GetOAuthToken(bool autoRefreshToken = true)

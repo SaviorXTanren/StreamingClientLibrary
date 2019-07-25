@@ -35,24 +35,69 @@ namespace Mixer.Base.Model.Chat
         public string user_avatar { get; set; }
     }
 
+    /// <summary>
+    /// The coordinates for a chat message.
+    /// </summary>
     public class CoordinatesModel
     {
+        /// <summary>
+        /// The X coordinate.
+        /// </summary>
         public uint x { get; set; }
+        /// <summary>
+        /// The Y coordinate.
+        /// </summary>
         public uint y { get; set; }
+        /// <summary>
+        /// The width.
+        /// </summary>
         public uint width { get; set; }
+        /// <summary>
+        /// The height.
+        /// </summary>
         public uint height { get; set; }
     }
 
+    /// <summary>
+    /// The data for a chat message.
+    /// </summary>
     public class ChatMessageDataModel
     {
-        public string type { get; set; }
-        public object data { get; set; }
-        public string text { get; set; }
+        /// <summary>
+        /// The ID of the message.
+        /// </summary>
         public uint id { get; set; }
+        /// <summary>
+        /// The type of data.
+        /// </summary>
+        public string type { get; set; }
+        /// <summary>
+        /// The data object.
+        /// </summary>
+        public object data { get; set; }
+        /// <summary>
+        /// The text of the message.
+        /// </summary>
+        public string text { get; set; }
+        /// <summary>
+        /// The username of the message.
+        /// </summary>
         public string username { get; set; }
+        /// <summary>
+        /// The source of the message.
+        /// </summary>
         public string source { get; set; }
+        /// <summary>
+        /// The pack for the message.
+        /// </summary>
         public string pack { get; set; }
+        /// <summary>
+        /// The url for the message.
+        /// </summary>
         public string url { get; set; }
+        /// <summary>
+        /// The coordinates for the message.
+        /// </summary>
         public CoordinatesModel coords { get; set; }
     }
 

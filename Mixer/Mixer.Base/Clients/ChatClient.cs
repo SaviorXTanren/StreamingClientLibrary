@@ -464,44 +464,44 @@ namespace Mixer.Base.Clients
             switch (eventPacket.eventName)
             {
                 case "ChatMessage":
-                    this.SendSpecificEvent(eventPacket, this.OnMessageOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnMessageOccurred);
                     break;
 
                 case "UserJoin":
-                    this.SendSpecificEvent(eventPacket, this.OnUserJoinOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnUserJoinOccurred);
                     break;
                 case "UserLeave":
-                    this.SendSpecificEvent(eventPacket, this.OnUserLeaveOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnUserLeaveOccurred);
                     break;
                 case "UserUpdate":
-                    this.SendSpecificEvent(eventPacket, this.OnUserUpdateOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnUserUpdateOccurred);
                     break;
                 case "UserTimeout":
-                    this.SendSpecificEvent(eventPacket, this.OnUserTimeoutOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnUserTimeoutOccurred);
                     break;
 
                 case "PollStart":
-                    this.SendSpecificEvent(eventPacket, this.OnPollStartOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnPollStartOccurred);
                     break;
                 case "PollEnd":
-                    this.SendSpecificEvent(eventPacket, this.OnPollEndOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnPollEndOccurred);
                     break;
 
                 case "DeleteMessage":
-                    this.SendSpecificEvent(eventPacket, this.OnDeleteMessageOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnDeleteMessageOccurred);
                     break;
                 case "PurgeMessage":
-                    this.SendSpecificEvent(eventPacket, this.OnPurgeMessageOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnPurgeMessageOccurred);
                     break;
                 case "ClearMessages":
-                    this.SendSpecificEvent(eventPacket, this.OnClearMessagesOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnClearMessagesOccurred);
                     break;
 
                 case "SkillAttribution":
-                    this.SendSpecificEvent(eventPacket, this.OnSkillAttributionOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnSkillAttributionOccurred);
                     break;
                 case "DeleteSkillAttribution":
-                    this.SendSpecificEvent(eventPacket, this.OnDeleteSkillAttributionOccurred);
+                    this.InvokeEventPacketEvent(eventPacket, this.OnDeleteSkillAttributionOccurred);
                     break;
             }
         }
