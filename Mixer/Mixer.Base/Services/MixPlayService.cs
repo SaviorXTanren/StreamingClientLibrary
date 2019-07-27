@@ -41,10 +41,10 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
         /// <returns>The games owned by the channel</returns>
-        public async Task<IEnumerable<MixPlayGameListingModel>> GetOwnedMixPlayGames(ChannelModel channel)
+        public async Task<IEnumerable<MixPlayGameListingModel>> GetOwnedMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/owned?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/owned?user=" + channel.userId, maxResults);
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
         /// <returns>The games shared with the channel</returns>
-        public async Task<IEnumerable<MixPlayGameListingModel>> GetSharedMixPlayGames(ChannelModel channel)
+        public async Task<IEnumerable<MixPlayGameListingModel>> GetSharedMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/shared?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/shared?user=" + channel.userId, maxResults);
         }
 
         /// <summary>
@@ -63,10 +63,10 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
         /// <returns>The games that have editor permissions set for the Channel Owner</returns>
-        public async Task<IEnumerable<MixPlayGameListingModel>> GetEditorMixPlayGames(ChannelModel channel)
+        public async Task<IEnumerable<MixPlayGameListingModel>> GetEditorMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/editor?user=" + channel.userId);
+            return await this.GetPagedNumberAsync<MixPlayGameListingModel>("interactive/games/editor?user=" + channel.userId,maxResults);
         }
 
 
