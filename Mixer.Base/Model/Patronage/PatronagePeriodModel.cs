@@ -17,9 +17,13 @@ namespace Mixer.Base.Model.Patronage
         /// </summary>
         public uint target { get; set; }
         /// <summary>
-        /// The reward amount for the milestone.
+        /// The bonus amount for the milestone.
         /// </summary>
-        public uint reward { get; set; }
+        public uint bonus { get; set; }
+        /// <summary>
+        /// The total reward
+        /// </summary>
+        public int incrementalReward { get; set; }
     }
 
     /// <summary>
@@ -54,6 +58,10 @@ namespace Mixer.Base.Model.Patronage
         /// The time period ID for the patronage.
         /// </summary>
         public Guid id { get; set; }
+        /// <summary>
+        /// The type of patronage event.
+        /// </summary>
+        public string eventType { get; set; }
         /// <summary>
         /// The start date time of the patronage period.
         /// </summary>

@@ -26,7 +26,7 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(channel, "channel");
 
-            return await this.GetAsync<PatronageStatusModel>("levels/patronage/channels/" + channel.id + "/status");
+            return await this.GetAsync<PatronageStatusModel>("levels/patronage/channels/" + channel.id + "/status/all");
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(patronagePeriodID, "patronagePeriodID");
 
-            return await this.GetAsync<PatronagePeriodModel>("levels/patronage/resources/" + patronagePeriodID);
+            return await this.GetAsync<PatronagePeriodModel>("levels/patronage/resources/" + patronagePeriodID + "/all");
         }
     }
 }
