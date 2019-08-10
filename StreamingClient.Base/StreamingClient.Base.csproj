@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Matthew Olivo</Authors>
+    <Authors></Authors>
     <Version>0.1.0.0</Version>
     <Product>streaming-client-shared-library</Product>
     <Description>A library used for multiple streaming libraries to share common code logic.
@@ -12,10 +12,17 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <RepositoryUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</RepositoryUrl>
     <PackageTags>Streaming Bot Chat</PackageTags>
     <PackageProjectUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId></PackageId>
+    <Company />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>StreamingClient.Base.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>S:\Code\mixer-client-csharp\StreamingClient.Base\StreamingClient.Base.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

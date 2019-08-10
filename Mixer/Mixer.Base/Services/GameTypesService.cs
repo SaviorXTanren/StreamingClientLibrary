@@ -1,6 +1,5 @@
 ﻿using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.Game;
-using Mixer.Base.Util;
 using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;

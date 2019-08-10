@@ -123,6 +123,32 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Updates the channel with the information supplied. Only limited information can be updated via this API.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to update</param>
+        /// <param name="name">The stream display name of the channel</param>
+        /// <param name="gameTypeID">The ID of the game</param>
+        /// <param name="audience">The audience of the channel</param>
+        /// <returns>The updated channel</returns>
+        public async Task<ChannelModel> UpdateChannel(uint channelID, string name = null, uint? gameTypeID = null, string audience = null)
+        {
+            JObject jobj = new JObject();
+            if (!string.IsNullOrEmpty(name))
+            {
+                jobj["name"] = name;
+            }
+            if (gameTypeID.HasValue)
+            {
+                jobj["typeId"] = gameTypeID;
+            }
+            if (!string.IsNullOrEmpty(audience))
+            {
+                jobj["audience"] = audience;
+            }
+            return await this.PatchAsync<ChannelModel>("channels/" + channelID, this.CreateContentFromObject(jobj));
+        }
+
+        /// <summary>
         /// Updates the channel with the information supplied. Only limited information can be updated
         /// via this API. See the ChannelUpdateableModel for the fields that are updateable.
         /// </summary>

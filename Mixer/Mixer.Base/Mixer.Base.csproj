@@ -8,17 +8,17 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.8.4.12-beta</Version>
+    <Version>0.9.0.0-beta</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
 For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
-    <Product>mixer-client-csharp</Product>
+    <Product>Mixer Streaming Client Library</Product>
     <PackageReleaseNotes>- Updating patronage APIs
 </PackageReleaseNotes>
-    <AssemblyVersion>0.8.4.12</AssemblyVersion>
-    <FileVersion>0.8.4.12</FileVersion>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -33,5 +33,15 @@ For more information, please see our project site: https://github.com/SaviorXTan
   <ItemGroup>
     <ProjectReference Include="..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 
 </Project>
