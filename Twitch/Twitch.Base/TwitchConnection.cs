@@ -245,7 +245,7 @@ namespace Twitch.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerService oauthServer = new LocalOAuthHttpListenerService(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
             oauthServer.Start();
 
             string url = await TwitchConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);

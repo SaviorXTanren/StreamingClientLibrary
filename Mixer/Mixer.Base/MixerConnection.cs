@@ -475,7 +475,7 @@ namespace Mixer.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerService oauthServer = new LocalOAuthHttpListenerService(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, loginSuccessHtmlPageFilePath);
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, loginSuccessHtmlPageFilePath);
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);

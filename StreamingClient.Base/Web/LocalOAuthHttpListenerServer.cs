@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 namespace StreamingClient.Base.Web
 {
     /// <summary>
-    /// An Http listening service for processing OAuth requests.
+    /// An Http listening server for processing OAuth requests.
     /// </summary>
-    public class LocalOAuthHttpListenerService : LocalHttpListenerServer
+    public class LocalOAuthHttpListenerServer : LocalHttpListenerServer
     {
         private const string defaultSuccessResponse = "<!DOCTYPE html><html><body><h1 style=\"text-align:center;\">Logged In Successfully</h1><p style=\"text-align:center;\">You have been logged in, you may now close this webpage</p></body></html>";
 
@@ -20,7 +20,7 @@ namespace StreamingClient.Base.Web
         /// </summary>
         /// <param name="address">The address to listen to</param>
         /// <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
-        public LocalOAuthHttpListenerService(string address, string authorizationCodeParameterName)
+        public LocalOAuthHttpListenerServer(string address, string authorizationCodeParameterName)
             : base(address)
         {
             this.authorizationCodeParameterName = authorizationCodeParameterName;
@@ -32,7 +32,7 @@ namespace StreamingClient.Base.Web
         /// <param name="address">The address to listen to</param>
         /// <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
         /// <param name="successResponse">The response to send upon successfully obtaining an authorization token</param>
-        public LocalOAuthHttpListenerService(string address, string authorizationCodeParameterName, string successResponse)
+        public LocalOAuthHttpListenerServer(string address, string authorizationCodeParameterName, string successResponse)
             : this(address, authorizationCodeParameterName)
         {
             this.successResponse = successResponse;
