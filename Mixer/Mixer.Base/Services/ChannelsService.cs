@@ -79,6 +79,19 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets a list of currently online channels. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A list of currently online channels</returns>
+        public async Task GetChannels(Func<IEnumerable<ExpandedChannelModel>, Task> processResults, uint maxResults = 1)
+        {
+            await this.GetPagedNumberAsync<ExpandedChannelModel>("channels", processResults, maxResults, linkPagesAvailable: false);
+        }
+
+        /// <summary>
         /// Gets a list of the currently featured channels. This API "appears" to only return regular, partnered channels and
         /// does not return "business" channels (EX: Xbox Ambassadors channel).
         /// </summary>
@@ -131,13 +144,31 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get viewers for</param>
         /// <param name="startDate">The start date for viewers</param>
         /// <param name="endDate">The end date for viewers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All viewers during the timespan</returns>
-        public async Task<IEnumerable<ViewerAnalyticModel>> GetViewerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        public async Task<IEnumerable<ViewerAnalyticModel>> GetViewerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedNumberAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate), maxResults);
+        }
+
+        /// <summary>
+        /// Gets all the viewers from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get viewers for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="startDate">The start date for viewers</param>
+        /// <param name="endDate">The end date for viewers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All viewers during the timespan</returns>
+        public async Task GetViewerAnalytics(ChannelModel channel, Func<IEnumerable<ViewerAnalyticModel>, Task> processResults, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            await this.GetPagedNumberAsync<ViewerAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/viewersMetrics?" + this.ConstructToAndFromQueryString(startDate, endDate), processResults, maxResults);
         }
 
         /// <summary>
@@ -146,13 +177,31 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get stream sessions for</param>
         /// <param name="startDate">The start date for stream sessions</param>
         /// <param name="endDate">The end date for stream sessions</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All stream sessions during the timespan</returns>
-        public async Task<IEnumerable<StreamSessionsAnalyticModel>> GetStreamSessions(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        public async Task<IEnumerable<StreamSessionsAnalyticModel>> GetStreamSessions(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedNumberAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate), maxResults);
+        }
+
+        /// <summary>
+        /// Gets all the stream sessions from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get stream sessions for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="startDate">The start date for stream sessions</param>
+        /// <param name="endDate">The end date for stream sessions</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All stream sessions during the timespan</returns>
+        public async Task GetStreamSessions(ChannelModel channel, Func<IEnumerable<StreamSessionsAnalyticModel>, Task> processResults, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            await this.GetPagedNumberAsync<StreamSessionsAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/streamSessions?" + this.ConstructToAndFromQueryString(startDate, endDate), processResults, maxResults);
         }
 
         /// <summary>
@@ -161,13 +210,31 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get followers for</param>
         /// <param name="startDate">The start date for followers</param>
         /// <param name="endDate">The end date for followers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All followers during the timespan</returns>
-        public async Task<IEnumerable<FollowersAnalyticModel>> GetFollowerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        public async Task<IEnumerable<FollowersAnalyticModel>> GetFollowerAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "startDate");
 
-            return await this.GetPagedNumberAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate), maxResults);
+        }
+
+        /// <summary>
+        /// Gets all the followers from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get followers for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="startDate">The start date for followers</param>
+        /// <param name="endDate">The end date for followers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All followers during the timespan</returns>
+        public async Task GetFollowerAnalytics(ChannelModel channel, Func<IEnumerable<FollowersAnalyticModel>, Task> processResults, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "startDate");
+
+            await this.GetPagedNumberAsync<FollowersAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/followers?" + this.ConstructToAndFromQueryString(startDate, endDate), processResults, maxResults);
         }
 
         /// <summary>
@@ -176,13 +243,31 @@ namespace Mixer.Base.Services
         /// <param name="channel">The channel to get subscribers for</param>
         /// <param name="startDate">The start date for subscribers</param>
         /// <param name="endDate">The end date for subscribers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>All subscribers during the timespan</returns>
-        public async Task<IEnumerable<SubscriberAnalyticModel>> GetSubscriberAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null)
+        public async Task<IEnumerable<SubscriberAnalyticModel>> GetSubscriberAnalytics(ChannelModel channel, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(startDate, "stateDate");
 
-            return await this.GetPagedNumberAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate));
+            return await this.GetPagedNumberAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate), maxResults);
+        }
+
+        /// <summary>
+        /// Gets all the subscribers from the specified channel from the specified start and end dates
+        /// </summary>
+        /// <param name="channel">The channel to get subscribers for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="startDate">The start date for subscribers</param>
+        /// <param name="endDate">The end date for subscribers</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All subscribers during the timespan</returns>
+        public async Task GetSubscriberAnalytics(ChannelModel channel, Func<IEnumerable<SubscriberAnalyticModel>, Task> processResults, DateTimeOffset startDate, DateTimeOffset? endDate = null, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateVariable(startDate, "stateDate");
+
+            await this.GetPagedNumberAsync<SubscriberAnalyticModel>("channels/" + channel.id + "/analytics/tsdb/subscriptions?" + this.ConstructToAndFromQueryString(startDate, endDate), processResults, maxResults);
         }
 
         /// <summary>
@@ -198,6 +283,22 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
 
             return await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow", maxResults);
+        }
+
+        /// <summary>
+        /// Gets the current followers of the channel. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get followers for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The users who followed the channel</returns>
+        public async Task GetFollowers(ChannelModel channel, Func<IEnumerable<FollowerUserModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+
+            await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow", processResults, maxResults);
         }
 
         /// <summary>
@@ -223,34 +324,55 @@ namespace Mixer.Base.Services
         /// <returns>All users checked and whether they follow or not</returns>
         public async Task<Dictionary<uint, DateTimeOffset?>> CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users)
         {
-            Validator.ValidateVariable(channel, "channel");
-            Validator.ValidateList(users, "users");
-
             Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
             try
             {
-                for (int i = 0; i < users.Count(); i += 25)
+                await this.CheckIfFollows(channel, users, (IEnumerable<KeyValuePair<uint, DateTimeOffset?>> pairs) =>
                 {
-                    IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
-                    IEnumerable<FollowerUserModel> followUsers = await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
-                    IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
-                    foreach (UserModel user in userSubset)
+                    foreach (var kvp in pairs)
                     {
-                        DateTimeOffset? followDate = null;
-                        FollowerUserModel follow = followUsers.FirstOrDefault(u => u.id.Equals(user.id));
-                        if (follow != null)
-                        {
-                            followDate = follow.followed.createdAt;
-                        }
-                        results[user.id] = followDate;
+                        results[kvp.Key] = kvp.Value;
                     }
-                }
-                return results;
+                    return Task.FromResult(0);
+                });
             }
             catch (HttpRateLimitedRestRequestException ex)
             {
                 ex.PartialData = results;
                 throw;
+            }
+            return results;
+        }
+
+        /// <summary>
+        /// Checks if the specified users follows the specified channel
+        /// </summary>
+        /// <param name="channel">The channel to get follows against</param>
+        /// <param name="users">The users to check if they follow</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <returns>All users checked and whether they follow or not</returns>
+        public async Task CheckIfFollows(ChannelModel channel, IEnumerable<UserModel> users, Func<IEnumerable<KeyValuePair<uint, DateTimeOffset?>>, Task> processResults)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateList(users, "users");
+
+            for (int i = 0; i < users.Count(); i += 25)
+            {
+                Dictionary<uint, DateTimeOffset?> results = new Dictionary<uint, DateTimeOffset?>();
+                IEnumerable<UserModel> userSubset = users.Skip(i).Take(25);
+                IEnumerable<FollowerUserModel> followUsers = await this.GetPagedNumberAsync<FollowerUserModel>("channels/" + channel.id + "/follow?nonce=" + Guid.NewGuid().ToString() + "&fields=id,followed&where=id:in:" + string.Join(";", userSubset.Select(u => u.id)));
+                IEnumerable<uint> followUserIDs = followUsers.Select(u => u.id);
+                foreach (UserModel user in userSubset)
+                {
+                    DateTimeOffset? followDate = null;
+                    FollowerUserModel follow = followUsers.FirstOrDefault(u => u.id.Equals(user.id));
+                    if (follow != null)
+                    {
+                        followDate = follow.followed.createdAt;
+                    }
+                    results[user.id] = followDate;
+                }
+                await processResults(results);
             }
         }
 
@@ -304,6 +426,21 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets the current channels that are hosting the specified channel. The search can be limited to a maximum number
+        /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+        /// threshold and slightly more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get hosters for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The hosting channels</returns>
+        public async Task GetHosters(ChannelModel channel, Func<IEnumerable<ChannelAdvancedModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            await this.GetPagedNumberAsync<ChannelAdvancedModel>("channels/" + channel.id + "/hosters", processResults, maxResults);
+        }
+
+        /// <summary>
         /// Gets the preferences for the specified channel.
         /// </summary>
         /// <param name="channel">The channel to get preferences for</param>
@@ -339,6 +476,21 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", maxResults);
+        }
+
+        /// <summary>
+        /// Gets all of the users who have roles for the specified channel. The search can be limited to a maximum number
+        /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+        /// threshold and slightly more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get users for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The users with roles for the channel</returns>
+        public async Task GetUsersWithRoles(ChannelModel channel, Func<IEnumerable<UserWithGroupsModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users", processResults, maxResults);
         }
 
         /// <summary>
@@ -381,6 +533,23 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateString(role, "role");
             return await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, maxResults);
+        }
+
+        /// <summary>
+        /// Gets all of the users who have the specified role for the specified channel. The search can be limited to a maximum number
+        /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+        /// threshold and slightly more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get users for</param>
+        /// <param name="role">The role to search for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The users with roles for the channel</returns>
+        public async Task GetUsersWithRoles(ChannelModel channel, string role, Func<IEnumerable<UserWithGroupsModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            Validator.ValidateString(role, "role");
+            await this.GetPagedNumberAsync<UserWithGroupsModel>("channels/" + channel.id + "/users/" + role, processResults, maxResults);
         }
 
         /// <summary>
@@ -543,6 +712,18 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<ChannelRecordingModel>> GetRecordings(ChannelModel channel, uint maxResults = 1)
         {
             return await this.GetPagedNumberAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", maxResults);
+        }
+
+        /// <summary>
+        /// Gets a list of the channel VOD recordings.
+        /// </summary>
+        /// <param name="channel">The channel to get recordings for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A list of the channel recordings</returns>
+        public async Task GetRecordings(ChannelModel channel, Func<IEnumerable<ChannelRecordingModel>, Task> processResults, uint maxResults = 1)
+        {
+            await this.GetPagedNumberAsync<ChannelRecordingModel>("channels/" + channel.id + "/recordings", processResults, maxResults);
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using Mixer.Base.Model.Teams;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using StreamingClient.Base.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -122,6 +123,21 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets all users that the specified user follows. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="user">The user to get follows for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All users that the specified user follows</returns>
+        public async Task GetFollows(UserModel user, Func<IEnumerable<ChannelAdvancedModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            await this.GetPagedNumberAsync<ChannelAdvancedModel>("users/" + user.id + "/follows", processResults, maxResults);
+        }
+
+        /// <summary>
         /// Gets all channels that the specified user is subscribed to. The search can be limited to a maximum number of results to speed up
         /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.
@@ -133,6 +149,21 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedNumberAsync<SubscriptionWithGroupModel>("users/" + user.id + "/subscriptions", maxResults);
+        }
+
+        /// <summary>
+        /// Gets all channels that the specified user is subscribed to. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="user">The user to get subscriptions for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All users that the specified user is subscribed to</returns>
+        public async Task GetSubscriptions(UserModel user, Func<IEnumerable<SubscriptionWithGroupModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            await this.GetPagedNumberAsync<SubscriptionWithGroupModel>("users/" + user.id + "/subscriptions", processResults, maxResults);
         }
 
         /// <summary>
@@ -150,6 +181,21 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets all logs for the specified user follows. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="user">The user to get logs for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All logs for the specified user</returns>
+        public async Task GetLogs(UserModel user, Func<IEnumerable<UserLogModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            await this.GetPagedNumberAsync<UserLogModel>("users/" + user.id + "/log", processResults, maxResults);
+        }
+
+        /// <summary>
         /// Gets all notifications for the specified user follows. The search can be limited to a maximum number of results to speed up
         /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.
@@ -161,6 +207,21 @@ namespace Mixer.Base.Services
         {
             Validator.ValidateVariable(user, "user");
             return await this.GetPagedNumberAsync<NotificationModel>("users/" + user.id + "/notifications", maxResults);
+        }
+
+        /// <summary>
+        /// Gets all notifications for the specified user follows. The search can be limited to a maximum number of results to speed up
+        /// the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="user">The user to get notifications for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All notifications for the specified user</returns>
+        public async Task GetNotifications(UserModel user, Func<IEnumerable<NotificationModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            await this.GetPagedNumberAsync<NotificationModel>("users/" + user.id + "/notifications", processResults, maxResults);
         }
 
         /// <summary>

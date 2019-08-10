@@ -49,5 +49,32 @@ namespace Mixer.Base.UnitTests
                 }
             });
         }
+
+
+        [TestMethod]
+        public void GetUsersProcessor()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                ChannelModel channel = await ChannelsServiceUnitTests.GetChannel(connection);
+
+                List<ChatUserModel> users = new List<ChatUserModel>();
+                await connection.Chats.GetUsers(channel, (results) =>
+                {
+                    foreach (ChatUserModel result in results)
+                    {
+                        users.Add(result);
+                    }
+                    return Task.FromResult(0);
+                });
+
+                Assert.IsNotNull(users);
+
+                if (users.Count() > 0)
+                {
+                    ChatUserModel user = await connection.Chats.GetUser(channel, users.First().userId.GetValueOrDefault());
+                }
+            });
+        }
     }
 }

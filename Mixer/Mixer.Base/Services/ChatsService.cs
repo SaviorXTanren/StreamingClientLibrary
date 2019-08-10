@@ -2,6 +2,7 @@
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using StreamingClient.Base.Util;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,6 +36,21 @@ namespace Mixer.Base.Services
             {
                 Validator.ValidateVariable(channel, "channel");
                 return await this.GetPagedContinuationAsync<ChatUserModel>("chats/" + channel.id + "/users", maxResults);
+            }
+
+            /// <summary>
+            /// Gets the current users connected to chat for the specified channel. The search can be limited to a maximum number
+            /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+            /// threshold and slightly more than the maximum number may be returned.
+            /// </summary>
+            /// <param name="channel">The channel to get chat users for</param>
+            /// <param name="processResults">The function to process results as they come in</param>
+            /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+            /// <returns>The chat users</returns>
+            public async Task GetUsers(ChannelModel channel, Func<IEnumerable<ChatUserModel>, Task> processResults, uint maxResults = 1)
+            {
+                Validator.ValidateVariable(channel, "channel");
+                await this.GetPagedContinuationAsync<ChatUserModel>("chats/" + channel.id + "/users", processResults, maxResults);
             }
         }
 
@@ -84,6 +100,20 @@ namespace Mixer.Base.Services
         public async Task<IEnumerable<ChatUserModel>> GetUsers(ChannelModel channel, uint maxResults = 1)
         {
             return await this.chatsV2Service.GetUsers(channel, maxResults);
+        }
+
+        /// <summary>
+        /// Gets the current users connected to chat for the specified channel. The search can be limited to a maximum number
+        /// of results to speed up the operation as it can take a long time on large channels. This maximum number is a lower
+        /// threshold and slightly more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="channel">The channel to get chat users for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The chat users</returns>
+        public async Task GetUsers(ChannelModel channel, Func<IEnumerable<ChatUserModel>, Task> processResults, uint maxResults = 1)
+        {
+            await this.chatsV2Service.GetUsers(channel, processResults, maxResults);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Mixer.Base.Model.Game;
 using Mixer.Base.Util;
 using StreamingClient.Base.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -48,6 +49,19 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets all known game types. The search can be limited to a maximum number of results to speed
+        /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All game types</returns>
+        public async Task GetGameTypes(Func<IEnumerable<GameTypeModel>, Task> processResults, uint maxResults = 1)
+        {
+            await this.GetPagedNumberAsync<GameTypeModel>("types", processResults, maxResults);
+        }
+
+        /// <summary>
         /// Gets all known game types using the specified name. The search can be limited to a maximum number of results to speed
         /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.
@@ -67,6 +81,26 @@ namespace Mixer.Base.Services
         }
 
         /// <summary>
+        /// Gets all known game types using the specified name. The search can be limited to a maximum number of results to speed
+        /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="name">The name of the game to search for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All game types</returns>
+        public async Task GetGameTypes(string name, Func<IEnumerable<GameTypeModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateString(name, "name");
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("query", name);
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
+
+            await this.GetPagedNumberAsync<GameTypeModel>("types?" + await content.ReadAsStringAsync(), processResults, maxResults);
+        }
+
+        /// <summary>
         /// Gets all channels playing the specified game type. The search can be limited to a maximum number of results to speed
         /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
         /// more than the maximum number may be returned.
@@ -79,6 +113,22 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(gameType, "gameType");
 
             return await this.GetPagedNumberAsync<ChannelModel>("types/" + gameType.id + "/channels", maxResults);
+        }
+
+        /// <summary>
+        /// Gets all channels playing the specified game type. The search can be limited to a maximum number of results to speed
+        /// up the operation as it can take a long time on large channels. This maximum number is a lower threshold and slightly
+        /// more than the maximum number may be returned.
+        /// </summary>
+        /// <param name="gameType">The game type to search for</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>All channels with the specified game type</returns>
+        public async Task GetChannelsByGameType(GameTypeSimpleModel gameType, Func<IEnumerable<ChannelModel>, Task> processResults, uint maxResults = 1)
+        {
+            Validator.ValidateVariable(gameType, "gameType");
+
+            await this.GetPagedNumberAsync<ChannelModel>("types/" + gameType.id + "/channels", processResults, maxResults);
         }
     }
 }

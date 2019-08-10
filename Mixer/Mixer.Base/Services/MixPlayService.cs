@@ -40,6 +40,7 @@ namespace Mixer.Base.Services
         /// Gets all of the owned games for the specified channel.
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The games owned by the channel</returns>
         public async Task<IEnumerable<MixPlayGameListingModel>> GetOwnedMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
@@ -51,6 +52,7 @@ namespace Mixer.Base.Services
         /// Gets all of the shared games for the specified channel.
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The games shared with the channel</returns>
         public async Task<IEnumerable<MixPlayGameListingModel>> GetSharedMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
@@ -62,6 +64,7 @@ namespace Mixer.Base.Services
         /// Gets all of the games where the channel owner has editor permissions.
         /// </summary>
         /// <param name="channel">The channel to get games for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The games that have editor permissions set for the Channel Owner</returns>
         public async Task<IEnumerable<MixPlayGameListingModel>> GetEditorMixPlayGames(ChannelModel channel, uint maxResults = uint.MaxValue)
         {
@@ -128,11 +131,12 @@ namespace Mixer.Base.Services
         /// Gets the MixPlay game versions for the specified game.
         /// </summary>
         /// <param name="game">The MixPlay game to get versions for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The MixPlay game versions</returns>
-        public async Task<IEnumerable<MixPlayGameVersionModel>> GetMixPlayGameVersions(MixPlayGameModel game)
+        public async Task<IEnumerable<MixPlayGameVersionModel>> GetMixPlayGameVersions(MixPlayGameModel game, uint maxResults = uint.MaxValue)
         {
             Validator.ValidateVariable(game, "game");
-            return await this.GetPagedNumberAsync<MixPlayGameVersionModel>("interactive/games/" + game.id + "/versions");
+            return await this.GetPagedNumberAsync<MixPlayGameVersionModel>("interactive/games/" + game.id + "/versions", maxResults);
         }
 
         /// <summary>

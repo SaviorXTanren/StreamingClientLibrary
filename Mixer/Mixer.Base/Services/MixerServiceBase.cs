@@ -54,13 +54,41 @@ namespace Mixer.Base.Services
         /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
         /// <param name="linkPagesAvailable">Whether the link pages header property exists</param>
         /// <returns>A type-casted list of objects of the contents of the response</returns>
-        public async Task<IEnumerable<T>> GetPagedNumberAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
+        protected internal async Task<IEnumerable<T>> GetPagedNumberAsync<T>(string requestUri, uint maxResults = 1, bool linkPagesAvailable = true)
         {
             List<T> results = new List<T>();
+            try
+            {
+                await this.GetPagedNumberAsync(requestUri, (IEnumerable<T> pagedResults) =>
+                {
+                    results.AddRange(pagedResults);
+                    return Task.FromResult(0);
+                },
+                maxResults, linkPagesAvailable);
+                return results;
+            }
+            catch (HttpRateLimitedRestRequestException ex)
+            {
+                ex.PartialData = results;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for paged results that are returned via the specified function.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
+        /// <param name="linkPagesAvailable">Whether the link pages header property exists</param>
+        /// <returns>A type-casted list of objects of the contents of the response</returns>
+        protected async Task GetPagedNumberAsync<T>(string requestUri, Func<IEnumerable<T>, Task> processResults, uint maxResults = 1, bool linkPagesAvailable = true)
+        {
             int currentPage = 0;
             int pageTotal = 0;
+            int totalItems = 0;
 
-            while (currentPage <= pageTotal && results.Count < maxResults)
+            while (currentPage <= pageTotal && totalItems < maxResults)
             {
                 string currentRequestUri = requestUri;
                 if (pageTotal > 0)
@@ -89,9 +117,15 @@ namespace Mixer.Base.Services
                 try
                 {
                     HttpResponseMessage response = await this.GetAsync(currentRequestUri);
-
                     T[] pagedResults = await response.ProcessResponse<T[]>();
-                    results.AddRange(pagedResults);
+                    if (pagedResults.Length > 0)
+                    {
+                        totalItems += pagedResults.Length;
+                        if (processResults != null)
+                        {
+                            await processResults(pagedResults);
+                        }
+                    }
                     currentPage++;
 
                     if (linkPagesAvailable)
@@ -110,19 +144,16 @@ namespace Mixer.Base.Services
                             }
                         }
                     }
-                    else if (pagedResults.Count() > 0)
+                    else if (pagedResults.Length > 0)
                     {
                         pageTotal++;
                     }
                 }
-                catch (HttpRateLimitedRestRequestException ex)
+                catch (HttpRateLimitedRestRequestException)
                 {
-                    ex.PartialData = results;
                     throw;
                 }
             }
-
-            return results;
         }
 
         /// <summary>
@@ -131,10 +162,37 @@ namespace Mixer.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
         /// <returns>A type-casted list of objects of the contents of the response</returns>
-        public async Task<IEnumerable<T>> GetPagedContinuationAsync<T>(string requestUri, uint maxResults = 1)
+        protected async Task<IEnumerable<T>> GetPagedContinuationAsync<T>(string requestUri, uint maxResults = 1)
         {
             List<T> results = new List<T>();
+            try
+            {
+                await this.GetPagedContinuationAsync(requestUri, (IEnumerable<T> pagedResults) =>
+                {
+                    results.AddRange(pagedResults);
+                    return Task.FromResult(0);
+                },
+                maxResults);
+                return results;
+            }
+            catch (HttpRateLimitedRestRequestException ex)
+            {
+                ex.PartialData = results;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for paged results that are returned via the specified function.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="processResults">The function to process results as they come in</param>
+        /// <param name="maxResults">The maximum results to return. The total results returned can exceed this value if more results are found within the pages acquired.</param>
+        /// <returns>A type-casted list of objects of the contents of the response</returns>
+        protected async Task GetPagedContinuationAsync<T>(string requestUri, Func<IEnumerable<T>, Task> processResults, uint maxResults = 1)
+        {
             string continuationToken = null;
+            int totalItems = 0;
 
             do
             {
@@ -167,7 +225,14 @@ namespace Mixer.Base.Services
                     HttpResponseMessage response = await this.GetAsync(currentRequestUri);
 
                     T[] pagedResults = await response.ProcessResponse<T[]>();
-                    results.AddRange(pagedResults);
+                    if (pagedResults.Length > 0)
+                    {
+                        totalItems += pagedResults.Length;
+                        if (processResults != null)
+                        {
+                            await processResults(pagedResults);
+                        }
+                    }
 
                     continuationToken = null;
 
@@ -192,14 +257,11 @@ namespace Mixer.Base.Services
                         }
                     }
                 }
-                catch (HttpRateLimitedRestRequestException ex)
+                catch (HttpRateLimitedRestRequestException)
                 {
-                    ex.PartialData = results;
                     throw;
                 }
-            } while (results.Count < maxResults && !string.IsNullOrEmpty(continuationToken));
-
-            return results;
+            } while (totalItems < maxResults && !string.IsNullOrEmpty(continuationToken));
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace StreamingClient.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A response message of the request</returns>
-        public async Task<HttpResponseMessage> GetAsync(string requestUri)
+        protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -48,7 +48,7 @@ namespace StreamingClient.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> GetAsync<T>(string requestUri)
+        protected async Task<T> GetAsync<T>(string requestUri)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -69,7 +69,7 @@ namespace StreamingClient.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A JObject of the contents of the response</returns>
-        public async Task<JObject> GetJObjectAsync(string requestUri)
+        protected async Task<JObject> GetJObjectAsync(string requestUri)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -90,7 +90,7 @@ namespace StreamingClient.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A string of the contents of the response</returns>
-        public async Task<string> GetStringAsync(string requestUri)
+        protected async Task<string> GetStringAsync(string requestUri)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -112,7 +112,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PostAsync<T>(string requestUri, bool autoRefreshToken = true)
+        protected async Task<T> PostAsync<T>(string requestUri, bool autoRefreshToken = true)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
@@ -135,7 +135,7 @@ namespace StreamingClient.Base.Services
         /// <param name="content">The content to send</param>
         /// <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
         /// <returns>A response message of the request</returns>
-        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, bool autoRefreshToken = true)
+        protected async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, bool autoRefreshToken = true)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
@@ -158,7 +158,7 @@ namespace StreamingClient.Base.Services
         /// <param name="content">The content to send</param>
         /// <param name="autoRefreshToken">Whether to auto refresh the OAuth token</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PostAsync<T>(string requestUri, HttpContent content, bool autoRefreshToken = true)
+        protected async Task<T> PostAsync<T>(string requestUri, HttpContent content, bool autoRefreshToken = true)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient(autoRefreshToken))
             {
@@ -179,7 +179,7 @@ namespace StreamingClient.Base.Services
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PutAsync<T>(string requestUri)
+        protected async Task<T> PutAsync<T>(string requestUri)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -201,7 +201,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>A response message of the request</returns>
-        public async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
+        protected async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -223,7 +223,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PutAsync<T>(string requestUri, HttpContent content)
+        protected async Task<T> PutAsync<T>(string requestUri, HttpContent content)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -245,7 +245,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>A response message of the request</returns>
-        public async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
+        protected async Task<HttpResponseMessage> PatchAsync(string requestUri, HttpContent content)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -267,7 +267,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
+        protected async Task<T> PatchAsync<T>(string requestUri, HttpContent content)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -289,7 +289,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>Whether the deletion was successful</returns>
-        public async Task<bool> DeleteAsync(string requestUri, HttpContent content = null)
+        protected async Task<bool> DeleteAsync(string requestUri, HttpContent content = null)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
@@ -311,7 +311,7 @@ namespace StreamingClient.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="content">The content to send</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> DeleteAsync<T>(string requestUri, HttpContent content = null)
+        protected async Task<T> DeleteAsync<T>(string requestUri, HttpContent content = null)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
