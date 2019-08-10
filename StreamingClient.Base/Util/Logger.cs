@@ -105,18 +105,41 @@ namespace StreamingClient.Base.Util
         }
 
         /// <summary>
-        /// Logs the specified exception.
+        /// Logs the specified exception at the Error level.
         /// </summary>
         /// <param name="ex">The exception to log</param>
         /// <param name="includeStackTrace">Whether to include a full stack trace</param>
         public static void Log(Exception ex, bool includeStackTrace = false)
+        {
+            Logger.Log(LogLevel.Error, ex, includeStackTrace);
+        }
+
+        /// <summary>
+        /// Logs the specified exception.
+        /// </summary>
+        /// <param name="level">The level of the log</param>
+        /// <param name="ex">The exception to log</param>
+        /// <param name="includeStackTrace">Whether to include a full stack trace</param>
+        public static void Log(LogLevel level, Exception ex, bool includeStackTrace = false)
         {
             string log = ex.ToString();
             if (includeStackTrace)
             {
                 log += Environment.NewLine + "Full Stack:" + Environment.StackTrace;
             }
-            Logger.Log(LogLevel.Error, log);
+            Logger.Log(level, log);
+        }
+
+        /// <summary>
+        /// Returns whether the current application is in debug mode or not
+        /// </summary>
+        /// <returns>Whether the current application is in debug mode or not</returns>
+        public static bool IsDebug()
+        {
+            #if DEBUG
+                return true;
+            #endif
+                return false;
         }
     }
 }
