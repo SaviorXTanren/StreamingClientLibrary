@@ -12,14 +12,14 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <param name="milliseconds">The total milliseconds in UTC Unix time</param>
         /// <returns>The equivalent DateTimeOffset</returns>
-        public static DateTimeOffset FromUTCUnixTimeMilliseconds(this long milliseconds) { return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).ToOffset(DateTimeOffset.Now.Offset); }
+        public static DateTimeOffset FromUTCUnixTimeMilliseconds(long milliseconds) { return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).ToOffset(DateTimeOffset.Now.Offset); }
 
         /// <summary>
         /// Creates a DateTimeOffset from an ISO 8601 string.
         /// </summary>
         /// <param name="dateTime">The total milliseconds in ISO 8601 time</param>
         /// <returns>The equivalent DateTimeOffset</returns>
-        public static DateTimeOffset FromUTCISO8601String(this string dateTime) { return DateTimeOffset.Parse(dateTime).ToOffset(DateTimeOffset.Now.Offset); }
+        public static DateTimeOffset FromUTCISO8601String(string dateTime) { return DateTimeOffset.Parse(dateTime).ToOffset(DateTimeOffset.Now.Offset); }
 
         /// <summary>
         /// Creates an ISO 8601 string.

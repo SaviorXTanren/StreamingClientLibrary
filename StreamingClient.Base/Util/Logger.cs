@@ -79,7 +79,7 @@ namespace StreamingClient.Base.Util
         public static void SetLogLevel(LogLevel level) { Logger.level = level; }
 
         /// <summary>
-        /// Logs the specified message.
+        /// Logs the specified message at the Information level.
         /// </summary>
         /// <param name="message">The message to log</param>
         public static void Log(string message)
@@ -108,9 +108,15 @@ namespace StreamingClient.Base.Util
         /// Logs the specified exception.
         /// </summary>
         /// <param name="ex">The exception to log</param>
-        public static void Log(Exception ex)
+        /// <param name="includeStackTrace">Whether to include a full stack trace</param>
+        public static void Log(Exception ex, bool includeStackTrace = false)
         {
-            Logger.Log(LogLevel.Error, ex.ToString());
+            string log = ex.ToString();
+            if (includeStackTrace)
+            {
+                log += Environment.NewLine + "Full Stack:" + Environment.StackTrace;
+            }
+            Logger.Log(LogLevel.Error, log);
         }
     }
 }

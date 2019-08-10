@@ -566,11 +566,12 @@
             <param name="level">The level of the log</param>
             <param name="message">The message to log</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception)">
+        <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception,System.Boolean)">
             <summary>
             Logs the specified exception.
             </summary>
             <param name="ex">The exception to log</param>
+            <param name="includeStackTrace">Whether to include a full stack trace</param>
         </member>
         <member name="T:StreamingClient.Base.Util.NameAttribute">
             <summary>
