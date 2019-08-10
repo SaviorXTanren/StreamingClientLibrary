@@ -33,6 +33,43 @@ namespace Mixer.Base.UnitTests
         }
 
         [TestMethod]
+        public void GetOnlineChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 150);
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetPartneredOnlineChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels("partnered:eq:true", maxResults: 50);
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+            });
+        }
+
+        [TestMethod]
+        public void GetSpecificChannels()
+        {
+            TestWrapper(async (MixerConnection connection) =>
+            {
+                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(new List<uint>() { 41088881, 10961439, 31961586 });
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+
+                channels = await connection.Channels.GetChannelsFromUsers(new List<uint>() { 49048475, 14128065, 39072213 });
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+            });
+        }
+
+        [TestMethod]
         public void GetChannelForUser()
         {
             TestWrapper(async (MixerConnection connection) =>
@@ -86,32 +123,6 @@ namespace Mixer.Base.UnitTests
             TestWrapper(async (MixerConnection connection) =>
             {
                 IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetFeaturedChannels();
-                Assert.IsNotNull(channels);
-                Assert.IsTrue(channels.Count() > 0);
-            });
-        }
-
-        [TestMethod]
-        public void GetOnlineChannels()
-        {
-            TestWrapper(async (MixerConnection connection) =>
-            {
-                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(maxResults: 150);
-                Assert.IsNotNull(channels);
-                Assert.IsTrue(channels.Count() > 0);
-            });
-        }
-
-        [TestMethod]
-        public void GetChannels()
-        {
-            TestWrapper(async (MixerConnection connection) =>
-            {
-                IEnumerable<ExpandedChannelModel> channels = await connection.Channels.GetChannels(new List<uint>() { 41088881, 10961439, 31961586 });
-                Assert.IsNotNull(channels);
-                Assert.IsTrue(channels.Count() > 0);
-
-                channels = await connection.Channels.GetChannelsFromUsers(new List<uint>() { 49048475, 14128065, 39072213 });
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
             });

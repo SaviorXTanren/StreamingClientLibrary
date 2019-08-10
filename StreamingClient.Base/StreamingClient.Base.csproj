@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors></Authors>
-    <Version>0.1.0.2</Version>
+    <Version>0.1.0.4</Version>
     <Product>streaming-client-shared-library</Product>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
@@ -15,8 +15,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId></PackageId>
     <Company />
-    <AssemblyVersion>0.1.0.2</AssemblyVersion>
-    <FileVersion>0.1.0.2</FileVersion>
+    <AssemblyVersion>0.1.0.4</AssemblyVersion>
+    <FileVersion>0.1.0.4</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

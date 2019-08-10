@@ -555,7 +555,7 @@
         </member>
         <member name="M:StreamingClient.Base.Util.Logger.Log(System.String)">
             <summary>
-            Logs the specified message.
+            Logs the specified message at the Information level.
             </summary>
             <param name="message">The message to log</param>
         </member>
@@ -568,10 +568,24 @@
         </member>
         <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception,System.Boolean)">
             <summary>
-            Logs the specified exception.
+            Logs the specified exception at the Error level.
             </summary>
             <param name="ex">The exception to log</param>
             <param name="includeStackTrace">Whether to include a full stack trace</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.Exception,System.Boolean)">
+            <summary>
+            Logs the specified exception.
+            </summary>
+            <param name="level">The level of the log</param>
+            <param name="ex">The exception to log</param>
+            <param name="includeStackTrace">Whether to include a full stack trace</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.Logger.IsDebug">
+            <summary>
+            Returns whether the current application is in debug mode or not
+            </summary>
+            <returns>Whether the current application is in debug mode or not</returns>
         </member>
         <member name="T:StreamingClient.Base.Util.NameAttribute">
             <summary>
@@ -1016,19 +1030,19 @@
             <param name="content">The text content to include</param>
             <returns></returns>
         </member>
-        <member name="T:StreamingClient.Base.Web.LocalOAuthHttpListenerService">
+        <member name="T:StreamingClient.Base.Web.LocalOAuthHttpListenerServer">
             <summary>
-            An Http listening service for processing OAuth requests.
+            An Http listening server for processing OAuth requests.
             </summary>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.#ctor(System.String,System.String)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String,System.String)">
             <summary>
             Creates a new instance of the LocalOAuthHttpListenerService with the specified address.
             </summary>
             <param name="address">The address to listen to</param>
             <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.#ctor(System.String,System.String,System.String)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String,System.String,System.String)">
             <summary>
             Creates a new instance of the LocalOAuthHttpListenerService with the specified address &amp; login response.
             </summary>
@@ -1036,14 +1050,14 @@
             <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
             <param name="successResponse">The response to send upon successfully obtaining an authorization token</param>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.WaitForAuthorizationCode(System.Int32)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.WaitForAuthorizationCode(System.Int32)">
             <summary>
             Waits for a successful authorization response from the OAuth service.
             </summary>
             <param name="secondsToWait">The total number of seconds to wait</param>
             <returns>The authorization token from the OAuth service</returns>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerService.ProcessConnection(System.Net.HttpListenerContext)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.ProcessConnection(System.Net.HttpListenerContext)">
             <summary>
             Processes an http request.
             </summary>
