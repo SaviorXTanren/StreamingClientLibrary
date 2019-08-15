@@ -452,12 +452,12 @@ namespace Mixer.Base
         /// <param name="clientID">The ID of the client application</param>
         /// <param name="scopes">the scopes to request</param>
         /// <param name="oauthListenerURL">The URI to redirect to after authorization</param>
-        /// <param name="loginSuccessHtmlPageFilePath">The HTML to show upon successful login</param>
+        /// <param name="successResponse">The HTML to show upon successful login</param>
         /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
         /// <returns>The connection to Mixer</returns>
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string successResponse = null)
         {
-            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, oauthListenerURL: oauthListenerURL, loginSuccessHtmlPageFilePath: loginSuccessHtmlPageFilePath);
+            return await ConnectViaLocalhostOAuthBrowser(clientID, null, scopes, forceApprovalPrompt, oauthListenerURL: oauthListenerURL, successResponse: successResponse);
         }
 
         /// <summary>
@@ -467,15 +467,15 @@ namespace Mixer.Base
         /// <param name="clientSecret">The secret of the client application</param>
         /// <param name="scopes">the scopes to request</param>
         /// <param name="oauthListenerURL">The URI to redirect to after authorization</param>
-        /// <param name="loginSuccessHtmlPageFilePath">The HTML to show upon successful login</param>
+        /// <param name="successResponse">The HTML to show upon successful login</param>
         /// <param name="forceApprovalPrompt">Whether to force the user to approve</param>
         /// <returns>The connection to Mixer</returns>
-        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string loginSuccessHtmlPageFilePath = null)
+        public static async Task<MixerConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string successResponse = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, loginSuccessHtmlPageFilePath);
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
             oauthServer.Start();
 
             string url = await MixerConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);
