@@ -129,17 +129,5 @@ namespace StreamingClient.Base.Util
             }
             Logger.Log(level, log);
         }
-
-        /// <summary>
-        /// Returns whether the current application is in debug mode or not
-        /// </summary>
-        /// <returns>Whether the current application is in debug mode or not</returns>
-        public static bool IsDebug()
-        {
-            #if DEBUG
-                return true;
-            #endif
-                return false;
-        }
     }
 }
