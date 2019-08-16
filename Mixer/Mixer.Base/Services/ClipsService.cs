@@ -31,7 +31,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(broadcast, "broadcast");
 
             HttpResponseMessage response = await this.GetAsync("clips/broadcasts/" + broadcast.id.ToString() + "/canClip");
-            return (response.StatusCode == HttpStatusCode.OK);
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Mixer.Base.Services
             Validator.ValidateString(title, "title");
 
             HttpResponseMessage response = await this.PostAsync("clips/" + shareableClipID + "/metadata", this.CreateContentFromString(title));
-            return (response.StatusCode == HttpStatusCode.OK);
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>

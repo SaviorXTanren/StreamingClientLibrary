@@ -666,7 +666,7 @@ namespace Mixer.Base.Services
             if (rolesToRemove != null) { obj.Add("remove", JToken.FromObject(rolesToRemove)); }
 
             HttpResponseMessage response = await this.PatchAsync("channels/" + channel.id + "/users/" + user.id, this.CreateContentFromObject(obj));
-            return (response.StatusCode == System.Net.HttpStatusCode.OK);
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>

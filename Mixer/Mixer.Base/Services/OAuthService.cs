@@ -51,7 +51,7 @@ namespace Mixer.Base.Services
             Validator.ValidateVariable(shortCode, "shortCode");
 
             HttpResponseMessage response = await this.GetAsync("oauth/shortcode/check/" + shortCode.handle);
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
                 JObject jobject = JObject.Parse(await response.Content.ReadAsStringAsync());
                 return (string)jobject["code"];
