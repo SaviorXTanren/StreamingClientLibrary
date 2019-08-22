@@ -581,12 +581,6 @@
             <param name="ex">The exception to log</param>
             <param name="includeStackTrace">Whether to include a full stack trace</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.IsDebug">
-            <summary>
-            Returns whether the current application is in debug mode or not
-            </summary>
-            <returns>Whether the current application is in debug mode or not</returns>
-        </member>
         <member name="T:StreamingClient.Base.Util.NameAttribute">
             <summary>
             An attribute that tracks the public-facing name of an item.
