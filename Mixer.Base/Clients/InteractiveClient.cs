@@ -137,7 +137,7 @@ namespace Mixer.Base.Clients
         }
 
         /// <summary>
-        /// Connects to the Constellation service.
+        /// Connects to the Interactive service.
         /// </summary>
         /// <param name="endpoint">The endpoint to connect to</param>
         /// <returns>Whether the operation succeeded</returns>
