@@ -117,15 +117,18 @@ namespace StreamingClient.Base.Web
                         startIndex = listenerContext.Request.RawUrl.IndexOf(searchString);
                     }
                 }
-
-                string token = listenerContext.Request.RawUrl.Substring(startIndex + searchString.Length);
-
-                int endIndex = token.IndexOf("&");
-                if (endIndex > 0)
+                
+                if (startIndex >= 0)
                 {
-                    token = token.Substring(0, endIndex);
+                    string token = listenerContext.Request.RawUrl.Substring(startIndex + searchString.Length);
+
+                    int endIndex = token.IndexOf("&");
+                    if (endIndex > 0)
+                    {
+                        token = token.Substring(0, endIndex);
+                    }
+                    return token;
                 }
-                return token;
             }
             return null;
         }
