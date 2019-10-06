@@ -15,6 +15,13 @@ namespace StreamingClient.Base.Util
         public static DateTimeOffset FromUTCUnixTimeMilliseconds(long milliseconds) { return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).ToOffset(DateTimeOffset.Now.Offset); }
 
         /// <summary>
+        /// Creates a DateTimeOffset from a UTC Unix time in seconds.
+        /// </summary>
+        /// <param name="seconds">The total secpnds in UTC Unix time</param>
+        /// <returns>The equivalent DateTimeOffset</returns>
+        public static DateTimeOffset FromUTCUnixTimeSeconds(long seconds) { return DateTimeOffset.FromUnixTimeSeconds(seconds).ToOffset(DateTimeOffset.Now.Offset); }
+
+        /// <summary>
         /// Creates a DateTimeOffset from an ISO 8601 string.
         /// </summary>
         /// <param name="dateTime">The total milliseconds in ISO 8601 time</param>
