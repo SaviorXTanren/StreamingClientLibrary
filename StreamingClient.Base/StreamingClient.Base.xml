@@ -240,6 +240,13 @@
             <param name="milliseconds">The total milliseconds in UTC Unix time</param>
             <returns>The equivalent DateTimeOffset</returns>
         </member>
+        <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.FromUTCUnixTimeSeconds(System.Int64)">
+            <summary>
+            Creates a DateTimeOffset from a UTC Unix time in seconds.
+            </summary>
+            <param name="seconds">The total secpnds in UTC Unix time</param>
+            <returns>The equivalent DateTimeOffset</returns>
+        </member>
         <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.FromUTCISO8601String(System.String)">
             <summary>
             Creates a DateTimeOffset from an ISO 8601 string.
