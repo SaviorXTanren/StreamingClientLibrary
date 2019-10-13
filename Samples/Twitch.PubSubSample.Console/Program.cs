@@ -61,6 +61,7 @@ namespace Twitch.PubSubSample.Console
                             pubSub.OnReconnectReceived += PubSub_OnReconnectReceived;
                             pubSub.OnResponseReceived += PubSub_OnResponseReceived;
                             pubSub.OnMessageReceived += PubSub_OnMessageReceived;
+                            pubSub.OnWhisperReceived += PubSub_OnWhisperReceived;
                             pubSub.OnPongReceived += PubSub_OnPongReceived;
 
                             await pubSub.Connect();
@@ -117,16 +118,12 @@ namespace Twitch.PubSubSample.Console
 
         private static void PubSub_OnMessageReceived(object sender, PubSubMessagePacketModel packet)
         {
-            System.Console.WriteLine(string.Format("MESSAGE: {0} {1} ", packet.type, packet.data));
+            System.Console.WriteLine(string.Format("MESSAGE: {0} {1} ", packet.type, packet.message));
+        }
 
-            if (packet.topicType == PubSubTopicsEnum.UserWhispers)
-            {
-                PubSubWhisperEventModel whisper = packet.messageJObj.ToObject<PubSubWhisperEventModel>();
-                if (whisper != null)
-                {
-                    System.Console.WriteLine("WHISPER: " + whisper.body);
-                }
-            }
+        private static void PubSub_OnWhisperReceived(object sender, PubSubWhisperEventModel whisper)
+        {
+            System.Console.WriteLine("WHISPER: " + whisper.body);
         }
 
         private static void PubSub_OnPongReceived(object sender, System.EventArgs e)

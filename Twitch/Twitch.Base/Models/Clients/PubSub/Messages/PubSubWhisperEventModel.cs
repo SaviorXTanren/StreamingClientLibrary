@@ -8,15 +8,15 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
     public class PubSubWhisperEventModel
     {
         /// <summary>
-        /// The type of message.
+        /// The ID of the event
         /// </summary>
-        public string type { get; set; }
+        public uint id { get; set; }
         /// <summary>
-        /// The data of the message.
+        /// The message ID
         /// </summary>
-        public JObject data { get; set; }
+        public string message_id { get; set; }
         /// <summary>
-        /// The ID
+        /// The thread ID
         /// </summary>
         public string thread_id { get; set; }
         /// <summary>
@@ -34,14 +34,68 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// <summary>
         /// The tags of the message.
         /// </summary>
-        public JObject tags { get; set; }
+        public PubSubWhisperEventTagsModel tags { get; set; }
         /// <summary>
         /// Information about the recipient.
         /// </summary>
-        public JObject recipient { get; set; }
+        public PubSubWhisperEventRecipientModel recipient { get; set; }
         /// <summary>
         /// The nonce tracker ID.
         /// </summary>
         public string nonce { get; set; }
+    }
+
+    /// <summary>
+    /// The tag information of a whisper.
+    /// </summary>
+    public class PubSubWhisperEventTagsModel
+    {
+        /// <summary>
+        /// The login of the user.
+        /// </summary>
+        public string login { get; set; }
+        /// <summary>
+        /// The display name of the user.
+        /// </summary>
+        public string display_name { get; set; }
+        /// <summary>
+        /// The color of the user.
+        /// </summary>
+        public string color { get; set; }
+        /// <summary>
+        /// The badges of the user.
+        /// </summary>
+        public JArray badges { get; set; }
+        /// <summary>
+        /// The emotes of the message.
+        /// </summary>
+        public JArray emotes { get; set; }
+    }
+
+    /// <summary>
+    /// The recipient information of a whisper.
+    /// </summary>
+    public class PubSubWhisperEventRecipientModel
+    {
+        /// <summary>
+        /// The ID of the user.
+        /// </summary>
+        public uint id { get; set; }
+        /// <summary>
+        /// The name of the user.
+        /// </summary>
+        public string username { get; set; }
+        /// <summary>
+        /// The display name of the user.
+        /// </summary>
+        public string display_name { get; set; }
+        /// <summary>
+        /// The color of the user.
+        /// </summary>
+        public string color { get; set; }
+        /// <summary>
+        /// The profile image of the user.
+        /// </summary>
+        public string profile_image { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Twitch.Base.Models.Clients.PubSub;
+using Twitch.Base.Models.Clients.PubSub.Messages;
 
 namespace Twitch.Base.Clients
 {
@@ -37,6 +38,35 @@ namespace Twitch.Base.Clients
         /// Invoked when a message packet is received.
         /// </summary>
         public event EventHandler<PubSubMessagePacketModel> OnMessageReceived;
+
+        /// <summary>
+        /// Invoked when a whisper event is received.
+        /// </summary>
+        public event EventHandler<PubSubWhisperEventModel> OnWhisperReceived;
+        /// <summary>
+        /// Invoked whena a bits v1 event is received.
+        /// </summary>
+        public event EventHandler<PubSubBitsEventV1Model> OnBitsV1Received;
+        /// <summary>
+        /// Invoked when a bits v2 event is received.
+        /// </summary>
+        public event EventHandler<PubSubBitsEventV2Model> OnBitsV2Received;
+        /// <summary>
+        /// Invoked when a bits badge event is received.
+        /// </summary>
+        public event EventHandler<PubSubBitBadgeEventModel> OnBitsBadgeReceived;
+        /// <summary>
+        /// Invoked when a subscription/resubscription event is received.
+        /// </summary>
+        public event EventHandler<PubSubSubscriptionsEventModel> OnSubscribedReceived;
+        /// <summary>
+        /// Invoked when a subscription gifted event is received.
+        /// </summary>
+        public event EventHandler<PubSubSubscriptionsGiftEventModel> OnSubscriptionsGiftedReceived;
+        /// <summary>
+        /// Invoked when a commerce event is received.
+        /// </summary>
+        public event EventHandler<PubSubCommerceEventModel> OnCommerceReceived;
 
         private TwitchConnection connection;
 
@@ -97,8 +127,51 @@ namespace Twitch.Base.Clients
                         this.OnResponseReceived?.Invoke(this, JSONSerializerHelper.DeserializeFromString<PubSubResponsePacketModel>(packetText));
                         break;
                     case "MESSAGE":
-                        PubSubMessagePacketModel message = JSONSerializerHelper.DeserializeFromString<PubSubMessagePacketModel>(packetText);
-                        this.OnMessageReceived?.Invoke(this, message);
+                        PubSubMessagePacketModel messagePacket = JSONSerializerHelper.DeserializeFromString<PubSubMessagePacketModel>(packetText);
+                        this.OnMessageReceived?.Invoke(this, messagePacket);
+                        try
+                        {
+                            PubSubMessagePacketDataModel messageData = messagePacket.messageData;
+                            if (messageData != null)
+                            {
+                                if (messagePacket.topicType == PubSubTopicsEnum.UserWhispers)
+                                {
+                                    this.OnWhisperReceived?.Invoke(this, messageData.data_object.ToObject<PubSubWhisperEventModel>());
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV1)
+                                {
+                                    this.OnBitsV1Received?.Invoke(this, messageData.data_object.ToObject<PubSubBitsEventV1Model>());
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV2)
+                                {
+                                    this.OnBitsV2Received?.Invoke(this, messageData.data_object.ToObject<PubSubBitsEventV2Model>());
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsBadgeUnlocks)
+                                {
+                                    this.OnBitsBadgeReceived?.Invoke(this, messageData.data_object.ToObject<PubSubBitBadgeEventModel>());
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelSubscriptionsV1)
+                                {
+                                    PubSubSubscriptionsEventModel subscription = messageData.data_object.ToObject<PubSubSubscriptionsEventModel>();
+                                    if (subscription.IsGiftedSubscription || subscription.IsAnonymousGiftedSubscription)
+                                    {
+                                        this.OnSubscriptionsGiftedReceived?.Invoke(this, messageData.data_object.ToObject<PubSubSubscriptionsGiftEventModel>());
+                                    }
+                                    else
+                                    {
+                                        this.OnSubscribedReceived?.Invoke(this, subscription);
+                                    }
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelCommerceV1)
+                                {
+                                    this.OnCommerceReceived?.Invoke(this, messageData.data_object.ToObject<PubSubCommerceEventModel>());
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log(ex);
+                        }
                         break;
                     case "PONG":
                         this.OnPongReceived?.Invoke(this, new EventArgs());

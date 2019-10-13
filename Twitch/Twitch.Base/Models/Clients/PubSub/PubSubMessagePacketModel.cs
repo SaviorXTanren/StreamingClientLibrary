@@ -62,5 +62,29 @@ namespace Twitch.Base.Models.Clients.PubSub
         /// </summary>
         [JsonIgnore]
         public JObject messageJObj { get { return (this.message != null) ? JObject.Parse(this.message) : null; } }
+        /// <summary>
+        /// The message contents as a data model.
+        /// </summary>
+        [JsonIgnore]
+        public PubSubMessagePacketDataModel messageData { get { return (this.messageJObj != null) ? this.messageJObj.ToObject<PubSubMessagePacketDataModel>() : null; } }
+    }
+
+    /// <summary>
+    /// The message data for a packet.
+    /// </summary>
+    public class PubSubMessagePacketDataModel
+    {
+        /// <summary>
+        /// The type of data.
+        /// </summary>
+        public string type { get; set; }
+        /// <summary>
+        /// The text data of the message.
+        /// </summary>
+        public string data { get; set; }
+        /// <summary>
+        /// The JObject data of the message.
+        /// </summary>
+        public JObject data_object { get; set; }
     }
 }
