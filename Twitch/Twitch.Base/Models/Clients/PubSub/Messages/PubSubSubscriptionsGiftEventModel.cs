@@ -3,7 +3,7 @@
     /// <summary>
     /// Information about a Subscription Gift.
     /// </summary>
-    public class PubSubSubscriptionsGiftEventModel
+    public class PubSubSubscriptionsGiftEventModel : PubSubSubscriptionsEventModel
     {
         /// <summary>
         /// The total months of the subscription (ONLY FOR SUB GIFT EVENTS).

@@ -58,5 +58,26 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// The message for the subscription.
         /// </summary>
         public JObject sub_message { get; set; }
+
+        /// <summary>
+        /// Whether the event is a subscription.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsSubscription { get { return this.context.Equals("sub"); } }
+        /// <summary>
+        /// Whether the event is a resubscription.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsResubscription { get { return this.context.Equals("resub"); } }
+        /// <summary>
+        /// Whether the event is a gifted subscription.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsGiftedSubscription { get { return this.context.Equals("subgift"); } }
+        /// <summary>
+        /// Whether the event is a anonymous gifted subscription.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsAnonymousGiftedSubscription { get { return this.context.Equals("anonsubgift"); } }
     }
 }
