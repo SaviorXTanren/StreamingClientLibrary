@@ -55,15 +55,15 @@ namespace Mixer.Base.Model.User
         /// <summary>
         /// The minimum XP required for the rank.
         /// </summary>
-        public uint minXp { get; set; }
+        public uint? minXp { get; set; }
         /// <summary>
         /// The current XP for the rank.
         /// </summary>
-        public uint currentXp { get; set; }
+        public uint? currentXp { get; set; }
         /// <summary>
         /// The required XP for the next rank.
         /// </summary>
-        public uint nextLevelXp { get; set; }
+        public uint? nextLevelXp { get; set; }
 
         /// <summary>
         /// The small version of the asset URL for the rank.
