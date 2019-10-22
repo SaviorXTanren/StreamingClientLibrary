@@ -2,11 +2,9 @@
 using Mixer.Base.Clients;
 using Mixer.Base.Model.Channel;
 using Mixer.Base.Model.User;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mixer.ConstellationSample.Console
