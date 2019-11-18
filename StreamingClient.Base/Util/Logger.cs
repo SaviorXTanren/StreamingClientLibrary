@@ -129,5 +129,19 @@ namespace StreamingClient.Base.Util
             }
             Logger.Log(level, log);
         }
+
+        /// <summary>
+        /// Forcefully logs the specified message.
+        /// </summary>
+        /// <param name="level">The level of the log</param>
+        /// <param name="message">The message to log</param>
+        public static void ForceLog(LogLevel level, string message)
+        {
+            try
+            {
+                Logger.LogOccurred(null, new Log(level, message));
+            }
+            catch (Exception) { }
+        }
     }
 }
