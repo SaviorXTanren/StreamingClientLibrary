@@ -306,7 +306,7 @@ namespace Mixer.Base.Clients
 
             await base.Connect(endpoint);
 
-            await this.WaitForSuccess(() => { return this.Connected; });
+            await this.WaitForSuccess(() => { return this.Connected; }, 30);
 
             this.OnEventOccurred -= ConstellationClient_HelloMethodHandler;
 
