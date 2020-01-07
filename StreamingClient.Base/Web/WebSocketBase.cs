@@ -206,7 +206,7 @@ namespace StreamingClient.Base.Web
         /// <param name="valueToCheck">Where the operation was successful</param>
         /// <param name="secondsToWait">The total amount of seconds to wait for success</param>
         /// <returns>An awaitable task</returns>
-        protected async Task WaitForSuccess(Func<bool> valueToCheck, int secondsToWait = 5)
+        protected async Task WaitForSuccess(Func<bool> valueToCheck, int secondsToWait = 15)
         {
             int loops = (secondsToWait * 1000) / 100;
             for (int i = 0; i < loops && !valueToCheck(); i++)

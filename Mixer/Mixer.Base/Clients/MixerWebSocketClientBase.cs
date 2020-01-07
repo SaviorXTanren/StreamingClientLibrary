@@ -114,7 +114,7 @@ namespace Mixer.Base.Clients
                     return true;
                 }
                 return false;
-            });
+            }, secondsToWait: 5);
 
             this.replyIDListeners.Remove(packet.id);
 
