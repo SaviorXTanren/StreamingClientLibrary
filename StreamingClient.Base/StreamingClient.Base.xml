@@ -588,6 +588,13 @@
             <param name="ex">The exception to log</param>
             <param name="includeStackTrace">Whether to include a full stack trace</param>
         </member>
+        <member name="M:StreamingClient.Base.Util.Logger.ForceLog(StreamingClient.Base.Util.LogLevel,System.String)">
+            <summary>
+            Forcefully logs the specified message.
+            </summary>
+            <param name="level">The level of the log</param>
+            <param name="message">The message to log</param>
+        </member>
         <member name="T:StreamingClient.Base.Util.NameAttribute">
             <summary>
             An attribute that tracks the public-facing name of an item.
