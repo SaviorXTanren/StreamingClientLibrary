@@ -115,6 +115,8 @@ namespace Twitch.Base.Clients
         /// <returns>An awaitable task</returns>
         protected override Task ProcessReceivedPacket(string packetText)
         {
+            Logger.Log(LogLevel.Debug, "Twitch PubSub Packet Received: " + packetText);
+
             PubSubPacketModel packet = JSONSerializerHelper.DeserializeFromString<PubSubPacketModel>(packetText);
             if (packet != null)
             {

@@ -58,15 +58,10 @@ namespace Twitch.Base.Models.Clients.PubSub
         [JsonIgnore]
         public string message { get { return (this.data != null && this.data.ContainsKey("message")) ? this.data["message"].ToString() : null; } }
         /// <summary>
-        /// The message contents as a JObject.
-        /// </summary>
-        [JsonIgnore]
-        public JObject messageJObj { get { return (this.message != null) ? JObject.Parse(this.message) : null; } }
-        /// <summary>
         /// The message contents as a data model.
         /// </summary>
         [JsonIgnore]
-        public PubSubMessagePacketDataModel messageData { get { return (this.messageJObj != null) ? this.messageJObj.ToObject<PubSubMessagePacketDataModel>() : null; } }
+        public PubSubMessagePacketDataModel messageData { get { return (!string.IsNullOrEmpty(this.message)) ? JSONSerializerHelper.DeserializeFromString<PubSubMessagePacketDataModel>(this.message) : null; } }
     }
 
     /// <summary>
@@ -81,7 +76,7 @@ namespace Twitch.Base.Models.Clients.PubSub
         /// <summary>
         /// The text data of the message.
         /// </summary>
-        public string data { get; set; }
+        public JObject data { get; set; }
         /// <summary>
         /// The JObject data of the message.
         /// </summary>
