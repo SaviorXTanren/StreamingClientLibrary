@@ -139,6 +139,10 @@ namespace Twitch.Base
         /// </summary>
         bits__read,
         /// <summary>
+        /// Get channel point redemption events for your channel.
+        /// </summary>
+        channel__read__redemptions,
+        /// <summary>
         /// Get a list of all subscribers to your channel and check if a user is subscribed to your channel
         /// </summary>
         channel__read__subscriptions,

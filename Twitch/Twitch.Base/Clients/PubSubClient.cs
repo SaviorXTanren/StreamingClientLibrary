@@ -23,50 +23,54 @@ namespace Twitch.Base.Clients
         /// <summary>
         /// Invoked when a pong packet is received.
         /// </summary>
-        public event EventHandler OnPongReceived;
+        public event EventHandler OnPongReceived = delegate { };
 
         /// <summary>
         /// Invoked when a reconnect packet is received.
         /// </summary>
-        public event EventHandler OnReconnectReceived;
+        public event EventHandler OnReconnectReceived = delegate { };
 
         /// <summary>
         /// Invoked when a response packet is received.
         /// </summary>
-        public event EventHandler<PubSubResponsePacketModel> OnResponseReceived;
+        public event EventHandler<PubSubResponsePacketModel> OnResponseReceived = delegate { };
         /// <summary>
         /// Invoked when a message packet is received.
         /// </summary>
-        public event EventHandler<PubSubMessagePacketModel> OnMessageReceived;
+        public event EventHandler<PubSubMessagePacketModel> OnMessageReceived = delegate { };
 
         /// <summary>
         /// Invoked when a whisper event is received.
         /// </summary>
-        public event EventHandler<PubSubWhisperEventModel> OnWhisperReceived;
+        public event EventHandler<PubSubWhisperEventModel> OnWhisperReceived = delegate { };
         /// <summary>
         /// Invoked whena a bits v1 event is received.
         /// </summary>
-        public event EventHandler<PubSubBitsEventV1Model> OnBitsV1Received;
+        public event EventHandler<PubSubBitsEventV1Model> OnBitsV1Received = delegate { };
         /// <summary>
         /// Invoked when a bits v2 event is received.
         /// </summary>
-        public event EventHandler<PubSubBitsEventV2Model> OnBitsV2Received;
+        public event EventHandler<PubSubBitsEventV2Model> OnBitsV2Received = delegate { };
         /// <summary>
         /// Invoked when a bits badge event is received.
         /// </summary>
-        public event EventHandler<PubSubBitBadgeEventModel> OnBitsBadgeReceived;
+        public event EventHandler<PubSubBitBadgeEventModel> OnBitsBadgeReceived = delegate { };
         /// <summary>
         /// Invoked when a subscription/resubscription event is received.
         /// </summary>
-        public event EventHandler<PubSubSubscriptionsEventModel> OnSubscribedReceived;
+        public event EventHandler<PubSubSubscriptionsEventModel> OnSubscribedReceived = delegate { };
         /// <summary>
         /// Invoked when a subscription gifted event is received.
         /// </summary>
-        public event EventHandler<PubSubSubscriptionsGiftEventModel> OnSubscriptionsGiftedReceived;
+        public event EventHandler<PubSubSubscriptionsGiftEventModel> OnSubscriptionsGiftedReceived = delegate { };
         /// <summary>
         /// Invoked when a commerce event is received.
         /// </summary>
-        public event EventHandler<PubSubCommerceEventModel> OnCommerceReceived;
+        public event EventHandler<PubSubCommerceEventModel> OnCommerceReceived = delegate { };
+        /// <summary>
+        /// Invoked when a channel points redeemed event is received.
+        /// </summary>
+        public event EventHandler<PubSubChannelPointsRedeemedEventModel> OnChannelPointsRedeemed = delegate { };
 
         private TwitchConnection connection;
 
@@ -154,10 +158,10 @@ namespace Twitch.Base.Clients
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelSubscriptionsV1)
                                 {
-                                    PubSubSubscriptionsEventModel subscription = messageData.data_object.ToObject<PubSubSubscriptionsEventModel>();
+                                    PubSubSubscriptionsEventModel subscription = JSONSerializerHelper.DeserializeFromString<PubSubSubscriptionsEventModel>(messagePacket.message);
                                     if (subscription.IsGiftedSubscription || subscription.IsAnonymousGiftedSubscription)
                                     {
-                                        this.OnSubscriptionsGiftedReceived?.Invoke(this, messageData.data_object.ToObject<PubSubSubscriptionsGiftEventModel>());
+                                        this.OnSubscriptionsGiftedReceived?.Invoke(this, JSONSerializerHelper.DeserializeFromString<PubSubSubscriptionsGiftEventModel>(messagePacket.message));
                                     }
                                     else
                                     {
@@ -167,6 +171,10 @@ namespace Twitch.Base.Clients
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelCommerceV1)
                                 {
                                     this.OnCommerceReceived?.Invoke(this, messageData.data_object.ToObject<PubSubCommerceEventModel>());
+                                }
+                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelPointsRedeemed)
+                                {
+                                    this.OnChannelPointsRedeemed?.Invoke(this, messageData.data_object.ToObject<PubSubChannelPointsRedeemedEventModel>());
                                 }
                             }
                         }

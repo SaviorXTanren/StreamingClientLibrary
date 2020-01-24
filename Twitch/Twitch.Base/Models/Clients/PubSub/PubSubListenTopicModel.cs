@@ -44,6 +44,12 @@ namespace Twitch.Base.Models.Clients.PubSub
         /// </summary>
         [Name("whispers")]
         UserWhispers,
+
+        /// <summary>
+        /// A custom reward is redeemed in a channel. 
+        /// </summary>
+        [Name("channel-points-channel-v1")]
+        ChannelPointsRedeemed,
     }
 
     /// <summary>

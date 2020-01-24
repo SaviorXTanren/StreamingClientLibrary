@@ -17,15 +17,15 @@ namespace StreamingClient.Base.Web
         /// <summary>
         /// Invoked when a packet is sent.
         /// </summary>
-        public event EventHandler<string> OnSentOccurred;
+        public event EventHandler<string> OnSentOccurred = delegate { };
         /// <summary>
         /// Invoked when a text packet is received.
         /// </summary>
-        public event EventHandler<string> OnTextReceivedOccurred;
+        public event EventHandler<string> OnTextReceivedOccurred = delegate { };
         /// <summary>
         /// Invoked when an unexpected disconnection occurs.
         /// </summary>
-        public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred;
+        public event EventHandler<WebSocketCloseStatus> OnDisconnectOccurred = delegate { };
 
         /// <summary>
         /// The web socket connection.
