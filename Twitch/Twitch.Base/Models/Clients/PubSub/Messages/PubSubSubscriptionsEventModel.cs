@@ -41,6 +41,10 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// </summary>
         public string sub_plan_name { get; set; }
         /// <summary>
+        /// The number of months subscribed (Deprecated).
+        /// </summary>
+        public int months { get; set; }
+        /// <summary>
         /// The total months of the subscriptions.
         /// </summary>
         [JsonProperty("cumulative-months")]
