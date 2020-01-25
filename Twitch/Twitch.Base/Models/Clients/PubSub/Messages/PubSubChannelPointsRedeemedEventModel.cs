@@ -15,7 +15,7 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// <summary>
         /// The redemption event data.
         /// </summary>
-        public PubSubChannelPointsRedeemedEventModel Redemption { get; set; }
+        public PubSubChannelPointsRedeemedEventModel redemption { get; set; }
     }
 
     /// <summary>
