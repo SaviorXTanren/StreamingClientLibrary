@@ -76,10 +76,10 @@ namespace Twitch.Base.Models.Clients.PubSub
         /// <summary>
         /// The text data of the message.
         /// </summary>
-        public JObject data { get; set; }
+        public JToken data { get; set; }
         /// <summary>
         /// The JObject data of the message.
         /// </summary>
-        public JObject data_object { get; set; }
+        public JToken data_object { get; set; }
     }
 }
