@@ -4,6 +4,21 @@ using Twitch.Base.Models.NewAPI.Users;
 namespace Twitch.Base.Models.Clients.PubSub.Messages
 {
     /// <summary>
+    /// Information about a channel points redemption event.
+    /// </summary>
+    public class PubSubChannelPointsRedemptionEventModel
+    {
+        /// <summary>
+        /// The time when the event occurred.
+        /// </summary>
+        public string timestamp { get; set; }
+        /// <summary>
+        /// The redemption event data.
+        /// </summary>
+        public PubSubChannelPointsRedeemedEventModel Redemption { get; set; }
+    }
+
+    /// <summary>
     /// Information about channel points redeemed.
     /// </summary>
     public class PubSubChannelPointsRedeemedEventModel

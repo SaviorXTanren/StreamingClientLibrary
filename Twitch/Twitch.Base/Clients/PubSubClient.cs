@@ -70,7 +70,7 @@ namespace Twitch.Base.Clients
         /// <summary>
         /// Invoked when a channel points redeemed event is received.
         /// </summary>
-        public event EventHandler<PubSubChannelPointsRedeemedEventModel> OnChannelPointsRedeemed = delegate { };
+        public event EventHandler<PubSubChannelPointsRedemptionEventModel> OnChannelPointsRedeemed = delegate { };
 
         private TwitchConnection connection;
 
@@ -174,7 +174,7 @@ namespace Twitch.Base.Clients
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelPointsRedeemed)
                                 {
-                                    this.OnChannelPointsRedeemed?.Invoke(this, messageData.data_object.ToObject<PubSubChannelPointsRedeemedEventModel>());
+                                    this.OnChannelPointsRedeemed?.Invoke(this, messageData.data.ToObject<PubSubChannelPointsRedemptionEventModel>());
                                 }
                             }
                         }
