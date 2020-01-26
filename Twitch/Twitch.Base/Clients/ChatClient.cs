@@ -264,7 +264,7 @@ namespace Twitch.Base.Clients
         /// <param name="broadcaster">The broadcaster's channel to use</param>
         /// <param name="targetUser">The target user to purge</param>
         /// <returns>An awaitable Task</returns>
-        public async Task ClearChat(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser)
+        public async Task PurgeUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(targetUser, "targetUser");
@@ -277,11 +277,22 @@ namespace Twitch.Base.Clients
         /// <param name="broadcaster">The broadcaster's channel to use</param>
         /// <param name="targetUser">The target user to purge</param>
         /// <returns>An awaitable Task</returns>
-        public async Task ClearChat(V5.Users.UserModel broadcaster, V5.Users.UserModel targetUser)
+        public async Task PurgeUser(V5.Users.UserModel broadcaster, V5.Users.UserModel targetUser)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(targetUser, "targetUser");
             await this.Send(string.Format("CLEARCHAT #{0} :{1}", broadcaster.name, targetUser.name));
+        }
+
+        /// <summary>
+        /// Clears all messages from chat.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to use</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task ClearChat(V5.Users.UserModel broadcaster)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            await this.Send(string.Format("CLEARCHAT #{0}", broadcaster.name));
         }
 
         /// <summary>
