@@ -388,6 +388,32 @@ namespace Twitch.Base.Clients
         }
 
         /// <summary>
+        /// Bans the specified user in specified broadcaster's channel.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel</param>
+        /// <param name="user">The user to ban</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task UnbanUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            await this.Send(string.Format("PRIVMSG #{0} :.unban {1}", broadcaster.login, user.login));
+        }
+
+        /// <summary>
+        /// Bans the specified user in specified broadcaster's channel.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel</param>
+        /// <param name="user">The user to ban</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task UnbanUser(V5.Users.UserModel broadcaster, V5.Users.UserModel user)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            await this.Send(string.Format("PRIVMSG #{0} :.unban {1}", broadcaster.name, user.name));
+        }
+
+        /// <summary>
         /// Runs a commercial for the specified time length in specified broadcaster's channel.
         /// </summary>
         /// <param name="broadcaster">The broadcaster's channel</param>
