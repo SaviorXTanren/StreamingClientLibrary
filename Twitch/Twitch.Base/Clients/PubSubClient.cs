@@ -146,7 +146,7 @@ namespace Twitch.Base.Clients
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV1)
                                 {
-                                    this.OnBitsV1Received?.Invoke(this, messageData.data_object.ToObject<PubSubBitsEventV1Model>());
+                                    this.OnBitsV1Received?.Invoke(this, messageData.data.ToObject<PubSubBitsEventV1Model>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV2)
                                 {
