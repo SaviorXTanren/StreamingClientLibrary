@@ -17,5 +17,9 @@
         /// The text code for the emote.
         /// </summary>
         public string code { get; set; }
+        /// <summary>
+        /// The image url of the emote.
+        /// </summary>
+        public string url { get { return string.Format("https://static-cdn.jtvnw.net/emoticons/v1/{0}/1.0", this.id); } }
     }
 }
