@@ -289,6 +289,17 @@ namespace Twitch.Base.Clients
         /// </summary>
         /// <param name="broadcaster">The broadcaster's channel to use</param>
         /// <returns>An awaitable Task</returns>
+        public async Task ClearChat(NewAPI.Users.UserModel broadcaster)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            await this.Send(string.Format("CLEARCHAT #{0}", broadcaster.login));
+        }
+
+        /// <summary>
+        /// Clears all messages from chat.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to use</param>
+        /// <returns>An awaitable Task</returns>
         public async Task ClearChat(V5.Users.UserModel broadcaster)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
