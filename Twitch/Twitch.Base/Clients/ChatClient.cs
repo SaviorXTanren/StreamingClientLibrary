@@ -234,6 +234,36 @@ namespace Twitch.Base.Clients
         }
 
         /// <summary>
+        /// Sends a message to the specified broadcaster's channel.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to send the message to</param>
+        /// <param name="user">The user to whisper</param>
+        /// <param name="message">The message to send</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task SendWhisperMessage(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user, string message)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            Validator.ValidateString(message, "message");
+            await this.Send(string.Format("PRIVMSG #{0} :.w {1} {2}", broadcaster.login, user.login, message));
+        }
+
+        /// <summary>
+        /// Sends a message to the specified broadcaster's channel.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to send the message to</param>
+        /// <param name="user">The user to whisper</param>
+        /// <param name="message">The message to send</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task SendWhisperMessage(V5.Users.UserModel broadcaster, V5.Users.UserModel user, string message)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            Validator.ValidateString(message, "message");
+            await this.Send(string.Format("PRIVMSG #{0} :.w {1} {2}", broadcaster.name, user.name, message));
+        }
+
+        /// <summary>
         /// Deletes the specified message.
         /// </summary>
         /// <param name="broadcaster">The broadcaster's channel to use</param>

@@ -36,7 +36,7 @@ namespace Twitch.ChatSample.Console
         };
 
         private static TwitchConnection connection;
-
+        private static UserModel user;
         private static ChatClient chat;
 
         private static SemaphoreSlim semaphore = new SemaphoreSlim(1);
@@ -64,7 +64,7 @@ namespace Twitch.ChatSample.Console
                     {
                         System.Console.WriteLine("Twitch connection successful!");
 
-                        UserModel user = await connection.NewAPI.Users.GetCurrentUser();
+                        user = await connection.NewAPI.Users.GetCurrentUser();
                         if (user != null)
                         {
                             System.Console.WriteLine("Logged in as: " + user.display_name);
