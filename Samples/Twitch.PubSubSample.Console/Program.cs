@@ -17,18 +17,26 @@ namespace Twitch.PubSubSample.Console
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
+            OAuthClientScopeEnum.channel_commercial,
+            OAuthClientScopeEnum.channel_editor,
             OAuthClientScopeEnum.channel_read,
             OAuthClientScopeEnum.channel_subscriptions,
+            OAuthClientScopeEnum.user_subscriptions,
 
             OAuthClientScopeEnum.user_read,
 
             OAuthClientScopeEnum.bits__read,
+            OAuthClientScopeEnum.channel__moderate,
+            OAuthClientScopeEnum.channel__read__redemptions,
+            OAuthClientScopeEnum.chat__edit,
+            OAuthClientScopeEnum.chat__read,
             OAuthClientScopeEnum.user__edit,
             OAuthClientScopeEnum.whispers__read,
+            OAuthClientScopeEnum.whispers__edit,
         };
 
         private static TwitchConnection connection;
-
+        private static UserModel user;
         private static PubSubClient pubSub;
 
         public static void Main(string[] args)
@@ -47,7 +55,7 @@ namespace Twitch.PubSubSample.Console
                     {
                         System.Console.WriteLine("Twitch connection successful!");
 
-                        UserModel user = await connection.NewAPI.Users.GetCurrentUser();
+                        user = await connection.NewAPI.Users.GetCurrentUser();
                         if (user != null)
                         {
                             System.Console.WriteLine("Logged in as: " + user.display_name);
