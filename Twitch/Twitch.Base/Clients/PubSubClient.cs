@@ -142,19 +142,19 @@ namespace Twitch.Base.Clients
                             {
                                 if (messagePacket.topicType == PubSubTopicsEnum.UserWhispers)
                                 {
-                                    this.OnWhisperReceived?.Invoke(this, messageData.data.ToObject<PubSubWhisperEventModel>());
+                                    this.OnWhisperReceived?.Invoke(this, messageData.data_object.ToObject<PubSubWhisperEventModel>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV1)
                                 {
-                                    this.OnBitsV1Received?.Invoke(this, messageData.data.ToObject<PubSubBitsEventV1Model>());
+                                    this.OnBitsV1Received?.Invoke(this, messageData.data_object.ToObject<PubSubBitsEventV1Model>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsEventsV2)
                                 {
-                                    this.OnBitsV2Received?.Invoke(this, messageData.data.ToObject<PubSubBitsEventV2Model>());
+                                    this.OnBitsV2Received?.Invoke(this, messageData.data_object.ToObject<PubSubBitsEventV2Model>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelBitsBadgeUnlocks)
                                 {
-                                    this.OnBitsBadgeReceived?.Invoke(this, messageData.data.ToObject<PubSubBitBadgeEventModel>());
+                                    this.OnBitsBadgeReceived?.Invoke(this, messageData.data_object.ToObject<PubSubBitBadgeEventModel>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelSubscriptionsV1)
                                 {
@@ -170,11 +170,11 @@ namespace Twitch.Base.Clients
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelCommerceV1)
                                 {
-                                    this.OnCommerceReceived?.Invoke(this, messageData.data.ToObject<PubSubCommerceEventModel>());
+                                    this.OnCommerceReceived?.Invoke(this, messageData.data_object.ToObject<PubSubCommerceEventModel>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelPointsRedeemed)
                                 {
-                                    this.OnChannelPointsRedeemed?.Invoke(this, messageData.data.ToObject<PubSubChannelPointsRedemptionEventModel>());
+                                    this.OnChannelPointsRedeemed?.Invoke(this, messageData.data_object.ToObject<PubSubChannelPointsRedemptionEventModel>());
                                 }
                             }
                         }

@@ -74,8 +74,13 @@ namespace Twitch.Base.Models.Clients.PubSub
         /// </summary>
         public string type { get; set; }
         /// <summary>
-        /// The text data of the message.
+        /// The JToken data of the message.
         /// </summary>
-        public JToken data { get; set; }
+        public object data { get; set; }
+        /// <summary>
+        /// The JToken data of the message.
+        /// </summary>
+        [JsonIgnore]
+        public JToken data_object { get { return (this.data is string) ? JToken.Parse((string)this.data) : (JToken)this.data; } }
     }
 }
