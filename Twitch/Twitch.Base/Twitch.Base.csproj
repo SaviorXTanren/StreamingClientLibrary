@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0.11</Version>
+    <Version>0.1.0.12</Version>
     <Authors>Matthew Olivo</Authors>
     <Company>Matthew Olivo</Company>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
@@ -31,8 +31,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>0.1.0.11</AssemblyVersion>
-    <FileVersion>0.1.0.11</FileVersion>
+    <AssemblyVersion>0.1.0.12</AssemblyVersion>
+    <FileVersion>0.1.0.12</FileVersion>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
