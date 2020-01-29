@@ -10,7 +10,7 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// <summary>
         /// The ID of the event
         /// </summary>
-        public uint id { get; set; }
+        public string id { get; set; }
         /// <summary>
         /// The message ID
         /// </summary>
