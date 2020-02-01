@@ -64,10 +64,6 @@ namespace Twitch.Base.Clients
         /// </summary>
         public event EventHandler<PubSubSubscriptionsGiftEventModel> OnSubscriptionsGiftedReceived = delegate { };
         /// <summary>
-        /// Invoked when a commerce event is received.
-        /// </summary>
-        public event EventHandler<PubSubCommerceEventModel> OnCommerceReceived = delegate { };
-        /// <summary>
         /// Invoked when a channel points redeemed event is received.
         /// </summary>
         public event EventHandler<PubSubChannelPointsRedemptionEventModel> OnChannelPointsRedeemed = delegate { };
@@ -167,10 +163,6 @@ namespace Twitch.Base.Clients
                                     {
                                         this.OnSubscribedReceived?.Invoke(this, subscription);
                                     }
-                                }
-                                else if (messagePacket.topicType == PubSubTopicsEnum.ChannelCommerceV1)
-                                {
-                                    this.OnCommerceReceived?.Invoke(this, messageData.data_object.ToObject<PubSubCommerceEventModel>());
                                 }
                                 else if (messagePacket.topicType == PubSubTopicsEnum.ChannelPointsRedeemed)
                                 {
