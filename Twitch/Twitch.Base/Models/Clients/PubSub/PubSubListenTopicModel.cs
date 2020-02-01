@@ -34,12 +34,6 @@ namespace Twitch.Base.Models.Clients.PubSub
         ChannelSubscriptionsV1,
 
         /// <summary>
-        /// Anyone makes a purchase on a channel.
-        /// </summary>
-        [Name("channel-commerce-events-v1")]
-        ChannelCommerceV1,
-
-        /// <summary>
         /// Anyone whispers the specified user.
         /// </summary>
         [Name("whispers")]
