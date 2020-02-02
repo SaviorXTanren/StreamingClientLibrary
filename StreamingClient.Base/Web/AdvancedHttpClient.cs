@@ -180,10 +180,11 @@ namespace StreamingClient.Base.Web
         /// Performs a GET REST request using the provided request URI.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
+        /// <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> GetAsync<T>(string requestUri)
+        public async Task<T> GetAsync<T>(string requestUri, bool throwExceptionOnFailure = true)
         {
-            return await (await this.GetAsync(requestUri)).ProcessResponse<T>();
+            return await (await this.GetAsync(requestUri)).ProcessResponse<T>(throwExceptionOnFailure);
         }
 
         /// <summary>

@@ -122,7 +122,7 @@ namespace Twitch.Base.Services.V5API
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(user, "user");
-            return await this.GetAsync<UserSubscriptionModel>("channels/" + channel.id + "/subscriptions/" + user.id);
+            return await this.GetAsync<UserSubscriptionModel>("channels/" + channel.id + "/subscriptions/" + user.id, throwExceptionOnFailure: false);
         }
 
         /// <summary>

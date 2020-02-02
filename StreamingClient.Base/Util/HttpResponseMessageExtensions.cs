@@ -30,28 +30,31 @@ namespace StreamingClient.Base.Util
         /// Processes and deserializes the HttpResponse into a type-casted object.
         /// </summary>
         /// <param name="response">The HttpResponse to process</param>
+        /// <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public static async Task<T> ProcessResponse<T>(this HttpResponseMessage response)
+        public static async Task<T> ProcessResponse<T>(this HttpResponseMessage response, bool throwExceptionOnFailure = true)
         {
-            return JSONSerializerHelper.DeserializeFromString<T>(await response.ProcessStringResponse());
+            return JSONSerializerHelper.DeserializeFromString<T>(await response.ProcessStringResponse(throwExceptionOnFailure));
         }
 
         /// <summary>
         /// Processes and deserializes the HttpResponse into a JObject.
         /// </summary>
         /// <param name="response">The HttpResponse to process</param>
+        /// <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
         /// <returns>A JObject of the contents of the response</returns>
-        public static async Task<JObject> ProcessJObjectResponse(this HttpResponseMessage response)
+        public static async Task<JObject> ProcessJObjectResponse(this HttpResponseMessage response, bool throwExceptionOnFailure = true)
         {
-            return JObject.Parse(await response.ProcessStringResponse());
+            return JObject.Parse(await response.ProcessStringResponse(throwExceptionOnFailure));
         }
 
         /// <summary>
         /// Processes and deserializes the HttpResponse into a string.
         /// </summary>
         /// <param name="response">The HttpResponse to process</param>
+        /// <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
         /// <returns>A string of the contents of the response</returns>
-        public static async Task<string> ProcessStringResponse(this HttpResponseMessage response)
+        public static async Task<string> ProcessStringResponse(this HttpResponseMessage response, bool throwExceptionOnFailure = true)
         {
             if (response.IsSuccessStatusCode)
             {
@@ -59,11 +62,15 @@ namespace StreamingClient.Base.Util
                 Logger.Log(LogLevel.Debug, result);
                 return result;
             }
-            else
+            else if (throwExceptionOnFailure)
             {
                 HttpRestRequestException ex = new HttpRestRequestException(response);
                 Logger.Log(ex);
                 throw ex;
+            }
+            else
+            {
+                return string.Empty;
             }
         }
     }

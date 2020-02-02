@@ -47,15 +47,16 @@ namespace StreamingClient.Base.Services
         /// Performs a GET REST request using the provided request URI.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
+        /// <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        protected async Task<T> GetAsync<T>(string requestUri)
+        protected async Task<T> GetAsync<T>(string requestUri, bool throwExceptionOnFailure = true)
         {
             using (AdvancedHttpClient client = await this.GetHttpClient())
             {
                 try
                 {
                     client.RateLimitUpdateOccurred += Client_RateLimitUpdateOccurred;
-                    return await client.GetAsync<T>(requestUri);
+                    return await client.GetAsync<T>(requestUri, throwExceptionOnFailure);
                 }
                 finally
                 {
