@@ -1,4 +1,5 @@
-﻿using StreamingClient.Base.Util;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,7 +47,12 @@ namespace Twitch.Base.Services.V5API
         public async Task<StreamModel> GetChannelStream(ChannelModel channel, StreamType streamType = StreamType.Live)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetAsync<StreamModel>("streams/" + channel.id + "?stream_type=" + streamType.ToString().ToLower());
+            JObject jobj = await this.GetJObjectAsync("streams/" + channel.id + "?stream_type=" + streamType.ToString().ToLower());
+            if (jobj != null && jobj.ContainsKey("stream"))
+            {
+                return jobj["stream"].ToObject<StreamModel>();
+            }
+            return null;
         }
 
         /// <summary>
