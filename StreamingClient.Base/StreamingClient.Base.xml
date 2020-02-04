@@ -106,11 +106,12 @@
             <param name="requestUri">The request URI to use</param>
             <returns>A response message of the request</returns>
         </member>
-        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetAsync``1(System.String)">
+        <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetAsync``1(System.String,System.Boolean)">
             <summary>
             Performs a GET REST request using the provided request URI.
             </summary>
             <param name="requestUri">The request URI to use</param>
+            <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
             <returns>A type-casted object of the contents of the response</returns>
         </member>
         <member name="M:StreamingClient.Base.Services.OAuthRestServiceBase.GetJObjectAsync(System.String)">
@@ -361,25 +362,28 @@
             <param name="name">The name of the header</param>
             <returns>The first value of the specified header if it exists</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessResponse``1(System.Net.Http.HttpResponseMessage)">
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessResponse``1(System.Net.Http.HttpResponseMessage,System.Boolean)">
             <summary>
             Processes and deserializes the HttpResponse into a type-casted object.
             </summary>
             <param name="response">The HttpResponse to process</param>
+            <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
             <returns>A type-casted object of the contents of the response</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessJObjectResponse(System.Net.Http.HttpResponseMessage)">
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessJObjectResponse(System.Net.Http.HttpResponseMessage,System.Boolean)">
             <summary>
             Processes and deserializes the HttpResponse into a JObject.
             </summary>
             <param name="response">The HttpResponse to process</param>
+            <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
             <returns>A JObject of the contents of the response</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessStringResponse(System.Net.Http.HttpResponseMessage)">
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.ProcessStringResponse(System.Net.Http.HttpResponseMessage,System.Boolean)">
             <summary>
             Processes and deserializes the HttpResponse into a string.
             </summary>
             <param name="response">The HttpResponse to process</param>
+            <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
             <returns>A string of the contents of the response</returns>
         </member>
         <member name="T:StreamingClient.Base.Util.HttpRestRequestException">
@@ -830,11 +834,12 @@
             <param name="requestUri">The request URI to use</param>
             <returns>A response message of the request</returns>
         </member>
-        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetAsync``1(System.String)">
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetAsync``1(System.String,System.Boolean)">
             <summary>
             Performs a GET REST request using the provided request URI.
             </summary>
             <param name="requestUri">The request URI to use</param>
+            <param name="throwExceptionOnFailure">Throws an exception on a failed request</param>
             <returns>A type-casted object of the contents of the response</returns>
         </member>
         <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetJObjectAsync(System.String)">
