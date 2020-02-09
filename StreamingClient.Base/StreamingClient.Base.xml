@@ -467,20 +467,22 @@
             <param name="data">The object to serialize</param>
             <returns>The serialized string</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeFromString``1(System.String)">
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeFromString``1(System.String,System.Boolean)">
             <summary>
             Deserialized the specified string to a typed object
             </summary>
             <typeparam name="T">The type of the object</typeparam>
             <param name="data">The string to deserialize</param>
+            <param name="ignoreErrors">Whether to ignore deserialization errors</param>
             <returns>The deserialized object</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeAbstractFromString``1(System.String)">
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeAbstractFromString``1(System.String,System.Boolean)">
             <summary>
             Deserialized the specified string to an abstract typed object
             </summary>
             <typeparam name="T">The type of the object</typeparam>
             <param name="data">The string to deserialize</param>
+            <param name="ignoreErrors">Whether to ignore deserialization errors</param>
             <returns>The deserialized object</returns>
         </member>
         <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.Clone``1(System.Object)">
