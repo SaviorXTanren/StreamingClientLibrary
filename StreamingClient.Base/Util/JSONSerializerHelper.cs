@@ -15,7 +15,7 @@ namespace StreamingClient.Base.Util
         /// <returns>The serialized string</returns>
         public static string SerializeToString<T>(T data)
         {
-            return JsonConvert.SerializeObject(data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            return JsonConvert.SerializeObject(data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
         }
 
         /// <summary>
@@ -23,10 +23,21 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <typeparam name="T">The type of the object</typeparam>
         /// <param name="data">The string to deserialize</param>
+        /// <param name="ignoreErrors">Whether to ignore deserialization errors</param>
         /// <returns>The deserialized object</returns>
-        public static T DeserializeFromString<T>(string data)
+        public static T DeserializeFromString<T>(string data, bool ignoreErrors = false)
         {
-            return JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+            };
+
+            if (ignoreErrors)
+            {
+                serializerSettings.Error = IgnoreDeserializationError;
+            }
+
+            return JsonConvert.DeserializeObject<T>(data, serializerSettings);
         }
 
         /// <summary>
@@ -34,10 +45,21 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <typeparam name="T">The type of the object</typeparam>
         /// <param name="data">The string to deserialize</param>
+        /// <param name="ignoreErrors">Whether to ignore deserialization errors</param>
         /// <returns>The deserialized object</returns>
-        public static T DeserializeAbstractFromString<T>(string data)
+        public static T DeserializeAbstractFromString<T>(string data, bool ignoreErrors = false)
         {
-            return (T)JsonConvert.DeserializeObject(data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+            };
+
+            if (ignoreErrors)
+            {
+                serializerSettings.Error = IgnoreDeserializationError;
+            }
+
+            return (T)JsonConvert.DeserializeObject(data, serializerSettings);
         }
 
         /// <summary>
@@ -49,6 +71,12 @@ namespace StreamingClient.Base.Util
         public static T Clone<T>(object data)
         {
             return JSONSerializerHelper.DeserializeFromString<T>(JSONSerializerHelper.SerializeToString(data));
+        }
+
+        private static void IgnoreDeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        {
+            Logger.Log(errorArgs.ErrorContext.Error.Message);
+            errorArgs.ErrorContext.Handled = true;
         }
     }
 }
