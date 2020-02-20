@@ -65,7 +65,10 @@ namespace StreamingClient.Base.Util
     /// </summary>
     public static class Logger
     {
-        private static LogLevel level = LogLevel.Warning;
+        /// <summary>
+        /// Sets the maximum log level to invoke the event method for.
+        /// </summary>
+        public static LogLevel Level { get; private set; } = LogLevel.Warning;
 
         /// <summary>
         /// Invoked when a log occurrs.
@@ -76,7 +79,7 @@ namespace StreamingClient.Base.Util
         /// Sets the maximum log level to invoke the event method for.
         /// </summary>
         /// <param name="level">The maximum level to capture logs for</param>
-        public static void SetLogLevel(LogLevel level) { Logger.level = level; }
+        public static void SetLogLevel(LogLevel level) { Logger.Level = level; }
 
         /// <summary>
         /// Logs the specified message at the Information level.
@@ -96,7 +99,7 @@ namespace StreamingClient.Base.Util
         {
             try
             {
-                if (level <= Logger.level)
+                if (level <= Logger.Level)
                 {
                     Logger.LogOccurred(null, new Log(level, message));
                 }
