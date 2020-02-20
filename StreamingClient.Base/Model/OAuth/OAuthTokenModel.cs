@@ -7,19 +7,23 @@ namespace StreamingClient.Base.Model.OAuth
     /// <summary>
     /// A token received from an OAuth authentication service.
     /// </summary>
+    [DataContract]
     public class OAuthTokenModel
     {
         /// <summary>
         /// The ID of the client service.
         /// </summary>
+        [DataMember]
         public string clientID { get; set; }
         /// <summary>
         /// The secret of the client service.
         /// </summary>
+        [DataMember]
         public string clientSecret { get; set; }
         /// <summary>
         /// The authorization code sent when authenticating against the OAuth service.
         /// </summary>
+        [DataMember]
         public string authorizationCode { get; set; }
 
         /// <summary>
