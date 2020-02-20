@@ -555,6 +555,11 @@
             Handles the logging for information.
             </summary>
         </member>
+        <member name="P:StreamingClient.Base.Util.Logger.Level">
+            <summary>
+            Sets the maximum log level to invoke the event method for.
+            </summary>
+        </member>
         <member name="E:StreamingClient.Base.Util.Logger.LogOccurred">
             <summary>
             Invoked when a log occurrs.
