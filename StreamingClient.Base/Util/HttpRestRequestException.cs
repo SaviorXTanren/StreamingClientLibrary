@@ -10,24 +10,9 @@ namespace StreamingClient.Base.Util
     public class HttpRestRequestException : HttpRequestException
     {
         /// <summary>
-        /// The URL of the request.
+        /// The response of the request.
         /// </summary>
-        public string Request { get; set; }
-
-        /// <summary>
-        /// The result status code.
-        /// </summary>
-        public HttpStatusCode StatusCode { get; private set; }
-
-        /// <summary>
-        /// The reason for the failure.
-        /// </summary>
-        public string Reason { get; private set; }
-
-        /// <summary>
-        /// The content of the response.
-        /// </summary>
-        public string Content { get; private set; }
+        public HttpResponseMessage Response { get; set; }
 
         /// <summary>
         /// Creates a new instance of the HttpRestRequestException.
@@ -54,10 +39,7 @@ namespace StreamingClient.Base.Util
         public HttpRestRequestException(HttpResponseMessage response)
             : this(response.ReasonPhrase)
         {
-            this.Request = response.RequestMessage.RequestUri.ToString();
-            this.StatusCode = response.StatusCode;
-            this.Reason = response.ReasonPhrase;
-            this.Content = response.Content.ReadAsStringAsync().Result;
+            this.Response = response;
         }
 
         /// <summary>
@@ -66,7 +48,8 @@ namespace StreamingClient.Base.Util
         /// <returns>A string representation of the object</returns>
         public override string ToString()
         {
-            return this.Request + Environment.NewLine + this.Content + Environment.NewLine + base.ToString();
+            return $"{this.Response.RequestMessage.RequestUri} - {this.Response.StatusCode} - {this.Response.ReasonPhrase} - {this.Response.GetCallLength()}" + Environment.NewLine +
+                this.Response.Content.ReadAsStringAsync().Result + Environment.NewLine + base.ToString();
         }
     }
 }

@@ -421,24 +421,9 @@
             An exception detailing the failure of an Http REST web request.
             </summary>
         </member>
-        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Request">
+        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Response">
             <summary>
-            The URL of the request.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.StatusCode">
-            <summary>
-            The result status code.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Reason">
-            <summary>
-            The reason for the failure.
-            </summary>
-        </member>
-        <member name="P:StreamingClient.Base.Util.HttpRestRequestException.Content">
-            <summary>
-            The content of the response.
+            The response of the request.
             </summary>
         </member>
         <member name="M:StreamingClient.Base.Util.HttpRestRequestException.#ctor">
