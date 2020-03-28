@@ -377,13 +377,13 @@ namespace StreamingClient.Base.Web
             {
                 try
                 {
-                    Logger.Log(LogLevel.Debug, string.Format("Rest API Request: {0} - {1}", requestUri, content.ReadAsStringAsync().Result));
+                    Logger.Log(LogLevel.Debug, string.Format("Rest API Request Sent: {0} - {1}", requestUri, content.ReadAsStringAsync().Result));
                 }
                 catch (Exception) { }
             }
             else
             {
-                Logger.Log(LogLevel.Debug, string.Format("Rest API Request: {0}", requestUri));
+                Logger.Log(LogLevel.Debug, string.Format("Rest API Request Sent: {0}", requestUri));
             }
         }
 

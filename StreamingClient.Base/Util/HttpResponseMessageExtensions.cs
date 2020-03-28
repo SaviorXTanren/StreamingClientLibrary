@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -59,7 +60,7 @@ namespace StreamingClient.Base.Util
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
-                Logger.Log(LogLevel.Debug, result);
+                Logger.Log(LogLevel.Debug, string.Format("Rest API Request Complete: {0} - {1}" + Environment.NewLine + "{2}", response.RequestMessage.RequestUri, response.StatusCode, result));
                 return result;
             }
             else if (throwExceptionOnFailure)
