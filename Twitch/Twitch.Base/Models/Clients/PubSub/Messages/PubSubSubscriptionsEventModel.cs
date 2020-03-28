@@ -47,13 +47,11 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// <summary>
         /// The total months of the subscriptions.
         /// </summary>
-        [JsonProperty("cumulative-months")]
-        public int cumulativeMonths { get; set; }
+        public int cumulative_months { get; set; }
         /// <summary>
         /// The streak months of the subscription.
         /// </summary>
-        [JsonProperty("streak-months")]
-        public int streakMonths { get; set; }
+        public int streak_months { get; set; }
         /// <summary>
         /// The type of subscription (sub/resub/gift).
         /// </summary>
@@ -83,5 +81,21 @@ namespace Twitch.Base.Models.Clients.PubSub.Messages
         /// </summary>
         [JsonIgnore]
         public bool IsAnonymousGiftedSubscription { get { return this.context.Equals("anonsubgift"); } }
+
+        /// <summary>
+        /// The message included with the subscription, if any.
+        /// </summary>
+        [JsonIgnore]
+        public string SubMessageText
+        {
+            get
+            {
+                if (sub_message != null && sub_message.ContainsKey("message"))
+                {
+                    return sub_message["message"].ToString();
+                }
+                return string.Empty;
+            }
+        }
     }
 }
