@@ -354,6 +354,36 @@
             Extension methods for the HttpResponseMessage class.
             </summary>
         </member>
+        <member name="F:StreamingClient.Base.Util.HttpResponseMessageExtensions.HttpResponseCallStartTimestampHeaderName">
+            <summary>
+            Http response header used for tracking the start of a call.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.HttpResponseMessageExtensions.HttpResponseCallEndTimestampHeaderName">
+            <summary>
+            Http response header used for tracking the end of a call.
+            </summary>
+        </member>
+        <member name="F:StreamingClient.Base.Util.HttpResponseMessageExtensions.HttpResponseCallLengthTimeSpanHeaderName">
+            <summary>
+            Http response header used for tracking the length of a call.
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.AddCallTimeHeaders(System.Net.Http.HttpResponseMessage,System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>
+            Adds the call times to the header of the Http response.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <param name="start">The start timestamp of the call</param>
+            <param name="end">The end timestamp of the call</param>
+        </member>
+        <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.GetCallLength(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Gets the call length of the Http response.
+            </summary>
+            <param name="response">The HttpResponse to process</param>
+            <returns>The call length</returns>
+        </member>
         <member name="M:StreamingClient.Base.Util.HttpResponseMessageExtensions.GetHeaderValue(System.Net.Http.HttpResponseMessage,System.String)">
             <summary>
             Gets the first value of the specified header if it exists.

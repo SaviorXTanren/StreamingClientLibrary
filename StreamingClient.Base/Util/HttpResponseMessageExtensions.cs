@@ -13,6 +13,47 @@ namespace StreamingClient.Base.Util
     public static class HttpResponseMessageExtensions
     {
         /// <summary>
+        /// Http response header used for tracking the start of a call.
+        /// </summary>
+        public const string HttpResponseCallStartTimestampHeaderName = "X-CallSent-Timestamp";
+        /// <summary>
+        /// Http response header used for tracking the end of a call.
+        /// </summary>
+        public const string HttpResponseCallEndTimestampHeaderName = "X-CallReceived-Timestamp";
+        /// <summary>
+        /// Http response header used for tracking the length of a call.
+        /// </summary>
+        public const string HttpResponseCallLengthTimeSpanHeaderName = "X-CallLength-Milliseconds";
+
+        /// <summary>
+        /// Adds the call times to the header of the Http response.
+        /// </summary>
+        /// <param name="response">The HttpResponse to process</param>
+        /// <param name="start">The start timestamp of the call</param>
+        /// <param name="end">The end timestamp of the call</param>
+        public static void AddCallTimeHeaders(this HttpResponseMessage response, DateTimeOffset start, DateTimeOffset end)
+        {
+            response.Headers.Add(HttpResponseCallStartTimestampHeaderName, start.ToString());
+            response.Headers.Add(HttpResponseCallEndTimestampHeaderName, end.ToString());
+            response.Headers.Add(HttpResponseCallLengthTimeSpanHeaderName, (end - start).TotalMilliseconds.ToString());
+        }
+
+        /// <summary>
+        /// Gets the call length of the Http response.
+        /// </summary>
+        /// <param name="response">The HttpResponse to process</param>
+        /// <returns>The call length</returns>
+        public static string GetCallLength(this HttpResponseMessage response)
+        {
+            string result = response.GetHeaderValue(HttpResponseCallLengthTimeSpanHeaderName);
+            if (!string.IsNullOrEmpty(result))
+            {
+                return result + " ms";
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Gets the first value of the specified header if it exists.
         /// </summary>
         /// <param name="response">The HttpResponse to process</param>
@@ -60,7 +101,7 @@ namespace StreamingClient.Base.Util
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
-                Logger.Log(LogLevel.Debug, string.Format("Rest API Request Complete: {0} - {1}" + Environment.NewLine + "{2}", response.RequestMessage.RequestUri, response.StatusCode, result));
+                Logger.Log(LogLevel.Debug, string.Format("Rest API Request Complete: {0} - {1} - {2}" + Environment.NewLine + "{3}", response.RequestMessage.RequestUri, response.StatusCode, response.GetCallLength(), result));
                 return result;
             }
             else if (throwExceptionOnFailure)

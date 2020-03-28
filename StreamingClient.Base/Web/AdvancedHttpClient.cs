@@ -171,7 +171,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             this.LogRequest(requestUri);
+            DateTimeOffset callStart = DateTimeOffset.Now;
             HttpResponseMessage response = await base.GetAsync(requestUri);
+            response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
             this.CheckForRateLimiting(response);
             return response;
         }
@@ -227,7 +229,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             this.LogRequest(requestUri, content);
+            DateTimeOffset callStart = DateTimeOffset.Now;
             HttpResponseMessage response = await base.PostAsync(requestUri, content);
+            response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
             this.CheckForRateLimiting(response);
             return response;
         }
@@ -279,7 +283,9 @@ namespace StreamingClient.Base.Web
         public new async Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
         {
             this.LogRequest(requestUri, content);
+            DateTimeOffset callStart = DateTimeOffset.Now;
             HttpResponseMessage response = await base.PutAsync(requestUri, content);
+            response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
             this.CheckForRateLimiting(response);
             return response;
         }
@@ -306,7 +312,9 @@ namespace StreamingClient.Base.Web
             HttpMethod method = new HttpMethod("PATCH");
             HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
             this.LogRequest(requestUri, content);
+            DateTimeOffset callStart = DateTimeOffset.Now;
             HttpResponseMessage response = await base.SendAsync(request);
+            response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
             this.CheckForRateLimiting(response);
             return response;
         }
@@ -359,13 +367,17 @@ namespace StreamingClient.Base.Web
             {
                 HttpMethod method = new HttpMethod("DELETE");
                 HttpRequestMessage request = new HttpRequestMessage(method, requestUri) { Content = content };
+                DateTimeOffset callStart = DateTimeOffset.Now;
                 HttpResponseMessage response = await base.SendAsync(request);
+                response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
                 this.CheckForRateLimiting(response);
                 return response;
             }
             else
             {
+                DateTimeOffset callStart = DateTimeOffset.Now;
                 HttpResponseMessage response = await base.DeleteAsync(requestUri);
+                response.AddCallTimeHeaders(callStart, DateTimeOffset.Now);
                 this.CheckForRateLimiting(response);
                 return response;
             }
