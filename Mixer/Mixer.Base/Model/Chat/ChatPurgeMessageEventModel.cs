@@ -1,4 +1,6 @@
-﻿namespace Mixer.Base.Model.Chat
+﻿using Newtonsoft.Json.Linq;
+
+namespace Mixer.Base.Model.Chat
 {
     /// <summary>
     /// A user that was purged in chat.
@@ -13,5 +15,9 @@
         /// The user who performed the purge.
         /// </summary>
         public ChatMessageUserModel moderator { get; set; }
+        /// <summary>
+        /// The cause of the purge.
+        /// </summary>
+        public JObject cause { get; set; }
     }
 }
