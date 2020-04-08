@@ -68,6 +68,10 @@ namespace Mixer.Base
         /// </summary>
         channel__clip__delete__self,
         /// <summary>
+        /// Trigger an ad break on your channel.
+        /// </summary>
+        chat__ad_break,
+        /// <summary>
         /// Bypasses the catbot chat filter.
         /// </summary>
         chat__bypass_catbot,
@@ -273,6 +277,11 @@ namespace Mixer.Base
         public const string DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER = "code";
 
         private OAuthTokenModel token;
+
+        /// <summary>
+        /// APIs for the ads of a channel.
+        /// </summary>
+        public AdsService Ads { get; private set; }
 
         /// <summary>
         /// APIs for the broadcasts of a channel.
@@ -568,6 +577,7 @@ namespace Mixer.Base
 
             this.token = token;
 
+            this.Ads = new AdsService(this);
             this.Broadcasts = new BroadcastsService(this);
             this.Channels = new ChannelsService(this);
             this.Chats = new ChatsService(this);
