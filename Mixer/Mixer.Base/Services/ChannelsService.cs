@@ -445,12 +445,18 @@ namespace Mixer.Base.Services
         /// </summary>
         /// <param name="channel">The channel hosting</param>
         /// <param name="hosteeChannel">The channelt to be hosted</param>
+        /// <param name="isAutoHost">Whether the hosting is coming from automation</param>
         /// <returns>The updated hosting channel</returns>
-        public async Task<ChannelModel> SetHostChannel(ChannelModel channel, ChannelModel hosteeChannel)
+        public async Task<ChannelModel> SetHostChannel(ChannelModel channel, ChannelModel hosteeChannel, bool isAutoHost = false)
         {
             Validator.ValidateVariable(channel, "channel");
             Validator.ValidateVariable(hosteeChannel, "hosteeChannel");
-            return await this.PutAsync<ChannelModel>("channels/" + channel.id + "/hostee", this.CreateContentFromObject(hosteeChannel));
+
+            JObject jobj = new JObject();
+            jobj["id"] = hosteeChannel.id;
+            jobj["auto"] = isAutoHost;
+
+            return await this.PutAsync<ChannelModel>("channels/" + channel.id + "/hostee", this.CreateContentFromObject(jobj));
         }
 
         /// <summary>
