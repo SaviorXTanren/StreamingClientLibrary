@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
-
 # StreamingClientLibrary
 C# client library for Mixer, Twitch, & YouTube streaming services
 
