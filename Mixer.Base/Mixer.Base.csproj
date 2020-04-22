@@ -4,24 +4,33 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Mixer.Base</AssemblyName>
     <RootNamespace>Mixer.Base</RootNamespace>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.8.4.12-beta</Version>
-    <Description>C# client library for the Mixer streaming service: https://mixer.com
-      
-For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
+    <Version>0.8.4.13-beta</Version>
+    <Description>This library has been DEPRECATED and a new version has been published:
+
+https://www.nuget.org/packages/StreamingClientLibrary.Mixer
+
+All future updates will be done on this new library. There are some changes that have been made in this new library related to naming conventions (EX: Interactive -&gt; MixPlay), so please there might be some costs to switching over.
+
+Thank you everyone for your support and usage of this library up until now and we hope you'll enjoy the new things we have for our newer version.</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
     <PackageId>mixer-client-csharp</PackageId>
     <Product>mixer-client-csharp</Product>
-    <PackageReleaseNotes>- Updating patronage APIs
-</PackageReleaseNotes>
-    <AssemblyVersion>0.8.4.12</AssemblyVersion>
-    <FileVersion>0.8.4.12</FileVersion>
-    <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/SaviorXTanren/mixer-client-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageReleaseNotes>This library has been DEPRECATED and a new version has been published:
+
+https://www.nuget.org/packages/StreamingClientLibrary.Mixer
+
+All future updates will be done on this new library. There are some changes that have been made in this new library related to naming conventions (EX: Interactive -&gt; MixPlay), so please there might be some costs to switching over.
+
+Thank you everyone for your support and usage of this library up until now and we hope you'll enjoy the new things we have for our newer version.</PackageReleaseNotes>
+    <AssemblyVersion>0.8.4.13</AssemblyVersion>
+    <FileVersion>0.8.4.13</FileVersion>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
