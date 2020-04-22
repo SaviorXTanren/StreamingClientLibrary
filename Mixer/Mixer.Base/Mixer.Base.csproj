@@ -4,23 +4,22 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Mixer.Base</AssemblyName>
     <RootNamespace>Mixer.Base</RootNamespace>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.9.0.15-beta</Version>
+    <Version>1.0.0.0</Version>
     <Description>C# client library for the Mixer streaming service: https://mixer.com
       
-For more information, please see our project site: https://github.com/SaviorXTanren/mixer-client-csharp</Description>
+For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>Mixer Streaming Bot Chat Interactive</PackageTags>
-    <PackageId>mixer-client-csharp</PackageId>
+    <PackageId>StreamingClientLibrary.Mixer</PackageId>
     <Product>Mixer Streaming Client Library</Product>
-    <PackageReleaseNotes>- Updating patronage APIs
-</PackageReleaseNotes>
-    <AssemblyVersion>0.9.0.15</AssemblyVersion>
-    <FileVersion>0.9.0.15</FileVersion>
-    <RepositoryUrl>https://github.com/SaviorXTanren/mixer-client-csharp</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/mixer-client-csharp</PackageProjectUrl>
+    <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -36,6 +35,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
   
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">

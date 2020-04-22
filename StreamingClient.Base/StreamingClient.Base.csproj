@@ -2,21 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors></Authors>
-    <Version>0.1.0.11</Version>
-    <Product>streaming-client-shared-library</Product>
+    <Authors>Matthew Olivo</Authors>
+    <Version>1.0.0.0</Version>
+    <Product>Streaming Client Library Base</Product>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
 For more information, please see our project site: https://github.com/SaviorXTanren/streaming-client-shared-library</Description>
-    <PackageLicenseUrl>https://github.com/SaviorXTanren/streaming-client-shared-library/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</RepositoryUrl>
-    <PackageTags>Streaming Bot Chat</PackageTags>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/streaming-client-shared-library</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
+    <PackageTags>Streaming Bot Chat Library</PackageTags>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId></PackageId>
+    <PackageId>StreamingClientLibrary.Base</PackageId>
     <Company />
-    <AssemblyVersion>0.1.0.11</AssemblyVersion>
-    <FileVersion>0.1.0.11</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

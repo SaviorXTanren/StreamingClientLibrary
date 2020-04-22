@@ -3,16 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0.19</Version>
+    <Version>1.0.0.0</Version>
     <Authors>Matthew Olivo</Authors>
     <Company>Matthew Olivo</Company>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
-For more information, please see our project site: https://github.com/SaviorXTanren/twitch-client-csharp</Description>
-    <Product>twitch-client-csharp</Product>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/twitch-client-csharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/SaviorXTanren/twitch-client-csharp</RepositoryUrl>
+For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
+    <Product>Twitch Streaming Client Library</Product>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Twitch Streaming Bot Chat</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -33,6 +33,9 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <AssemblyVersion>0.1.0.19</AssemblyVersion>
     <FileVersion>0.1.0.19</FileVersion>
+    <PackageId>StreamingClientLibrary.Twitch</PackageId>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">

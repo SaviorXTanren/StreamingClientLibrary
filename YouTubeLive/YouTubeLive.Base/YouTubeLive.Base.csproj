@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.0.0</Version>
+    <Version>1.0.0.0</Version>
     <Company>Matthew Olivo</Company>
-    <Product>youtubelive-client-csharp</Product>
+    <Product>YouTube Streaming Client Library</Product>
     <Description>C# client library for the YouTube Live streaming service: https://www.youtube.com/live
       
-For more information, please see our project site: youtubelive-client-csharp</Description>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2019</Copyright>
+For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/youtubelive-client-csharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/SaviorXTanren/youtubelive-client-csharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>YouTube Live Streaming Bot Chat</PackageTags>
   </PropertyGroup>
 
@@ -31,11 +31,16 @@ For more information, please see our project site: youtubelive-client-csharp</De
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    <PackageId>StreamingClientLibrary.YouTube</PackageId>
+    <Authors>Matthew Olivo</Authors>
+    <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
     <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
     </ItemGroup>
   </Target>
 
