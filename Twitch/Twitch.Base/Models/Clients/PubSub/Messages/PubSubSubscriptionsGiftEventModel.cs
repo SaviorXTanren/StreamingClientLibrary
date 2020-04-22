@@ -6,10 +6,6 @@
     public class PubSubSubscriptionsGiftEventModel : PubSubSubscriptionsEventModel
     {
         /// <summary>
-        /// The total months of the subscription (ONLY FOR SUB GIFT EVENTS).
-        /// </summary>
-        public int months { get; set; }
-        /// <summary>
         /// The recipient ID of the gift.
         /// </summary>
         public string recipient_id { get; set; }
