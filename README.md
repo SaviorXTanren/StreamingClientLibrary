@@ -1,11 +1,5 @@
 [![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
 
-Mixer: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Mixer.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Mixer)
-
-Twitch: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Twitch.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Twitch)
-
-YouTube: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.YouTube.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.YouTube)
-
 # StreamingClientLibrary
 C# client library for Mixer, Twitch, & YouTube streaming services
 
@@ -23,9 +17,11 @@ All of the most common APIs are available across all sites. We've also added sup
 ## How do I get started using it?
 Download the appropriate NuGet package based on the streaming site you want to work with:
 
-Mixer: https://www.nuget.org/packages/StreamingClientLibrary.Mixer
-Twitch: https://www.nuget.org/packages/StreamingClientLibrary.Twitch
-YouTube: https://www.nuget.org/packages/StreamingClientLibrary.YouTube
+Mixer: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Mixer.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Mixer)
+
+Twitch: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Twitch.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Twitch)
+
+YouTube: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.YouTube.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.YouTube)
 
 There are sample apps available in this repository for each of the different streaming sites that you can reference for some of the more common scenarios. Additionally, there are a large series of unit tests that go through all of the individual functionality that you can look at.
 
