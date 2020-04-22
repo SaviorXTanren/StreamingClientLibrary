@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.0</Version>
+    <Version>1.0.0.1</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -16,8 +16,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Product>YouTube Streaming Client Library</Product>
     <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
