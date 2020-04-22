@@ -1,40 +1,44 @@
-[![NuGet](https://img.shields.io/nuget/v/mixer-client-csharp.svg?style=flat)](https://www.nuget.org/packages/mixer-client-csharp) [![Build Status](https://travis-ci.org/SaviorXTanren/mixer-client-csharp.svg?branch=master)](https://travis-ci.org/SaviorXTanren/mixer-client-csharp)
+[![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
+Mixer: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Mixer.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Mixer)
+Twitch: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Twitch.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Twitch)
+YouTube: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.YouTube.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.YouTube)
 
-# mixer-client-csharp
-A C# client library for the Mixer streaming service
+# StreamingClientLibrary
+C# client library for Mixer, Twitch, & YouTube streaming services
 
 ## What is this?
-Unsatisfied with the current set of APIs that exist to interact with Mixer, I took some time to build and design an API set in C# to interact with the service. This API set can be used by anyone to build out any apps they wish to use and it’s very easy to setup.
+When this project was initially created, it was made to fill a gap that existed with lack of a .NET-based library for interaction with Mixer. As time has gone on, the project has added support for additional streaming sites and strives to build a "one-stop shop" to interact with variety of different sites in a consistent manner.
 
 ## Requirements
 This library uses the native WebSocket support found in Windows 8 & higher. This means that any application that uses this library must be running Windows 8 or higher.
 
 ## Current functionality
-We have must of the most common usage scenarios completed, including:
-- The most common REST APIs for Channels, Chat, Interactive, and Users services
-- WebSocket-based clients to use Chat, Interactive, and Constellation features
-- Various OAuth logic flows to allow your application to authenticate with the Mixer endpoints and handle authorization scopes
-- Unit tests and sample applications to document and show usage of all functionality
+All of the most common APIs are available across all sites. We've also added support for the various other forms of connections for each site:
+- Chat/Constellation/MixPlay WebSockets for Mixer
+- Chat IRC for Twitch, PubSub WebSockets for Twitch
 
-## Feature roadmap
-These are the current planned features to be developed in priority order:
-- Add ViewModels to all APIs to make ramp-up development work easier and put less focus on knowing the dev docs top-to-bottom
-- Continue filling out REST API services with less-common methods
-- Add full documentation to github for API usage
+## Future plans
+Currently each streaming site is a dedicated library and project to help keep dependencies down. This allows you
 
 ## How do I get started using it?
-Download the NuGet package by searching for "mixer-client-csharp" or downloading it manually from https://www.nuget.org/packages/mixer-client-csharp. There are two sample apps created the help showcase some the setup needed and how to use the APIs. Additionally, there are a large serious of unit tests that go through all of the individual functionality that you can look at. I plan on creating more formal documentation soon.
+Download the appropriate NuGet package based on the streaming site you want to work with:
+
+Mixer: https://www.nuget.org/packages/StreamingClientLibrary.Mixer
+Twitch: https://www.nuget.org/packages/StreamingClientLibrary.Twitch
+YouTube: https://www.nuget.org/packages/StreamingClientLibrary.YouTube
+
+There are sample apps available in this repository for each of the different streaming sites that you can reference for some of the more common scenarios. Additionally, there are a large series of unit tests that go through all of the individual functionality that you can look at.
 
 ## I found a bug, who do I contact?
-Just head over to the https://github.com/SaviorXTanren/mixer-client-csharp/issues page and create a new issue.
+Just head over to the https://github.com/SaviorXTanren/StreamingClientLibrary/issues page and create a new issue.
 
 ## I have a new feature idea!
-Submit feature requests at the https://github.com/SaviorXTanren/mixer-client-csharp/issues page or feel free to develop the feature yourself and submit a pull request at https://github.com/SaviorXTanren/mixer-client-csharp/pulls! I'm happy to assist anyone if they're interested in developing something as well.
+Submit feature requests at the https://github.com/SaviorXTanren/StreamingClientLibrary/issues page or feel free to develop the feature yourself and submit a pull request at https://github.com/SaviorXTanren/StreamingClientLibrary/pulls.
 
 ## License
 MIT License
 
-Copyright (c) 2017-2018 Matthew Olivo
+Copyright (c) 2017-2020 Matthew Olivo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
