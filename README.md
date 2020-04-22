@@ -17,9 +17,6 @@ All of the most common APIs are available across all sites. We've also added sup
 - Chat/Constellation/MixPlay WebSockets for Mixer
 - Chat IRC for Twitch, PubSub WebSockets for Twitch
 
-## Future plans
-Currently each streaming site is a dedicated library and project to help keep dependencies down. This allows you
-
 ## How do I get started using it?
 Download the appropriate NuGet package based on the streaming site you want to work with:
 
