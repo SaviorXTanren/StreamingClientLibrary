@@ -2,17 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0.0</Version>
+    <AssemblyName>YouTube.Base</AssemblyName>
+    <RootNamespace>YouTube.Base</RootNamespace>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
     <Company>Matthew Olivo</Company>
-    <Product>YouTube Streaming Client Library</Product>
+    <Authors>Matthew Olivo</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0.0</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <PackageTags>YouTube Streaming Bot Chat Interactive</PackageTags>
+    <PackageId>StreamingClientLibrary.YouTube</PackageId>
+    <Product>YouTube Streaming Client Library</Product>
+    <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
-    <PackageTags>YouTube Streaming Bot Chat</PackageTags>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

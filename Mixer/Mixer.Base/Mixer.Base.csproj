@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Mixer.Base</AssemblyName>
     <RootNamespace>Mixer.Base</RootNamespace>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -20,7 +20,6 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <FileVersion>1.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>

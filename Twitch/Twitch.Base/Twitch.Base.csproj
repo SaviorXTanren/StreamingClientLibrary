@@ -2,19 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Twitch.Base</AssemblyName>
+    <RootNamespace>Twitch.Base</RootNamespace>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
+    <Company>Matthew Olivo</Company>
+    <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.0.0</Version>
-    <Authors>Matthew Olivo</Authors>
-    <Company>Matthew Olivo</Company>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
+    <PackageTags>Twitch Streaming Bot Chat Interactive</PackageTags>
+    <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <Product>Twitch Streaming Client Library</Product>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2020</Copyright>
-    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <PackageReleaseNotes>- Initial 1.0 release with full added documentation for all endpoints</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
-    <PackageTags>Twitch Streaming Bot Chat</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
