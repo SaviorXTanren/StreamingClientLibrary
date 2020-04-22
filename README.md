@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
+
 Mixer: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Mixer.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Mixer)
+
 Twitch: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Twitch.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Twitch)
+
 YouTube: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.YouTube.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.YouTube)
 
 # StreamingClientLibrary
