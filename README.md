@@ -12,6 +12,7 @@ This library uses the native WebSocket support found in Windows 8 & higher. This
 All of the most common APIs are available across all sites. We've also added support for the various other forms of connections for each site:
 - Chat/Constellation/MixPlay WebSockets for Mixer
 - Chat IRC for Twitch, PubSub WebSockets for Twitch
+- Automated Chat Web Call for YouTube
 
 ## How do I get started using it?
 Download the appropriate NuGet package based on the streaming site you want to work with:
