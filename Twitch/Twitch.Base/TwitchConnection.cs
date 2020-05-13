@@ -201,6 +201,11 @@ namespace Twitch.Base
         public V5APIServices V5API { get; private set; }
 
         /// <summary>
+        /// The Client ID associated with the connection.
+        /// </summary>
+        public string ClientID { get { return (this.token != null) ? this.token.clientID : null; } }
+
+        /// <summary>
         /// Generates the OAuth authorization URL to use for authentication.
         /// </summary>
         /// <param name="clientID">The ID of the client application</param>
@@ -328,11 +333,11 @@ namespace Twitch.Base
         {
             Validator.ValidateVariable(token, "token");
 
+            this.token = token;
+
             this.OAuth = new OAuthService(this);
             this.NewAPI = new NewTwitchAPIServices(this);
             this.V5API = new V5APIServices(this);
-
-            this.token = token;
         }
 
         /// <summary>
