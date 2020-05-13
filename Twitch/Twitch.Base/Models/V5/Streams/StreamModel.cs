@@ -50,5 +50,11 @@ namespace Twitch.Base.Models.V5.Streams
         /// The total number of viewers for the stream.
         /// </summary>
         public long viewers { get; set; }
+
+        /// <summary>
+        /// Whether the stream is currently live or not.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsLive { get { return this.id > 0 && !this.is_playlist; } }
     }
 }
