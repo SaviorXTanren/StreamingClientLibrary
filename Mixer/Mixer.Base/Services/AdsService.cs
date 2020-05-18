@@ -1,5 +1,6 @@
 ﻿using Mixer.Base.Model.Channel;
 using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -27,6 +28,10 @@ namespace Mixer.Base.Services
             JObject body = new JObject();
             body["requestId"] = Guid.NewGuid().ToString();
             HttpResponseMessage response = await this.PostAsync("ads/channels/" + channel.id, new StringContent(body.ToString()));
+            if (!response.IsSuccessStatusCode)
+            {
+                Logger.Log(new HttpRestRequestException(response));
+            }
             return response.IsSuccessStatusCode;
         }
     }
