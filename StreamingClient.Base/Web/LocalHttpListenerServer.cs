@@ -127,7 +127,10 @@ namespace StreamingClient.Base.Web
                     {
                         token = token.Substring(0, endIndex);
                     }
-                    return token;
+
+                    String decodedToken = HttpUtility.UrlDecode(token);
+
+                    return decodedToken;
                 }
             }
             return null;
