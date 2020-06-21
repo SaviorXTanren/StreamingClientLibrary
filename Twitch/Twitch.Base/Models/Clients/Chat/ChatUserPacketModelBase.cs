@@ -49,25 +49,5 @@ namespace Twitch.Base.Models.Clients.Chat
         /// A dictionary containing the user's badges and associated versions.
         /// </summary>
         public Dictionary<string, int> BadgeInfoDictionary { get { return this.ParseBadgeDictionary(this.UserBadgeInfo); } }
-
-        private Dictionary<string, int> ParseBadgeDictionary(string list)
-        {
-            Dictionary<string, int> results = new Dictionary<string, int>();
-            if (!string.IsNullOrEmpty(list))
-            {
-                string[] splits = list.Split(new char[] { ',', '/' });
-                if (splits != null && splits.Length > 0 && splits.Length % 2 == 0)
-                {
-                    for (int i = 0; i < splits.Length; i = i + 2)
-                    {
-                        if (int.TryParse(splits[i + 1], out int version))
-                        {
-                            results[splits[i]] = version;
-                        }
-                    }
-                }
-            }
-            return results;
-        }
     }
 }

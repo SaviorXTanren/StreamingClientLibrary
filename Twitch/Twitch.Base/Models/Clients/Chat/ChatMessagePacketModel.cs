@@ -1,4 +1,6 @@
-﻿namespace Twitch.Base.Models.Clients.Chat
+﻿using System.Collections.Generic;
+
+namespace Twitch.Base.Models.Clients.Chat
 {
     /// <summary>
     /// Information about a Chat message packet.
@@ -100,5 +102,16 @@
 
             this.Timestamp = packet.GetTagString("tmi-sent-ts");
         }
+
+
+        /// <summary>
+        /// A dictionary containing the user's badges and associated versions.
+        /// </summary>
+        public Dictionary<string, int> BadgeDictionary { get { return this.ParseBadgeDictionary(this.UserBadges); } }
+
+        /// <summary>
+        /// A dictionary containing the user's badges and associated versions.
+        /// </summary>
+        public Dictionary<string, int> BadgeInfoDictionary { get { return this.ParseBadgeDictionary(this.UserBadgeInfo); } }
     }
 }
