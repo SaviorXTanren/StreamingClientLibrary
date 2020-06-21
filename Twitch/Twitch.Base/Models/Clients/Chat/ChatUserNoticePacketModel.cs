@@ -5,8 +5,6 @@
     /// </summary>
     public class ChatUserNoticePacketModel : ChatUserPacketModelBase
     {
-        private const string EmoteURLFormat = "http://static-cdn.jtvnw.net/emoticons/v1/{0}/{1}";
-
         /// <summary>
         /// The ID of the command for a chat user notice.
         /// </summary>
