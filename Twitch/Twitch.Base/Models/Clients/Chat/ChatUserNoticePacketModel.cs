@@ -3,22 +3,52 @@
     /// <summary>
     /// Information about a chat user notice packet.
     /// </summary>
-    public class ChatUserNoticePacketModel : ChatMessagePacketModel
+    public class ChatUserNoticePacketModel : ChatUserPacketModelBase
     {
+        private const string EmoteURLFormat = "http://static-cdn.jtvnw.net/emoticons/v1/{0}/{1}";
+
         /// <summary>
         /// The ID of the command for a chat user notice.
         /// </summary>
-        public new const string CommandID = "USERNOTICE";
+        public const string CommandID = "USERNOTICE";
+
+        /// <summary>
+        /// The user’s ID.
+        /// </summary>
+        public long UserID { get; set; }
+
+        /// <summary>
+        /// The name of the user who sent the notice.
+        /// </summary>
+        public string Login { get; set; }
+
+        /// <summary>
+        /// A unique ID for the message.
+        /// </summary>
+        public string MessageID { get; set; }
 
         /// <summary>
         /// The type of notice (not the ID). Valid values: sub, resub, subgift, anonsubgift, submysterygift, giftpaidupgrade, rewardgift, anongiftpaidupgrade, raid, unraid, ritual, bitsbadgetier.
         /// </summary>
-        public string MessageID { get; set; }
+        public string MessageTypeID { get; set; }
 
         /// <summary>
         /// The message printed in chat along with this notice.
         /// </summary>
         public string SystemMessage { get; set; }
+
+        /// <summary>
+        /// The channel ID.
+        /// </summary>
+        public string RoomID { get; set; }
+
+        /// <summary>
+        /// Information to replace text in the message with emote images. This can be empty. Syntax:
+        /// &lt;emote ID&gt;:&lt;first index&gt;-&lt;last index&gt;,&lt;another first index&gt;-&lt;another last index&gt;/&lt;another emote ID&gt;:&lt;first index&gt;-&lt;last index&gt;...
+        ///     emote ID – The number to use in this URL: http://static-cdn.jtvnw.net/emoticons/v1/:&lt;emote ID&gt;/:&lt;size&gt; (size is 1.0, 2.0 or 3.0.)
+        ///     first index, last index – Character indexes. \001ACTION does not count. Indexing starts from the first character that is part of the user’s actual message.See the example (normal message) below.
+        /// </summary>
+        public string Emotes { get; set; }
 
         /// <summary>
         /// (Sent only on sub, resub) The total number of months the user has subscribed. This is the same as msg-param-months but sent for different types of user notices.
@@ -113,38 +143,43 @@
         public string RitualName { get; set; }
 
         /// <summary>
+        /// Timestamp when the server received the message.
+        /// </summary>
+        public long Timestamp { get; set; }
+
+        /// <summary>
         /// Creates a new instance of the ChatUserNoticePacketModel class.
         /// </summary>
         /// <param name="packet">The Chat packet</param>
         public ChatUserNoticePacketModel(ChatRawPacketModel packet)
             : base(packet)
         {
-            this.MessageID = packet.GetTagString("msg-id");
+            this.UserID = packet.GetTagLong("user-id");
+            this.Login = packet.GetTagString("login");
+            this.MessageID = packet.GetTagString("id");
+            this.MessageTypeID = packet.GetTagString("msg-id");
             this.SystemMessage = packet.GetTagString("system-msg");
-
+            this.RoomID = packet.GetTagString("room-id");
+            this.Emotes = packet.GetTagString("emotes");
             this.SubCumulativeMonths = packet.GetTagInt("msg-param-cumulative-months");
             this.SubPlan = packet.GetTagString("msg-param-sub-plan");
             this.SubPlanDisplayName = packet.GetTagString("msg-param-sub-plan-name");
             this.SubShareStreakMonths = packet.GetTagBool("msg-param-should-share-streak");
             this.SubStreakMonths = packet.GetTagInt("msg-param-streak-months");
-
             this.SubGiftSenderLogin = packet.GetTagString("msg-param-sender-login");
             this.SubGiftSenderDisplayName = packet.GetTagString("msg-param-sender-name");
             this.SubGiftMonths = packet.GetTagInt("msg-param-months");
             this.SubGiftRecipientID = packet.GetTagString("msg-param-recipient-id");
             this.SubGiftRecipientLogin = packet.GetTagString("msg-param-recipient-user-name");
             this.SubGiftRecipientDisplayName = packet.GetTagString("msg-param-recipient-display-name");
-
             this.SubPromoName = packet.GetTagString("msg-param-promo-name");
             this.SubPromoTotalGifts = packet.GetTagInt("msg-param-promo-gift-total");
-
             this.RaidUserLogin = packet.GetTagString("msg-param-login");
             this.RaidUserDisplayName = packet.GetTagString("msg-param-displayName");
             this.RaidViewerCount = packet.GetTagInt("msg-param-viewerCount");
-
             this.RitualName = packet.GetTagString("msg-param-ritual-name");
-
             this.BitsTierThreshold = packet.GetTagLong("msg-param-threshold");
+            this.Timestamp = packet.GetTagLong("tmi-sent-ts");
         }
     }
 }
