@@ -1,6 +1,4 @@
-﻿using StreamingClient.Base.Util;
-
-namespace Twitch.Base.Models.Clients.Chat
+﻿namespace Twitch.Base.Models.Clients.Chat
 {
     /// <summary>
     /// Information about a chat room state packet.

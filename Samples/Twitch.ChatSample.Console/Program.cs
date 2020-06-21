@@ -78,6 +78,7 @@ namespace Twitch.ChatSample.Console
                             chat.OnPacketReceived += Chat_OnPacketReceived;
 
                             chat.OnPingReceived += Chat_OnPingReceived;
+                            chat.OnGlobalUserStateReceived += Chat_OnGlobalUserStateReceived;
                             chat.OnUserListReceived += Chat_OnUserListReceived;
                             chat.OnUserJoinReceived += Chat_OnUserJoinReceived;
                             chat.OnUserLeaveReceived += Chat_OnUserLeaveReceived;
@@ -118,6 +119,11 @@ namespace Twitch.ChatSample.Console
             }).Wait();
 
             System.Console.ReadLine();
+        }
+
+        private static void Chat_OnGlobalUserStateReceived(object sender, ChatGlobalUserStatePacketModel packet)
+        {
+            System.Console.WriteLine(string.Format("Connected as: {0} {1}", packet.UserID, packet.UserDisplayName));
         }
 
         private static void Chat_OnUserListReceived(object sender, ChatUsersListPacketModel packet)

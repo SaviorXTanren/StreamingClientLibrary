@@ -3,34 +3,28 @@
 namespace Twitch.Base.Models.Clients.Chat
 {
     /// <summary>
-    /// Information about a chat user state packet.
+    /// Information about a chat global user state packet.
     /// </summary>
-    public class ChatUserStatePacketModel : ChatUserPacketModelBase
+    public class ChatGlobalUserStatePacketModel : ChatUserStatePacketModel
     {
         /// <summary>
-        /// The ID of the command for a chat user state.
+        /// The ID of the command for a chat global user state.
         /// </summary>
-        public const string CommandID = "USERSTATE";
+        public new const string CommandID = "GLOBALUSERSTATE";
 
         /// <summary>
-        /// Indicates whether the user is a moderator.
+        /// The user’s ID.
         /// </summary>
-        public bool Moderator { get; set; }
-
-        /// <summary>
-        /// Information to the user's emote sets.
-        /// </summary>
-        public string EmoteSets { get; set; }
+        public long UserID { get; set; }
 
         /// <summary>
         /// Creates a new instance of the ChatUserStatePacketModel class.
         /// </summary>
         /// <param name="packet">The Chat packet</param>
-        public ChatUserStatePacketModel(ChatRawPacketModel packet)
+        public ChatGlobalUserStatePacketModel(ChatRawPacketModel packet)
             : base(packet)
         {
-            this.Moderator = packet.GetTagBool("mod");
-            this.EmoteSets = packet.GetTagString("emote-sets");
+            this.UserID = packet.GetTagLong("user-id");
         }
 
         /// <summary>

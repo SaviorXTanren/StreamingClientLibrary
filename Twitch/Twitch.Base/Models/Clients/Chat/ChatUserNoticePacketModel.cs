@@ -23,6 +23,11 @@
         public string Login { get; set; }
 
         /// <summary>
+        /// Indicates whether the user is a moderator.
+        /// </summary>
+        public bool Moderator { get; set; }
+
+        /// <summary>
         /// A unique ID for the message.
         /// </summary>
         public string MessageID { get; set; }
@@ -156,6 +161,7 @@
         {
             this.UserID = packet.GetTagLong("user-id");
             this.Login = packet.GetTagString("login");
+            this.Moderator = packet.GetTagBool("mod");
             this.MessageID = packet.GetTagString("id");
             this.MessageTypeID = packet.GetTagString("msg-id");
             this.SystemMessage = packet.GetTagString("system-msg");

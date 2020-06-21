@@ -23,11 +23,6 @@ namespace Twitch.Base.Models.Clients.Chat
         public string UserBadges { get; set; }
 
         /// <summary>
-        /// Indicates whether the user is a moderator.
-        /// </summary>
-        public bool Moderator { get; set; }
-
-        /// <summary>
         /// Hexadecimal RGB color code of the message, if any.
         /// </summary>
         public string Color { get; set; }
@@ -42,7 +37,6 @@ namespace Twitch.Base.Models.Clients.Chat
             this.UserDisplayName = packet.GetTagString("display-name");
             this.UserBadgeInfo = packet.GetTagString("badge-info");
             this.UserBadges = packet.GetTagString("badges");
-            this.Moderator = packet.GetTagBool("mod");
             this.Color = packet.GetTagString("color");
         }
 

@@ -115,6 +115,11 @@ namespace Twitch.Base.Clients
         /// </summary>
         public event EventHandler<ChatUserNoticePacketModel> OnUserNoticeReceived;
 
+        /// <summary>
+        /// Invoked when a global user state is received.
+        /// </summary>
+        public event EventHandler<ChatGlobalUserStatePacketModel> OnGlobalUserStateReceived;
+
         private TwitchConnection connection;
 
         /// <summary>
@@ -547,6 +552,9 @@ namespace Twitch.Base.Clients
                         break;
                     case ChatUserNoticePacketModel.CommandID:
                         this.OnUserNoticeReceived?.Invoke(this, new ChatUserNoticePacketModel(packet));
+                        break;
+                    case ChatGlobalUserStatePacketModel.CommandID:
+                        this.OnGlobalUserStateReceived?.Invoke(this, new ChatGlobalUserStatePacketModel(packet));
                         break;
                 }
             }
