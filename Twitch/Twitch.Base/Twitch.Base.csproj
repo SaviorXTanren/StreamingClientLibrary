@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.4</Version>
+    <Version>1.0.0.5</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -36,8 +36,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.4</AssemblyVersion>
-    <FileVersion>1.0.0.4</FileVersion>
+    <AssemblyVersion>1.0.0.5</AssemblyVersion>
+    <FileVersion>1.0.0.5</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageReleaseNotes>- Adding helper properties to Twitch chat user state packet
@@ -45,7 +45,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
 - Adding event for Twitch Chat GlobalUserState
 - Adding emote endpoints to Twitch Chat APIs
 - Adding more properties &amp; renaming properties for Twitch EmoteModel
-- Adding additional properties to Twitch ChatMessagePacketModel</PackageReleaseNotes>
+- Adding additional properties to Twitch ChatMessagePacketModel
+- Adding Twitch NewAPI Chat service to get channel chat badges</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
