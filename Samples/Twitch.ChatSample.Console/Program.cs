@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Twitch.Base;
 using Twitch.Base.Clients;
 using Twitch.Base.Models.Clients.Chat;
+using Twitch.Base.Models.NewAPI.Chat;
 using Twitch.Base.Models.NewAPI.Users;
+using Twitch.Base.Models.V5.Channel;
 
 namespace Twitch.ChatSample.Console
 {
@@ -37,6 +39,7 @@ namespace Twitch.ChatSample.Console
 
         private static TwitchConnection connection;
         private static UserModel user;
+        private static ChannelModel channel;
         private static ChatClient chat;
 
         private static SemaphoreSlim semaphore = new SemaphoreSlim(1);
@@ -95,15 +98,13 @@ namespace Twitch.ChatSample.Console
 
                             await Task.Delay(1000);
 
-                            UserModel broadcaster = await connection.NewAPI.Users.GetCurrentUser();
-
-                            await chat.Join(broadcaster);
+                            await chat.Join(user);
 
                             await Task.Delay(2000);
 
                             System.Console.WriteLine(string.Format("There are {0} users currently in chat", initialUserList.Count()));
 
-                            await chat.SendMessage(broadcaster, "Hello World!");
+                            await chat.SendMessage(user, "Hello World!");
 
                             while (true)
                             {

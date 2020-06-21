@@ -11,6 +11,11 @@
         public BitsService Bits { get; private set; }
 
         /// <summary>
+        /// APIs for Bits interaction.
+        /// </summary>
+        public ChatService Chat { get; private set; }
+
+        /// <summary>
         /// APIs for Clips interaction.
         /// </summary>
         public ClipsService Clips { get; private set; }
@@ -47,6 +52,7 @@
         public NewTwitchAPIServices(TwitchConnection connection)
         {
             this.Bits = new BitsService(connection);
+            this.Chat = new ChatService(connection);
             this.Clips = new ClipsService(connection);
             this.Games = new GamesService(connection);
             this.Streams = new StreamsService(connection);
