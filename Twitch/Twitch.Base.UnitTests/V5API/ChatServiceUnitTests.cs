@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Twitch.Base.Models.V5.Channel;
 using Twitch.Base.Models.V5.Chat;
+using Twitch.Base.Models.V5.Emotes;
 using Twitch.Base.Models.V5.Users;
 
 namespace Twitch.Base.UnitTests.V5API
@@ -27,13 +28,11 @@ namespace Twitch.Base.UnitTests.V5API
         }
 
         [TestMethod]
-        public void GetChatRoomsForChannel()
+        public void GetChatEmoticonsForSet()
         {
             TestWrapper(async (TwitchConnection connection) =>
             {
-                ChannelModel channel = await connection.V5API.Channels.GetCurrentChannel();
-
-                IEnumerable<ChatRoomModel> results = await connection.V5API.Chat.GetChatRoomsForChannel(channel);
+                IEnumerable<EmoteModel> results = await connection.V5API.Chat.GetChatEmoticonsForSet(new List<int>() { 19151 });
 
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Count() > 0);
