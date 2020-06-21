@@ -83,18 +83,17 @@ namespace Twitch.Base.Services.V5API
             Validator.ValidateVariable(user, "user");
 
             JObject jobj = await this.GetJObjectAsync("users/" + user.id + "/emotes");
-
             List<EmoteModel> results = new List<EmoteModel>();
             if (jobj != null && jobj.ContainsKey("emoticon_sets"))
             {
                 JObject emoticonSets = (JObject)jobj["emoticon_sets"];
                 foreach (var kvp in emoticonSets)
                 {
-                    string channelID = kvp.Key;
+                    string setID = kvp.Key;
                     foreach (JToken token in (JArray)kvp.Value)
                     {
                         EmoteModel emote = token.ToObject<EmoteModel>();
-                        emote.channelID = channelID;
+                        emote.setID = setID;
                         results.Add(emote);
                     }
                 }
