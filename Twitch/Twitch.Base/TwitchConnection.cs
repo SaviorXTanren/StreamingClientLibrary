@@ -139,6 +139,14 @@ namespace Twitch.Base
         /// </summary>
         bits__read,
         /// <summary>
+        /// Run commercials on a channel.
+        /// </summary>
+        channel__edit__commercial,
+        /// <summary>
+        /// Get hype train information for your channel.
+        /// </summary>
+        channel__read__hype_train,
+        /// <summary>
         /// Get channel point redemption events for your channel.
         /// </summary>
         channel__read__redemptions,
@@ -159,13 +167,21 @@ namespace Twitch.Base
         /// </summary>
         user__edit__broadcast,
         /// <summary>
+        /// Edit your follows.
+        /// </summary>
+        user__edit__follows,
+        /// <summary>
         /// View your broadcasting configuration, including extension configurations.
         /// </summary>
         user__read__broadcast,
         /// <summary>
         /// Read authorized user’s email address.
         /// </summary>
-        user__read__email
+        user__read__email,
+        /// <summary>
+        /// Read authorized user’s stream key.
+        /// </summary>
+        user__read__stream_key
     }
 
     /// <summary>
