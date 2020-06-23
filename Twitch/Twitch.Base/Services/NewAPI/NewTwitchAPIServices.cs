@@ -6,6 +6,11 @@
     public class NewTwitchAPIServices
     {
         /// <summary>
+        /// APIs for Ads interaction.
+        /// </summary>
+        public AdsService Ads { get; private set; }
+
+        /// <summary>
         /// APIs for Bits interaction.
         /// </summary>
         public BitsService Bits { get; private set; }
@@ -51,6 +56,7 @@
         /// <param name="connection">The Twitch connection</param>
         public NewTwitchAPIServices(TwitchConnection connection)
         {
+            this.Ads = new AdsService(connection);
             this.Bits = new BitsService(connection);
             this.Chat = new ChatService(connection);
             this.Clips = new ClipsService(connection);
