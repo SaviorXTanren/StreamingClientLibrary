@@ -91,6 +91,12 @@ namespace Twitch.Base.Clients
         public event EventHandler<ChatMessagePacketModel> OnMessageReceived;
 
         /// <summary>
+        /// Invoked when a whisper is received.
+        /// </summary>
+        public event EventHandler<ChatWhisperMessagePacketModel> OnWhisperMessageReceived;
+
+
+        /// <summary>
         /// Invoked when a chat clear is received.
         /// </summary>
         public event EventHandler<ChatClearChatPacketModel> OnChatClearReceived;
@@ -537,6 +543,9 @@ namespace Twitch.Base.Clients
                         break;
                     case ChatMessagePacketModel.CommandID:
                         this.OnMessageReceived?.Invoke(this, new ChatMessagePacketModel(packet));
+                        break;
+                    case ChatWhisperMessagePacketModel.CommandID:
+                        this.OnWhisperMessageReceived?.Invoke(this, new ChatWhisperMessagePacketModel(packet));
                         break;
                     case ChatClearChatPacketModel.CommandID:
                         this.OnChatClearReceived?.Invoke(this, new ChatClearChatPacketModel(packet));
