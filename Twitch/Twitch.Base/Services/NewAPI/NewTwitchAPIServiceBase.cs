@@ -62,7 +62,7 @@ namespace Twitch.Base.Services.NewAPI
             {
                 if (!string.IsNullOrEmpty(cursor))
                 {
-                    queryParameters.Add("after", cursor);
+                    queryParameters["after"] = cursor;
                 }
                 NewTwitchAPIDataRestResult<T> data = await this.GetAsync<NewTwitchAPIDataRestResult<T>>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
 
