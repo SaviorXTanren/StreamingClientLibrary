@@ -3,7 +3,7 @@
 namespace Twitch.Base.Models.Clients.Chat
 {
     /// <summary>
-    /// Information about a Chat message packet.
+    /// Information about a Chat whisper message packet.
     /// </summary>
     public class ChatWhisperMessagePacketModel : ChatPacketModelBase
     {
@@ -78,7 +78,7 @@ namespace Twitch.Base.Models.Clients.Chat
         public string Timestamp { get; set; }
 
         /// <summary>
-        /// Creates a new instance of the ChatMessagePacketModel class.
+        /// Creates a new instance of the ChatWhisperMessagePacketModel class.
         /// </summary>
         /// <param name="packet">The Chat packet</param>
         public ChatWhisperMessagePacketModel(ChatRawPacketModel packet)
