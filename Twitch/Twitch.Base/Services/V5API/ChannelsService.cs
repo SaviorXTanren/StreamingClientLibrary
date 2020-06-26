@@ -90,6 +90,17 @@ namespace Twitch.Base.Services.V5API
         }
 
         /// <summary>
+        /// Gets the total number of followers for a channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the total number of followers for</param>
+        /// <returns>The total number of followers for the channel</returns>
+        public async Task<long> GetChannelFollowersCount(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedResultTotalCountAsync("channels/" + channel.id + "/follows");
+        }
+
+        /// <summary>
         /// Gets the teams for a channel.
         /// </summary>
         /// <param name="channel">The channel to get teams for</param>
@@ -101,15 +112,26 @@ namespace Twitch.Base.Services.V5API
         }
 
         /// <summary>
-        /// Gets the followers for a channel.
+        /// Gets the subscribers for a channel.
         /// </summary>
-        /// <param name="channel">The channel to get followers for</param>
+        /// <param name="channel">The channel to get subscribers for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
-        /// <returns>The followers for the channel</returns>
+        /// <returns>The subscribers for the channel</returns>
         public async Task<IEnumerable<UserSubscriptionModel>> GetChannelSubscribers(ChannelModel channel, int maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetOffsetPagedResultAsync<UserSubscriptionModel>("channels/" + channel.id + "/subscriptions", "subscriptions", maxResults);
+        }
+
+        /// <summary>
+        /// Gets the total number of subscribers for a channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the total number of subscribers for</param>
+        /// <returns>The total number of subscribers for the channel</returns>
+        public async Task<long> GetChannelSubscribersCount(ChannelModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedResultTotalCountAsync("channels/" + channel.id + "/subscriptions");
         }
 
         /// <summary>
