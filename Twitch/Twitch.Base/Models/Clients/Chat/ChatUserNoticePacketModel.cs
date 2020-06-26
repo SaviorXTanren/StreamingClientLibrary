@@ -86,7 +86,7 @@
         public string SubGiftSenderLogin { get; set; }
 
         /// <summary>
-        /// Sent only on giftpaidupgrade) The display name of the user who gifted the subscription.
+        /// (Sent only on giftpaidupgrade) The display name of the user who gifted the subscription.
         /// </summary>
         public string SubGiftSenderDisplayName { get; set; }
 
@@ -109,6 +109,11 @@
         /// (Sent only on subgift, anonsubgift) The display name of the subscription gift recipient.
         /// </summary>
         public string SubGiftRecipientDisplayName { get; set; }
+
+        /// <summary>
+        /// (Sent only on submysterygift) The total number of subscriptions gifted.
+        /// </summary>
+        public int SubTotalGifted { get; set; }
 
         /// <summary>
         /// (Sent only on anongiftpaidupgrade, giftpaidupgrade) The subscriptions promo, if any, that is ongoing; e.g. Subtember 2018.
@@ -176,6 +181,7 @@
             this.SubGiftRecipientID = packet.GetTagString("msg-param-recipient-id");
             this.SubGiftRecipientLogin = packet.GetTagString("msg-param-recipient-user-name");
             this.SubGiftRecipientDisplayName = packet.GetTagString("msg-param-recipient-display-name");
+            this.SubTotalGifted = packet.GetTagInt("msg-param-mass-gift-count");
             this.SubPromoName = packet.GetTagString("msg-param-promo-name");
             this.SubPromoTotalGifts = packet.GetTagInt("msg-param-promo-gift-total");
             this.RaidUserLogin = packet.GetTagString("msg-param-login");
