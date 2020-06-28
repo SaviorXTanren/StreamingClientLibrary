@@ -5,113 +5,19 @@ namespace Twitch.Base.Models.Clients.Chat
     /// <summary>
     /// Information about a Chat whisper message packet.
     /// </summary>
-    public class ChatWhisperMessagePacketModel : ChatPacketModelBase
+    public class ChatWhisperMessagePacketModel : ChatMessagePacketModel
     {
         /// <summary>
         /// The ID of the command for a chat message.
         /// </summary>
-        public const string CommandID = "WHISPER";
+        new public const string CommandID = "WHISPER";
 
         /// <summary>
-        /// The ID of the message.
+        /// Creates a new instance of the ChatWhisperMessagePacketModel
         /// </summary>
-        public string ID { get; set; }
-
-        /// <summary>
-        /// The message text.
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// The user's ID.
-        /// </summary>
-        public string UserID { get; set; }
-
-        /// <summary>
-        /// The user's login name.
-        /// </summary>
-        public string UserLogin { get; set; }
-
-        /// <summary>
-        /// The user's display name.
-        /// </summary>
-        public string UserDisplayName { get; set; }
-
-        /// <summary>
-        /// The user's badge information.
-        /// </summary>
-        public string UserBadgeInfo { get; set; }
-
-        /// <summary>
-        /// The user's badges.
-        /// </summary>
-        public string UserBadges { get; set; }
-
-        /// <summary>
-        /// Indicates whether the user is a moderator.
-        /// </summary>
-        public bool Moderator { get; set; }
-
-        /// <summary>
-        /// Hexadecimal RGB color code of the message, if any.
-        /// </summary>
-        public string Color { get; set; }
-
-        /// <summary>
-        /// Information to replace text in the message with emote images.
-        /// </summary>
-        public string Emotes { get; set; }
-
-        /// <summary>
-        /// The channel ID.
-        /// </summary>
-        public string RoomID { get; set; }
-
-        /// <summary>
-        /// The amount of bits associated with the message, if any.
-        /// </summary>
-        public string Bits { get; set; }
-
-        /// <summary>
-        /// Timestamp when the server received the message.
-        /// </summary>
-        public string Timestamp { get; set; }
-
-        /// <summary>
-        /// Creates a new instance of the ChatWhisperMessagePacketModel class.
-        /// </summary>
-        /// <param name="packet">The Chat packet</param>
-        public ChatWhisperMessagePacketModel(ChatRawPacketModel packet)
-            : base(packet)
+        /// <param name="packet"></param>
+        public ChatWhisperMessagePacketModel(ChatRawPacketModel packet) : base(packet)
         {
-            this.ID = packet.GetTagString("id");
-            this.Message = packet.Get1SkippedParameterText;
-
-            this.UserID = packet.GetTagString("user-id");
-            this.UserLogin = packet.GetUserLogin;
-            this.UserDisplayName = packet.GetTagString("display-name");
-            this.UserBadgeInfo = packet.GetTagString("badge-info");
-            this.UserBadges = packet.GetTagString("badges");
-            this.Moderator = packet.GetTagBool("mod");
-
-            this.Color = packet.GetTagString("color");
-            this.Emotes = packet.GetTagString("emotes");
-            this.RoomID = packet.GetTagString("room-id");
-
-            this.Bits = packet.GetTagString("bits");
-
-            this.Timestamp = packet.GetTagString("tmi-sent-ts");
         }
-
-
-        /// <summary>
-        /// A dictionary containing the user's badges and associated versions.
-        /// </summary>
-        public Dictionary<string, int> BadgeDictionary { get { return this.ParseBadgeDictionary(this.UserBadges); } }
-
-        /// <summary>
-        /// A dictionary containing the user's badges and associated versions.
-        /// </summary>
-        public Dictionary<string, int> BadgeInfoDictionary { get { return this.ParseBadgeDictionary(this.UserBadgeInfo); } }
     }
 }
