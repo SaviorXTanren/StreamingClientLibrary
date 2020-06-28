@@ -116,6 +116,11 @@
         public int SubTotalGifted { get; set; }
 
         /// <summary>
+        /// (Sent only on submysterygift) The total number of subscriptions gifted by the sender throughout the lifetime of the channel.
+        /// </summary>
+        public int SubTotalGiftedLifetime { get; set; }
+
+        /// <summary>
         /// (Sent only on anongiftpaidupgrade, giftpaidupgrade) The subscriptions promo, if any, that is ongoing; e.g. Subtember 2018.
         /// </summary>
         public string SubPromoName { get; set; }
@@ -182,6 +187,7 @@
             this.SubGiftRecipientLogin = packet.GetTagString("msg-param-recipient-user-name");
             this.SubGiftRecipientDisplayName = packet.GetTagString("msg-param-recipient-display-name");
             this.SubTotalGifted = packet.GetTagInt("msg-param-mass-gift-count");
+            this.SubTotalGiftedLifetime = packet.GetTagInt("msg-param-sender-count");
             this.SubPromoName = packet.GetTagString("msg-param-promo-name");
             this.SubPromoTotalGifts = packet.GetTagInt("msg-param-promo-gift-total");
             this.RaidUserLogin = packet.GetTagString("msg-param-login");
