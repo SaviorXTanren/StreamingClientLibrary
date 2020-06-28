@@ -54,7 +54,7 @@ namespace Twitch.Base.UnitTests.NewAPI
             {
                 UserModel user = await connection.NewAPI.Users.GetUserByLogin("TwitchPresents");
 
-                StreamMarkerModel result = await connection.NewAPI.Streams.CreateStreamMarker(user, "test");
+                CreatedStreamMarkerModel result = await connection.NewAPI.Streams.CreateStreamMarker(user, "test");
 
                 Assert.IsNotNull(result);
                 Assert.IsNotNull(result.id);

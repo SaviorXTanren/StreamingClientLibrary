@@ -26,7 +26,7 @@ namespace Twitch.Base.Services.V5API
         public V5APIServiceBase(TwitchConnection connection) : base(connection, BASE_ADDRESS) { }
 
         /// <summary>
-        /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data.
+        /// Performs a GET REST request using the provided request URI for v5 Twitch API-wrapped data.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="valueName">The name of the value to look for in the results</param>
@@ -70,7 +70,7 @@ namespace Twitch.Base.Services.V5API
         }
 
         /// <summary>
-        /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data.
+        /// Performs a GET REST request using the provided request URI for v5 Twitch API-wrapped data.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="valueName">The name of the value to look for in the results</param>
@@ -92,27 +92,49 @@ namespace Twitch.Base.Services.V5API
 
             List<T> results = new List<T>();
             int total = 0;
-            int currentTotal = 0;
             do
             {
-                if (total > 0)
+                if (results.Count > 0)
                 {
-                    queryParameters["offset"] = total.ToString();
+                    queryParameters["offset"] = results.Count.ToString();
                 }
                 JObject data = await this.GetJObjectAsync(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
 
-                currentTotal = 0;
                 if (data != null && data.ContainsKey("_total") && data.ContainsKey(valueName))
                 {
                     JArray array = (JArray)data[valueName];
                     results.AddRange(array.ToTypedArray<T>());
-                    currentTotal = (int)data["_total"];
-                    total += currentTotal;
+                    total = (int)data["_total"];
                 }
             }
-            while (results.Count < maxResults && currentTotal > 0);
+            while (results.Count < maxResults && results.Count < total && total > 0);
 
             return results;
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for v5 Twitch API-wrapped data to get total count.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <returns>The total count of the response</returns>
+        public async Task<long> GetPagedResultTotalCountAsync(string requestUri)
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+            requestUri += "limit=1";
+
+            JObject data = await this.GetJObjectAsync(requestUri);
+            if (data != null && data.ContainsKey("_total"))
+            {
+                return (long)data["_total"];
+            }
+            return 0;
         }
 
         /// <summary>

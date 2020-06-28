@@ -26,6 +26,10 @@ namespace Twitch.Base.Models.V5.Users
         /// </summary>
         public ChannelModel channel { get; set; }
         /// <summary>
+        /// The user who is subscribed.
+        /// </summary>
+        public UserModel user { get; set; }
+        /// <summary>
         /// The date of the subscription creation.
         /// </summary>
         public string created_at { get; set; }
