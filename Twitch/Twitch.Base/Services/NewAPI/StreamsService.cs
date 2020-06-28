@@ -85,10 +85,10 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="broadcaster">The broadcaster to create the stream marker on</param>
         /// <param name="description">The description of the stream marker</param>
         /// <returns>The created stream marker</returns>
-        public async Task<StreamMarkerModel> CreateStreamMarker(UserModel broadcaster, string description)
+        public async Task<CreatedStreamMarkerModel> CreateStreamMarker(UserModel broadcaster, string description)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.PostAsync<StreamMarkerModel>("streams/markers", AdvancedHttpClient.CreateContentFromObject(new { user_id = broadcaster.id, description = description }));
+            return await this.PostAsync<CreatedStreamMarkerModel>("streams/markers", AdvancedHttpClient.CreateContentFromObject(new { user_id = broadcaster.id, description = description }));
         }
     }
 }

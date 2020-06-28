@@ -1,9 +1,9 @@
 ﻿namespace Twitch.Base.Models.NewAPI.Streams
 {
     /// <summary>
-    /// Information about a stream marker.
+    /// Information about a created stream marker.
     /// </summary>
-    public class StreamMarkerModel
+    public class CreatedStreamMarkerModel
     {
         /// <summary>
         /// The ID of the stream marker.
