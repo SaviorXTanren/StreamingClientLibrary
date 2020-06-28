@@ -1,7 +1,9 @@
-﻿using StreamingClient.Base.Util;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 using Twitch.Base.Models.NewAPI.Users;
@@ -128,6 +130,53 @@ namespace Twitch.Base.Services.NewAPI
             }
 
             return await this.GetPagedDataResultAsync<UserFollowModel>("users/follows?" + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)), maxResults);
+        }
+
+        /// <summary>
+        /// Adds the specified "to" user to the followers of the specified "from" user.
+        /// </summary>
+        /// <param name="from">The user to perform the follow</param>
+        /// <param name="to">The user to be followed</param>
+        /// <returns>Whether the follow was successful</returns>
+        public async Task<bool> FollowUser(UserModel from, UserModel to) { return await this.FollowUser(from?.id, to?.id); }
+
+        /// <summary>
+        /// Adds the specified "to" user ID to the followers of the specified "from" user ID.
+        /// </summary>
+        /// <param name="from">The user ID to perform the follow</param>
+        /// <param name="to">The user ID to be followed</param>
+        /// <returns>Whether the follow was successful</returns>
+        public async Task<bool> FollowUser(string from, string to)
+        {
+            Validator.ValidateVariable(from, "from");
+            Validator.ValidateVariable(to, "to");
+
+            JObject jobj = new JObject();
+            jobj["from_id"] = from;
+            jobj["to_id"] = to;
+            HttpResponseMessage response = await this.PostAsync("users/follows", AdvancedHttpClient.CreateContentFromObject(jobj));
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Removes the specified "to" user from the followers of the specified "from" user.
+        /// </summary>
+        /// <param name="from">The user to perform the unfollow</param>
+        /// <param name="to">The user to be unfollowed</param>
+        /// <returns>Whether the unfollow was successful</returns>
+        public async Task<bool> UnfollowUser(UserModel from, UserModel to) { return await this.UnfollowUser(from?.id, to?.id); }
+
+        /// <summary>
+        /// Removes the specified "to" user ID from the followers of the specified "from" user ID.
+        /// </summary>
+        /// <param name="from">The user ID to perform the unfollow</param>
+        /// <param name="to">The user ID to be unfollowed</param>
+        /// <returns>Whether the unfollow was successful</returns>
+        public async Task<bool> UnfollowUser(string from, string to)
+        {
+            Validator.ValidateVariable(from, "from");
+            Validator.ValidateVariable(to, "to");
+            return await this.DeleteAsync($"users/follows?from_id={from}&to_id={to}");
         }
 
         /// <summary>
