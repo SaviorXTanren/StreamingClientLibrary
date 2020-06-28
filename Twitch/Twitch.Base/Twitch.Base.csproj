@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.7</Version>
+    <Version>1.0.0.8</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -36,14 +36,15 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.7</AssemblyVersion>
-    <FileVersion>1.0.0.7</FileVersion>
+    <AssemblyVersion>1.0.0.8</AssemblyVersion>
+    <FileVersion>1.0.0.8</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Adding GetChannelFollowersCount() &amp; GetChannelSubscribersCount() methods to v5 Channels API
-- Fixing bugs with v5 GetOffsetPagedResultAsync() method processing
-- Adding SubTotalGifted property to chat UserNotice packet
-- NewAPI.Users.GetFollows throws error when retrieving large list of followers</PackageReleaseNotes>
+    <PackageReleaseNotes>- Adding Channels endpoint to New API
+- Adding GetChannelInformation(), UpdateChannelInformation(), and GetHypeTrainEvents() to Channels New API endpoint
+- Adding FollowUser() and UnfollowerUser() to Users New API endpoint
+- Adding SubTotalGiftedLifetime property to Chat User Notice
+- Updating model name for stream marker creation</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
