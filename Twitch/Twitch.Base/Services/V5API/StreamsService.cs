@@ -63,7 +63,7 @@ namespace Twitch.Base.Services.V5API
         /// <param name="language">The language to get streams for</param>
         /// <param name="streamType">The type of stream to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
-        /// <returns>The followers for the channel</returns>
+        /// <returns>The set of streams</returns>
         public async Task<IEnumerable<StreamModel>> GetStreams(IEnumerable<string> channelIDs = null, string game = null, string language = null, StreamType streamType = StreamType.Live, int maxResults = 1)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();

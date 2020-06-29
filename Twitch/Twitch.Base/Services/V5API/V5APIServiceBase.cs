@@ -90,24 +90,32 @@ namespace Twitch.Base.Services.V5API
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             queryParameters.Add("limit", ((maxResults > 100) ? 100 : maxResults).ToString());
 
+            bool hasTotalKey = false;
             List<T> results = new List<T>();
             int total = 0;
+            int currentCount = 0;
             do
             {
+                currentCount = 0;
                 if (results.Count > 0)
                 {
                     queryParameters["offset"] = results.Count.ToString();
                 }
                 JObject data = await this.GetJObjectAsync(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
 
-                if (data != null && data.ContainsKey("_total") && data.ContainsKey(valueName))
+                if (data != null && data.ContainsKey(valueName))
                 {
                     JArray array = (JArray)data[valueName];
+                    currentCount = array.Count;
                     results.AddRange(array.ToTypedArray<T>());
-                    total = (int)data["_total"];
+                    if (data.ContainsKey("_total"))
+                    {
+                        total = (int)data["_total"];
+                        hasTotalKey = true;
+                    }
                 }
             }
-            while (results.Count < maxResults && results.Count < total && total > 0);
+            while (results.Count < maxResults && ((hasTotalKey && total > 0 && results.Count < total) || (!hasTotalKey && currentCount > 0 && results.Count < maxResults)));
 
             return results;
         }

@@ -31,6 +31,11 @@
         public StreamsService Streams { get; private set; }
 
         /// <summary>
+        /// APIs for Teams interaction.
+        /// </summary>
+        public TeamsService Teams { get; private set; }
+
+        /// <summary>
         /// APIs for User interaction.
         /// </summary>
         public UsersService Users { get; private set; }
@@ -46,6 +51,7 @@
             this.Chat = new ChatService(connection);
             this.Search = new SearchService(connection);
             this.Streams = new StreamsService(connection);
+            this.Teams = new TeamsService(connection);
             this.Users = new UsersService(connection);
         }
     }

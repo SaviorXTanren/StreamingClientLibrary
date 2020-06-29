@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using Twitch.Base.Models.V5.Users;
 
 namespace Twitch.Base.Models.V5.Teams
 {
@@ -44,5 +46,16 @@ namespace Twitch.Base.Models.V5.Teams
         /// The date the team was updated.
         /// </summary>
         public string updated_at { get; set; }
+    }
+
+    /// <summary>
+    /// Detailed information about a team
+    /// </summary>
+    public class TeamDetailsModel : TeamModel
+    {
+        /// <summary>
+        /// The members of the team.
+        /// </summary>
+        public List<UserModel> users { get; set; } = new List<UserModel>();
     }
 }
