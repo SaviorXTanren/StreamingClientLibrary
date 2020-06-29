@@ -54,17 +54,22 @@ namespace Twitch.Base.Services.NewAPI
         /// <summary>
         /// Gets the list of streams
         /// </summary>
-        /// <param name="communityIDs">An optional list of community IDs</param>
+        /// <param name="userIDs">An optional list of user IDs</param>
+        /// <param name="userLogins">An optional list of user logins</param>
         /// <param name="gameIDs">An optional list of game IDs</param>
         /// <param name="languages">An optional list of languages</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>A list of streams</returns>
-        public async Task<IEnumerable<StreamModel>> GetStreams(IEnumerable<string> communityIDs = null, IEnumerable<string> gameIDs = null, IEnumerable<string> languages = null, int maxResults = 20)
+        public async Task<IEnumerable<StreamModel>> GetStreams(IEnumerable<string> userIDs = null, IEnumerable<string> userLogins = null, IEnumerable<string> gameIDs = null, IEnumerable<string> languages = null, int maxResults = 20)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            if (communityIDs != null)
+            if (userIDs != null)
             {
-                parameters.Add("community_id", string.Join("&community_id=", communityIDs));
+                parameters.Add("user_id", string.Join("&user_id=", userIDs));
+            }
+            if (gameIDs != null)
+            {
+                parameters.Add("user_login", string.Join("&user_login=", userLogins));
             }
             if (gameIDs != null)
             {
