@@ -67,7 +67,7 @@ namespace Twitch.Base.Services.NewAPI
             {
                 parameters.Add("user_id", string.Join("&user_id=", userIDs));
             }
-            if (gameIDs != null)
+            if (userLogins != null)
             {
                 parameters.Add("user_login", string.Join("&user_login=", userLogins));
             }
