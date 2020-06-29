@@ -26,7 +26,7 @@ namespace Twitch.Base.Services.NewAPI
         /// <returns>A list of streams</returns>
         public async Task<IEnumerable<StreamModel>> GetTopStreams(int maxResults = 20)
         {
-            return await this.GetStreams(null, null, null, maxResults);
+            return await this.GetStreams(maxResults: maxResults);
         }
 
         /// <summary>
