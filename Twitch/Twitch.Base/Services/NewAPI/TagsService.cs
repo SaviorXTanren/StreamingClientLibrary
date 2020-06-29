@@ -31,17 +31,6 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
-        /// Gets all stream tags associated with a broadcaster.
-        /// </summary>
-        /// <param name="broadcaster">The broadcaster to get stream tags for.</param>
-        /// <returns>A list of tags</returns>
-        public async Task<IEnumerable<TagModel>> GetStreamTagsForBroadcaster(UserModel broadcaster)
-        {
-            Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetDataResultAsync<TagModel>("tags/streams?broadcaster_id=" + broadcaster.id);
-        }
-
-        /// <summary>
         /// Gets all stream tags matching the specified tag IDs.
         /// </summary>
         /// <param name="tagIDs">A list of tag IDs</param>
@@ -50,6 +39,17 @@ namespace Twitch.Base.Services.NewAPI
         {
             Validator.ValidateList(tagIDs, "tagIDs");
             return await this.GetPagedDataResultAsync<TagModel>("tags/streams?tag_id=" + string.Join("&tag_id=", tagIDs), tagIDs.Count());
+        }
+
+        /// <summary>
+        /// Gets all stream tags associated with a broadcaster.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to get stream tags for.</param>
+        /// <returns>A list of tags</returns>
+        public async Task<IEnumerable<TagModel>> GetStreamTagsForBroadcaster(UserModel broadcaster)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            return await this.GetDataResultAsync<TagModel>("streams/tags?broadcaster_id=" + broadcaster.id);
         }
 
         /// <summary>
