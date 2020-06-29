@@ -57,12 +57,13 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get stream tags for.</param>
         /// <param name="tags">The set of tags to update with</param>
-        /// <returns>An awaitable Task</returns>
-        public async Task UpdateStreamTags(UserModel broadcaster, IEnumerable<TagModel> tags = null)
+        /// <returns>Whether the update was successful</returns>
+        public async Task<bool> UpdateStreamTags(UserModel broadcaster, IEnumerable<TagModel> tags = null)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             List<string> tagIDs = (tags != null) ? tags.Select(t => t.tag_id).ToList() : new List<string>();
-            await this.PutAsync("streams/tags?broadcaster_id=" + broadcaster.id, AdvancedHttpClient.CreateContentFromObject(new { tag_ids = tagIDs }));
+            HttpResponseMessage response = await this.PutAsync("streams/tags?broadcaster_id=" + broadcaster.id, AdvancedHttpClient.CreateContentFromObject(new { tag_ids = tagIDs }));
+            return response.IsSuccessStatusCode;
         }
     }
 }
