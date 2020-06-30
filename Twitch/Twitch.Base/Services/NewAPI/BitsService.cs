@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI.Bits;
+using Twitch.Base.Models.NewAPI.Users;
 
 namespace Twitch.Base.Services.NewAPI
 {
@@ -45,6 +46,16 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="connection">The Twitch connection to use</param>
         public BitsService(TwitchConnection connection) : base(connection) { }
+
+        /// <summary>
+        /// Retrieves the list of available Cheermotes, animated emotes to which viewers can assign Bits, to cheer in chat. Cheermotes returned are available throughout Twitch, in all Bits-enabled channels.
+        /// </summary>
+        /// <param name="channel">Optional channel to include specialized cheermotes for if they exist</param>
+        /// <returns>The list of available cheermotes</returns>
+        public async Task<IEnumerable<BitsCheermoteModel>> GetCheermotes(UserModel channel = null)
+        {
+            return await this.GetDataResultAsync<BitsCheermoteModel>("bits/cheermotes" + ((channel != null) ? "?broadcaster_id=" + channel.id : ""));
+        }
 
         /// <summary>
         /// Gets the Bits leaderboard for the current channel.
