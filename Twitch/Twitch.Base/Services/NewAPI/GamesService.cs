@@ -41,6 +41,17 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets a set of games by their IDs.
+        /// </summary>
+        /// <param name="ids">The IDs of the gamse</param>
+        /// <returns>The set of game information</returns>
+        public async Task<IEnumerable<GameModel>> GetGamesByID(IEnumerable<string> ids)
+        {
+            Validator.ValidateList(ids, "ids");
+            return await this.GetDataResultAsync<GameModel>("games?id=" + string.Join("&id=", ids));
+        }
+
+        /// <summary>
         /// Gets a set of games by the specified name
         /// </summary>
         /// <param name="name">The name of the game</param>
