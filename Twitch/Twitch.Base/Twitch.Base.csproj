@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.11</Version>
+    <Version>1.0.0.12</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -36,12 +36,11 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.11</AssemblyVersion>
-    <FileVersion>1.0.0.11</FileVersion>
+    <AssemblyVersion>1.0.0.12</AssemblyVersion>
+    <FileVersion>1.0.0.12</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Adding Teams V5 endpoint with GetTeams() and GetTeam() methods
-- Updating GetStreams() New API method to add userID &amp; userLogin support, as well as remove deprecated communityIDs</PackageReleaseNotes>
+    <PackageReleaseNotes>- Adding GetCheermotes() method to Bits New API endpoint</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
