@@ -88,11 +88,11 @@ namespace Twitch.Base.Services.NewAPI
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             if (startedAt != null)
             {
-                parameters.Add("started_at", startedAt.GetValueOrDefault().ToUTCISO8601String());
+                parameters.Add("started_at", startedAt.GetValueOrDefault().ToUTCISO8601String()+"Z");
             }
             if (endedAt != null)
             {
-                parameters.Add("endedAt", endedAt.GetValueOrDefault().ToUTCISO8601String());
+                parameters.Add("endedAt", endedAt.GetValueOrDefault().ToUTCISO8601String()+"Z");
             }
 
             string parameterString = (parameters.Count > 0) ? "&" + string.Join("&", parameters.Select(kvp => kvp.Key + "=" + kvp.Value)) : string.Empty;
