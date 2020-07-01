@@ -50,15 +50,15 @@ namespace Twitch.Base.Services.NewAPI
         /// <summary>
         /// Updates channel information for the specified user.
         /// </summary>
-        /// <param name="user">The user to update channel information for</param>
+        /// <param name="channel">The channel to update information for</param>
         /// <param name="title">The optional title to update to</param>
         /// <param name="gameID">The optional game ID to update to</param>
         /// <param name="broadcasterLanguage">The optional broadcast language to update to</param>
         /// <returns>Whether the update was successful or not</returns>
-        public async Task<bool> UpdateChannelInformation(UserModel user, string title = null, string gameID = null, string broadcasterLanguage = null)
+        public async Task<bool> UpdateChannelInformation(UserModel channel, string title = null, string gameID = null, string broadcasterLanguage = null)
         {
-            Validator.ValidateVariable(user, "user");
-            return await this.UpdateChannelInformation(user.id, title, gameID, broadcasterLanguage);
+            Validator.ValidateVariable(channel, "channel");
+            return await this.UpdateChannelInformation(channel.id, title, gameID, broadcasterLanguage);
         }
 
         private async Task<bool> UpdateChannelInformation(string broadcasterID, string title = null, string gameID = null, string broadcasterLanguage = null)
@@ -69,6 +69,18 @@ namespace Twitch.Base.Services.NewAPI
             if (!string.IsNullOrEmpty(broadcasterLanguage)) { jobj["broadcaster_language"] = broadcasterLanguage; }
             HttpResponseMessage response = await this.PatchAsync("channels?broadcaster_id=" + broadcasterID, AdvancedHttpClient.CreateContentFromObject(jobj));
             return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Gets the most recent banned events for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get banned events for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The set of banned events</returns>
+        public async Task<IEnumerable<ChannelBannedEventModel>> GetChannelBannedEvents(UserModel channel, int maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedDataResultAsync<ChannelBannedEventModel>("moderation/banned/events?broadcaster_id=" + channel.id);
         }
 
         /// <summary>

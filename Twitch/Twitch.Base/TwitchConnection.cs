@@ -159,6 +159,10 @@ namespace Twitch.Base
         /// </summary>
         clips__edit,
         /// <summary>
+        /// Read moderation events.
+        /// </summary>
+        moderation__read,
+        /// <summary>
         /// Manage a user object.
         /// </summary>
         user__edit,
