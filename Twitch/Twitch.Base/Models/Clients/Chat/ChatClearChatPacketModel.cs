@@ -1,5 +1,4 @@
-﻿using StreamingClient.Base.Util;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Twitch.Base.Models.Clients.Chat
 {
@@ -11,7 +10,12 @@ namespace Twitch.Base.Models.Clients.Chat
         /// <summary>
         /// The ID of the command for a chat clear.
         /// </summary>
-        public const string CommandID = "ClEARCHAT";
+        public const string CommandID = "CLEARCHAT";
+        
+        /// <summary>
+        /// The user's ID who was purged, if any.
+        /// </summary>
+        public string UserID { get; set; }
 
         /// <summary>
         /// The user's login name who was purged, if any.
@@ -19,7 +23,7 @@ namespace Twitch.Base.Models.Clients.Chat
         public string UserLogin { get; set; }
 
         /// <summary>
-        /// The time of the user in seconds. A value of 0 is a permanent ban.
+        /// The time of the ban in seconds. A value of 0 is a permanent ban.
         /// </summary>
         public long BanDuration { get; set; } = 0;
 
@@ -34,7 +38,23 @@ namespace Twitch.Base.Models.Clients.Chat
             {
                 this.UserLogin = packet.Parameters.Last();
             }
+            this.UserID = packet.GetTagString("target-user-id");
             this.BanDuration = packet.GetTagLong("ban-duration");
         }
+
+        /// <summary>
+        /// Indicates if this was a regular chat clear and not directed at a specific user.
+        /// </summary>
+        public bool IsClear { get { return string.IsNullOrEmpty(this.UserID); } }
+
+        /// <summary>
+        /// Indicates if this is a timeout of a specific user.
+        /// </summary>
+        public bool IsTimeout { get { return !string.IsNullOrEmpty(this.UserID) && this.BanDuration > 0; } }
+
+        /// <summary>
+        /// Indicates if this is a ban of a specific user.
+        /// </summary>
+        public bool IsBan { get { return !string.IsNullOrEmpty(this.UserID) && this.BanDuration == 0; } }
     }
 }
