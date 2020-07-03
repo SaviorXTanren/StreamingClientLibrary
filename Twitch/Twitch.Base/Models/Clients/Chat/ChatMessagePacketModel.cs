@@ -116,7 +116,7 @@ namespace Twitch.Base.Models.Clients.Chat
         public Dictionary<string, int> BadgeInfoDictionary { get { return this.ParseBadgeDictionary(this.UserBadgeInfo); } }
 
         /// <summary>
-        /// A dictionary containing the emote sets used by the user in the message and their location in the message
+        /// A dictionary containing the emote IDs used by the user in the message and their location in the message
         /// </summary>
         public Dictionary<string, List<Tuple<int, int>>> EmotesDictionary
         {
