@@ -87,6 +87,7 @@ namespace Twitch.ChatSample.Console
                             chat.OnUserLeaveReceived += Chat_OnUserLeaveReceived;
                             chat.OnMessageReceived += Chat_OnMessageReceived;
                             chat.OnUserStateReceived += Chat_OnUserStateReceived;
+                            chat.OnUserNoticeReceived += Chat_OnUserNoticeReceived;
 
                             await chat.Connect();
 
@@ -150,6 +151,11 @@ namespace Twitch.ChatSample.Console
         private static void Chat_OnUserStateReceived(object sender, ChatUserStatePacketModel packet)
         {
             System.Console.WriteLine(string.Format("{0}: {1} {2}", packet.UserDisplayName, packet.UserBadges, packet.Color));
+        }
+
+        private static void Chat_OnUserNoticeReceived(object sender, ChatUserNoticePacketModel packet)
+        {
+            System.Console.WriteLine(string.Format("USER NOTICE: {0} {1}", packet.UserDisplayName, packet.SystemMessage));
         }
 
         private static async void Chat_OnPingReceived(object sender, EventArgs e)
