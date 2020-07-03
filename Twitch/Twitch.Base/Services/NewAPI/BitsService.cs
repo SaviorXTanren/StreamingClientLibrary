@@ -70,7 +70,7 @@ namespace Twitch.Base.Services.NewAPI
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             if (startedAt != null)
             {
-                parameters.Add("started_at", startedAt.GetValueOrDefault().ToUTCISO8601String());
+                parameters.Add("started_at", startedAt.GetValueOrDefault().ToRFC3339String());
             }
             if (userID != null)
             {
@@ -86,7 +86,7 @@ namespace Twitch.Base.Services.NewAPI
                 BitsLeaderboardModel result = new BitsLeaderboardModel();
                 result.users = ((JArray)jobj["data"]).ToTypedArray<BitsLeaderboardUserModel>();
                 result.started_at = jobj["date_range"]["started_at"].ToString();
-                result.started_at = jobj["date_range"]["ended_at"].ToString();
+                result.ended_at = jobj["date_range"]["ended_at"].ToString();
                 return result;
             }
             return null;

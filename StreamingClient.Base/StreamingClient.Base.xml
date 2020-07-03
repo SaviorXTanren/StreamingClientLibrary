@@ -262,6 +262,13 @@
             <param name="dateTime">The DateTimeOffset to convert</param>
             <returns>The equivalent ISO 8601 string</returns>
         </member>
+        <member name="M:StreamingClient.Base.Util.DateTimeOffsetExtensions.ToRFC3339String(System.DateTimeOffset)">
+            <summary>
+            Creates an RFC 3339 string
+            </summary>
+            <param name="dateTime">The DateTimeOffset to convert</param>
+            <returns>The equivalent RFC 3339 string</returns>
+        </member>
         <member name="T:StreamingClient.Base.Util.DictionaryExtensions">
             <summary>
             Extension methods for the Dictionary class

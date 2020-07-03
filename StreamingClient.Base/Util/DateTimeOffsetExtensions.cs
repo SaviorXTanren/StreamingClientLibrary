@@ -34,5 +34,12 @@ namespace StreamingClient.Base.Util
         /// <param name="dateTime">The DateTimeOffset to convert</param>
         /// <returns>The equivalent ISO 8601 string</returns>
         public static string ToUTCISO8601String(this DateTimeOffset dateTime) { return dateTime.ToOffset(DateTimeOffset.UtcNow.Offset).ToString("s"); }
+
+        /// <summary>
+        /// Creates an RFC 3339 string
+        /// </summary>
+        /// <param name="dateTime">The DateTimeOffset to convert</param>
+        /// <returns>The equivalent RFC 3339 string</returns>
+        public static string ToRFC3339String(this DateTimeOffset dateTime) { return dateTime.ToUTCISO8601String() + "Z"; }
     }
 }
