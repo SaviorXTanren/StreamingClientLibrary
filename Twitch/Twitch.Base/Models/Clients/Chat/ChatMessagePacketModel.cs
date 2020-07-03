@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Twitch.Base.Models.Clients.Chat
 {
@@ -113,5 +114,42 @@ namespace Twitch.Base.Models.Clients.Chat
         /// A dictionary containing the user's badges and associated versions.
         /// </summary>
         public Dictionary<string, int> BadgeInfoDictionary { get { return this.ParseBadgeDictionary(this.UserBadgeInfo); } }
+
+        /// <summary>
+        /// A dictionary containing the emote sets used by the user in the message and their location in the message
+        /// </summary>
+        public Dictionary<long, List<Tuple<int, int>>> EmotesDictionary
+        {
+            get
+            {
+                Dictionary<long, List<Tuple<int, int>>> results = new Dictionary<long, List<Tuple<int, int>>>();
+                if (!string.IsNullOrEmpty(this.Emotes))
+                {
+                    string[] splits = this.Emotes.Split(new char[] { '/', ':' });
+                    if (splits != null && splits.Length > 0 && splits.Length % 2 == 0)
+                    {
+                        for (int i = 0; i < splits.Length; i = i + 2)
+                        {
+                            if (long.TryParse(splits[i], out long setID))
+                            {
+                                results[setID] = new List<Tuple<int, int>>();
+                                string[] setSplits = splits[i + 1].Split(new char[] { '-', ',' });
+                                if (setSplits != null && setSplits.Length > 0 && setSplits.Length % 2 == 0)
+                                {
+                                    for (int j = 0; j < setSplits.Length; j = j + 2)
+                                    {
+                                        if (int.TryParse(setSplits[j], out int start) && int.TryParse(setSplits[j + 1], out int end))
+                                        {
+                                            results[setID].Add(new Tuple<int, int>(start, end));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return results;
+            }
+        }
     }
 }
