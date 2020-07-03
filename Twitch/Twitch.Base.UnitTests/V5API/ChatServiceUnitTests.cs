@@ -32,7 +32,7 @@ namespace Twitch.Base.UnitTests.V5API
         {
             TestWrapper(async (TwitchConnection connection) =>
             {
-                IEnumerable<EmoteModel> results = await connection.V5API.Chat.GetChatEmoticonsForSet(new List<int>() { 19151 });
+                IEnumerable<EmoteModel> results = await connection.V5API.Chat.GetChatEmoticonsForSet(new List<string>() { "19151" });
 
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Count() > 0);
