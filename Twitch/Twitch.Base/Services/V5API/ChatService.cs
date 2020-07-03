@@ -57,7 +57,7 @@ namespace Twitch.Base.Services.V5API
         /// Gets all chat emoticons (not including their images) in one or more specified sets.
         /// </summary>
         /// <returns>The chat badges</returns>
-        public async Task<IEnumerable<EmoteModel>> GetChatEmoticonsForSet(List<int> sets)
+        public async Task<IEnumerable<EmoteModel>> GetChatEmoticonsForSet(List<string> sets)
         {
             Validator.ValidateList(sets, "sets");
 
