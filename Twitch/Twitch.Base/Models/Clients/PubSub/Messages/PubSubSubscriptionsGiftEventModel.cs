@@ -1,4 +1,6 @@
-﻿namespace Twitch.Base.Models.Clients.PubSub.Messages
+﻿using Newtonsoft.Json;
+
+namespace Twitch.Base.Models.Clients.PubSub.Messages
 {
     /// <summary>
     /// Information about a Subscription Gift.
@@ -17,5 +19,15 @@
         /// The recipient display name of the gift.
         /// </summary>
         public string recipient_display_name { get; set; }
+        /// <summary>
+        /// The amount of months gifted to the recipient if it was more than 1 month.
+        /// </summary>
+        public int multi_month_duration { get; set; }
+
+        /// <summary>
+        /// Indicates whether the event is a multi-month subscription gift.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsMultiMonth { get { return this.multi_month_duration > 1; } }
     }
 }
