@@ -21,20 +21,18 @@ namespace YouTube.Base.Services
         public LiveBroadcastsService(YouTubeConnection connection) : base(connection) { }
 
         /// <summary>
-        /// Gets the live broadcasts associated with the currently authenticated account.
+        /// Gets the broadcasts associated with the currently authenticated account.
         /// </summary>
-        /// <param name="broadcastStatus">The status for the broadcasts to get</param>
         /// <param name="maxResults">The maximum results to return</param>
         /// <returns>The list of live broadcasts</returns>
-        public async Task<IEnumerable<LiveBroadcast>> GetMyBroadcasts(BroadcastStatusEnum broadcastStatus = BroadcastStatusEnum.All, int maxResults = 1)
+        public async Task<IEnumerable<LiveBroadcast>> GetMyBroadcasts(int maxResults = 1)
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
                 LiveBroadcastsResource.ListRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.List("snippet,contentDetails,status");
-                request.BroadcastStatus = broadcastStatus;
                 request.BroadcastType = BroadcastTypeEnum.All;
                 request.Mine = true;
-                request.MaxResults = 1;
+                request.MaxResults = maxResults;
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
                 if (response.Items.Count > 0)

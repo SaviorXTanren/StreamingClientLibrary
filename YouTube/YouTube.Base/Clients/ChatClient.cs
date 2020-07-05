@@ -38,9 +38,11 @@ namespace YouTube.Base.Clients
         /// <returns>Whether the connection was successful</returns>
         public async Task<bool> Connect()
         {
-            IEnumerable<LiveBroadcast> broadcasts = await this.connection.LiveBroadcasts.GetMyBroadcasts(BroadcastStatusEnum.Active);
+            IEnumerable<LiveBroadcast> broadcasts = await this.connection.LiveBroadcasts.GetMyBroadcasts();
             if (broadcasts.Count() > 0)
             {
+                this.broadcast = broadcasts.First();
+
                 this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
