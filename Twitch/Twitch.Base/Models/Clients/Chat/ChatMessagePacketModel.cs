@@ -118,11 +118,11 @@ namespace Twitch.Base.Models.Clients.Chat
         /// <summary>
         /// A dictionary containing the emote IDs used by the user in the message and their location in the message
         /// </summary>
-        public Dictionary<string, List<Tuple<int, int>>> EmotesDictionary
+        public Dictionary<long, List<Tuple<int, int>>> EmotesDictionary
         {
             get
             {
-                Dictionary<string, List<Tuple<int, int>>> results = new Dictionary<string, List<Tuple<int, int>>>();
+                Dictionary<long, List<Tuple<int, int>>> results = new Dictionary<long, List<Tuple<int, int>>>();
                 if (!string.IsNullOrEmpty(this.Emotes))
                 {
                     string[] splits = this.Emotes.Split(new char[] { '/', ':' });
@@ -130,16 +130,18 @@ namespace Twitch.Base.Models.Clients.Chat
                     {
                         for (int i = 0; i < splits.Length; i = i + 2)
                         {
-                            string setID = splits[i];
-                            results[setID] = new List<Tuple<int, int>>();
-                            string[] setSplits = splits[i + 1].Split(new char[] { '-', ',' });
-                            if (setSplits != null && setSplits.Length > 0 && setSplits.Length % 2 == 0)
+                            if (long.TryParse(splits[i], out long setID))
                             {
-                                for (int j = 0; j < setSplits.Length; j = j + 2)
+                                results[setID] = new List<Tuple<int, int>>();
+                                string[] setSplits = splits[i + 1].Split(new char[] { '-', ',' });
+                                if (setSplits != null && setSplits.Length > 0 && setSplits.Length % 2 == 0)
                                 {
-                                    if (int.TryParse(setSplits[j], out int start) && int.TryParse(setSplits[j + 1], out int end))
+                                    for (int j = 0; j < setSplits.Length; j = j + 2)
                                     {
-                                        results[setID].Add(new Tuple<int, int>(start, end));
+                                        if (int.TryParse(setSplits[j], out int start) && int.TryParse(setSplits[j + 1], out int end))
+                                        {
+                                            results[setID].Add(new Tuple<int, int>(start, end));
+                                        }
                                     }
                                 }
                             }
