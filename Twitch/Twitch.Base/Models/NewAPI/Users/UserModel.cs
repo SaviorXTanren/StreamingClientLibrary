@@ -5,6 +5,8 @@
     /// </summary>
     public class UserModel
     {
+        private const string ThumbnailPreviewURLFormat = "https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}{1}.jpg";
+
         /// <summary>
         /// The user ID.
         /// </summary>
@@ -45,5 +47,14 @@
         /// The user's email account.
         /// </summary>
         public string email { get; set; }
+
+        /// <summary>
+        /// Gets the current thumbnail preview image for the user's channel in a large size.
+        /// </summary>
+        public string ThumbnailPreviewLarge { get { return string.Format(ThumbnailPreviewURLFormat, this.login, ""); } }
+        /// <summary>
+        /// Gets the current thumbnail preview image for the user's channel in a small size.
+        /// </summary>
+        public string ThumbnailPreviewSmall { get { return string.Format(ThumbnailPreviewURLFormat, this.login, "-640x360"); } }
     }
 }
