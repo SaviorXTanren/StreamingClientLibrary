@@ -27,6 +27,6 @@ namespace Twitch.Base.Models.NewAPI
         /// <summary>
         /// The pagination cursor.
         /// </summary>
-        public string Cursor { get { return (this.pagination.ContainsKey("cursor")) ? this.pagination["cursor"].ToString() : null; } }
+        public string Cursor { get { return (this.pagination!=null && this.pagination.ContainsKey("cursor")) ? this.pagination["cursor"].ToString() : null; } }
     }
 }
