@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.18</Version>
+    <Version>1.0.0.19</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -36,11 +36,12 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.18</AssemblyVersion>
-    <FileVersion>1.0.0.18</FileVersion>
+    <AssemblyVersion>1.0.0.19</AssemblyVersion>
+    <FileVersion>1.0.0.19</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Changing EmotesDictionary property to use long for ID of emote instead of string to match better with EmoteModel class</PackageReleaseNotes>
+    <PackageReleaseNotes>- Fixed null refrence exception when API results do not include a cursor / pagination object.
+- Adding properties for thumbnail preview images for user</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
