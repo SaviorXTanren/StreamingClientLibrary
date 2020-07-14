@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B38950FA-645B-49A0-886A-1B9B29711F61}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,6 +29,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTube.Base", "YouTube\YouTube.Base\YouTube.Base.csproj", "{01C75807-79A0-4E61-851A-487A6D664103}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTube.Base.UnitTests", "YouTube\YouTube.Base.UnitTests\YouTube.Base.UnitTests.csproj", "{94EC4A3D-188A-4F66-ABFD-714D09D6714C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.Extensions.Base", "Twitch\Twitch.Extensions.Base\Twitch.Extensions.Base.csproj", "{03D054E7-8681-4450-9FBF-15EEBA328615}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,14 @@ Global
 		{94EC4A3D-188A-4F66-ABFD-714D09D6714C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94EC4A3D-188A-4F66-ABFD-714D09D6714C}.Release|x86.ActiveCfg = Release|Any CPU
 		{94EC4A3D-188A-4F66-ABFD-714D09D6714C}.Release|x86.Build.0 = Release|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Debug|x86.Build.0 = Debug|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Release|x86.ActiveCfg = Release|Any CPU
+		{03D054E7-8681-4450-9FBF-15EEBA328615}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +115,7 @@ Global
 		{3E25B588-C4D2-4ECF-AED8-5737FAB4DCBD} = {15853CC4-4FF4-4942-ABE9-0D1B1BCD0F9C}
 		{01C75807-79A0-4E61-851A-487A6D664103} = {310F8834-CFC8-4E18-80A1-2A2737228A44}
 		{94EC4A3D-188A-4F66-ABFD-714D09D6714C} = {310F8834-CFC8-4E18-80A1-2A2737228A44}
+		{03D054E7-8681-4450-9FBF-15EEBA328615} = {15853CC4-4FF4-4942-ABE9-0D1B1BCD0F9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FE2C578-F9C3-42C1-AE95-BFB0C4A0E927}
