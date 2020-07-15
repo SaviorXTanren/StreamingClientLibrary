@@ -74,8 +74,10 @@ namespace Twitch.Base.Services.NewAPI
             try
             {
                 var response = await this.PostAsync("webhooks/hub", postObject);
-                
-                return true;
+                if (response.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
             }
             catch (Exception)
             {
