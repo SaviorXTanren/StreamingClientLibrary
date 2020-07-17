@@ -56,6 +56,11 @@
         public UsersService Users { get; private set; }
 
         /// <summary>
+        /// APIs for Webhooks
+        /// </summary>
+        public WebhooksService Webhooks { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of the NewTwitchAPIServices class with the specified connection.
         /// </summary>
         /// <param name="connection">The Twitch connection</param>
@@ -71,6 +76,7 @@
             this.Subscriptions = new SubscriptionsService(connection);
             this.Tags = new TagsService(connection);
             this.Users = new UsersService(connection);
+            this.Webhooks = new WebhooksService(connection);
         }
     }
 }
