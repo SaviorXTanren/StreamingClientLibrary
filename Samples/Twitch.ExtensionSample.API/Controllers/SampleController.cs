@@ -29,7 +29,7 @@ namespace Twitch.ExtensionSample.API.Controllers
                 bearerToken = bearerToken.Replace("Bearer ", "");
             }
 
-            string result = TwitchAuthenticationService.ValidateAuthenticationToken(bearerToken, clientSecret, out TwitchJWTTokenPayloadModel payload);
+            string result = TwitchExtensionService.ValidateAuthenticationToken(bearerToken, clientSecret, out TwitchJWTTokenPayloadModel payload);
             if (!string.IsNullOrEmpty(result))
             {
                 return this.Unauthorized(result);
@@ -37,7 +37,7 @@ namespace Twitch.ExtensionSample.API.Controllers
 
             JObject data = new JObject();
             data["hello"] = "world";
-            await TwitchBroadcastService.SendBroadcast(clientID, clientSecret, ownerID, payload.channel_id, data);
+            await TwitchExtensionService.SendBroadcast(clientID, clientSecret, ownerID, payload.channel_id, data);
 
             return this.Ok("Broadcast Sent");
         }
