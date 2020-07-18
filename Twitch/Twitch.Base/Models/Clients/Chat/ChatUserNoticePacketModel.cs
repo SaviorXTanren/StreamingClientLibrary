@@ -96,6 +96,11 @@
         public int SubGiftMonths { get; set; }
 
         /// <summary>
+        /// Sent for extendsub. Indiciates the month number to which the sub was extended.
+        /// </summary>
+        public int SubBenefitEndMonth { get; set; }
+
+        /// <summary>
         /// (Sent only on subgift, anonsubgift) The user ID of the subscription gift recipient.
         /// </summary>
         public string SubGiftRecipientID { get; set; }
@@ -155,7 +160,7 @@
         /// </summary>
         public string RitualName { get; set; }
 
-        /// <summary>
+         /// <summary>
         /// Timestamp when the server received the message.
         /// </summary>
         public long Timestamp { get; set; }
@@ -195,6 +200,7 @@
             this.RaidViewerCount = packet.GetTagInt("msg-param-viewerCount");
             this.RitualName = packet.GetTagString("msg-param-ritual-name");
             this.BitsTierThreshold = packet.GetTagLong("msg-param-threshold");
+            this.SubBenefitEndMonth = packet.GetTagInt("msg-param-sub-benefit-end-month");
             this.Timestamp = packet.GetTagLong("tmi-sent-ts");
         }
     }
