@@ -155,6 +155,8 @@
         /// </summary>
         public string RitualName { get; set; }
 
+        public int SubBenefitEndMonth { get; set; }
+
         /// <summary>
         /// Timestamp when the server received the message.
         /// </summary>
@@ -195,6 +197,7 @@
             this.RaidViewerCount = packet.GetTagInt("msg-param-viewerCount");
             this.RitualName = packet.GetTagString("msg-param-ritual-name");
             this.BitsTierThreshold = packet.GetTagLong("msg-param-threshold");
+            this.SubBenefitEndMonth = packet.GetTagInt("msg-param-sub-benefit-end-month");
             this.Timestamp = packet.GetTagLong("tmi-sent-ts");
         }
     }
