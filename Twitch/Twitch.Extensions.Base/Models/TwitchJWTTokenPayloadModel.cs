@@ -56,5 +56,10 @@ namespace Twitch.Extensions.Base.Models
         /// Whether the user is a broadcaster.
         /// </summary>
         public bool IsBroadcaster { get { return !string.IsNullOrEmpty(this.role) && this.role.Equals("broadcaster"); } }
+
+        /// <summary>
+        /// Whether the user shared their public user ID
+        /// </summary>
+        public bool HasPublicUserID { get { return !string.IsNullOrEmpty(this.user_id); } }
     }
 }

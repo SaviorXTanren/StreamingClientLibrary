@@ -254,6 +254,40 @@ namespace Twitch.Extensions.Base.Services
             }
         }
 
+        /// <summary>
+        /// Sends a chat message to the specified channel from the extension.
+        /// </summary>
+        /// <param name="clientID">The client ID of the extension</param>
+        /// <param name="clientSecret">The client secret of the extension</param>
+        /// <param name="ownerID">The owner user ID of the extension</param>
+        /// <param name="version">The version of the extension</param>
+        /// <param name="channelID">The channel ID to broadcast to</param>
+        /// <param name="message">The message to send</param>
+        /// <returns>Whether the chat message send was successful. Throws a HttpRestRequestException in the event of failed request</returns>
+        public static async Task<bool> SendChatMessage(string clientID, string clientSecret, string ownerID, string version, string channelID, string message)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(clientSecret, "clientSecret");
+            Validator.ValidateString(ownerID, "ownerID");
+            Validator.ValidateString(version, "version");
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(message, "message");
+
+            using (AdvancedHttpClient client = TwitchExtensionService.GetHttpClient(clientID, clientSecret, ownerID, channelID))
+            {
+                HttpResponseMessage response = await client.PostAsync($"https://api.twitch.tv/extensions/{clientID}/{version}/channels/{channelID}/chat",
+                    AdvancedHttpClient.CreateContentFromString(JSONSerializerHelper.SerializeToString(new ExtensionChatMessageModel(message))));
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new HttpRestRequestException(response);
+                }
+            }
+        }
+
         private static AdvancedHttpClient GetHttpClient(string clientID, string clientSecret, string ownerID, string channelID)
         {
             AdvancedHttpClient client = new AdvancedHttpClient();
