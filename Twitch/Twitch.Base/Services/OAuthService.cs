@@ -24,25 +24,25 @@ namespace Twitch.Base.Services
         internal OAuthService() : base(OAuthBaseAddress) { }
 
         /// <summary>
-        /// Creates an OAuth token for authenticating with the Mixer services.
+        /// Creates an OAuth token for authenticating with the Twitch services.
         /// </summary>
         /// <param name="clientID">The id of the client application</param>
         /// <param name="authorizationCode">The authorization code</param>
         /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
-        /// <returns></returns>
+        /// <returns>The OAuth token</returns>
         public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string authorizationCode, string redirectUrl = null)
         {
             return await this.GetOAuthTokenModel(clientID, null, authorizationCode, redirectUrl);
         }
 
         /// <summary>
-        /// Creates an OAuth token for authenticating with the Mixer services.
+        /// Creates an OAuth token for authenticating with the Twitch services.
         /// </summary>
         /// <param name="clientID">The id of the client application</param>
         /// <param name="clientSecret">The secret key of the client application</param>
         /// <param name="authorizationCode">The authorization code</param>
         /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
-        /// <returns></returns>
+        /// <returns>The OAuth token</returns>
         public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
         {
             Validator.ValidateString(clientID, "clientID");

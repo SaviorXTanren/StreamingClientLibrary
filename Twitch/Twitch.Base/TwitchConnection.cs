@@ -238,9 +238,6 @@ namespace Twitch.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
             Validator.ValidateString(redirectUri, "redirectUri");
-
-            string url = "https://id.twitch.tv/oauth2/authorize";
-
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "client_id", clientID },
@@ -256,7 +253,30 @@ namespace Twitch.Base
 
             FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
 
-            return url + "?" + await content.ReadAsStringAsync();
+            return "https://id.twitch.tv/oauth2/authorize?" + await content.ReadAsStringAsync();
+        }
+
+        /// <summary>
+        /// Generates the OAuth token URL to use for app access token creation.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <returns>The token URL</returns>
+        public static async Task<string> GetTokenURLForAppAccess(string clientID, string clientSecret)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(clientSecret, "clientSecret");
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            {
+                { "client_id", clientID },
+                { "client_secret", clientSecret },
+                { "grant_type", "client_credentials" }
+            };
+
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
+
+            return "https://id.twitch.tv/oauth2/token?" + await content.ReadAsStringAsync();
         }
 
         /// <summary>
@@ -310,6 +330,31 @@ namespace Twitch.Base
             {
                 throw new InvalidOperationException("OAuth token was not acquired");
             }
+            return new TwitchConnection(token);
+        }
+
+        /// <summary>
+        /// Creates a TwitchConnection object from an app access token.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <returns>The TwitchConnection object</returns>
+        public static async Task<TwitchConnection> ConnectViaAppAccess(string clientID, string clientSecret)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(clientSecret, "clientSecret");
+
+            OAuthTokenModel token = null;
+            using (AdvancedHttpClient client = new AdvancedHttpClient())
+            {
+                token = await client.PostAsync<OAuthTokenModel>(await TwitchConnection.GetTokenURLForAppAccess(clientID, clientSecret));
+            }
+
+            if (token == null)
+            {
+                throw new InvalidOperationException("OAuth token was not acquired");
+            }
+            token.clientID = clientID;
             return new TwitchConnection(token);
         }
 
