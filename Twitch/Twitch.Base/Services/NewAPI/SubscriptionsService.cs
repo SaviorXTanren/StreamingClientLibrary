@@ -21,11 +21,12 @@ namespace Twitch.Base.Services.NewAPI
         /// Gets all subscriptions for a broadcaster
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The broadcaster's subscriptions</returns>
-        public async Task<IEnumerable<SubscriptionModel>> GetAllSubscriptions(UserModel broadcaster)
+        public async Task<IEnumerable<SubscriptionModel>> GetAllSubscriptions(UserModel broadcaster, int maxResults = 1)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id);
+            return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id, maxResults);
         }
 
         /// <summary>
