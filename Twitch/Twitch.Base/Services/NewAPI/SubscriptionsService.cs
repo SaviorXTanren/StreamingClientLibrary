@@ -1,5 +1,6 @@
 ﻿using StreamingClient.Base.Util;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI.Subscriptions;
 using Twitch.Base.Models.NewAPI.Users;
@@ -39,7 +40,7 @@ namespace Twitch.Base.Services.NewAPI
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateList(userIDs, "userIDs");
-            return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id + "&user_id=" + string.Join("&user_id=", userIDs));
+            return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id + "&user_id=" + string.Join("&user_id=", userIDs), userIDs.Count());
         }
     }
 }

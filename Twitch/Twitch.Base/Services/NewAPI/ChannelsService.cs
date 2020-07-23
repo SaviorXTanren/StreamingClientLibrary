@@ -80,7 +80,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<IEnumerable<ChannelBannedEventModel>> GetChannelBannedEvents(UserModel channel, int maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.GetPagedDataResultAsync<ChannelBannedEventModel>("moderation/banned/events?broadcaster_id=" + channel.id);
+            return await this.GetPagedDataResultAsync<ChannelBannedEventModel>("moderation/banned/events?broadcaster_id=" + channel.id, maxResults);
         }
 
         /// <summary>
