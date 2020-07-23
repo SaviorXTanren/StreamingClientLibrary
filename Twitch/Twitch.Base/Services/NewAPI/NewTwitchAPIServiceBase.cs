@@ -67,12 +67,9 @@ namespace Twitch.Base.Services.NewAPI
                 NewTwitchAPIDataRestResult<T> data = await this.GetAsync<NewTwitchAPIDataRestResult<T>>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
 
                 cursor = null;
-                if (data != null)
+                if (data != null && data.data != null && data.data.Count > 0)
                 {
-                    if (data.data != null)
-                    {
-                        results.AddRange(data.data);
-                    }
+                    results.AddRange(data.data);
                     cursor = data.Cursor;
                 }
             }
