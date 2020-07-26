@@ -114,8 +114,9 @@ namespace Twitch.Extensions.Base.Services
         /// <param name="segment">The segment type of the configuration</param>
         /// <param name="version">The version for the configuration</param>
         /// <param name="data">The data to set for the configuration</param>
-        /// <returns>Whether the broadcast was successful or not. Throws a HttpRestRequestException in the event of failed request</returns>
-        public static async Task<bool> SetConfiguration(string clientID, string clientSecret, string ownerID, string channelID, string segment, string version, object data)
+        /// <returns>An awaitable task</returns>
+        /// <exception cref="HttpRestRequestException">Throw in the event of a failed request</exception>
+        public static async Task SetConfiguration(string clientID, string clientSecret, string ownerID, string channelID, string segment, string version, object data)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(clientSecret, "clientSecret");
@@ -132,11 +133,7 @@ namespace Twitch.Extensions.Base.Services
 
                 HttpResponseMessage response = await client.PutAsync($"https://api.twitch.tv/extensions/{clientID}/configurations/",
                     AdvancedHttpClient.CreateContentFromString(JSONSerializerHelper.SerializeToString(configuration)));
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRestRequestException(response);
                 }
@@ -230,8 +227,9 @@ namespace Twitch.Extensions.Base.Services
         /// <param name="ownerID">The owner user ID of the extension</param>
         /// <param name="channelID">The channel ID to broadcast to</param>
         /// <param name="data">The data to broadcast</param>
-        /// <returns>Whether the broadcast was successful or not. Throws a HttpRestRequestException in the event of failed request</returns>
-        public static async Task<bool> SendBroadcast(string clientID, string clientSecret, string ownerID, string channelID, object data)
+        /// <returns>An awaitable task</returns>
+        /// <exception cref="HttpRestRequestException">Throw in the event of a failed request</exception>
+        public static async Task SendBroadcast(string clientID, string clientSecret, string ownerID, string channelID, object data)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(clientSecret, "clientSecret");
@@ -243,11 +241,7 @@ namespace Twitch.Extensions.Base.Services
             {
                 HttpResponseMessage response = await client.PostAsync("https://api.twitch.tv/extensions/message/" + channelID,
                     AdvancedHttpClient.CreateContentFromString(JSONSerializerHelper.SerializeToString(new BroadcastBodyModel(data))));
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRestRequestException(response);
                 }
@@ -263,8 +257,9 @@ namespace Twitch.Extensions.Base.Services
         /// <param name="version">The version of the extension</param>
         /// <param name="channelID">The channel ID to broadcast to</param>
         /// <param name="message">The message to send</param>
-        /// <returns>Whether the chat message send was successful. Throws a HttpRestRequestException in the event of failed request</returns>
-        public static async Task<bool> SendChatMessage(string clientID, string clientSecret, string ownerID, string version, string channelID, string message)
+        /// <returns>An awaitable task</returns>
+        /// <exception cref="HttpRestRequestException">Throw in the event of a failed request</exception>
+        public static async Task SendChatMessage(string clientID, string clientSecret, string ownerID, string version, string channelID, string message)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(clientSecret, "clientSecret");
@@ -277,11 +272,7 @@ namespace Twitch.Extensions.Base.Services
             {
                 HttpResponseMessage response = await client.PostAsync($"https://api.twitch.tv/extensions/{clientID}/{version}/channels/{channelID}/chat",
                     AdvancedHttpClient.CreateContentFromString(JSONSerializerHelper.SerializeToString(new ExtensionChatMessageModel(message))));
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRestRequestException(response);
                 }
