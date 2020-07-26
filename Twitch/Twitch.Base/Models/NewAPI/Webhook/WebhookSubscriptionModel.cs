@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Twitch.Base.Models.NewAPI.Webhooks
+﻿namespace Twitch.Base.Models.NewAPI.Webhooks
 {
     /// <summary>
     /// Information about Webhook Subscription
