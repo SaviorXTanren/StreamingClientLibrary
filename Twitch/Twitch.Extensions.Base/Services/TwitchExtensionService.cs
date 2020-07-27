@@ -15,7 +15,7 @@ using Twitch.Extensions.Base.Models;
 namespace Twitch.Extensions.Base.Services
 {
     /// <summary>
-    /// Service that handles authentication validation for Twitch JWT tokens via Extensions.
+    /// Service that handles interacting with Twitch extension services.
     /// </summary>
     public static class TwitchExtensionService
     {
