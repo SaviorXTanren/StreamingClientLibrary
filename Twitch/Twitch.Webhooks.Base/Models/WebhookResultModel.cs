@@ -33,6 +33,11 @@ namespace Twitch.Webhooks.Base.Models
         [DataMember]
         public long BodyContentLength { get; set; }
         /// <summary>
+        /// The query parameters included with the request.
+        /// </summary>
+        [DataMember]
+        public Dictionary<string, string> QueryParameters { get; set; } = new Dictionary<string, string>();
+        /// <summary>
         /// The data included in the request.
         /// </summary>
         [DataMember]
@@ -50,13 +55,15 @@ namespace Twitch.Webhooks.Base.Models
         /// <param name="headerContentLength">The content length in the header of the request.</param>
         /// <param name="bodySignature">The hash signature computed from the body contents.</param>
         /// <param name="bodyContentLength">The content length computed from the body contents.</param>
+        /// <param name="queryParameters">The query parameters included with the request./param>
         /// <param name="data">The data included in the request.</param>
-        public WebhookResultModel(string headerSignature, long headerContentLength, string bodySignature, long bodyContentLength, IEnumerable<T> data)
+        public WebhookResultModel(string headerSignature, long headerContentLength, string bodySignature, long bodyContentLength, Dictionary<string, string> queryParameters, IEnumerable<T> data)
         {
             this.HeaderSignature = headerSignature;
             this.HeaderContentLength = headerContentLength;
             this.BodySignature = bodySignature;
             this.BodyContentLength = bodyContentLength;
+            this.QueryParameters = queryParameters;
             this.Data = data;
         }
 

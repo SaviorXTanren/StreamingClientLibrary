@@ -56,6 +56,12 @@ namespace Twitch.Webhooks.Base.Services
                 body = await reader.ReadToEndAsync();
             }
 
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            foreach (var kvp in request.Query)
+            {
+                queryParameters[kvp.Key] = kvp.Value;
+            }
+
             WebhookDataWrapperModel<T> dataWrapper = null;
             if (!string.IsNullOrEmpty(body))
             {
@@ -72,7 +78,7 @@ namespace Twitch.Webhooks.Base.Services
                 dataWrapper = JSONSerializerHelper.DeserializeFromString<WebhookDataWrapperModel<T>>(body);
             }
 
-            return new WebhookResultModel<T>(headerSignature, headerContentLength, bodySignature, bodyContentLength, (dataWrapper != null) ? dataWrapper.data : new List<T>());
+            return new WebhookResultModel<T>(headerSignature, headerContentLength, bodySignature, bodyContentLength, queryParameters, (dataWrapper != null) ? dataWrapper.data : new List<T>());
         }
     }
 }
