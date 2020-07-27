@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Twitch.Base.Models.NewAPI
 {
     /// <summary>
-    /// A wrapper result used forthe New Twitch APIs
+    /// A wrapper result used for the New Twitch APIs
     /// </summary>
     /// <typeparam name="T">The type that the result contains</typeparam>
     public class NewTwitchAPIDataRestResult<T>
