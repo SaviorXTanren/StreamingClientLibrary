@@ -56,7 +56,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTube.VideoUploadSample.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.Extensions.Base", "..\Twitch\Twitch.Extensions.Base\Twitch.Extensions.Base.csproj", "{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitch.ExtensionSample.API", "Twitch.ExtensionSample.API\Twitch.ExtensionSample.API.csproj", "{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.ExtensionSample.API", "Twitch.ExtensionSample.API\Twitch.ExtensionSample.API.csproj", "{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.WebhooksSample.API", "Twitch.WebhooksSample.API\Twitch.WebhooksSample.API.csproj", "{5B88AA03-1640-4CD1-B616-430BB30E2D99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitch.Webhooks.Base", "..\Twitch\Twitch.Webhooks.Base\Twitch.Webhooks.Base.csproj", "{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +198,22 @@ Global
 		{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}.Release|x86.ActiveCfg = Release|Any CPU
 		{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}.Release|x86.Build.0 = Release|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99}.Release|x86.Build.0 = Release|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,6 +240,8 @@ Global
 		{7BD692E5-6886-4B5C-83C1-533BE2F90E67} = {4A93CE08-D195-4A2F-985E-D8BC8C9B0CCF}
 		{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89} = {15853CC4-4FF4-4942-ABE9-0D1B1BCD0F9C}
 		{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F} = {A036E2E9-43ED-4928-8235-1066BA5FDE05}
+		{5B88AA03-1640-4CD1-B616-430BB30E2D99} = {A036E2E9-43ED-4928-8235-1066BA5FDE05}
+		{4A77F5CE-3A77-46D6-8C1F-C1673996C23E} = {15853CC4-4FF4-4942-ABE9-0D1B1BCD0F9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FE2C578-F9C3-42C1-AE95-BFB0C4A0E927}
