@@ -21,6 +21,11 @@
         public string Login { get; set; }
 
         /// <summary>
+        /// The display name of the user who sent the notice.
+        /// </summary>
+        public string DisplayName { get; set; }
+
+        /// <summary>
         /// Indicates whether the user is a moderator.
         /// </summary>
         public bool Moderator { get; set; }
@@ -174,6 +179,7 @@
         {
             this.UserID = packet.GetTagLong("user-id");
             this.Login = packet.GetTagString("login");
+            this.DisplayName = packet.GetTagString("display-name");
             this.Moderator = packet.GetTagBool("mod");
             this.MessageID = packet.GetTagString("id");
             this.MessageTypeID = packet.GetTagString("msg-id");
