@@ -719,6 +719,7 @@ namespace Twitch.Base.Clients
                                     default:
                                         throw new FormatException(string.Format("Unexpected escape sequence {0}.", (int)c));
                                 }
+                                i++;
                                 break;
                             case '\r':
                             case '\n':
