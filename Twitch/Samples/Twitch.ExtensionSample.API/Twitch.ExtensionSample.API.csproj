@@ -10,8 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
-    <ProjectReference Include="..\..\Twitch\Twitch.Extensions.Base\Twitch.Extensions.Base.csproj" />
+    <ProjectReference Include="..\..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
+    <ProjectReference Include="..\..\Twitch.Base\Twitch.Base.csproj" />
+    <ProjectReference Include="..\..\Twitch.Extensions.Base\Twitch.Extensions.Base.csproj" />
   </ItemGroup>
 
 
