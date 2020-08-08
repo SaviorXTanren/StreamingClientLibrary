@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trovo.Base;
+using Trovo.Base.Clients;
 using Trovo.Base.Models.Channels;
 using Trovo.Base.Models.Users;
 
@@ -10,9 +11,12 @@ namespace Trovo.ChatSample.Console
 {
     public class Program
     {
-        private static string clientID = "8FMjuk785AX4FMyrwPTU3B8vYvgHWN33";
+        private static string clientID = "";
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
+            OAuthClientScopeEnum.chat_connect,
+            OAuthClientScopeEnum.chat_send_self,
+
             OAuthClientScopeEnum.channel_details_self,
             OAuthClientScopeEnum.channel_update_self,
 
@@ -20,6 +24,8 @@ namespace Trovo.ChatSample.Console
         };
 
         private static TrovoConnection connection;
+
+        private static ChatClient chat;
 
         public static void Main(string[] args)
         {
@@ -46,6 +52,14 @@ namespace Trovo.ChatSample.Console
                             if (channel != null)
                             {
                                 System.Console.WriteLine("Channel Title: " + channel.live_title);
+
+                                chat = new ChatClient(connection);
+
+                                System.Console.WriteLine("Connecting to chat...");
+                                if (await chat.Connect())
+                                {
+                                    System.Console.WriteLine("Successfully connected to chat!");
+                                }
                             }
                         }
                     }

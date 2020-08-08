@@ -17,17 +17,27 @@ namespace Trovo.Base
     public enum OAuthClientScopeEnum
     {
         /// <summary>
-        /// View your email address and user profiles. 
-        /// </summary>
-        user_details_self,
-        /// <summary>
         /// View your channel details. Including Stream Key. 
         /// </summary>
         channel_details_self,
         /// <summary>
-        /// Update your channel settings
+        /// Update your channel settings.
         /// </summary>
-        channel_update_self
+        channel_update_self,
+
+        /// <summary>
+        /// Connect to chat.
+        /// </summary>
+        chat_connect,
+        /// <summary>
+        /// Send chat messages as connected user.
+        /// </summary>
+        chat_send_self,
+
+        /// <summary>
+        /// View your email address and user profiles. 
+        /// </summary>
+        user_details_self,
     }
 
     /// <summary>
@@ -134,6 +144,8 @@ namespace Trovo.Base
 
         public ChannelsService Channels { get; private set; }
 
+        public ChatService Chat { get; private set; }
+
         public UsersService Users { get; private set; }
 
         private TrovoConnection(OAuthTokenModel token)
@@ -143,6 +155,7 @@ namespace Trovo.Base
             this.token = token;
             this.OAuth = new OAuthService(this);
             this.Channels = new ChannelsService(this);
+            this.Chat = new ChatService(this);
             this.Users = new UsersService(this);
         }
 
