@@ -40,7 +40,11 @@ namespace StreamingClient.Base.Model.OAuth
         /// The expiration time of the token in seconds from when it was obtained.
         /// </summary>
         [JsonProperty("expires_in")]
-        public int expiresIn { get; set; }
+        public long expiresIn { get; set; }
+        /// <summary>
+        /// The timestamp of the expiration, if supported by the service, in seconds from Unix Epoch
+        /// </summary>
+        public long expiresTimeStamp { get; set; }
 
         /// <summary>
         /// The time when the token was obtained.
@@ -52,7 +56,7 @@ namespace StreamingClient.Base.Model.OAuth
         /// The expiration time of the token.
         /// </summary>
         [JsonIgnore]
-        public DateTimeOffset ExpirationDateTime { get { return this.AcquiredDateTime.AddSeconds(this.expiresIn); } }
+        public DateTimeOffset ExpirationDateTime { get { return (this.expiresTimeStamp > 0) ? DateTimeOffset.FromUnixTimeSeconds(this.expiresTimeStamp) : this.AcquiredDateTime.AddSeconds(this.expiresIn); } }
 
         /// <summary>
         /// Creates a new instance of an OAuth token.

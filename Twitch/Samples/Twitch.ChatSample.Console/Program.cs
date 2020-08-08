@@ -62,7 +62,7 @@ namespace Twitch.ChatSample.Console
 
                     System.Console.WriteLine("Connecting to Twitch...");
 
-                    connection = TwitchConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes).Result;
+                    connection = await TwitchConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes);
                     if (connection != null)
                     {
                         System.Console.WriteLine("Twitch connection successful!");
