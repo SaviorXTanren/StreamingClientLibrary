@@ -5,5 +5,5 @@ dotnet: 2.0.0
 dist: trusty
 
 script:
-  - dotnet restore
-  - dotnet msbuild
+  - dotnet restore streaming-client-csharp.sln
+  - dotnet msbuild streaming-client-csharp.sln
