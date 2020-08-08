@@ -12,8 +12,4 @@
     <ProjectReference Include="..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

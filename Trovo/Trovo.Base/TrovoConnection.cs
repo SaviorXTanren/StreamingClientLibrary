@@ -132,12 +132,18 @@ namespace Trovo.Base
 
         public OAuthService OAuth { get; private set; }
 
+        public ChannelsService Channels { get; private set; }
+
+        public UsersService Users { get; private set; }
+
         private TrovoConnection(OAuthTokenModel token)
         {
             Validator.ValidateVariable(token, "token");
 
             this.token = token;
             this.OAuth = new OAuthService(this);
+            this.Channels = new ChannelsService(this);
+            this.Users = new UsersService(this);
         }
 
         /// <summary>

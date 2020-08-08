@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trovo.Base;
+using Trovo.Base.Models.Channels;
+using Trovo.Base.Models.Users;
 
 namespace Trovo.ChatSample.Console
 {
     public class Program
     {
-        private static string clientID = "";
+        private static string clientID = "8FMjuk785AX4FMyrwPTU3B8vYvgHWN33";
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
             OAuthClientScopeEnum.channel_details_self,
@@ -34,6 +36,18 @@ namespace Trovo.ChatSample.Console
                     if (connection != null)
                     {
                         System.Console.WriteLine("Trovo connection successful!");
+
+                        PrivateUserModel user = await connection.Users.GetCurrentUser();
+                        if (user != null)
+                        {
+                            System.Console.WriteLine("Current User: " + user.userName);
+
+                            PrivateChannelModel channel = await connection.Channels.GetCurrentChannel();
+                            if (channel != null)
+                            {
+                                System.Console.WriteLine("Channel Title: " + channel.live_title);
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
