@@ -486,12 +486,13 @@
             Helper class for handling JSON serialization
             </summary>
         </member>
-        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.SerializeToString``1(``0)">
+        <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.SerializeToString``1(``0,System.Boolean)">
             <summary>
             Serializes the specified object to a string
             </summary>
             <typeparam name="T">The type of the object</typeparam>
             <param name="data">The object to serialize</param>
+            <param name="includeObjectType">Whether to include the serialized object type in the serialized string</param>
             <returns>The serialized string</returns>
         </member>
         <member name="M:StreamingClient.Base.Util.JSONSerializerHelper.DeserializeFromString``1(System.String,System.Boolean)">

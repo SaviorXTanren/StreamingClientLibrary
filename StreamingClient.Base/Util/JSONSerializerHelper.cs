@@ -12,10 +12,11 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <typeparam name="T">The type of the object</typeparam>
         /// <param name="data">The object to serialize</param>
+        /// <param name="includeObjectType">Whether to include the serialized object type in the serialized string</param>
         /// <returns>The serialized string</returns>
-        public static string SerializeToString<T>(T data)
+        public static string SerializeToString<T>(T data, bool includeObjectType = true)
         {
-            return JsonConvert.SerializeObject(data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            return JsonConvert.SerializeObject(data, new JsonSerializerSettings { TypeNameHandling = (includeObjectType) ? TypeNameHandling.Objects : TypeNameHandling.None });
         }
 
         /// <summary>
