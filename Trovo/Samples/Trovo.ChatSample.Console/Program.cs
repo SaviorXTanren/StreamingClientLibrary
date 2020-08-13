@@ -1,10 +1,12 @@
 ﻿using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trovo.Base;
 using Trovo.Base.Clients;
 using Trovo.Base.Models.Channels;
+using Trovo.Base.Models.Chat;
 using Trovo.Base.Models.Users;
 
 namespace Trovo.ChatSample.Console
@@ -54,11 +56,18 @@ namespace Trovo.ChatSample.Console
                                 System.Console.WriteLine("Channel Title: " + channel.live_title);
 
                                 chat = new ChatClient(connection);
+                                chat.OnChatMessageReceived += Chat_OnChatMessageReceived;
 
                                 System.Console.WriteLine("Connecting to chat...");
                                 if (await chat.Connect())
                                 {
                                     System.Console.WriteLine("Successfully connected to chat!");
+
+                                    while (true)
+                                    {
+                                        string line = System.Console.ReadLine();
+                                        await chat.SendMessage(line);
+                                    }
                                 }
                             }
                         }
@@ -71,6 +80,16 @@ namespace Trovo.ChatSample.Console
             }).Wait();
 
             System.Console.ReadLine();
+        }
+
+        private static void Chat_OnChatMessageReceived(object sender, ChatMessageContainerModel message)
+        {
+            List<string> rawText = new List<string>();
+            foreach (ChatMessageModel m in message.chats)
+            {
+                rawText.Add(m.content);
+            }
+            System.Console.WriteLine(string.Format("{0}: {1}", message.chats.FirstOrDefault()?.nick_name, string.Join(' ', rawText)));
         }
 
         private static void Logger_LogOccurred(object sender, Log log)
