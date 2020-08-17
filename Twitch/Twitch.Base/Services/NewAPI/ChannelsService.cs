@@ -95,11 +95,15 @@ namespace Twitch.Base.Services.NewAPI
         {
             Validator.ValidateVariable(channel, "channel");
             List<string> parameters = new List<string>();
-            foreach (string userID in userIDs)
+            if (userIDs != null)
             {
-                parameters.Add("user_id=" + userID);
+                foreach (string userID in userIDs)
+                {
+                    parameters.Add("user_id=" + userID);
+                }
             }
-            return await this.GetPagedDataResultAsync<ChannelBannedUserModel>("moderation/banned?broadcaster_id=" + channel.id + "&" + string.Join("&", parameters), maxResults);
+            parameters.Add("broadcaster_id=" + channel.id);
+            return await this.GetPagedDataResultAsync<ChannelBannedUserModel>("moderation/banned?" + string.Join("&", parameters), maxResults);
         }
 
         /// <summary>
