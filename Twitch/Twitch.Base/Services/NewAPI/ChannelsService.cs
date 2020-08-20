@@ -83,6 +83,29 @@ namespace Twitch.Base.Services.NewAPI
             return await this.GetPagedDataResultAsync<ChannelBannedEventModel>("moderation/banned/events?broadcaster_id=" + channel.id, maxResults);
         }
 
+
+        /// <summary>
+        /// Returns all banned and timed-out users in a channel.
+        /// </summary>
+        /// <param name="channel">The channel to get banned events for</param>
+        /// <param name="userIDs">If specified, filters banned and timed-out users to those userIDs specified.</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The set of banned or timed-out users</returns>
+        public async Task<IEnumerable<ChannelBannedUserModel>> GetChannelBannedUsers(UserModel channel, IEnumerable<string> userIDs=null, int maxResults=1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            List<string> parameters = new List<string>();
+            if (userIDs != null)
+            {
+                foreach (string userID in userIDs)
+                {
+                    parameters.Add("user_id=" + userID);
+                }
+            }
+            parameters.Add("broadcaster_id=" + channel.id);
+            return await this.GetPagedDataResultAsync<ChannelBannedUserModel>("moderation/banned?" + string.Join("&", parameters), maxResults);
+        }
+
         /// <summary>
         /// Gets the information of the most recent Hype Train of the given channel ID.
         /// </summary>

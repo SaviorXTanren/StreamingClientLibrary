@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
 # StreamingClientLibrary
-C# client library for Mixer, Twitch, & YouTube streaming services
+C# client library for Twitch, YouTube, and other streaming services
 
 ## What is this?
 When this project was initially created, it was made to fill a gap that existed with lack of a .NET-based library for interaction with Mixer. As time has gone on, the project has added support for additional streaming sites and strives to build a "one-stop shop" to interact with variety of different sites in a consistent manner.
@@ -10,14 +10,11 @@ This library uses the native WebSocket support found in Windows 8 & higher. This
 
 ## Current functionality
 All of the most common APIs are available across all sites. We've also added support for the various other forms of connections for each site:
-- Chat/Constellation/MixPlay WebSockets for Mixer
 - Chat IRC for Twitch, PubSub WebSockets for Twitch
 - Automated Chat Web Call for YouTube
 
 ## How do I get started using it?
 Download the appropriate NuGet package based on the streaming site you want to work with:
-
-Mixer: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Mixer.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Mixer)
 
 Twitch: [![NuGet](https://img.shields.io/nuget/v/StreamingClientLibrary.Twitch.svg?style=flat)](https://www.nuget.org/packages/StreamingClientLibrary.Twitch)
 
