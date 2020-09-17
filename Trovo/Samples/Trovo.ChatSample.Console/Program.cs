@@ -13,7 +13,7 @@ namespace Trovo.ChatSample.Console
 {
     public class Program
     {
-        private static string clientID = "";
+        private static string clientID = "8FMjuk785AX4FMyrwPTU3B8vYvgHWN33";
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
             OAuthClientScopeEnum.chat_connect,
