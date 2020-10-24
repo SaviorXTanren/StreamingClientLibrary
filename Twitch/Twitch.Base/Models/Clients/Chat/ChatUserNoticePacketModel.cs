@@ -165,7 +165,17 @@
         /// </summary>
         public string RitualName { get; set; }
 
-         /// <summary>
+        /// <summary>
+        /// (Sent only on celebration) The name of the effect shown.
+        /// </summary>
+        public string CelebrationEffect { get; set; }
+
+        /// <summary>
+        /// (Sent only on celebration) The intensity of the celebration.
+        /// </summary>
+        public string CelebrationIntensity { get; set; }
+
+        /// <summary>
         /// Timestamp when the server received the message.
         /// </summary>
         public long Timestamp { get; set; }
@@ -207,6 +217,8 @@
             this.RitualName = packet.GetTagString("msg-param-ritual-name");
             this.BitsTierThreshold = packet.GetTagLong("msg-param-threshold");
             this.SubBenefitEndMonth = packet.GetTagInt("msg-param-sub-benefit-end-month");
+            this.CelebrationEffect = packet.GetTagString("msg-param-effect");
+            this.CelebrationIntensity = packet.GetTagString("msg-param-intensity");
             this.Timestamp = packet.GetTagLong("tmi-sent-ts");
         }
     }
