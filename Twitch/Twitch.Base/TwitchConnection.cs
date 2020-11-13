@@ -143,6 +143,18 @@ namespace Twitch.Base
         /// </summary>
         channel__edit__commercial,
         /// <summary>
+        /// Manage your channel’s broadcast configuration, including updating channel configuration and managing stream markers and stream tags.
+        /// </summary>
+        channel__manage__broadcast,
+        /// <summary>
+        /// Manage your channel’s extension configuration, including activating extensions.
+        /// </summary>
+        channel__manage__extension,
+        /// <summary>
+        /// Manage Channel Points custom rewards and their redemptions on a channel.
+        /// </summary>
+        channel__manage__redemptions,
+        /// <summary>
         /// Get hype train information for your channel.
         /// </summary>
         channel__read__hype_train,
