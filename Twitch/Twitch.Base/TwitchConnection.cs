@@ -147,10 +147,6 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__broadcast,
         /// <summary>
-        /// Manage your channel’s extension configuration, including activating extensions.
-        /// </summary>
-        channel__manage__extension,
-        /// <summary>
         /// Manage Channel Points custom rewards and their redemptions on a channel.
         /// </summary>
         channel__manage__redemptions,

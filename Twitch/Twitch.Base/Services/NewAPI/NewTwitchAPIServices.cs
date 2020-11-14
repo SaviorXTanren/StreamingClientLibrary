@@ -16,6 +16,11 @@
         public BitsService Bits { get; private set; }
 
         /// <summary>
+        /// APIs for Channel Points interaction
+        /// </summary>
+        public ChannelPointsService ChannelPoints { get; private set; }
+
+        /// <summary>
         /// APIs for Channels interaction.
         /// </summary>
         public ChannelsService Channels { get; private set; }
@@ -68,6 +73,7 @@
         {
             this.Ads = new AdsService(connection);
             this.Bits = new BitsService(connection);
+            this.ChannelPoints = new ChannelPointsService(connection);
             this.Channels = new ChannelsService(connection);
             this.Chat = new ChatService(connection);
             this.Clips = new ClipsService(connection);

@@ -36,6 +36,19 @@ namespace StreamingClient.Base.Util
         }
 
         /// <summary>
+        /// Validates whether the specified Guid is not empty. Throws an ArgumentException if it is.
+        /// </summary>
+        /// <param name="value">The Guid to check</param>
+        /// <param name="name">The name of the variable</param>
+        public static void ValidateGuid(Guid value, string name)
+        {
+            if (value == Guid.Empty)
+            {
+                throw new ArgumentException(name + " is empty");
+            }
+        }
+
+        /// <summary>
         /// Validates whether the specified variable is not null. Throws an ArgumentException if it is.
         /// </summary>
         /// <param name="value">The variable to check</param>

@@ -7,7 +7,7 @@ using Twitch.Base.Models.NewAPI.Users;
 namespace Twitch.Base.UnitTests.NewAPI
 {
     [TestClass]
-    public class ChatServiceUnitTest : UnitTestBase
+    public class ChatServiceUnitTests : UnitTestBase
     {
         [TestMethod]
         public void GetChannelChatBadges()

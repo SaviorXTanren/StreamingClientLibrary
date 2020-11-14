@@ -747,6 +747,13 @@
             <param name="value">The string to check</param>
             <param name="name">The name of the string</param>
         </member>
+        <member name="M:StreamingClient.Base.Util.Validator.ValidateGuid(System.Guid,System.String)">
+            <summary>
+            Validates whether the specified Guid is not empty. Throws an ArgumentException if it is.
+            </summary>
+            <param name="value">The Guid to check</param>
+            <param name="name">The name of the variable</param>
+        </member>
         <member name="M:StreamingClient.Base.Util.Validator.ValidateVariable(System.Object,System.String)">
             <summary>
             Validates whether the specified variable is not null. Throws an ArgumentException if it is.

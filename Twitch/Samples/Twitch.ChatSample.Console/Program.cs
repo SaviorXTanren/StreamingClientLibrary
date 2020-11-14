@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Twitch.Base;
 using Twitch.Base.Clients;
 using Twitch.Base.Models.Clients.Chat;
-using Twitch.Base.Models.NewAPI.Chat;
 using Twitch.Base.Models.NewAPI.Users;
 using Twitch.Base.Models.V5.Channel;
 
@@ -39,7 +38,6 @@ namespace Twitch.ChatSample.Console
 
         private static TwitchConnection connection;
         private static UserModel user;
-        private static ChannelModel channel;
         private static ChatClient chat;
 
         private static SemaphoreSlim semaphore = new SemaphoreSlim(1);
