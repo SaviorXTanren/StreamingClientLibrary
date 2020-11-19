@@ -176,6 +176,17 @@
         public string CelebrationIntensity { get; set; }
 
         /// <summary>
+        /// (Sent on CommunityPayForward) Display name of the person who originally gifted the sub.
+        /// </summary>
+        public string PriorGifterDisplayName { get; set; }
+
+        /// <summary>
+        /// (Sent on CommunityPayForward) Username of the person who originally gifted the sub.
+        /// </summary>
+        public string PriorGifterUserName { get; set; }
+
+
+        /// <summary>
         /// Timestamp when the server received the message.
         /// </summary>
         public long Timestamp { get; set; }
@@ -219,6 +230,8 @@
             this.SubBenefitEndMonth = packet.GetTagInt("msg-param-sub-benefit-end-month");
             this.CelebrationEffect = packet.GetTagString("msg-param-effect");
             this.CelebrationIntensity = packet.GetTagString("msg-param-intensity");
+            this.PriorGifterDisplayName = packet.GetTagString("msg-param-prior-gifter-display-name");
+            this.PriorGifterUserName = packet.GetTagString("msg-param-prior-gifter-user-name");
             this.Timestamp = packet.GetTagLong("tmi-sent-ts");
         }
     }
