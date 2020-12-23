@@ -26,4 +26,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <ProjectReference Include="..\..\StreamingClient.Base\StreamingClient.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

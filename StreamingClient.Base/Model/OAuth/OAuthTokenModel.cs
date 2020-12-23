@@ -31,11 +31,13 @@ namespace StreamingClient.Base.Model.OAuth
         /// </summary>
         [JsonProperty("refresh_token")]
         public string refreshToken { get; set; }
+
         /// <summary>
         /// The token used for accessing the OAuth service.
         /// </summary>
         [JsonProperty("access_token")]
         public string accessToken { get; set; }
+
         /// <summary>
         /// The expiration time of the token in seconds from when it was obtained.
         /// </summary>
@@ -45,6 +47,18 @@ namespace StreamingClient.Base.Model.OAuth
         /// The timestamp of the expiration, if supported by the service, in seconds from Unix Epoch
         /// </summary>
         public long expiresTimeStamp { get; set; }
+
+        /// <summary>
+        /// The redirect URL used as part of the token.
+        /// </summary>
+        [DataMember]
+        public string redirectUrl { get; set; }
+
+        /// <summary>
+        /// The set of scopes for the token, if supported by the service.
+        /// </summary>
+        [DataMember]
+        public string scope { get; set; }
 
         /// <summary>
         /// The time when the token was obtained.
