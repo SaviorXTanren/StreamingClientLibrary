@@ -1,6 +1,5 @@
 ﻿using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Util;
-using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,7 +12,7 @@ namespace Glimesh.Base.Services
     /// </summary>
     public class OAuthService : GlimeshServiceBase
     {
-        private const string OAuthBaseAddress = "https://glimesh.tv/api/oauth";
+        private const string OAuthBaseAddress = "https://glimesh.tv/api/oauth/";
 
         /// <summary>
         /// Creates an instance of the OAuthService.
@@ -81,12 +80,11 @@ namespace Glimesh.Base.Services
                 { "client_secret", token.clientSecret },
                 { "refresh_token", token.refreshToken },
                 { "grant_type", "refresh_token" },
-                { "redirect_uri", token.redirectUrl },
-                { "code", token.authorizationCode }
+                { "redirect_uri", token.redirectUrl }
             };
             FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
 
-            OAuthTokenModel newToken = await this.PostAsync<OAuthTokenModel>("oauth2/token?" + await content.ReadAsStringAsync(), autoRefreshToken: false);
+            OAuthTokenModel newToken = await this.PostAsync<OAuthTokenModel>("token?" + await content.ReadAsStringAsync(), autoRefreshToken: false);
             newToken.clientID = token.clientID;
             newToken.clientSecret = token.clientSecret;
             newToken.authorizationCode = token.authorizationCode;
