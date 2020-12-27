@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 namespace Glimesh.Base.Services
 {
     /// <summary>
-    /// The APIs for user-based services.
+    /// The APIs for User-based services.
     /// </summary>
     public class UsersService : GlimeshServiceBase
     {
         /// <summary>
         /// Creates an instance of the ChatService.
         /// </summary>
-        /// <param name="connection">The Trovo connection to use</param>
+        /// <param name="connection">The Glimesh connection to use</param>
         public UsersService(GlimeshConnection connection) : base(connection) { }
 
         /// <summary>
         /// Gets the currently authenticated user.
         /// </summary>
         /// <returns>The currently authenticated user</returns>
-        public async Task<UserModel> GetCurrentUser() { return await this.QueryAsync<UserModel>($"{{  myself {{     {UserModel.AllFieldsWithSocials}    }}  }}", "myself"); }
+        public async Task<UserModel> GetCurrentUser() { return await this.QueryAsync<UserModel>($"{{ myself {{ {UserModel.AllFieldsWithSocials} }} }}", "myself"); }
 
         /// <summary>
         /// Gets the user with the specified id.
