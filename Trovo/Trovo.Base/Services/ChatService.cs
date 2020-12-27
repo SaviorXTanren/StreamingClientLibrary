@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Trovo.Base.Services
 {
+    /// <summary>
+    /// The APIs for chat-based services.
+    /// </summary>
     public class ChatService : TrovoServiceBase
     {
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,9 @@ using Trovo.Base.Models.Users;
 
 namespace Trovo.Base.Services
 {
+    /// <summary>
+    /// The APIs for user-based services.
+    /// </summary>
     public class UsersService : TrovoServiceBase
     {
         private class GetUsersResult

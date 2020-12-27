@@ -7,6 +7,9 @@ using Trovo.Base.Models.Channels;
 
 namespace Trovo.Base.Services
 {
+    /// <summary>
+    /// The APIs for channel-based services.
+    /// </summary>
     public class ChannelsService : TrovoServiceBase
     {
         /// <summary>
