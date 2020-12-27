@@ -61,6 +61,11 @@ namespace Glimesh.Base
         public OAuthService OAuth { get; private set; }
 
         /// <summary>
+        /// APIs for User interaction.
+        /// </summary>
+        public UsersService Users { get; private set; }
+
+        /// <summary>
         /// Generates the OAuth authorization URL to use for authentication.
         /// </summary>
         /// <param name="clientID">The ID of the client application</param>
@@ -188,6 +193,7 @@ namespace Glimesh.Base
             this.token = token;
 
             this.OAuth = new OAuthService(this);
+            this.Users = new UsersService(this);
         }
 
         /// <summary>
