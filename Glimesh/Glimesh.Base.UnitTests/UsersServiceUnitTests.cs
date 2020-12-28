@@ -1,5 +1,7 @@
 ﻿using Glimesh.Base.Models.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Glimesh.Base.UnitTests
 {
@@ -45,6 +47,40 @@ namespace Glimesh.Base.UnitTests
                 UserModel user = await connection.Users.GetUserByName(currentUser.username);
                 Assert.IsNotNull(user);
                 Assert.IsTrue(string.Equals(user.username, currentUser.username));
+            });
+        }
+
+        [TestMethod]
+        public void GetUsersFollowed()
+        {
+            TestWrapper(async (GlimeshConnection connection) =>
+            {
+                UserModel currentUser = await connection.Users.GetCurrentUser();
+                Assert.IsNotNull(currentUser);
+                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
+
+                IEnumerable<UserFollowModel> follows = await connection.Users.GetUsersFollowed(currentUser.username);
+                Assert.IsNotNull(follows);
+                Assert.IsTrue(follows.Count() > 0);
+                Assert.IsNotNull(follows.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(follows.First().id));
+            });
+        }
+
+        [TestMethod]
+        public void GetFollowingUsers()
+        {
+            TestWrapper(async (GlimeshConnection connection) =>
+            {
+                UserModel currentUser = await connection.Users.GetCurrentUser();
+                Assert.IsNotNull(currentUser);
+                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
+
+                IEnumerable<UserFollowModel> follows = await connection.Users.GetFollowingUsers(currentUser.username);
+                Assert.IsNotNull(follows);
+                Assert.IsTrue(follows.Count() > 0);
+                Assert.IsNotNull(follows.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(follows.First().id));
             });
         }
     }

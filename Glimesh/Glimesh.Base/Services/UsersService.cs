@@ -1,4 +1,5 @@
 ﻿using Glimesh.Base.Models.Users;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Glimesh.Base.Services
@@ -33,5 +34,17 @@ namespace Glimesh.Base.Services
         /// <param name="username">The name of the user</param>
         /// <returns>The user</returns>
         public async Task<UserModel> GetUserByName(string username) { return await this.QueryAsync<UserModel>($"{{  user(username: \"{username}\") {{ {UserModel.AllFieldsWithSocials} }} }}", "user"); }
+
+        /// <summary>
+        /// Gets the users that the specified user are following.
+        /// <param name="username">The user to get follows for</param>
+        /// <returns>The set of follows</returns>
+        public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(userUsername: \"{username}\") {{ {UserFollowModel.AllFieldsWithStreamerAndUser} }} }}", "followers"); }
+
+        /// <summary>
+        /// Gets the users that are following the specified channel.
+        /// <param name="username">The user to get follows for</param>
+        /// <returns>The set of follows</returns>
+        public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(streamerUsername: \"{username}\") {{ {UserFollowModel.AllFieldsWithStreamerAndUser} }} }}", "followers"); }
     }
 }
