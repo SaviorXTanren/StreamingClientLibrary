@@ -13,7 +13,7 @@ namespace Glimesh.Base.UnitTests
         {
             TestWrapper(async (GlimeshConnection connection) =>
             {
-                IEnumerable<CategoryModel> categories = await connection.Categories.GetCategories();
+                IEnumerable<CategoryModel> categories = await connection.Category.GetCategories();
                 Assert.IsNotNull(categories);
                 Assert.IsTrue(categories.Count() > 0);
                 Assert.IsNotNull(categories.First());
@@ -28,7 +28,7 @@ namespace Glimesh.Base.UnitTests
         {
             TestWrapper(async (GlimeshConnection connection) =>
             {
-                IEnumerable<CategoryModel> categories = await connection.Categories.GetCategories();
+                IEnumerable<CategoryModel> categories = await connection.Category.GetCategories();
                 Assert.IsNotNull(categories);
                 Assert.IsTrue(categories.Count() > 0);
                 Assert.IsNotNull(categories.First());
@@ -36,7 +36,7 @@ namespace Glimesh.Base.UnitTests
                 Assert.IsTrue(!string.IsNullOrEmpty(categories.First().name));
                 Assert.IsTrue(!string.IsNullOrEmpty(categories.First().slug));
 
-                CategoryModel category = await connection.Categories.GetCategoryBySlug(categories.First().slug);
+                CategoryModel category = await connection.Category.GetCategoryBySlug(categories.First().slug);
                 Assert.IsNotNull(category);
                 Assert.IsTrue(string.Equals(categories.First().id, category.id));
             });

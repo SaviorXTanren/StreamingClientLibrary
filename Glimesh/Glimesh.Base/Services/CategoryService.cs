@@ -24,7 +24,7 @@ namespace Glimesh.Base.Services
         /// <summary>
         /// Gets the category with the specified slug.
         /// </summary>
-        /// <param name="slug">The slug of the categrory</param>
+        /// <param name="slug">The slug of the category</param>
         /// <returns>The category</returns>
         public async Task<CategoryModel> GetCategoryBySlug(string slug) { return await this.QueryAsync<CategoryModel>($"{{ category(slug: \"{slug}\") {{ {CategoryModel.AllFields} }} }}", "category"); }
     }

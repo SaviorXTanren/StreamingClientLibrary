@@ -63,7 +63,12 @@ namespace Glimesh.Base
         /// <summary>
         /// APIs for Category interaction.
         /// </summary>
-        public CategoryService Categories { get; private set; }
+        public CategoryService Category { get; private set; }
+
+        /// <summary>
+        /// APIs for Channel interaction.
+        /// </summary>
+        public ChannelService Channel { get; private set; }
 
         /// <summary>
         /// APIs for User interaction.
@@ -198,7 +203,8 @@ namespace Glimesh.Base
             this.token = token;
 
             this.OAuth = new OAuthService(this);
-            this.Categories = new CategoryService(this);
+            this.Category = new CategoryService(this);
+            this.Channel = new ChannelService(this);
             this.Users = new UsersService(this);
         }
 
