@@ -9,7 +9,6 @@ using Twitch.Base;
 using Twitch.Base.Clients;
 using Twitch.Base.Models.Clients.Chat;
 using Twitch.Base.Models.NewAPI.Users;
-using Twitch.Base.Models.V5.Channel;
 
 namespace Twitch.ChatSample.Console
 {

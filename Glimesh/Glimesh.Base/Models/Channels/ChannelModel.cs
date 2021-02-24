@@ -10,12 +10,12 @@ namespace Glimesh.Base.Models.Channels
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFields = $"id, language, status, streamKey, thumbnail, title, category {{ {CategoryModel.AllFields} }}";
+        public static readonly string AllFields = $"id, language, status, thumbnail, title, category {{ {CategoryModel.AllFields} }}";
 
         /// <summary>
         /// All fields with socials for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithStreamer = $"{StreamModel.AllFields}, streamer {{ {UserModel.AllFields} }}";
+        public static readonly string AllFieldsWithStreamer = $"{ChannelModel.AllFields}, streamer {{ {UserModel.AllFields} }}";
 
         /// <summary>
         /// All fields with socials for a GraphQL query.

@@ -28,18 +28,14 @@ namespace Glimesh.Base.UnitTests
         {
             TestWrapper(async (GlimeshConnection connection) =>
             {
-                UserModel currentUser = await connection.Users.GetCurrentUser();
-                Assert.IsNotNull(currentUser);
-                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.id));
-                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
+                string channelID = "6343";
 
-                ChannelModel channel = await connection.Channel.GetChannelByID(currentUser.id);
+                ChannelModel channel = await connection.Channel.GetChannelByID(channelID);
                 Assert.IsNotNull(channel);
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.id));
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.status));
 
-                Assert.IsTrue(string.Equals(currentUser.id, channel.id));
-                Assert.IsTrue(string.Equals(currentUser.username, channel.streamer.id));
+                Assert.IsTrue(string.Equals(channelID, channel.id));
             });
         }
 

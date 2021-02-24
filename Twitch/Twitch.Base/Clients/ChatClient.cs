@@ -95,7 +95,6 @@ namespace Twitch.Base.Clients
         /// </summary>
         public event EventHandler<ChatWhisperMessagePacketModel> OnWhisperMessageReceived;
 
-
         /// <summary>
         /// Invoked when a chat clear is received.
         /// </summary>
