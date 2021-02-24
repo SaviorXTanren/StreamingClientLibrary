@@ -65,6 +65,8 @@ namespace Glimesh.ChatSample.Console
                                     {
                                         System.Console.WriteLine("Successfully joined channel!");
 
+                                        await chat.SendMessage(channel.id, "Hello World!");
+
                                         while (true)
                                         {
                                             string line = System.Console.ReadLine();

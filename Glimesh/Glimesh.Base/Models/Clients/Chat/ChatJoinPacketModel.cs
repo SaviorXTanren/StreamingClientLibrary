@@ -7,12 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatJoinPacketModel : ChatPacketModelBase
     {
-        /// <summary>
-        /// Event sent when connecting to specific channel's chat.
-        /// </summary>
-        public const string ConnectEventName = "doc";
-
-        private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ channel {{ id }} user {{ id username displayname avatar }} message }} }}";
+        private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ id channel {{ id }} user {{ id username displayname avatar }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
 
         /// <summary>
         /// Creates a new instance of the ChatConnectPacketModel class.
@@ -21,7 +16,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         public ChatJoinPacketModel(string channelID)
         {
             this.Topic = AbsintheControlTopicName;
-            this.Event = ConnectEventName;
+            this.Event = DocEventName;
             this.Payload["query"] = string.Format(SubscriptionQueryPayload, channelID);
             this.Payload["variables"] = new JObject();
         }

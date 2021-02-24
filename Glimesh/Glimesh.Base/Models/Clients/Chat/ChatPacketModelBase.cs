@@ -15,9 +15,14 @@ namespace Glimesh.Base.Models.Clients.Chat
         public const string AbsintheControlTopicName = "__absinthe__:control";
 
         /// <summary>
+        /// Event sent when connecting to specific channel's chat.
+        /// </summary>
+        public const string DocEventName = "doc";
+
+        /// <summary>
         /// Reply event received when for most response packets.
         /// </summary>
-        public const string PacketReplyName = "phx_reply";
+        public const string ReplyEventName = "phx_reply";
 
         /// <summary>
         /// The join reference for multi-connection.
@@ -66,7 +71,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// <summary>
         /// Whether the packet is a reply event.
         /// </summary>
-        public bool IsReplyEvent { get { return string.Equals(this.Event, PacketReplyName, StringComparison.OrdinalIgnoreCase); } }
+        public bool IsReplyEvent { get { return string.Equals(this.Event, ReplyEventName, StringComparison.OrdinalIgnoreCase); } }
 
         /// <summary>
         /// Whether the payload contains the Status property and it's set to "ok".

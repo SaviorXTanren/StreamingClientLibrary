@@ -116,6 +116,21 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
+        /// Sends a plain-text message the specified channel's chat.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to send the message to</param>
+        /// <param name="message">The plain-text message to send</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> SendMessage(string channelID, string message)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(message, "message");
+
+            ChatResponsePacketModel response = await this.SendAndListen(new ChatSendMessagePacketModel(channelID, message));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
         /// Processes the received text packet.
         /// </summary>
         /// <param name="packetMessage">The receive text packet</param>
