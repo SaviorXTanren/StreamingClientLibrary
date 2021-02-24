@@ -131,6 +131,66 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
+        /// Times out a user for a short period of time (5 minutes) for the specified channel.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to send the message to</param>
+        /// <param name="userID">The ID of the user to timeout</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> ShortTimeoutUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            ChatResponsePacketModel response = await this.SendAndListen(new ChatShortTimeoutUserPacketModel(channelID, userID));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
+        /// Times out a user for a long period of time (15 minutes) for the specified channel.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to send the message to</param>
+        /// <param name="userID">The ID of the user to timeout</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> LongTimeoutUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            ChatResponsePacketModel response = await this.SendAndListen(new ChatLongTimeoutUserPacketModel(channelID, userID));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
+        /// Bans a user from the specified channel.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to send the message to</param>
+        /// <param name="userID">The ID of the user to ban</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> BanUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            ChatResponsePacketModel response = await this.SendAndListen(new ChatBanUserPacketModel(channelID, userID));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
+        /// Unbans a user from the specified channel.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to send the message to</param>
+        /// <param name="userID">The ID of the user to unban</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> UnbanUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            ChatResponsePacketModel response = await this.SendAndListen(new ChatUnbanUserPacketModel(channelID, userID));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
         /// Processes the received text packet.
         /// </summary>
         /// <param name="packetMessage">The receive text packet</param>
