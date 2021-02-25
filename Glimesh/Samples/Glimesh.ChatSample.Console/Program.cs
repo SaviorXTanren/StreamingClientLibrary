@@ -72,7 +72,7 @@ namespace Glimesh.ChatSample.Console
                                         while (true)
                                         {
                                             string line = System.Console.ReadLine();
-                                            //await chat.SendMessage(line);
+                                            await chat.SendMessage(channel.id, line);
                                         }
                                     }
                                 }
