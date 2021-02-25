@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>StreamingClientLibrary.Trovo</PackageId>
+    <Authors>Matthew Olivo</Authors>
+    <Company>Matthew Olivo</Company>
+    <Product>Trovo Streaming Client Library</Product>
+    <Description>C# client library for the Trovo streaming service: https://trovo.live
+      
+For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2021</Copyright>
+    <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
+    <PackageTags>Trovo Streaming Bot Chat Interactive</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

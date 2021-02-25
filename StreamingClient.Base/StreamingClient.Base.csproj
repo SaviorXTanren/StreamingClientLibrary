@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>StreamingClient.Base</AssemblyName>
     <RootNamespace>StreamingClient.Base</RootNamespace>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2021</Copyright>
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

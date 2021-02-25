@@ -8,10 +8,11 @@
     <Description>C# client library for the Glimesh streaming service: https://glimesh.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2020</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2021</Copyright>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Glimesh Streaming Bot Chat Interactive</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
