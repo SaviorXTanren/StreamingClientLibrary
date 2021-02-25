@@ -1,4 +1,5 @@
 ﻿using Glimesh.Base.Models.Clients.Chat;
+using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
@@ -18,12 +19,19 @@ namespace Glimesh.Base.Clients
         private const string TOKEN_CHAT_CONNECTION_URL = CHAT_CONNECTION_URL_BASE + "&token={0}";
         private const string CLIENT_ID_CHAT_CONNECTION_URL = CHAT_CONNECTION_URL_BASE + "client_id={0}";
 
+        /// <summary>
+        /// Invoked when a chat message is received.
+        /// </summary>
+        public event EventHandler<ChatMessagePacketModel> OnMessageReceived;
+
         private GlimeshConnection connection;
         private string connectionUrl;
 
         private CancellationTokenSource backgroundPingCancellationTokenSource;
 
-        private readonly Dictionary<string, ChatResponsePacketModel> replyIDListeners = new Dictionary<string, ChatResponsePacketModel>();
+        private Dictionary<string, ChatResponsePacketModel> replyIDListeners = new Dictionary<string, ChatResponsePacketModel>();
+
+        private HashSet<string> chatSubscriptions = new HashSet<string>();
 
         /// <summary>
         /// Connects to chat using the user's acquired OAuth token.
@@ -102,7 +110,16 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
 
             ChatResponsePacketModel response = await this.SendAndListen(new ChatJoinPacketModel(channelID));
-            return response != null && response.IsPayloadStatusOk;
+            if (response != null && response.IsPayloadStatusOk)
+            {
+                JToken subscription = response.Payload.SelectToken("response.subscriptionId");
+                if (subscription != null)
+                {
+                    this.chatSubscriptions.Add(subscription.ToString());
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -209,7 +226,11 @@ namespace Glimesh.Base.Clients
                     }
                 }
 
-
+                if (this.chatSubscriptions.Contains(packet.Topic))
+                {
+                    ChatMessagePacketModel message = new ChatMessagePacketModel(packetMessage);
+                    this.OnMessageReceived?.Invoke(this, message);
+                }
             }
             return Task.FromResult(0);
         }

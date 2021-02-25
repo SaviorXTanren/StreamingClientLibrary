@@ -7,7 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatJoinPacketModel : ChatPacketModelBase
     {
-        private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ id channel {{ id }} user {{ id username displayname avatar }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
+        private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ id channel {{ id }} user {{ id username displayname avatar confirmedAt }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
 
         /// <summary>
         /// Creates a new instance of the ChatConnectPacketModel class.

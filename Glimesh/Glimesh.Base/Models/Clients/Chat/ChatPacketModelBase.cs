@@ -57,6 +57,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// <summary>
         /// Creates a new instance of the ChatPacketModelBase class.
         /// </summary>
+        /// <param name="serializedChatPacketArray">The serialized chat packet array</param>
         protected ChatPacketModelBase(string serializedChatPacketArray)
             : this()
         {

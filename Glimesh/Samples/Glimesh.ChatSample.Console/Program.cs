@@ -1,6 +1,7 @@
 ﻿using Glimesh.Base;
 using Glimesh.Base.Clients;
 using Glimesh.Base.Models.Channels;
+using Glimesh.Base.Models.Clients.Chat;
 using Glimesh.Base.Models.Users;
 using StreamingClient.Base.Util;
 using System;
@@ -43,17 +44,18 @@ namespace Glimesh.ChatSample.Console
                     {
                         System.Console.WriteLine("Glimesh connection successful!");
 
-                        UserModel user = await connection.Users.GetCurrentUser();
+                        user = await connection.Users.GetCurrentUser();
                         if (user != null)
                         {
                             System.Console.WriteLine("Current User: " + user.username);
 
-                            ChannelModel channel = await connection.Channel.GetChannelByName(user.username);
+                            channel = await connection.Channel.GetChannelByName(user.username);
                             if (channel != null)
                             {
                                 System.Console.WriteLine("Channel ID: " + channel.id);
 
                                 chat = await ChatClient.CreateWithToken(connection);
+                                chat.OnMessageReceived += Chat_OnMessageReceived;
 
                                 System.Console.WriteLine("Connecting to chat...");
                                 if (await chat.Connect())
@@ -85,6 +87,11 @@ namespace Glimesh.ChatSample.Console
             }).Wait();
 
             System.Console.ReadLine();
+        }
+
+        private static void Chat_OnMessageReceived(object sender, ChatMessagePacketModel message)
+        {
+            System.Console.WriteLine(string.Format("{0}: {1}", message.User?.displayname, message.Message));
         }
 
         private static void Logger_LogOccurred(object sender, Log log)
