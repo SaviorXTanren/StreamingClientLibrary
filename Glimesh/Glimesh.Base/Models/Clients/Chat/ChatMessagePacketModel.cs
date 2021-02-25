@@ -10,6 +10,11 @@ namespace Glimesh.Base.Models.Clients.Chat
     public class ChatMessagePacketModel : ChatResponsePacketModel
     {
         /// <summary>
+        /// The ID of the message
+        /// </summary>
+        public string ID { get; set; }
+
+        /// <summary>
         /// The ID of the channel the message was sent in.
         /// </summary>
         public string ChannelID { get; set; }
@@ -44,6 +49,7 @@ namespace Glimesh.Base.Models.Clients.Chat
             JObject chatMessage = (JObject)this.Payload.SelectToken("result.data.chatMessage");
             if (chatMessage != null)
             {
+                this.ID = chatMessage.SelectToken("id")?.ToString();
                 this.ChannelID = chatMessage.SelectToken("channel.id")?.ToString();
 
                 JToken user = chatMessage.SelectToken("user");
