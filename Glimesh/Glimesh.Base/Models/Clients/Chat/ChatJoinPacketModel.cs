@@ -5,7 +5,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// <summary>
     /// Packet sent when connecting to a specific channel's chat.
     /// </summary>
-    public class ChatJoinPacketModel : ChatPacketModelBase
+    public class ChatJoinPacketModel : ClientPacketModelBase
     {
         private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ id channel {{ id }} user {{ id username displayname avatar confirmedAt }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
 

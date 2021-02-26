@@ -7,7 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// <summary>
     /// Packet for chat messag received.
     /// </summary>
-    public class ChatMessagePacketModel : ChatResponsePacketModel
+    public class ChatMessagePacketModel : ClientResponsePacketModel
     {
         /// <summary>
         /// The ID of the message

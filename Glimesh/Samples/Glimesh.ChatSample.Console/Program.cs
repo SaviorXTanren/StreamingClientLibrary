@@ -26,7 +26,7 @@ namespace Glimesh.ChatSample.Console
         private static GlimeshConnection connection;
         private static UserModel user;
         private static ChannelModel channel;
-        private static ChatClient chat;
+        private static ChatEventClient chat;
 
         public static void Main(string[] args)
         {
@@ -54,8 +54,8 @@ namespace Glimesh.ChatSample.Console
                             {
                                 System.Console.WriteLine("Channel ID: " + channel.id);
 
-                                chat = await ChatClient.CreateWithToken(connection);
-                                chat.OnMessageReceived += Chat_OnMessageReceived;
+                                chat = await ChatEventClient.CreateWithToken(connection);
+                                chat.OnChatMessageReceived += Chat_OnMessageReceived;
 
                                 System.Console.WriteLine("Connecting to chat...");
                                 if (await chat.Connect())
@@ -63,7 +63,7 @@ namespace Glimesh.ChatSample.Console
                                     System.Console.WriteLine("Successfully connected to chat!");
 
                                     System.Console.WriteLine("Joining channel...");
-                                    if (await chat.Join(channel.id))
+                                    if (await chat.JoinChannel(channel.id))
                                     {
                                         System.Console.WriteLine("Successfully joined channel!");
 

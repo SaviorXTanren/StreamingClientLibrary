@@ -2,12 +2,12 @@
 using StreamingClient.Base.Util;
 using System;
 
-namespace Glimesh.Base.Models.Clients.Chat
+namespace Glimesh.Base.Models.Clients
 {
     /// <summary>
-    /// Base model for Chat-based packets.
+    /// Base model for client-based packets.
     /// </summary>
-    public abstract class ChatPacketModelBase
+    public abstract class ClientPacketModelBase
     {
         /// <summary>
         /// Default topic used for most packets.
@@ -50,15 +50,15 @@ namespace Glimesh.Base.Models.Clients.Chat
         public JObject Payload { get; set; } = new JObject();
 
         /// <summary>
-        /// Creates a new instance of the ChatPacketModelBase class.
+        /// Creates a new instance of the ClientPacketModelBase class.
         /// </summary>
-        protected ChatPacketModelBase() { }
+        protected ClientPacketModelBase() { }
 
         /// <summary>
-        /// Creates a new instance of the ChatPacketModelBase class.
+        /// Creates a new instance of the ClientPacketModelBase class.
         /// </summary>
-        /// <param name="serializedChatPacketArray">The serialized chat packet array</param>
-        protected ChatPacketModelBase(string serializedChatPacketArray)
+        /// <param name="serializedChatPacketArray">The serialized packet array</param>
+        protected ClientPacketModelBase(string serializedChatPacketArray)
             : this()
         {
             JArray array = JSONSerializerHelper.DeserializeFromString<JArray>(serializedChatPacketArray);
@@ -90,10 +90,10 @@ namespace Glimesh.Base.Models.Clients.Chat
         }
 
         /// <summary>
-        /// Generates the serialized chat packet array for sending over the web socket connection.
+        /// Generates the serialized packet array for sending over the web socket connection.
         /// </summary>
-        /// <returns>The serialized chat packet array</returns>
-        public string ToSerializedChatPacketArray()
+        /// <returns>The serialized packet array</returns>
+        public string ToSerializedPacketArray()
         {
             return JSONSerializerHelper.SerializeToString(new JArray() { this.JoinRef, this.NormalRef, this.Topic, this.Event, this.Payload });
         }

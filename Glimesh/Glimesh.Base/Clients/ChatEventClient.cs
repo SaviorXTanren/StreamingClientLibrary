@@ -1,4 +1,5 @@
-﻿using Glimesh.Base.Models.Clients.Chat;
+﻿using Glimesh.Base.Models.Clients;
+using Glimesh.Base.Models.Clients.Chat;
 using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Util;
@@ -11,68 +12,68 @@ using System.Threading.Tasks;
 namespace Glimesh.Base.Clients
 {
     /// <summary>
-    /// Web Socket client for interacting with Chat service.
+    /// Web Socket client for interacting with Chat & Event services.
     /// </summary>
-    public class ChatClient : ClientWebSocketBase
+    public class ChatEventClient : ClientWebSocketBase
     {
-        private const string CHAT_CONNECTION_URL_BASE = "wss://glimesh.tv/api/socket/websocket?vsn=2.0.0";
-        private const string TOKEN_CHAT_CONNECTION_URL = CHAT_CONNECTION_URL_BASE + "&token={0}";
-        private const string CLIENT_ID_CHAT_CONNECTION_URL = CHAT_CONNECTION_URL_BASE + "client_id={0}";
+        private const string CONNECTION_URL_BASE = "wss://glimesh.tv/api/socket/websocket?vsn=2.0.0";
+        private const string TOKEN_CONNECTION_URL = CONNECTION_URL_BASE + "&token={0}";
+        private const string CLIENT_ID_CONNECTION_URL = CONNECTION_URL_BASE + "client_id={0}";
 
         /// <summary>
         /// Invoked when a chat message is received.
         /// </summary>
-        public event EventHandler<ChatMessagePacketModel> OnMessageReceived;
+        public event EventHandler<ChatMessagePacketModel> OnChatMessageReceived;
 
         private GlimeshConnection connection;
         private string connectionUrl;
 
         private CancellationTokenSource backgroundPingCancellationTokenSource;
 
-        private Dictionary<string, ChatResponsePacketModel> replyIDListeners = new Dictionary<string, ChatResponsePacketModel>();
+        private Dictionary<string, ClientResponsePacketModel> replyIDListeners = new Dictionary<string, ClientResponsePacketModel>();
 
         private HashSet<string> chatSubscriptions = new HashSet<string>();
 
         /// <summary>
-        /// Connects to chat using the user's acquired OAuth token.
+        /// Creates a client using the user's acquired OAuth token.
         /// </summary>
         /// <returns>The chat client</returns>
-        public static async Task<ChatClient> CreateWithToken(GlimeshConnection connection)
+        public static async Task<ChatEventClient> CreateWithToken(GlimeshConnection connection)
         {
             OAuthTokenModel oauthToken = await connection.GetOAuthToken();
-            return new ChatClient(connection, string.Format(TOKEN_CHAT_CONNECTION_URL, oauthToken.accessToken));
+            return new ChatEventClient(connection, string.Format(TOKEN_CONNECTION_URL, oauthToken.accessToken));
         }
 
         /// <summary>
-        /// Connects to chat using the user's acquired OAuth token.
+        /// Creates a client using the user's acquired OAuth token.
         /// </summary>
         /// <returns>The chat client</returns>
-        public static async Task<ChatClient> CreateWithClientID(GlimeshConnection connection)
+        public static async Task<ChatEventClient> CreateWithClientID(GlimeshConnection connection)
         {
             OAuthTokenModel oauthToken = await connection.GetOAuthToken();
-            return new ChatClient(connection, string.Format(CLIENT_ID_CHAT_CONNECTION_URL, oauthToken.clientID));
+            return new ChatEventClient(connection, string.Format(CLIENT_ID_CONNECTION_URL, oauthToken.clientID));
         }
 
         /// <summary>
-        /// Creates a new instance of the ChatClient class.
+        /// Creates a new instance of the ChatEventClient class.
         /// </summary>
         /// <param name="connection">The current connection</param>
         /// <param name="connectionUrl">The URL to connect with</param>
-        private ChatClient(GlimeshConnection connection, string connectionUrl)
+        private ChatEventClient(GlimeshConnection connection, string connectionUrl)
         {
             this.connection = connection;
             this.connectionUrl = connectionUrl;
         }
 
         /// <summary>
-        /// Connects to the chat servers.
+        /// Connects to the web socket servers.
         /// </summary>
         /// <returns>Whether the connection was successful</returns>
         public async Task<bool> Connect()
         {
             if (await this.Connect(this.connectionUrl))
             {
-                ChatResponsePacketModel response = await this.SendAndListen(new ChatConnectPacketModel());
+                ClientResponsePacketModel response = await this.SendAndListen(new ClientConnectPacketModel());
                 if (response != null && response.IsPayloadStatusOk)
                 {
                     this.backgroundPingCancellationTokenSource = new CancellationTokenSource();
@@ -101,15 +102,15 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
-        /// Joins the specified channel's chat.
+        /// Joins the specified channel.
         /// </summary>
         /// <param name="channelID">The ID of the channel to join</param>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> Join(string channelID)
+        public async Task<bool> JoinChannel(string channelID)
         {
             Validator.ValidateString(channelID, "channelID");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatJoinPacketModel(channelID));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatJoinPacketModel(channelID));
             if (response != null && response.IsPayloadStatusOk)
             {
                 JToken subscription = response.Payload.SelectToken("response.subscriptionId");
@@ -123,12 +124,12 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
-        /// Sends a heartbeat to the chat servers.
+        /// Sends a heartbeat to the web socket servers.
         /// </summary>
         /// <returns>An awaitable Task</returns>
         public async Task<bool> SendHeartbeat()
         {
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatHeartbeatPacketModel());
+            ClientResponsePacketModel response = await this.SendAndListen(new ClientHeartbeatPacketModel());
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -143,7 +144,7 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(message, "message");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatSendMessagePacketModel(channelID, message));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatSendMessagePacketModel(channelID, message));
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -158,7 +159,7 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(userID, "userID");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatShortTimeoutUserPacketModel(channelID, userID));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatShortTimeoutUserPacketModel(channelID, userID));
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -173,7 +174,7 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(userID, "userID");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatLongTimeoutUserPacketModel(channelID, userID));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatLongTimeoutUserPacketModel(channelID, userID));
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -188,7 +189,7 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(userID, "userID");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatBanUserPacketModel(channelID, userID));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatBanUserPacketModel(channelID, userID));
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -203,7 +204,7 @@ namespace Glimesh.Base.Clients
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(userID, "userID");
 
-            ChatResponsePacketModel response = await this.SendAndListen(new ChatUnbanUserPacketModel(channelID, userID));
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatUnbanUserPacketModel(channelID, userID));
             return response != null && response.IsPayloadStatusOk;
         }
 
@@ -216,7 +217,7 @@ namespace Glimesh.Base.Clients
         {
             if (!string.IsNullOrEmpty(packetMessage))
             {
-                ChatResponsePacketModel packet = new ChatResponsePacketModel(packetMessage);
+                ClientResponsePacketModel packet = new ClientResponsePacketModel(packetMessage);
 
                 if (packet.IsReplyEvent)
                 {
@@ -229,25 +230,20 @@ namespace Glimesh.Base.Clients
                 if (this.chatSubscriptions.Contains(packet.Topic))
                 {
                     ChatMessagePacketModel message = new ChatMessagePacketModel(packetMessage);
-                    this.OnMessageReceived?.Invoke(this, message);
+                    this.OnChatMessageReceived?.Invoke(this, message);
                 }
             }
             return Task.FromResult(0);
         }
 
-        private async Task Send(ChatPacketModelBase packet)
+        private async Task Send(ClientPacketModelBase packet)
         {
-            await this.Send(packet.ToSerializedChatPacketArray());
+            await this.Send(packet.ToSerializedPacketArray());
         }
 
-        /// <summary>
-        /// Sends a packet to the server and listens for a reply.
-        /// </summary>
-        /// <param name="packet">The packet to send</param>
-        /// <returns>An awaitable task with the reply packet</returns>
-        private async Task<ChatResponsePacketModel> SendAndListen(ChatPacketModelBase packet)
+        private async Task<ClientResponsePacketModel> SendAndListen(ClientPacketModelBase packet)
         {
-            ChatResponsePacketModel replyPacket = null;
+            ClientResponsePacketModel replyPacket = null;
             this.replyIDListeners[packet.NormalRef] = null;
             await this.Send(packet);
 

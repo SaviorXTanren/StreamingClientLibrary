@@ -5,7 +5,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// <summary>
     /// Packet for sending chat messages.
     /// </summary>
-    public class ChatSendMessagePacketModel : ChatPacketModelBase
+    public class ChatSendMessagePacketModel : ClientPacketModelBase
     {
         private const string MessageMutationPayload = "mutation {{ createChatMessage(channelId: {0}, message: {{ message: \"{1}\" }}) {{ message }} }}";
 

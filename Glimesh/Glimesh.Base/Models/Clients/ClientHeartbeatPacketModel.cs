@@ -1,9 +1,9 @@
-﻿namespace Glimesh.Base.Models.Clients.Chat
+﻿namespace Glimesh.Base.Models.Clients
 {
     /// <summary>
-    /// Heartbeat packet sent to keep chat connection open.
+    /// Heartbeat packet sent to keep the web socket connection open.
     /// </summary>
-    public class ChatHeartbeatPacketModel : ChatPacketModelBase
+    public class ClientHeartbeatPacketModel : ClientPacketModelBase
     {
         /// <summary>
         /// Topic sent for heartbeat chat connection.
@@ -11,9 +11,9 @@
         public const string HeartbeatTopicName = "phoenix";
 
         /// <summary>
-        /// Creates a new instance of the ChatHeartbeatPacketModel class.
+        /// Creates a new instance of the ClientHeartbeatPacketModel class.
         /// </summary>
-        public ChatHeartbeatPacketModel()
+        public ClientHeartbeatPacketModel()
         {
             this.Topic = HeartbeatTopicName;
             this.Event = "heartbeat";

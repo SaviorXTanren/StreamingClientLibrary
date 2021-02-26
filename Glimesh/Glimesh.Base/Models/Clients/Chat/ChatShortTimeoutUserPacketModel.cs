@@ -5,7 +5,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// <summary>
     /// Packet for timing out a user.
     /// </summary>
-    public class ChatShortTimeoutUserPacketModel : ChatPacketModelBase
+    public class ChatShortTimeoutUserPacketModel : ClientPacketModelBase
     {
         private const string ShortTimeoutUserMutationPayload = "mutation {{ shortTimeoutUser(channelId: {0}, userId: {1}) {{ action, moderator {{ displayname }} }} }}";
 
