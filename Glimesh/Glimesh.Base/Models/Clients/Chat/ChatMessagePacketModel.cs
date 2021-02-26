@@ -42,7 +42,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// <summary>
         /// Creates a new instance of the ChatMessagePacketModel class.
         /// </summary>
-        /// <param name="serializedChatPacketArray">The serialized chat packet array</param>
+        /// <param name="serializedChatPacketArray">The serialized packet array</param>
         public ChatMessagePacketModel(string serializedChatPacketArray)
             : base(serializedChatPacketArray)
         {

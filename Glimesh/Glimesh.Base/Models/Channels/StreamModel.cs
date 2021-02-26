@@ -6,14 +6,14 @@
     public class StreamModel
     {
         /// <summary>
-        /// All fields for a GraphQL query.
+        /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string AllFields = "avgChatters, avgViewers, countChatters, countViewers, endedAt, id, newSubscribers, peakChatters, peakViewers, resubSubscribers, startedAt, title";
+        public const string BasicFields = "avgChatters, avgViewers, countChatters, countViewers, endedAt, id, newSubscribers, peakChatters, peakViewers, resubSubscribers, startedAt, title";
 
         /// <summary>
-        /// All fields with socials for a GraphQL query.
+        /// Basic fields with channel for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithChannel = $"{StreamModel.AllFields}, channel {{ {ChannelModel.AllFields} }}";
+        public static readonly string BasicFieldsWithChannel = $"{StreamModel.BasicFields}, channel {{ {ChannelModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the stream.

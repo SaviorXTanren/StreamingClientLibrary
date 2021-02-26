@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Glimesh.Base.Models.Users;
+using Newtonsoft.Json.Linq;
 
 namespace Glimesh.Base.Models.Clients.Chat
 {
@@ -7,8 +8,6 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatJoinPacketModel : ClientPacketModelBase
     {
-        private const string SubscriptionQueryPayload = "subscription {{ chatMessage(channelId: {0}) {{ id channel {{ id }} user {{ id username displayname avatar confirmedAt }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
-
         /// <summary>
         /// Creates a new instance of the ChatConnectPacketModel class.
         /// </summary>
@@ -17,7 +16,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         {
             this.Topic = AbsintheControlTopicName;
             this.Event = DocEventName;
-            this.Payload["query"] = string.Format(SubscriptionQueryPayload, channelID);
+            this.Payload["query"] = $"subscription {{ chatMessage(channelId: {channelID}) {{ id channel {{ id }} user {{ {UserModel.BasicFields} }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
             this.Payload["variables"] = new JObject();
         }
     }

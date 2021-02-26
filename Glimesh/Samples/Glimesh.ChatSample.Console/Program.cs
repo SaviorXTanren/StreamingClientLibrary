@@ -26,7 +26,7 @@ namespace Glimesh.ChatSample.Console
         private static GlimeshConnection connection;
         private static UserModel user;
         private static ChannelModel channel;
-        private static ChatEventClient chat;
+        private static ChatEventClient client;
 
         public static void Main(string[] args)
         {
@@ -54,25 +54,26 @@ namespace Glimesh.ChatSample.Console
                             {
                                 System.Console.WriteLine("Channel ID: " + channel.id);
 
-                                chat = await ChatEventClient.CreateWithToken(connection);
-                                chat.OnChatMessageReceived += Chat_OnMessageReceived;
+                                client = await ChatEventClient.CreateWithToken(connection);
+                                client.OnChatMessageReceived += Client_OnChatMessageReceived;
+                                client.OnChannelUpdated += Client_OnChannelUpdated;
 
-                                System.Console.WriteLine("Connecting to chat...");
-                                if (await chat.Connect())
+                                System.Console.WriteLine("Connecting client...");
+                                if (await client.Connect())
                                 {
-                                    System.Console.WriteLine("Successfully connected to chat!");
+                                    System.Console.WriteLine("Successfully connected!");
 
                                     System.Console.WriteLine("Joining channel...");
-                                    if (await chat.JoinChannel(channel.id))
+                                    if (await client.JoinChannelChat(channel.id) && await client.JoinChannelEvents(channel.id))
                                     {
                                         System.Console.WriteLine("Successfully joined channel!");
 
-                                        await chat.SendMessage(channel.id, "Hello World!");
+                                        await client.SendMessage(channel.id, "Hello World!");
 
                                         while (true)
                                         {
                                             string line = System.Console.ReadLine();
-                                            await chat.SendMessage(channel.id, line);
+                                            await client.SendMessage(channel.id, line);
                                         }
                                     }
                                 }
@@ -89,9 +90,14 @@ namespace Glimesh.ChatSample.Console
             System.Console.ReadLine();
         }
 
-        private static void Chat_OnMessageReceived(object sender, ChatMessagePacketModel message)
+        private static void Client_OnChatMessageReceived(object sender, ChatMessagePacketModel message)
         {
             System.Console.WriteLine(string.Format("{0}: {1}", message.User?.displayname, message.Message));
+        }
+
+        private static void Client_OnChannelUpdated(object sender, Base.Models.Clients.Channel.ChannelUpdatePacketModel channelUpdate)
+        {
+            System.Console.WriteLine(string.Format("Stream Title: {0}", channelUpdate.Channel.title));
         }
 
         private static void Logger_LogOccurred(object sender, Log log)

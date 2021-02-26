@@ -1,4 +1,5 @@
 ﻿using Glimesh.Base.Models.Clients;
+using Glimesh.Base.Models.Clients.Channel;
 using Glimesh.Base.Models.Clients.Chat;
 using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Model.OAuth;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace Glimesh.Base.Clients
 {
     /// <summary>
-    /// Web Socket client for interacting with Chat & Event services.
+    /// Web Socket client for interacting with Chat &amp; Event services.
     /// </summary>
     public class ChatEventClient : ClientWebSocketBase
     {
@@ -25,6 +26,11 @@ namespace Glimesh.Base.Clients
         /// </summary>
         public event EventHandler<ChatMessagePacketModel> OnChatMessageReceived;
 
+        /// <summary>
+        /// Invoked when a channel is updated.
+        /// </summary>
+        public event EventHandler<ChannelUpdatePacketModel> OnChannelUpdated;
+
         private GlimeshConnection connection;
         private string connectionUrl;
 
@@ -33,6 +39,7 @@ namespace Glimesh.Base.Clients
         private Dictionary<string, ClientResponsePacketModel> replyIDListeners = new Dictionary<string, ClientResponsePacketModel>();
 
         private HashSet<string> chatSubscriptions = new HashSet<string>();
+        private HashSet<string> channelSubscriptions = new HashSet<string>();
 
         /// <summary>
         /// Creates a client using the user's acquired OAuth token.
@@ -102,25 +109,55 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
-        /// Joins the specified channel.
+        /// Joins the specified channel's chat.
         /// </summary>
         /// <param name="channelID">The ID of the channel to join</param>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> JoinChannel(string channelID)
+        public async Task<bool> JoinChannelChat(string channelID)
         {
             Validator.ValidateString(channelID, "channelID");
 
-            ClientResponsePacketModel response = await this.SendAndListen(new ChatJoinPacketModel(channelID));
-            if (response != null && response.IsPayloadStatusOk)
+            // Join Chat
+            ClientResponsePacketModel chatJoinResponse = await this.SendAndListen(new ChatJoinPacketModel(channelID));
+            if (chatJoinResponse == null || !chatJoinResponse.IsPayloadStatusOk)
             {
-                JToken subscription = response.Payload.SelectToken("response.subscriptionId");
-                if (subscription != null)
-                {
-                    this.chatSubscriptions.Add(subscription.ToString());
-                    return true;
-                }
+                return false;
             }
-            return false;
+
+            JToken chatJoinSubscription = chatJoinResponse.Payload.SelectToken("response.subscriptionId");
+            if (chatJoinSubscription == null)
+            {
+                return false;
+            }
+            this.chatSubscriptions.Add(chatJoinSubscription.ToString());
+
+            return true;
+        }
+
+        /// <summary>
+        /// Joins the specified channel's events.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to join</param>
+        /// <returns>Whether the connection was successful</returns>
+        public async Task<bool> JoinChannelEvents(string channelID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+
+            // Join Channel Events
+            ClientResponsePacketModel channelJoinResponse = await this.SendAndListen(new ChannelJoinPacketModel(channelID));
+            if (channelJoinResponse == null || !channelJoinResponse.IsPayloadStatusOk)
+            {
+                return false;
+            }
+
+            JToken channelJoinSubscription = channelJoinResponse.Payload.SelectToken("response.subscriptionId");
+            if (channelJoinSubscription == null)
+            {
+                return false;
+            }
+            this.channelSubscriptions.Add(channelJoinSubscription.ToString());
+
+            return true;
         }
 
         /// <summary>
@@ -231,6 +268,11 @@ namespace Glimesh.Base.Clients
                 {
                     ChatMessagePacketModel message = new ChatMessagePacketModel(packetMessage);
                     this.OnChatMessageReceived?.Invoke(this, message);
+                }
+                else if (this.channelSubscriptions.Contains(packet.Topic))
+                {
+                    ChannelUpdatePacketModel channelUpdate = new ChannelUpdatePacketModel(packetMessage);
+                    this.OnChannelUpdated?.Invoke(this, channelUpdate);
                 }
             }
             return Task.FromResult(0);

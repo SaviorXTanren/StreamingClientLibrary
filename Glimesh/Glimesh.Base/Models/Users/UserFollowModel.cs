@@ -6,14 +6,14 @@
     public class UserFollowModel
     {
         /// <summary>
-        /// All fields for a GraphQL query.
+        /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string AllFields = "id, insertedAt, updatedAt";
+        public const string BasicFields = "id, insertedAt, updatedAt";
 
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithStreamerAndUser = $"{UserFollowModel.AllFields}, streamer {{ {UserModel.AllFields} }}, user {{ {UserModel.AllFields} }}";
+        public static readonly string AllFieldsWithStreamerAndUser = $"{UserFollowModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}, user {{ {UserModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the follow.

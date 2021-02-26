@@ -6,14 +6,14 @@
     public class UserSubscriptionModel
     {
         /// <summary>
-        /// All fields for a GraphQL query.
+        /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string AllFields = "id, productName, price, isActive, insertedAt, updatedAt, endedAt";
+        public const string BasicFields = "id, productName, price, isActive, insertedAt, updatedAt, endedAt";
 
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithStreamerAndUser = $"{UserSubscriptionModel.AllFields}, streamer {{ {UserModel.AllFields} }}, user {{ {UserModel.AllFields} }}";
+        public static readonly string AllFields = $"{UserSubscriptionModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}, user {{ {UserModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the subscription.

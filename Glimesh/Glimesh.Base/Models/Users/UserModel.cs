@@ -9,14 +9,14 @@ namespace Glimesh.Base.Models.Users
     public class UserModel
     {
         /// <summary>
-        /// All fields for a GraphQL query.
+        /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string AllFields = "avatar, confirmedAt, displayname, id, username";
+        public const string BasicFields = "avatar, confirmedAt, displayname, id, username";
 
         /// <summary>
-        /// All fields with socials for a GraphQL query.
+        /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithSocials = $"{UserModel.AllFields}, socials {{ {UserSocialModel.AllFields} }}";
+        public static readonly string AllFields = $"{UserModel.BasicFields}, socials {{ {UserSocialModel.AllFields} }}";
 
         /// <summary>
         /// The ID of the user.

@@ -1,4 +1,7 @@
 ﻿using Glimesh.Base.Models.Users;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Glimesh.Base.Models.Channels
 {
@@ -8,19 +11,19 @@ namespace Glimesh.Base.Models.Channels
     public class ChannelModel
     {
         /// <summary>
+        /// Basic fields for a GraphQL query.
+        /// </summary>
+        public static readonly string BasicFields = $"id, language, status, thumbnail, title, category {{ {CategoryModel.AllFields} }} updatedAt";
+
+        /// <summary>
+        /// Basic fields with streamer for a GraphQL query.
+        /// </summary>
+        public static readonly string BasicFieldsWithStreamer = $"{ChannelModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}";
+
+        /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFields = $"id, language, status, thumbnail, title, category {{ {CategoryModel.AllFields} }}";
-
-        /// <summary>
-        /// All fields with socials for a GraphQL query.
-        /// </summary>
-        public static readonly string AllFieldsWithStreamer = $"{ChannelModel.AllFields}, streamer {{ {UserModel.AllFields} }}";
-
-        /// <summary>
-        /// All fields with socials for a GraphQL query.
-        /// </summary>
-        public static readonly string AllFieldsWithStreamerAndStream = $"{ChannelModel.AllFieldsWithStreamer}, stream {{ {StreamModel.AllFields} }}";
+        public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, stream {{ {StreamModel.BasicFields} }}, bans {{ {ChannelBanModel.AllFields} }}";
 
         /// <summary>
         /// The ID of the channel.
@@ -66,5 +69,21 @@ namespace Glimesh.Base.Models.Channels
         /// The current stream of the channel.
         /// </summary>
         public StreamModel stream { get; set; }
+
+        /// <summary>
+        /// The banned and timed out users of the channel.
+        /// </summary>
+        public List<ChannelBanModel> bans { get; set; } = new List<ChannelBanModel>();
+
+        /// <summary>
+        /// When the channel was last updated.
+        /// </summary>
+        public string updatedAt { get; set; }
+
+        /// <summary>
+        /// Whether the channel is live.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsLive { get { return string.Equals(this.status, "LIVE", StringComparison.OrdinalIgnoreCase); } }
     }
 }
