@@ -31,6 +31,11 @@ namespace Glimesh.Base.Clients
         /// </summary>
         public event EventHandler<ChannelUpdatePacketModel> OnChannelUpdated;
 
+        /// <summary>
+        /// Invoked when a user follows the channel.
+        /// </summary>
+        public event EventHandler<FollowPacketModel> OnFollowOccurred;
+
         private GlimeshConnection connection;
         private string connectionUrl;
 
@@ -40,6 +45,7 @@ namespace Glimesh.Base.Clients
 
         private HashSet<string> chatSubscriptions = new HashSet<string>();
         private HashSet<string> channelSubscriptions = new HashSet<string>();
+        private HashSet<string> followSubscriptions = new HashSet<string>();
 
         /// <summary>
         /// Creates a client using the user's acquired OAuth token.
@@ -111,7 +117,7 @@ namespace Glimesh.Base.Clients
         /// <summary>
         /// Joins the specified channel's chat.
         /// </summary>
-        /// <param name="channelID">The ID of the channel to join</param>
+        /// <param name="channelID">The ID of the channel</param>
         /// <returns>Whether the connection was successful</returns>
         public async Task<bool> JoinChannelChat(string channelID)
         {
@@ -137,9 +143,10 @@ namespace Glimesh.Base.Clients
         /// <summary>
         /// Joins the specified channel's events.
         /// </summary>
-        /// <param name="channelID">The ID of the channel to join</param>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <param name="streamerID">The ID of the streamer user</param>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> JoinChannelEvents(string channelID)
+        public async Task<bool> JoinChannelEvents(string channelID, string streamerID)
         {
             Validator.ValidateString(channelID, "channelID");
 
@@ -156,6 +163,20 @@ namespace Glimesh.Base.Clients
                 return false;
             }
             this.channelSubscriptions.Add(channelJoinSubscription.ToString());
+
+            // Join Follow Events
+            ClientResponsePacketModel followJoinResponse = await this.SendAndListen(new FollowsJoinPacketModel(streamerID));
+            if (followJoinResponse == null || !followJoinResponse.IsPayloadStatusOk)
+            {
+                return false;
+            }
+
+            JToken followJoinSubscription = followJoinResponse.Payload.SelectToken("response.subscriptionId");
+            if (followJoinSubscription == null)
+            {
+                return false;
+            }
+            this.followSubscriptions.Add(followJoinSubscription.ToString());
 
             return true;
         }
@@ -273,6 +294,11 @@ namespace Glimesh.Base.Clients
                 {
                     ChannelUpdatePacketModel channelUpdate = new ChannelUpdatePacketModel(packetMessage);
                     this.OnChannelUpdated?.Invoke(this, channelUpdate);
+                }
+                else if (this.followSubscriptions.Contains(packet.Topic))
+                {
+                    FollowPacketModel follow = new FollowPacketModel(packetMessage);
+                    this.OnFollowOccurred?.Invoke(this, follow);
                 }
             }
             return Task.FromResult(0);

@@ -11,7 +11,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// <summary>
         /// Creates a new instance of the ChatConnectPacketModel class.
         /// </summary>
-        /// <param name="channelID">The ID of the channel to connect to</param>
+        /// <param name="channelID">The ID of the channel to get chat for</param>
         public ChatJoinPacketModel(string channelID)
         {
             this.Topic = AbsintheControlTopicName;

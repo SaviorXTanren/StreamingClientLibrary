@@ -13,7 +13,7 @@
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFieldsWithStreamerAndUser = $"{UserFollowModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}, user {{ {UserModel.BasicFields} }}";
+        public static readonly string AllFields = $"{UserFollowModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}, user {{ {UserModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the follow.

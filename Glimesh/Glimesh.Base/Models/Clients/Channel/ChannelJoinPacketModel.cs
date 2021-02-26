@@ -11,7 +11,7 @@ namespace Glimesh.Base.Models.Clients.Channel
         /// <summary>
         /// Creates a new instance of the ChannelJoinPacketModel class.
         /// </summary>
-        /// <param name="channelID">The ID of the channel to connect to</param>
+        /// <param name="channelID">The ID of the channel to get updates for</param>
         public ChannelJoinPacketModel(string channelID)
         {
             this.Topic = AbsintheControlTopicName;

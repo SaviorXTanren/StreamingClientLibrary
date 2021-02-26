@@ -1,6 +1,7 @@
 ﻿using Glimesh.Base;
 using Glimesh.Base.Clients;
 using Glimesh.Base.Models.Channels;
+using Glimesh.Base.Models.Clients.Channel;
 using Glimesh.Base.Models.Clients.Chat;
 using Glimesh.Base.Models.Users;
 using StreamingClient.Base.Util;
@@ -57,6 +58,7 @@ namespace Glimesh.ChatSample.Console
                                 client = await ChatEventClient.CreateWithToken(connection);
                                 client.OnChatMessageReceived += Client_OnChatMessageReceived;
                                 client.OnChannelUpdated += Client_OnChannelUpdated;
+                                client.OnFollowOccurred += Client_OnFollowOccurred;
 
                                 System.Console.WriteLine("Connecting client...");
                                 if (await client.Connect())
@@ -64,7 +66,7 @@ namespace Glimesh.ChatSample.Console
                                     System.Console.WriteLine("Successfully connected!");
 
                                     System.Console.WriteLine("Joining channel...");
-                                    if (await client.JoinChannelChat(channel.id) && await client.JoinChannelEvents(channel.id))
+                                    if (await client.JoinChannelChat(channel.id) && await client.JoinChannelEvents(channel.id, user.id))
                                     {
                                         System.Console.WriteLine("Successfully joined channel!");
 
@@ -95,9 +97,14 @@ namespace Glimesh.ChatSample.Console
             System.Console.WriteLine(string.Format("{0}: {1}", message.User?.displayname, message.Message));
         }
 
-        private static void Client_OnChannelUpdated(object sender, Base.Models.Clients.Channel.ChannelUpdatePacketModel channelUpdate)
+        private static void Client_OnChannelUpdated(object sender, ChannelUpdatePacketModel channelUpdate)
         {
             System.Console.WriteLine(string.Format("Stream Title: {0}", channelUpdate.Channel.title));
+        }
+
+        private static void Client_OnFollowOccurred(object sender, FollowPacketModel follow)
+        {
+            System.Console.WriteLine(string.Format("User Followed: {0}", follow.Follow.user?.username));
         }
 
         private static void Logger_LogOccurred(object sender, Log log)

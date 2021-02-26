@@ -39,13 +39,13 @@ namespace Glimesh.Base.Services
         /// Gets the users that the specified user are following.
         /// <param name="username">The user to get follows for</param>
         /// <returns>The set of follows</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(userUsername: \"{username}\") {{ {UserFollowModel.AllFieldsWithStreamerAndUser} }} }}", "followers"); }
+        public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(userUsername: \"{username}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
 
         /// <summary>
         /// Gets the users that are following the specified channel.
         /// <param name="username">The user to get follows for</param>
         /// <returns>The set of follows</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(streamerUsername: \"{username}\") {{ {UserFollowModel.AllFieldsWithStreamerAndUser} }} }}", "followers"); }
+        public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(streamerUsername: \"{username}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
 
         /// <summary>
         /// Gets the users that the specified user are subscribed to.
