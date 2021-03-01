@@ -55,12 +55,6 @@ namespace StreamingClient.Base.Model.OAuth
         public string redirectUrl { get; set; }
 
         /// <summary>
-        /// The set of scopes for the token, if supported by the service.
-        /// </summary>
-        [DataMember]
-        public string scope { get; set; }
-
-        /// <summary>
         /// The time when the token was obtained.
         /// </summary>
         [DataMember]

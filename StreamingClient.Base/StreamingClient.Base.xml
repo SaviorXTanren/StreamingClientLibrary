@@ -79,11 +79,6 @@
             The redirect URL used as part of the token.
             </summary>
         </member>
-        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.scope">
-            <summary>
-            The set of scopes for the token, if supported by the service.
-            </summary>
-        </member>
         <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.AcquiredDateTime">
             <summary>
             The time when the token was obtained.
