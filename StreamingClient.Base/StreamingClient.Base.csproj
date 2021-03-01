@@ -8,16 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.2</Version>
+    <Version>1.0.0.3</Version>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
 For more information, please see our project site: https://github.com/SaviorXTanren/streaming-client-shared-library</Description>
     <PackageTags>Streaming Bot Chat Library</PackageTags>
     <PackageId>StreamingClientLibrary.Base</PackageId>
     <Product>Streaming Client Library</Product>
-    <PackageReleaseNotes>- Various minor changes &amp; improvements</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
-    <FileVersion>1.0.0.2</FileVersion>
+    <PackageReleaseNotes>- Removing scope property from OAuthTokenModel due to differences of how property is handled with different services</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.3</AssemblyVersion>
+    <FileVersion>1.0.0.3</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

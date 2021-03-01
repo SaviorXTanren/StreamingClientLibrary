@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.23</Version>
+    <Version>1.0.0.24</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -36,13 +36,12 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.23</AssemblyVersion>
-    <FileVersion>1.0.0.23</FileVersion>
+    <AssemblyVersion>1.0.0.24</AssemblyVersion>
+    <FileVersion>1.0.0.24</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Adding Channel Points API to Twitch
-- Adding new Twitch OAuth scopes
-- Added fields to ChatUserNoticePacketModel to support channel celebration</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added properties to ChatUserNoticePacketModel to support communitypayforward message type
+- Removing scope property from OAuthTokenModel due to differences of how property is handled with different services</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
