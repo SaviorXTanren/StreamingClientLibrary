@@ -11,7 +11,7 @@ namespace Glimesh.Base.Models.Users
         /// <summary>
         /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string BasicFields = "avatar, confirmedAt, displayname, id, username";
+        public const string BasicFields = "avatarUrl, confirmedAt, displayname, id, username";
 
         /// <summary>
         /// All fields for a GraphQL query.
@@ -36,7 +36,7 @@ namespace Glimesh.Base.Models.Users
         /// <summary>
         /// The avatar URL of the user.
         /// </summary>
-        public string avatar { get; set; }
+        public string avatarUrl { get; set; }
 
         /// <summary>
         /// The date of account confirmation.
@@ -47,11 +47,5 @@ namespace Glimesh.Base.Models.Users
         /// The socials for the user.
         /// </summary>
         public List<UserSocialModel> socials { get; set; } = new List<UserSocialModel>();
-
-        /// <summary>
-        /// The full URL for the user's avatar.
-        /// </summary>
-        [JsonIgnore]
-        public string FullAvatarURL { get { return "https://glimesh.tv/" + this.avatar; } }
     }
 }
