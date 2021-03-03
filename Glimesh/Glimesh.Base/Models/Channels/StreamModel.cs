@@ -38,42 +38,42 @@
         /// <summary>
         /// The average number of chatter for the stream.
         /// </summary>
-        public int avgChatters { get; set; }
+        public int? avgChatters { get; set; }
 
         /// <summary>
         /// The average number of viewers for the stream.
         /// </summary>
-        public int avgViewers { get; set; }
+        public int? avgViewers { get; set; }
 
         /// <summary>
         /// The current number of chatter for the stream.
         /// </summary>
-        public int countChatters { get; set; }
+        public int? countChatters { get; set; }
 
         /// <summary>
         /// The current number of viewers for the stream.
         /// </summary>
-        public int countViewers { get; set; }
+        public int? countViewers { get; set; }
 
         /// <summary>
         /// The peak number of chatter for the stream.
         /// </summary>
-        public int peakChatters { get; set; }
+        public int? peakChatters { get; set; }
 
         /// <summary>
         /// The peak number of viewers for the stream.
         /// </summary>
-        public int peakViewers { get; set; }
+        public int? peakViewers { get; set; }
 
         /// <summary>
         /// The number of new subscribers for the stream.
         /// </summary>
-        public int newSubscribers { get; set; }
+        public int? newSubscribers { get; set; }
 
         /// <summary>
         /// The number of resubscribers for the stream.
         /// </summary>
-        public int resubSubscribers { get; set; }
+        public int? resubSubscribers { get; set; }
 
         /// <summary>
         /// The channel information for the stream.
