@@ -1,5 +1,4 @@
-﻿using Glimesh.Base.Models;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using Newtonsoft.Json.Linq;
@@ -61,7 +60,7 @@ namespace Glimesh.Base.Services
                 {
                     foreach (GraphQLError error in response.Errors)
                     {
-                        Logger.Log(LogLevel.Error, error.ToString());
+                        Logger.Log(LogLevel.Error, error.Message);
                     }
                 }
 
