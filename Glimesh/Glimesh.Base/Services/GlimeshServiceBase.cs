@@ -60,7 +60,7 @@ namespace Glimesh.Base.Services
                 {
                     foreach (GraphQLError error in response.Errors)
                     {
-                        Logger.Log(LogLevel.Error, error.Message);
+                        Logger.Log(LogLevel.Error, $"GraphQL Query Error: {query} - {error.Message}");
                     }
                 }
 
