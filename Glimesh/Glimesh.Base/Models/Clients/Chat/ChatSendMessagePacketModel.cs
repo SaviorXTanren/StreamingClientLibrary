@@ -17,6 +17,8 @@ namespace Glimesh.Base.Models.Clients.Chat
         public ChatSendMessagePacketModel(string channelID, string message)
             : base()
         {
+            message = message.Replace("\"", "\\\"");
+
             this.Topic = AbsintheControlTopicName;
             this.Event = DocEventName;
             this.Payload["query"] = string.Format(MessageMutationPayload, channelID, message);
