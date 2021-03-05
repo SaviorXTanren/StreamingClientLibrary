@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Util;
 using System;
+using System.Text;
 
 namespace Glimesh.Base.Models.Clients
 {
@@ -96,6 +97,32 @@ namespace Glimesh.Base.Models.Clients
         public string ToSerializedPacketArray()
         {
             return JSONSerializerHelper.SerializeToString(new JArray() { this.JoinRef, this.NormalRef, this.Topic, this.Event, this.Payload });
+        }
+
+        /// <summary>
+        /// Encodes the specified text for sending in a GraphQL packet.
+        /// </summary>
+        /// <param name="text">The text to encode</param>
+        /// <returns>The encoded text</returns>
+        protected string EncodeText(string text)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (char c in text)
+            {
+                if (c == '\\')
+                {
+                    str.Append("\\\\");
+                }
+                else if (c == '\"')
+                {
+                    str.Append("\\\"");
+                }
+                else
+                {
+                    str.Append(c);
+                }
+            }
+            return str.ToString();
         }
     }
 }
