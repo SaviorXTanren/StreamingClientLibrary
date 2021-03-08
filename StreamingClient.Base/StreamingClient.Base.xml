@@ -585,17 +585,35 @@
             The log message
             </summary>
         </member>
+        <member name="P:StreamingClient.Base.Util.Log.FunctionName">
+            <summary>
+            The name of the function
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.Log.FilePath">
+            <summary>
+            The code file path of the function
+            </summary>
+        </member>
+        <member name="P:StreamingClient.Base.Util.Log.LineNumber">
+            <summary>
+            The line number of the code file path of the function
+            </summary>
+        </member>
         <member name="M:StreamingClient.Base.Util.Log.#ctor">
             <summary>
             Creates a new instance of the Log class.
             </summary>
         </member>
-        <member name="M:StreamingClient.Base.Util.Log.#ctor(StreamingClient.Base.Util.LogLevel,System.String)">
+        <member name="M:StreamingClient.Base.Util.Log.#ctor(StreamingClient.Base.Util.LogLevel,System.String,System.String,System.String,System.Int32)">
             <summary>
             Creates a new instance of the Log class.
             </summary>
             <param name="level">The level of the log</param>
             <param name="message">The log message</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
         <member name="T:StreamingClient.Base.Util.Logger">
             <summary>
@@ -618,40 +636,55 @@
             </summary>
             <param name="level">The maximum level to capture logs for</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.Log(System.String)">
+        <member name="M:StreamingClient.Base.Util.Logger.Log(System.String,System.String,System.String,System.Int32)">
             <summary>
             Logs the specified message at the Information level.
             </summary>
             <param name="message">The message to log</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.String)">
+        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.String,System.String,System.String,System.Int32)">
             <summary>
             Logs the specified message.
             </summary>
             <param name="level">The level of the log</param>
             <param name="message">The message to log</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception,System.Boolean)">
+        <member name="M:StreamingClient.Base.Util.Logger.Log(System.Exception,System.Boolean,System.String,System.String,System.Int32)">
             <summary>
             Logs the specified exception at the Error level.
             </summary>
             <param name="ex">The exception to log</param>
             <param name="includeStackTrace">Whether to include a full stack trace</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.Exception,System.Boolean)">
+        <member name="M:StreamingClient.Base.Util.Logger.Log(StreamingClient.Base.Util.LogLevel,System.Exception,System.Boolean,System.String,System.String,System.Int32)">
             <summary>
             Logs the specified exception.
             </summary>
             <param name="level">The level of the log</param>
             <param name="ex">The exception to log</param>
             <param name="includeStackTrace">Whether to include a full stack trace</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
-        <member name="M:StreamingClient.Base.Util.Logger.ForceLog(StreamingClient.Base.Util.LogLevel,System.String)">
+        <member name="M:StreamingClient.Base.Util.Logger.ForceLog(StreamingClient.Base.Util.LogLevel,System.String,System.String,System.String,System.Int32)">
             <summary>
             Forcefully logs the specified message.
             </summary>
             <param name="level">The level of the log</param>
             <param name="message">The message to log</param>
+            <param name="functionName">The name of the function</param>
+            <param name="filePath">The code file path of the function</param>
+            <param name="lineNumber">The line number of the code file path of the function</param>
         </member>
         <member name="T:StreamingClient.Base.Util.NameAttribute">
             <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace StreamingClient.Base.Util
 {
@@ -42,6 +43,18 @@ namespace StreamingClient.Base.Util
         /// The log message
         /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// The name of the function
+        /// </summary>
+        public string FunctionName { get; set; }
+        /// <summary>
+        /// The code file path of the function
+        /// </summary>
+        public string FilePath { get; set; }
+        /// <summary>
+        /// The line number of the code file path of the function
+        /// </summary>
+        public int LineNumber { get; set; }
 
         /// <summary>
         /// Creates a new instance of the Log class.
@@ -53,10 +66,16 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <param name="level">The level of the log</param>
         /// <param name="message">The log message</param>
-        public Log(LogLevel level, string message)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public Log(LogLevel level, string message, string functionName, string filePath, int lineNumber)
         {
             this.Level = level;
             this.Message = message;
+            this.FunctionName = functionName;
+            this.FilePath = filePath;
+            this.LineNumber = lineNumber;
         }
     }
 
@@ -85,9 +104,12 @@ namespace StreamingClient.Base.Util
         /// Logs the specified message at the Information level.
         /// </summary>
         /// <param name="message">The message to log</param>
-        public static void Log(string message)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public static void Log(string message, [CallerMemberName] string functionName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            Logger.Log(LogLevel.Information, message);
+            Logger.Log(LogLevel.Information, message, functionName, filePath, lineNumber);
         }
 
         /// <summary>
@@ -95,13 +117,16 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <param name="level">The level of the log</param>
         /// <param name="message">The message to log</param>
-        public static void Log(LogLevel level, string message)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public static void Log(LogLevel level, string message, [CallerMemberName] string functionName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             try
             {
                 if (level <= Logger.Level)
                 {
-                    Logger.LogOccurred(null, new Log(level, message));
+                    Logger.LogOccurred(null, new Log(level, message, functionName, filePath, lineNumber));
                 }
             }
             catch (Exception) { }
@@ -112,9 +137,12 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <param name="ex">The exception to log</param>
         /// <param name="includeStackTrace">Whether to include a full stack trace</param>
-        public static void Log(Exception ex, bool includeStackTrace = false)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public static void Log(Exception ex, bool includeStackTrace = false, [CallerMemberName] string functionName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            Logger.Log(LogLevel.Error, ex, includeStackTrace);
+            Logger.Log(LogLevel.Error, ex, includeStackTrace, functionName, filePath, lineNumber);
         }
 
         /// <summary>
@@ -123,14 +151,17 @@ namespace StreamingClient.Base.Util
         /// <param name="level">The level of the log</param>
         /// <param name="ex">The exception to log</param>
         /// <param name="includeStackTrace">Whether to include a full stack trace</param>
-        public static void Log(LogLevel level, Exception ex, bool includeStackTrace = false)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public static void Log(LogLevel level, Exception ex, bool includeStackTrace = false, [CallerMemberName] string functionName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             string log = ex.ToString();
             if (includeStackTrace)
             {
                 log += Environment.NewLine + "Full Stack:" + Environment.StackTrace;
             }
-            Logger.Log(level, log);
+            Logger.Log(level, log, functionName, filePath, lineNumber);
         }
 
         /// <summary>
@@ -138,11 +169,14 @@ namespace StreamingClient.Base.Util
         /// </summary>
         /// <param name="level">The level of the log</param>
         /// <param name="message">The message to log</param>
-        public static void ForceLog(LogLevel level, string message)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="filePath">The code file path of the function</param>
+        /// <param name="lineNumber">The line number of the code file path of the function</param>
+        public static void ForceLog(LogLevel level, string message, [CallerMemberName] string functionName = null, [CallerFilePath] string filePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             try
             {
-                Logger.LogOccurred(null, new Log(level, message));
+                Logger.LogOccurred(null, new Log(level, message, functionName, filePath, lineNumber));
             }
             catch (Exception) { }
         }
