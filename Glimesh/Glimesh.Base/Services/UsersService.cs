@@ -37,24 +37,28 @@ namespace Glimesh.Base.Services
 
         /// <summary>
         /// Gets the users that the specified user are following.
+        /// </summary>
         /// <param name="username">The user to get follows for</param>
         /// <returns>The set of follows</returns>
         public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(userUsername: \"{username}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
 
         /// <summary>
-        /// Gets the users that are following the specified channel.
+        /// Gets the users that are following the specified channel
+        /// </summary>
         /// <param name="username">The user to get follows for</param>
         /// <returns>The set of follows</returns>
         public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string username) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(streamerUsername: \"{username}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
 
         /// <summary>
         /// Gets the users that the specified user are subscribed to.
+        /// </summary>
         /// <param name="username">The user to get subscriptions for</param>
         /// <returns>The set of subscriptions</returns>
         public async Task<IEnumerable<UserSubscriptionModel>> GetUsersSubscribedTo(string username) { return await this.QueryAsync<IEnumerable<UserSubscriptionModel>>($"{{ subscriptions(userUsername: \"{username}\") {{ {UserSubscriptionModel.AllFields} }} }}", "subscriptions"); }
 
         /// <summary>
         /// Gets the users that are subscribed to the specified channel.
+        /// </summary>
         /// <param name="username">The user to get subscriptions for</param>
         /// <returns>The set of subscriptions</returns>
         public async Task<IEnumerable<UserSubscriptionModel>> GetSubscribedUsers(string username) { return await this.QueryAsync<IEnumerable<UserSubscriptionModel>>($"{{ subscriptions(streamerUsername: \"{username}\") {{ {UserSubscriptionModel.AllFields} }} }}", "subscriptions"); }
