@@ -18,9 +18,12 @@ namespace Trovo.ChatSample.Console
         {
             OAuthClientScopeEnum.chat_connect,
             OAuthClientScopeEnum.chat_send_self,
+            OAuthClientScopeEnum.send_to_my_channel,
+            OAuthClientScopeEnum.manage_messages,
 
             OAuthClientScopeEnum.channel_details_self,
             OAuthClientScopeEnum.channel_update_self,
+            OAuthClientScopeEnum.channel_subscriptions,
 
             OAuthClientScopeEnum.user_details_self,
         };
@@ -59,9 +62,11 @@ namespace Trovo.ChatSample.Console
                                 chat.OnChatMessageReceived += Chat_OnChatMessageReceived;
 
                                 System.Console.WriteLine("Connecting to chat...");
-                                if (await chat.Connect())
+                                if (await chat.Connect(await connection.Chat.GetToken()))
                                 {
                                     System.Console.WriteLine("Successfully connected to chat!");
+
+                                    await chat.SendMessage("Hello World!");
 
                                     while (true)
                                     {

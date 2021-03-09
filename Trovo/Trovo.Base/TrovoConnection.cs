@@ -1,5 +1,4 @@
-﻿
-using StreamingClient.Base.Model.OAuth;
+﻿using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System;
@@ -14,6 +13,9 @@ using Trovo.Base.Services;
 [assembly: InternalsVisibleTo("Trovo.Base.UnitTests")]
 namespace Trovo.Base
 {
+    /// <summary>
+    /// The OAuth authentication scopes.
+    /// </summary>
     public enum OAuthClientScopeEnum
     {
         /// <summary>
@@ -24,15 +26,27 @@ namespace Trovo.Base
         /// Update your channel settings.
         /// </summary>
         channel_update_self,
+        /// <summary>
+        /// Get your subscribers list
+        /// </summary>
+        channel_subscriptions,
 
         /// <summary>
-        /// Connect to chat.
+        /// Connect to chat
         /// </summary>
         chat_connect,
         /// <summary>
         /// Send chat messages as connected user.
         /// </summary>
         chat_send_self,
+        /// <summary>
+        /// Send chat messages to the currently authenticated channel.
+        /// </summary>
+        send_to_my_channel,
+        /// <summary>
+        /// Perform chat commands and delete chat messages.
+        /// </summary>
+        manage_messages,
 
         /// <summary>
         /// View your email address and user profiles. 
@@ -68,6 +82,7 @@ namespace Trovo.Base
         /// <param name="clientID">The ID of the client application</param>
         /// <param name="scopes">The authorization scopes to request</param>
         /// <param name="redirectUri">The redirect URL for the client application</param>
+        /// <param name="state">The state for authentication check</param>
         /// <param name="forceApprovalPrompt">Whether to force an approval from the user</param>
         /// <returns>The authorization URL</returns>
         public static async Task<string> GetAuthorizationCodeURLForOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUri, string state = "abc123", bool forceApprovalPrompt = false)
@@ -98,6 +113,7 @@ namespace Trovo.Base
         /// </summary>
         /// <param name="clientID">The ID of the client application</param>
         /// <param name="scopes">The authorization scopes to request</param>
+        /// <param name="state">The state for authentication check</param>
         /// <param name="forceApprovalPrompt">Whether to force an approval from the user</param>
         /// <param name="oauthListenerURL">The URL to listen for the OAuth successful authentication</param>
         /// <param name="successResponse">The response to send back upon successful authentication</param>
@@ -140,13 +156,30 @@ namespace Trovo.Base
             return string.Join("+", scopes);
         }
 
+        /// <summary>
+        /// The OAuth service.
+        /// </summary>
         public OAuthService OAuth { get; private set; }
 
+        /// <summary>
+        /// The Channels service.
+        /// </summary>
         public ChannelsService Channels { get; private set; }
 
+        /// <summary>
+        /// The Chat service.
+        /// </summary>
         public ChatService Chat { get; private set; }
 
+        /// <summary>
+        /// The Users service.
+        /// </summary>
         public UsersService Users { get; private set; }
+
+        /// <summary>
+        /// The Category service.
+        /// </summary>
+        public CategoryService Categories { get; set; }
 
         private TrovoConnection(OAuthTokenModel token)
         {
@@ -157,6 +190,7 @@ namespace Trovo.Base
             this.Channels = new ChannelsService(this);
             this.Chat = new ChatService(this);
             this.Users = new UsersService(this);
+            this.Categories = new CategoryService(this);
         }
 
         /// <summary>

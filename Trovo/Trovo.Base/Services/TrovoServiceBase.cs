@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Trovo.Base.Services
 {
+    /// <summary>
+    /// Base class for all Trovo services.
+    /// </summary>
     public abstract class TrovoServiceBase : OAuthRestServiceBase
     {
         private const string TrovoRestAPIBaseAddressFormat = "https://open-api.trovo.live/openplatform/";

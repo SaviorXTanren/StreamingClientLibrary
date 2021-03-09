@@ -25,11 +25,20 @@ namespace Trovo.Base.Services
         /// <param name="connection">The Trovo connection to use</param>
         public UsersService(TrovoConnection connection) : base(connection) { }
 
+        /// <summary>
+        /// Gets the currently authenticated user.
+        /// </summary>
+        /// <returns>The currently authenticated user</returns>
         public async Task<PrivateUserModel> GetCurrentUser()
         {
             return await this.GetAsync<PrivateUserModel>("getuserinfo");
         }
 
+        /// <summary>
+        /// Gets the user matching the specified username.
+        /// </summary>
+        /// <param name="username">The username to search for</param>
+        /// <returns>The matching user</returns>
         public async Task<UserModel> GetUser(string username)
         {
             Validator.ValidateString(username, "username");
@@ -37,6 +46,11 @@ namespace Trovo.Base.Services
             return (users != null) ? users.FirstOrDefault() : null;
         }
 
+        /// <summary>
+        /// Gets the set of users matching the specified usernames.
+        /// </summary>
+        /// <param name="usernames">The usernames to search for</param>
+        /// <returns>The matching users.</returns>
         public async Task<IEnumerable<UserModel>> GetUsers(IEnumerable<string> usernames)
         {
             Validator.ValidateList(usernames, "usernames");
