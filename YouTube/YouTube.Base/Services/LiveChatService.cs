@@ -13,22 +13,13 @@ namespace YouTube.Base.Services
     /// </summary>
     public class LiveChatService : YouTubeServiceBase
     {
+        private const string ChatIsNotLive = "The live chat is no longer live";
+
         /// <summary>
         /// Creates an instance of the LiveChatService.
         /// </summary>
         /// <param name="connection">The YouTube connection to use</param>
         public LiveChatService(YouTubeConnection connection) : base(connection) { }
-
-        /// <summary>
-        /// Gets the most recent messages for a live chat.
-        /// </summary>
-        /// <param name="broadcast">The broadcast of the live chat</param>
-        /// <param name="maxResults">The maximum results to return</param>
-        /// <returns>The list of chat messages</returns>
-        public async Task<LiveChatMessagesResultModel> GetRecentMessages(LiveBroadcast broadcast, int maxResults = 200)
-        {
-            return await this.GetMessages(broadcast, nextResultsToken: null, maxResults: maxResults);
-        }
 
         /// <summary>
         /// Gets the messages for a live chat.
@@ -126,19 +117,19 @@ namespace YouTube.Base.Services
         /// </summary>
         /// <param name="maxResults">The maximum results to return</param>
         /// <returns>The list of channel memberships</returns>
-        public async Task<IEnumerable<Sponsor>> GetChannelMemberships(int maxResults = 1)
+        public async Task<IEnumerable<Member>> GetChannelMemberships(int maxResults = 1)
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
-                List<Sponsor> results = new List<Sponsor>();
+                List<Member> results = new List<Member>();
                 string pageToken = null;
                 do
                 {
-                    SponsorsResource.ListRequest request = this.connection.GoogleYouTubeService.Sponsors.List("id,snippet");
+                    MembersResource.ListRequest request = this.connection.GoogleYouTubeService.Members.List("id,snippet");
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
 
-                    SponsorListResponse response = await request.ExecuteAsync();
+                    MemberListResponse response = await request.ExecuteAsync();
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;

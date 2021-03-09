@@ -4,6 +4,7 @@ using Google.Apis.YouTubePartner.v1;
 using Google.Apis.YouTubePartner.v1.Data;
 using StreamingClient.Base.Util;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static Google.Apis.YouTube.v3.LiveBroadcastsResource.ListRequest;
 
@@ -44,6 +45,24 @@ namespace YouTube.Base.Services
         }
 
         /// <summary>
+        /// Gets the currently active broadcast associated with the currently authenticated account.
+        /// </summary>
+        /// <returns>The current live broadcasts</returns>
+        public async Task<LiveBroadcast> GetActiveBroadcast()
+        {
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                LiveBroadcastsResource.ListRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.List("snippet,contentDetails,status");
+                request.BroadcastType = BroadcastTypeEnum.All;
+                request.Mine = true;
+                request.MaxResults = 10;
+
+                LiveBroadcastListResponse response = await request.ExecuteAsync();
+                return response.Items.FirstOrDefault(b => string.Equals(b.Status.LifeCycleStatus, "live"));
+            });
+        }
+
+        /// <summary>
         /// Updates the specified broadcast.
         /// </summary>
         /// <param name="broadcast">The broadcast to update</param>
@@ -55,24 +74,6 @@ namespace YouTube.Base.Services
             {
                 LiveBroadcastsResource.UpdateRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.Update(broadcast, "id,snippet,contentDetails,status");
                 return await request.ExecuteAsync();
-            });
-        }
-
-        /// <summary>
-        /// Enables/Disables the slate for a live broadcast.
-        /// </summary>
-        /// <param name="broadcast">The broadcast to update</param>
-        /// <param name="showSlate">Indicates whether to show or hide the slate</param>
-        /// <returns>An awaitable Task</returns>
-        public async Task EnableDisableSlate(LiveBroadcast broadcast, bool showSlate)
-        {
-            Validator.ValidateVariable(broadcast, "broadcast");
-            await this.YouTubeServiceWrapper<object>(async () =>
-            {
-                LiveBroadcastsResource.ControlRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.Control(broadcast.Id, "snippet,contentDetails");
-                request.DisplaySlate = showSlate;
-                await request.ExecuteAsync();
-                return null;
             });
         }
 

@@ -10,8 +10,8 @@ namespace YouTube.ChatSample.Console
 {
     public class Program
     {
-        public static string clientID = "";     // SET YOUR OAUTH CLIENT ID
-        public static string clientSecret = ""; // SET YOUR OAUTH CLIENT SECRET
+        public static string clientID = "884596410562-pcrl1fn8ov0npj7fhjl086ffmud7r5j6.apps.googleusercontent.com";
+        public static string clientSecret = "QBkxNmPNIvWatRvOIfRYrXlc";
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
@@ -32,11 +32,6 @@ namespace YouTube.ChatSample.Console
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(clientID) || string.IsNullOrEmpty(clientSecret))
-                    {
-                        throw new InvalidOperationException("Client ID and/or Client Secret are not set in the UnitTestBase class");
-                    }
-
                     System.Console.WriteLine("Initializing connection");
 
                     YouTubeConnection connection = await YouTubeConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes);
@@ -54,6 +49,8 @@ namespace YouTube.ChatSample.Console
                             if (await client.Connect())
                             {
                                 System.Console.WriteLine("Live chat connection successful!");
+
+                                await client.SendMessage("Hello World!");
 
                                 while (true) { }
                             }

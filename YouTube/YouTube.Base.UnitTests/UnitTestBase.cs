@@ -8,8 +8,8 @@ namespace YouTube.Base.UnitTests
 {
     public class UnitTestBase
     {
-        public static string clientID = "";     // SET YOUR OAUTH CLIENT ID
-        public static string clientSecret = ""; // SET YOUR OAUTH CLIENT SECRET
+        public static string clientID = "884596410562-pcrl1fn8ov0npj7fhjl086ffmud7r5j6.apps.googleusercontent.com";
+        public static string clientSecret = "QBkxNmPNIvWatRvOIfRYrXlc";
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {

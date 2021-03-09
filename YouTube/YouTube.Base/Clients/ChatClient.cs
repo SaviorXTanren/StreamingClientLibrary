@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using YouTube.Base.Model;
 using YouTube.Base.Services;
-using static Google.Apis.YouTube.v3.LiveBroadcastsResource.ListRequest;
 
 namespace YouTube.Base.Clients
 {
@@ -20,6 +19,8 @@ namespace YouTube.Base.Clients
         private LiveBroadcast broadcast;
 
         private CancellationTokenSource messageBackgroundPollingTokenSource;
+
+        private HashSet<string> messageIDs = new HashSet<string>();
 
         /// <summary>
         /// Invoked when chat messages are received.
@@ -38,17 +39,14 @@ namespace YouTube.Base.Clients
         /// <returns>Whether the connection was successful</returns>
         public async Task<bool> Connect()
         {
-            IEnumerable<LiveBroadcast> broadcasts = await this.connection.LiveBroadcasts.GetMyBroadcasts();
-            if (broadcasts.Count() > 0)
-            {
-                this.broadcast = broadcasts.First();
+            this.broadcast = await this.connection.LiveBroadcasts.GetActiveBroadcast();
 
-                this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
+            this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
+            Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            }
-            return false;
+
+            return true;
         }
 
         /// <summary>
@@ -91,7 +89,7 @@ namespace YouTube.Base.Clients
         /// </summary>
         /// <param name="maxResults">The maximum results to return</param>
         /// <returns>The list of channel memberships</returns>
-        public async Task<IEnumerable<Sponsor>> GetChannelMemberships(int maxResults = 1) { return await this.connection.LiveChat.GetChannelMemberships(maxResults); }
+        public async Task<IEnumerable<Member>> GetChannelMemberships(int maxResults = 1) { return await this.connection.LiveChat.GetChannelMemberships(maxResults); }
 
         /// <summary>
         /// Gets the list of moderators.
@@ -158,30 +156,43 @@ namespace YouTube.Base.Clients
 
         private async Task MessageBackgroundPolling()
         {
-            LiveChatMessage lastMessage = null;
+            string nextResultsToken = null;
             while (!this.messageBackgroundPollingTokenSource.IsCancellationRequested)
             {
                 try
                 {
-                    LiveChatMessagesResultModel result = await this.connection.LiveChat.GetRecentMessages(this.broadcast, maxResults: 1000);
-                    if (result != null)
+                    if (broadcast != null)
                     {
-                        if (lastMessage != null)
+                        LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.broadcast, nextResultsToken: nextResultsToken, maxResults: 200);
+                        if (result != null)
                         {
                             List<LiveChatMessage> newMessages = new List<LiveChatMessage>();
                             foreach (LiveChatMessage message in result.Messages)
                             {
-                                if (message.Id.Equals(lastMessage.Id))
+                                if (!messageIDs.Contains(message.Id))
                                 {
-                                    break;
+                                    newMessages.Add(message);
+                                    messageIDs.Add(message.Id);
                                 }
-                                newMessages.Add(message);
                             }
-                            this.OnMessagesReceived?.Invoke(this, newMessages);
-                        }
-                        lastMessage = result.Messages.FirstOrDefault();
 
-                        await Task.Delay((int)result.PollingInterval);
+                            if (newMessages.Count > 0)
+                            {
+                                this.OnMessagesReceived?.Invoke(this, newMessages);
+                            }
+
+                            nextResultsToken = result.NextResultsToken;
+                            await Task.Delay((int)result.PollingInterval);
+                        }
+                        else
+                        {
+                            await Task.Delay(10000);
+                        }
+                    }
+                    else
+                    {
+                        this.broadcast = await this.connection.LiveBroadcasts.GetActiveBroadcast();
+                        await Task.Delay(60000);
                     }
                 }
                 catch (TaskCanceledException) { }
