@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Trovo.Base.Models.Chat
 {
@@ -174,5 +175,11 @@ namespace Trovo.Base.Models.Chat
         /// Number of spells. Only for chat messages of spell (type = 5), in the content field.
         /// </summary>
         public int num { get; set; }
+
+        /// <summary>
+        /// Returns the full avatar URL for the user.
+        /// </summary>
+        [JsonIgnore]
+        public string FullAvatarURL { get { return $"https://headicon.trovo.live/user/{this.avatar}"; } }
     }
 }
