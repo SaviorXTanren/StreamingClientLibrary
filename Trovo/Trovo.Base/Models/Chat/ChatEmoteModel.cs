@@ -15,12 +15,12 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// The event emotes available.
         /// </summary>
-        public List<GlobalEmoteChatModel> eventEmotes { get; set; }
+        public List<GlobalChatEmoteModel> eventEmotes { get; set; }
 
         /// <summary>
         /// The global emotes available.
         /// </summary>
-        public List<GlobalEmoteChatModel> globalEmotes { get; set; }
+        public List<GlobalChatEmoteModel> globalEmotes { get; set; }
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ namespace Trovo.Base.Models.Chat
     /// <summary>
     /// Information about a global chat emote.
     /// </summary>
-    public class GlobalEmoteChatModel : ChatEmoteModel
+    public class GlobalChatEmoteModel : ChatEmoteModel
     {
         /// <summary>
         /// The Gifp URL of the emote.
@@ -95,7 +95,7 @@ namespace Trovo.Base.Models.Chat
     /// <summary>
     /// Information about an event chat emote.
     /// </summary>
-    public class EventChatEmoteModel : GlobalEmoteChatModel
+    public class EventChatEmoteModel : GlobalChatEmoteModel
     {
         /// <summary>
         /// The name of platform-level limited emoticons activity.
