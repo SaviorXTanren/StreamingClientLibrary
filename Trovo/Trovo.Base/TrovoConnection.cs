@@ -151,6 +151,25 @@ namespace Trovo.Base
             return null;
         }
 
+        /// <summary>
+        /// Creates a TrovoConnection object from an OAuth token.
+        /// </summary>
+        /// <param name="token">The OAuth token to use</param>
+        /// <param name="refreshToken">Whether to refresh the token</param>
+        /// <returns>The TrovoConnection object</returns>
+        public static async Task<TrovoConnection> ConnectViaOAuthToken(OAuthTokenModel token, bool refreshToken = true)
+        {
+            Validator.ValidateVariable(token, "token");
+
+            TrovoConnection connection = new TrovoConnection(token);
+            if (refreshToken)
+            {
+                await connection.RefreshOAuthToken();
+            }
+
+            return connection;
+        }
+
         internal static string ConvertClientScopesToString(IEnumerable<OAuthClientScopeEnum> scopes)
         {
             return string.Join("+", scopes);
