@@ -10,7 +10,7 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// The customized emotes available.
         /// </summary>
-        public List<ChannelChatEmotesModel> customizedEmotes { get; set; }
+        public CustomizedChatEmotesModel customizedEmotes { get; set; }
 
         /// <summary>
         /// The event emotes available.
@@ -32,6 +32,22 @@ namespace Trovo.Base.Models.Chat
         /// The emotes available from channels.
         /// </summary>
         public List<ChannelChatEmotesModel> channel { get; set; }
+    }
+
+    /// <summary>
+    /// Information about a channel chat emote.
+    /// </summary>
+    public class ChannelChatEmotesModel
+    {
+        /// <summary>
+        /// The ID of the channel that the emote belongs to.
+        /// </summary>
+        public string channel_id { get; set; }
+
+        /// <summary>
+        /// The set of emotes for the channel.
+        /// </summary>
+        public List<ChatEmoteModel> emotes { get; set; }
     }
 
     /// <summary>
@@ -58,22 +74,6 @@ namespace Trovo.Base.Models.Chat
         /// The available status of the emote.
         /// </summary>
         public string status { get; set; }
-    }
-
-    /// <summary>
-    /// Information about a channel chat emote.
-    /// </summary>
-    public class ChannelChatEmotesModel : ChatEmoteModel
-    {
-        /// <summary>
-        /// The ID of the channel that the emote belongs to.
-        /// </summary>
-        public string channel_id { get; set; }
-
-        /// <summary>
-        /// The set of emotes for the channel.
-        /// </summary>
-        public List<ChatEmoteModel> emotes { get; set; }
     }
 
     /// <summary>

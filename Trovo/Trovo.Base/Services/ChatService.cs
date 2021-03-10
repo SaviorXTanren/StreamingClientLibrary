@@ -13,6 +13,11 @@ namespace Trovo.Base.Services
     /// </summary>
     public class ChatService : TrovoServiceBase
     {
+        private class ChatEmotePackageWrapperModel
+        {
+            public ChatEmotePackageModel channels { get; set; }
+        }
+
         /// <summary>
         /// Creates an instance of the ChatService.
         /// </summary>
@@ -60,7 +65,13 @@ namespace Trovo.Base.Services
             JObject jobj = new JObject();
             jobj["emote_type"] = (channelIDs != null && channelIDs.Count() > 0) ? 0 : 2;
             jobj["channel_id"] = new JArray(channelIDs);
-            return await this.PostAsync<ChatEmotePackageModel>("chat/send", AdvancedHttpClient.CreateContentFromObject(jobj));
+
+            ChatEmotePackageWrapperModel result = await this.PostAsync<ChatEmotePackageWrapperModel>("getemotes", AdvancedHttpClient.CreateContentFromObject(jobj));
+            if (result != null)
+            {
+                return result.channels;
+            }
+            return null;
         }
 
         /// <summary>
