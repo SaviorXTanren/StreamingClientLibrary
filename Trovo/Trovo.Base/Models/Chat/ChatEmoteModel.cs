@@ -15,7 +15,7 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// The event emotes available.
         /// </summary>
-        public List<GlobalChatEmoteModel> eventEmotes { get; set; }
+        public List<EventChatEmoteModel> eventEmotes { get; set; }
 
         /// <summary>
         /// The global emotes available.
