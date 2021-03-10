@@ -41,7 +41,7 @@ namespace Trovo.Base.Services
         /// <param name="query">The query to search for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The matching categories</returns>
-        public async Task<IEnumerable<CategoryModel>> GetTopCategories(string query, int maxResults = 1)
+        public async Task<IEnumerable<CategoryModel>> SearchCategories(string query, int maxResults = 1)
         {
             Validator.ValidateString(query, "query");
 
