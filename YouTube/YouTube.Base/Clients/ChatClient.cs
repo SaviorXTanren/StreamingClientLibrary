@@ -3,7 +3,6 @@ using Google.Apis.YouTube.v3.Data;
 using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using YouTube.Base.Model;
@@ -37,16 +36,23 @@ namespace YouTube.Base.Clients
         /// Connects to the chat for the current broadcast.
         /// </summary>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> Connect()
+        public async Task<bool> Connect() { return await this.Connect(await this.connection.LiveBroadcasts.GetActiveBroadcast()); }
+
+        /// <summary>
+        /// Connects to the specified broadcast.
+        /// </summary>
+        /// <param name="broadcast">The broadcast to connect to</param>
+        /// <returns>Whether the connection was successful</returns>
+        public Task<bool> Connect(LiveBroadcast broadcast)
         {
-            this.broadcast = await this.connection.LiveBroadcasts.GetActiveBroadcast();
+            this.broadcast = broadcast;
 
             this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <summary>
