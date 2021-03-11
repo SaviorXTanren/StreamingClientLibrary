@@ -26,6 +26,11 @@ namespace YouTube.Base
     public enum OAuthClientScopeEnum
     {
         /// <summary>
+        /// https://www.googleapis.com/auth/youtube.channel-memberships.creator
+        /// </summary>
+        [Name("https://www.googleapis.com/auth/youtube.channel-memberships.creator")]
+        ChannelMemberships,
+        /// <summary>
         /// https://www.googleapis.com/auth/youtube
         /// </summary>
         [Name("https://www.googleapis.com/auth/youtube")]

@@ -15,6 +15,7 @@ namespace YouTube.ChatSample.Console
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
+            OAuthClientScopeEnum.ChannelMemberships,
             OAuthClientScopeEnum.ManageAccount,
             OAuthClientScopeEnum.ManageData,
             OAuthClientScopeEnum.ManagePartner,
@@ -50,7 +51,10 @@ namespace YouTube.ChatSample.Console
                             {
                                 System.Console.WriteLine("Live chat connection successful!");
 
-                                await client.SendMessage("Hello World!");
+                                if (await connection.LiveBroadcasts.GetActiveBroadcast() != null)
+                                {
+                                    await client.SendMessage("Hello World!");
+                                }
 
                                 while (true) { }
                             }
