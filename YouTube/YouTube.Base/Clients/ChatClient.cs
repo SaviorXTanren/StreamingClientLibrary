@@ -1,5 +1,4 @@
-﻿using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
+﻿using Google.Apis.YouTube.v3.Data;
 using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
@@ -89,27 +88,6 @@ namespace YouTube.Base.Clients
         public async Task DeleteMessage(LiveChatMessage message) { await this.connection.LiveChat.DeleteMessage(message); }
 
         /// <summary>
-        /// Gets the most recent super chat events for a live chat.
-        /// </summary>
-        /// <param name="maxResults">The maximum results to return</param>
-        /// <returns>The list of super chat events</returns>
-        public async Task<IEnumerable<SuperChatEvent>> GetRecentSuperChatEvents(int maxResults = 1) { return await this.connection.LiveChat.GetRecentSuperChatEvents(this.broadcast, maxResults); }
-
-        /// <summary>
-        /// Gets the list of channel memberships.
-        /// </summary>
-        /// <param name="maxResults">The maximum results to return</param>
-        /// <returns>The list of channel memberships</returns>
-        public async Task<IEnumerable<Member>> GetChannelMemberships(int maxResults = 1) { return await this.connection.LiveChat.GetChannelMemberships(maxResults); }
-
-        /// <summary>
-        /// Gets the list of moderators.
-        /// </summary>
-        /// <param name="maxResults">The maximum results to return</param>
-        /// <returns>The list of moderators</returns>
-        public async Task<IEnumerable<LiveChatModerator>> GetModerators(int maxResults = 1) { return await this.connection.LiveChat.GetModerators(this.broadcast, maxResults); }
-
-        /// <summary>
         /// Makes the specified user a moderator.
         /// </summary>
         /// <param name="user">The user to mod</param>
@@ -144,26 +122,6 @@ namespace YouTube.Base.Clients
         /// <param name="ban">The ban to remove</param>
         /// <returns>An awaitable Task</returns>
         public async Task UnbanUser(LiveChatBan ban) { await this.connection.LiveChat.UnbanUser(ban); }
-
-        private async Task<LiveChatBan> BanUserInternal(LiveBroadcast broadcast, Channel user, string banType, ulong banDuration = 0)
-        {
-            return await this.YouTubeServiceWrapper(async () =>
-            {
-                LiveChatBan ban = new LiveChatBan();
-                ban.Snippet = new LiveChatBanSnippet();
-                ban.Snippet.LiveChatId = broadcast.Snippet.LiveChatId;
-                ban.Snippet.Type = banType;
-                if (banDuration > 0)
-                {
-                    ban.Snippet.BanDurationSeconds = banDuration;
-                }
-                ban.Snippet.BannedUserDetails = new ChannelProfileDetails();
-                ban.Snippet.BannedUserDetails.ChannelId = user.Id;
-
-                LiveChatBansResource.InsertRequest request = this.connection.GoogleYouTubeService.LiveChatBans.Insert(ban, "snippet");
-                return await request.ExecuteAsync();
-            });
-        }
 
         private async Task MessageBackgroundPolling()
         {
