@@ -35,22 +35,27 @@ namespace YouTube.Base.Clients
         /// <summary>
         /// Connects to the chat for the current broadcast.
         /// </summary>
+        /// <param name="listenForMessage">Whether to enable message listen polling</param>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> Connect() { return await this.Connect(await this.connection.LiveBroadcasts.GetActiveBroadcast()); }
+        public async Task<bool> Connect(bool listenForMessage = true) { return await this.Connect(await this.connection.LiveBroadcasts.GetActiveBroadcast(), listenForMessage); }
 
         /// <summary>
         /// Connects to the specified broadcast.
         /// </summary>
         /// <param name="broadcast">The broadcast to connect to</param>
+        /// <param name="listenForMessage">Whether to enable message listen polling</param>
         /// <returns>Whether the connection was successful</returns>
-        public Task<bool> Connect(LiveBroadcast broadcast)
+        public Task<bool> Connect(LiveBroadcast broadcast, bool listenForMessage = true)
         {
             this.broadcast = broadcast;
 
-            this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
+            if (listenForMessage)
+            {
+                this.messageBackgroundPollingTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
+                Task.Run(this.MessageBackgroundPolling, this.messageBackgroundPollingTokenSource.Token);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            }
 
             return Task.FromResult(true);
         }
