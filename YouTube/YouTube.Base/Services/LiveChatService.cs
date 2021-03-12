@@ -13,8 +13,6 @@ namespace YouTube.Base.Services
     /// </summary>
     public class LiveChatService : YouTubeServiceBase
     {
-        private const string ChatIsNotLive = "The live chat is no longer live";
-
         /// <summary>
         /// Creates an instance of the LiveChatService.
         /// </summary>
@@ -194,7 +192,7 @@ namespace YouTube.Base.Services
         /// <summary>
         /// Removes moderator privileges from the specified user.
         /// </summary>
-        /// <param name="moderator">The user to unmode</param>
+        /// <param name="moderator">The user to unmod</param>
         /// <returns>An awaitable Task</returns>
         public async Task UnmodUser(LiveChatModerator moderator)
         {
