@@ -91,6 +91,8 @@ namespace Trovo.Base.Models.Chat
     /// </summary>
     public class ChatMessageModel
     {
+        private const string FullAvatarURLFormat = "https://headicon.trovo.live/user/";
+
         /// <summary>
         /// Streamer of the current channel
         /// </summary>
@@ -180,6 +182,6 @@ namespace Trovo.Base.Models.Chat
         /// Returns the full avatar URL for the user.
         /// </summary>
         [JsonIgnore]
-        public string FullAvatarURL { get { return $"https://headicon.trovo.live/user/{this.avatar}"; } }
+        public string FullAvatarURL { get { return (this.avatar.StartsWith(FullAvatarURLFormat)) ? this.avatar : FullAvatarURLFormat + this.avatar; } }
     }
 }
