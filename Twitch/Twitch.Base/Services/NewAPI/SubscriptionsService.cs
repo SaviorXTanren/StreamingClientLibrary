@@ -42,5 +42,19 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateList(userIDs, "userIDs");
             return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id + "&user_id=" + string.Join("&user_id=", userIDs), userIDs.Count());
         }
+
+        /// <summary>
+        /// Gets the subscriptions for a broadcaster for the specified user IDs.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
+        /// <param name="user">The user to get subscription for</param>
+        /// <returns>The broadcaster's subscriptions</returns>
+        public async Task<SubscriptionModel> GetSubscription(UserModel broadcaster, UserModel user)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            IEnumerable<SubscriptionModel> subscriptions = await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions/user?broadcaster_id=" + broadcaster.id + "&user_id=" + user.id);
+            return (subscriptions != null) ? subscriptions.FirstOrDefault() : null;
+        }
     }
 }

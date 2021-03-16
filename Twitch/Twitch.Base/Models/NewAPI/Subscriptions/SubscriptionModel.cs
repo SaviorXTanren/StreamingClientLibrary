@@ -18,6 +18,14 @@
         /// </summary>
         public bool is_gift { get; set; }
         /// <summary>
+        /// The login of the gifter if it was a gifted subscription
+        /// </summary>
+        public string gifter_login { get; set; }
+        /// <summary>
+        /// The display name of the gifter if it was a gifted subscription
+        /// </summary>
+        public string gifter_name { get; set; }
+        /// <summary>
         /// The tier of the subscription.
         /// </summary>
         public string tier { get; set; }
