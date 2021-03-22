@@ -11,7 +11,7 @@
     <Version>1.0.0.4</Version>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
-For more information, please see our project site: https://github.com/SaviorXTanren/streaming-client-shared-library</Description>
+For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>Streaming Bot Chat Library</PackageTags>
     <PackageId>StreamingClientLibrary.Base</PackageId>
     <Product>Streaming Client Library</Product>
