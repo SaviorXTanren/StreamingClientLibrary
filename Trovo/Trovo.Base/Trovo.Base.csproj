@@ -17,6 +17,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <Version>1.0.0.7</Version>
     <AssemblyVersion>1.0.0.7</AssemblyVersion>
     <FileVersion>1.0.0.7</FileVersion>
+    <PackageReleaseNotes>- Initial release of library</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
