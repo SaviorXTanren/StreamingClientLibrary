@@ -1,4 +1,5 @@
-﻿using StreamingClient.Base.Util;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,23 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateGuid(rewardID, "rewardID");
             Validator.ValidateVariable(reward, "reward");
 
-            NewTwitchAPIDataRestResult<CustomChannelPointRewardModel> result = await this.PatchAsync<NewTwitchAPIDataRestResult<CustomChannelPointRewardModel>>($"channel_points/custom_rewards?broadcaster_id={broadcaster.id}&id={rewardID}", AdvancedHttpClient.CreateContentFromObject(reward));
+            return await this.UpdateCustomReward(broadcaster, rewardID, new JObject(reward));
+        }
+
+        /// <summary>
+        /// Updates an existing reward associated with the broadcaster with the specified information.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to create the reward for</param>
+        /// <param name="rewardID">The ID of the reward</param>
+        /// <param name="updatableFields">The reward information to update</param>
+        /// <returns>The updated reward</returns>
+        public async Task<CustomChannelPointRewardModel> UpdateCustomReward(UserModel broadcaster, Guid rewardID, JObject updatableFields)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateGuid(rewardID, "rewardID");
+            Validator.ValidateVariable(updatableFields, "updatableFields");
+
+            NewTwitchAPIDataRestResult<CustomChannelPointRewardModel> result = await this.PatchAsync<NewTwitchAPIDataRestResult<CustomChannelPointRewardModel>>($"channel_points/custom_rewards?broadcaster_id={broadcaster.id}&id={rewardID}", AdvancedHttpClient.CreateContentFromObject(updatableFields));
             if (result != null && result.data != null)
             {
                 return result.data.FirstOrDefault();
