@@ -29,7 +29,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<ClipCreationModel> CreateClip(UserModel broadcaster, bool hasDelay = false)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.PostDataResultAsync<ClipCreationModel>("clips?broadcaster_id=" + broadcaster.id + "&has_delay=" + hasDelay);
+            return (await this.PostDataResultAsync<ClipCreationModel>("clips?broadcaster_id=" + broadcaster.id + "&has_delay=" + hasDelay))?.FirstOrDefault();
         }
 
         /// <summary>

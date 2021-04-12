@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 
@@ -83,14 +84,30 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<T> PostDataResultAsync<T>(string requestUri)
+        public async Task<T[]> PostDataResultAsync<T>(string requestUri)
         {
             NewTwitchAPIDataRestResult<T> result = await this.PostAsync<NewTwitchAPIDataRestResult<T>>(requestUri);
             if (result != null && result.data.Count > 0)
             {
-                return result.data.First();
+                return result.data.ToArray();
             }
-            return default(T);
+            return null;
+        }
+
+        /// <summary>
+        /// Performs a POST REST request using the provided request URI for New Twitch API-wrapped data.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="content">The post body content</param>
+        /// <returns>A type-casted object of the contents of the response</returns>
+        public async Task<T[]> PostDataResultAsync<T>(string requestUri, HttpContent content)
+        {
+            NewTwitchAPIDataRestResult<T> result = await this.PostAsync<NewTwitchAPIDataRestResult<T>>(requestUri, content);
+            if (result != null && result.data.Count > 0)
+            {
+                return result.data.ToArray();
+            }
+            return null;
         }
     }
 }

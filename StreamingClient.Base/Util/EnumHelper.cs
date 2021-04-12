@@ -33,6 +33,27 @@ namespace StreamingClient.Base.Util
         }
 
         /// <summary>
+        /// Gets the public-facing name of the specified enum from the Name Attribute.
+        /// </summary>
+        /// <param name="type">The enum type</param>
+        /// <param name="value">The enum value</param>
+        /// <returns>The public-facing name of the specified enum</returns>
+        public static string GetEnumName(Type type, object value)
+        {
+            string name = Enum.GetName(type, value);
+            if (!string.IsNullOrEmpty(name))
+            {
+                NameAttribute[] nameAttributes = (NameAttribute[])type.GetField(name).GetCustomAttributes(typeof(NameAttribute), false);
+                if (nameAttributes != null && nameAttributes.Length > 0)
+                {
+                    return nameAttributes[0].Name;
+                }
+                return name;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the public-facing name of the specified enums from the Name Attribute.
         /// </summary>
         /// <typeparam name="T">The type of enum value</typeparam>
@@ -84,6 +105,29 @@ namespace StreamingClient.Base.Util
                 values.Add(value);
             }
             return values;
+        }
+
+        /// <summary>
+        /// Gets the enum value that matches the specified name.
+        /// </summary>
+        /// <param name="type">The type to search</param>
+        /// <param name="str">The name to search for</param>
+        /// <returns>The enum value that matches the specified name</returns>
+        public static object GetEnumValueFromString(Type type, string str)
+        {
+            foreach (object value in Enum.GetValues(type))
+            {
+                if (string.Equals(str, EnumHelper.GetEnumName(type, value)))
+                {
+                    return value;
+                }
+            }
+            if (type.IsValueType)
+            {
+                return Activator.CreateInstance(type);
+            }
+
+            return null;
         }
 
         /// <summary>

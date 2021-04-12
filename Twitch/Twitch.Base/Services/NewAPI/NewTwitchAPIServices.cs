@@ -36,6 +36,11 @@
         public ClipsService Clips { get; private set; }
 
         /// <summary>
+        /// APIs for EventSub
+        /// </summary>
+        public EventSubService EventSub { get; private set; }
+
+        /// <summary>
         /// APIs for Games interaction.
         /// </summary>
         public GamesService Games { get; private set; }
@@ -77,6 +82,7 @@
             this.Channels = new ChannelsService(connection);
             this.Chat = new ChatService(connection);
             this.Clips = new ClipsService(connection);
+            this.EventSub = new EventSubService(connection);
             this.Games = new GamesService(connection);
             this.Streams = new StreamsService(connection);
             this.Subscriptions = new SubscriptionsService(connection);

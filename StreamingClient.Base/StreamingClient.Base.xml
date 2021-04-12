@@ -305,6 +305,14 @@
             <param name="value">The enum value</param>
             <returns>The public-facing name of the specified enum</returns>
         </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumName(System.Type,System.Object)">
+            <summary>
+            Gets the public-facing name of the specified enum from the Name Attribute.
+            </summary>
+            <param name="type">The enum type</param>
+            <param name="value">The enum value</param>
+            <returns>The public-facing name of the specified enum</returns>
+        </member>
         <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumNames``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Gets the public-facing name of the specified enums from the Name Attribute.
@@ -328,6 +336,14 @@
             <typeparam name="T">The type of enum value</typeparam>
             <param name="includeObsoletes">Whether to include obsolete enums</param>
             <returns>The list of all available values for the enum type</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumValueFromString(System.Type,System.String)">
+            <summary>
+            Gets the enum value that matches the specified name.
+            </summary>
+            <param name="type">The type to search</param>
+            <param name="str">The name to search for</param>
+            <returns>The enum value that matches the specified name</returns>
         </member>
         <member name="M:StreamingClient.Base.Util.EnumHelper.GetEnumValueFromString``1(System.String)">
             <summary>
@@ -734,6 +750,36 @@
             <param name="semaphore">The semaphore to await on</param>
             <param name="function">The function to run</param>
             <returns>An awaitable task of type T</returns>
+        </member>
+        <member name="T:StreamingClient.Base.Util.StringEnumNameConverter">
+            <summary>
+            This converts from Enum value to name and back
+            </summary>
+        </member>
+        <member name="M:StreamingClient.Base.Util.StringEnumNameConverter.CanConvert(System.Type)">
+            <summary>
+            Checks to see if this converter can work on the requested type.
+            </summary>
+            <param name="objectType">The type to convert to.</param>
+            <returns>True if it can convert.</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.StringEnumNameConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the raw json to parse to enum
+            </summary>
+            <param name="reader">The Json reader to read from.</param>
+            <param name="objectType">The type being converted to.</param>
+            <param name="existingValue">The current value.</param>
+            <param name="serializer">The serializer being used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamingClient.Base.Util.StringEnumNameConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Write out the enum as a string.
+            </summary>
+            <param name="writer">The writer being used.</param>
+            <param name="value">The enum value.</param>
+            <param name="serializer">The serializer being used.</param>
         </member>
         <member name="T:StreamingClient.Base.Util.StringExtensions">
             <summary>

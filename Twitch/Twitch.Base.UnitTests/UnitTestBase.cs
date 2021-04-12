@@ -49,11 +49,35 @@ namespace Twitch.Base.UnitTests
             return UnitTestBase.connection;
         }
 
+        public static TwitchConnection GetAppTwitchClient()
+        {
+            if (UnitTestBase.connection == null)
+            {
+                UnitTestBase.connection = TwitchConnection.ConnectViaAppAccess(clientID, clientSecret).Result;
+            }
+
+            Assert.IsNotNull(UnitTestBase.connection);
+            return UnitTestBase.connection;
+        }
+
         protected static void TestWrapper(Func<TwitchConnection, Task> function)
         {
             try
             {
                 TwitchConnection connection = UnitTestBase.GetTwitchClient();
+                function(connection).Wait();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.ToString());
+            }
+        }
+
+        protected static void TestAppWrapper(Func<TwitchConnection, Task> function)
+        {
+            try
+            {
+                TwitchConnection connection = UnitTestBase.GetAppTwitchClient();
                 function(connection).Wait();
             }
             catch (Exception ex)
