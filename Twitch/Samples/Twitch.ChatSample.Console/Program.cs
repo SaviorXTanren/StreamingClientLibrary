@@ -106,7 +106,8 @@ namespace Twitch.ChatSample.Console
 
                             while (true)
                             {
-                                System.Console.ReadLine();
+                                string line = System.Console.ReadLine();
+                                await chat.SendMessage(user, line);
                             }
                         }
                     }
