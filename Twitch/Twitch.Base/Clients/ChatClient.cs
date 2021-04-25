@@ -244,6 +244,36 @@ namespace Twitch.Base.Clients
         }
 
         /// <summary>
+        /// Sends a reply message to the specified broadcaster's channel and message ID.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to send the message to</param>
+        /// <param name="message">The message to send</param>
+        /// <param name="messageID">The message ID to reply to</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task SendReplyMessage(NewAPI.Users.UserModel broadcaster, string message, string messageID)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateString(message, "message");
+            Validator.ValidateString(messageID, "messageID");
+            await this.Send(string.Format("@reply-parent-msg-id={0} PRIVMSG #{1} :{2}", messageID, broadcaster.login, message));
+        }
+
+        /// <summary>
+        /// Sends a reply message to the specified broadcaster's channel and message ID.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster's channel to send the message to</param>
+        /// <param name="message">The message to send</param>
+        /// <param name="messageID">The message ID to reply to</param>
+        /// <returns>An awaitable Task</returns>
+        public async Task SendReplyMessage(V5.Users.UserModel broadcaster, string message, string messageID)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateString(message, "message");
+            Validator.ValidateString(messageID, "messageID");
+            await this.Send(string.Format("@reply-parent-msg-id={0} PRIVMSG #{1} :{2}", messageID, broadcaster.name, message));
+        }
+
+        /// <summary>
         /// Sends a message to the specified broadcaster's channel.
         /// </summary>
         /// <param name="broadcaster">The broadcaster's channel to send the message to</param>
