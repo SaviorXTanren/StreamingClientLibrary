@@ -29,6 +29,7 @@ namespace Twitch.Base.UnitTests
             OAuthClientScopeEnum.channel__manage__broadcast,
             OAuthClientScopeEnum.channel__manage__redemptions,
             OAuthClientScopeEnum.channel__read__subscriptions,
+            OAuthClientScopeEnum.channel__read__hype_train,
             OAuthClientScopeEnum.clips__edit,
             OAuthClientScopeEnum.user__edit,
             OAuthClientScopeEnum.user__edit__broadcast,
