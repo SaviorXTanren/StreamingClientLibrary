@@ -89,6 +89,11 @@ namespace StreamingClient.Base.Web
     public class AdvancedHttpClient : HttpClient
     {
         /// <summary>
+        /// The default request timeout amount of 5 seconds.
+        /// </summary>
+        public static readonly TimeSpan DefaultRequestTimeout = new TimeSpan(0, 0, 5);
+
+        /// <summary>
         /// Creates an HttpContent object from the specified object.
         /// </summary>
         /// <param name="obj">The object to serialize</param>
@@ -120,6 +125,8 @@ namespace StreamingClient.Base.Web
         public AdvancedHttpClient()
             : base()
         {
+            this.Timeout = DefaultRequestTimeout;
+
             this.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
