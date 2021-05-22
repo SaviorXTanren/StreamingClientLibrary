@@ -891,6 +891,11 @@
             An advanced Http client.
             </summary>
         </member>
+        <member name="F:StreamingClient.Base.Web.AdvancedHttpClient.DefaultRequestTimeout">
+            <summary>
+            The default request timeout amount of 5 seconds.
+            </summary>
+        </member>
         <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.CreateContentFromObject(System.Object)">
             <summary>
             Creates an HttpContent object from the specified object.
