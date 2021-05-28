@@ -147,6 +147,14 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__broadcast,
         /// <summary>
+        /// Manage a channel’s polls.
+        /// </summary>
+        channel__manage__polls,
+        /// <summary>
+        /// Manage of channel’s Channel Points Predictions
+        /// </summary>
+        channel__manage__predictions,
+        /// <summary>
         /// Manage Channel Points custom rewards and their redemptions on a channel.
         /// </summary>
         channel__manage__redemptions,

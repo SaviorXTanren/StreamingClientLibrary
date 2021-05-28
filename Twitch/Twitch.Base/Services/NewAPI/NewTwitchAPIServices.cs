@@ -46,6 +46,16 @@
         public GamesService Games { get; private set; }
 
         /// <summary>
+        /// APIs for Polls interaction.
+        /// </summary>
+        public PollsService Polls { get; private set; }
+
+        /// <summary>
+        /// APIs for Predictions interaction.
+        /// </summary>
+        public PredictionsService Predictions { get; private set; }
+
+        /// <summary>
         /// APIs for Streams interaction.
         /// </summary>
         public StreamsService Streams { get; private set; }
@@ -84,6 +94,8 @@
             this.Clips = new ClipsService(connection);
             this.EventSub = new EventSubService(connection);
             this.Games = new GamesService(connection);
+            this.Polls = new PollsService(connection);
+            this.Predictions = new PredictionsService(connection);
             this.Streams = new StreamsService(connection);
             this.Subscriptions = new SubscriptionsService(connection);
             this.Tags = new TagsService(connection);

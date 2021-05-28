@@ -25,7 +25,7 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="broadcaster">The broadcaster to create the clip from</param>
         /// <param name="hasDelay">Whether the clip is captured from the live stream or with a delay</param>
-        /// <returns></returns>
+        /// <returns>The created clip</returns>
         public async Task<ClipCreationModel> CreateClip(UserModel broadcaster, bool hasDelay = false)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
