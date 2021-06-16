@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Twitch.Base.Models.Clients.Chat
 {
@@ -36,23 +37,18 @@ namespace Twitch.Base.Models.Clients.Chat
         /// <summary>
         /// A list containing the user's available emote set IDs.
         /// </summary>
-        public List<int> EmoteSetsDictionary
+        public IEnumerable<string> EmoteSetsDictionary
         {
             get
             {
-                List<int> results = new List<int>();
+                HashSet<string> results = new HashSet<string>();
                 if (!string.IsNullOrEmpty(this.EmoteSets))
                 {
                     string[] splits = this.EmoteSets.Split(new char[] { ',' });
-                    if (splits != null && splits.Length > 0)
+                    if (splits != null)
                     {
-                        foreach (string split in splits)
-                        {
-                            if (int.TryParse(split, out int emoteSet))
-                            {
-                                results.Add(emoteSet);
-                            }
-                        }
+                        results = new HashSet<string>(splits);
+                        results.Remove("0");
                     }
                 }
                 return results;

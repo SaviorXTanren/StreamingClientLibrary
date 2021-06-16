@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Twitch.Base;
 using Twitch.Base.Clients;
 using Twitch.Base.Models.Clients.Chat;
-using Twitch.Base.Models.NewAPI.Chat;
 using Twitch.Base.Models.NewAPI.Users;
 
 namespace Twitch.ChatSample.Console
@@ -116,7 +115,7 @@ namespace Twitch.ChatSample.Console
             System.Console.ReadLine();
         }
 
-        private static async void Chat_OnGlobalUserStateReceived(object sender, ChatGlobalUserStatePacketModel packet)
+        private static void Chat_OnGlobalUserStateReceived(object sender, ChatGlobalUserStatePacketModel packet)
         {
             System.Console.WriteLine(string.Format("Connected as: {0} {1}", packet.UserID, packet.UserDisplayName));
         }
