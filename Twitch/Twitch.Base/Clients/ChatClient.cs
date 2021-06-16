@@ -144,6 +144,10 @@ namespace Twitch.Base.Clients
         {
             await base.Connect(ChatClient.CHAT_CONNECTION_URL);
 
+            await this.AddCommandsCapability();
+            await this.AddTagsCapability();
+            await this.AddMembershipCapability();
+
             OAuthTokenModel oauthToken = await this.connection.GetOAuthToken();
             await this.Send("PASS oauth:" + oauthToken.accessToken);
 
