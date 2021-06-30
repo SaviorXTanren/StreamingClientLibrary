@@ -140,32 +140,6 @@ namespace Twitch.Base.Services.V5API
         }
 
         /// <summary>
-        /// Has the specified user follow the specified channel.
-        /// </summary>
-        /// <param name="user">The user to follow for</param>
-        /// <param name="channel">The channel to follow</param>
-        /// <returns>The follow information, if it exists</returns>
-        public async Task<UserFollowModel> FollowChannel(UserModel user, ChannelModel channel)
-        {
-            Validator.ValidateVariable(user, "user");
-            Validator.ValidateVariable(channel, "channel");
-            return await this.PutAsync<UserFollowModel>("users/" + user.id + "/follows/channels/" + channel.id);
-        }
-
-        /// <summary>
-        /// Has the specified user unfollow the specified channel.
-        /// </summary>
-        /// <param name="user">The user to unfollow for</param>
-        /// <param name="channel">The channel to unfollow</param>
-        /// <returns>Whether the deletion was successful</returns>
-        public async Task<bool> UnfollowChannel(UserModel user, ChannelModel channel)
-        {
-            Validator.ValidateVariable(user, "user");
-            Validator.ValidateVariable(channel, "channel");
-            return await this.DeleteAsync("users/" + user.id + "/follows/channels/" + channel.id);
-        }
-
-        /// <summary>
         /// Gets the users that have been blocked
         /// </summary>
         /// <param name="user">The user to get blocked users for</param>

@@ -154,38 +154,6 @@ namespace Twitch.Base.UnitTests.V5API
         }
 
         [TestMethod]
-        public void FollowChannel()
-        {
-            TestWrapper(async (TwitchConnection connection) =>
-            {
-                UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
-
-                ChannelModel channel = await connection.V5API.Channels.GetCurrentChannel();
-
-                UserFollowModel result = await connection.V5API.Users.FollowChannel(user, channel);
-
-                Assert.IsNotNull(result);
-                Assert.IsNotNull(result.user);
-                Assert.IsNotNull(result.user.id);
-            });
-        }
-
-        [TestMethod]
-        public void UnfollowChannel()
-        {
-            TestWrapper(async (TwitchConnection connection) =>
-            {
-                UserModel user = await UsersServiceUnitTests.GetCurrentUser(connection);
-
-                ChannelModel channel = await connection.V5API.Channels.GetCurrentChannel();
-
-                bool result = await connection.V5API.Users.UnfollowChannel(user, channel);
-
-                Assert.IsTrue(result);
-            });
-        }
-
-        [TestMethod]
         public void GetUserBlockList()
         {
             TestWrapper(async (TwitchConnection connection) =>
