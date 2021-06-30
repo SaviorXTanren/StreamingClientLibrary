@@ -85,10 +85,6 @@ namespace Twitch.Base
         /// </summary>
         user_blocks_read,
         /// <summary>
-        /// Manage a user’s followed channels.
-        /// </summary>
-        user_follows_edit,
-        /// <summary>
         /// Read nonpublic user information, like email address.
         /// </summary>
         user_read,
@@ -186,10 +182,6 @@ namespace Twitch.Base
         /// Edit your channel’s broadcast configuration, including extension configuration. (This scope implies user:read:broadcast capability.)
         /// </summary>
         user__edit__broadcast,
-        /// <summary>
-        /// Edit your follows.
-        /// </summary>
-        user__edit__follows,
         /// <summary>
         /// View your broadcasting configuration, including extension configurations.
         /// </summary>
