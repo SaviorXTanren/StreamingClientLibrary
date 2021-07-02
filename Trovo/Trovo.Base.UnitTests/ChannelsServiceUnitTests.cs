@@ -15,6 +15,26 @@ namespace Trovo.Base.UnitTests
             {
                 ChannelModel channel = await connection.Channels.GetCurrentChannel();
 
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
+            });
+        }
+
+        [TestMethod]
+        public void GetChannel()
+        {
+            TestWrapper(async (TrovoConnection connection) =>
+            {
+                ChannelModel channel = await connection.Channels.GetCurrentChannel();
+
+                Assert.IsNotNull(channel);
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
+
+                channel = await connection.Channels.GetChannel(channel.channel_id);
+
+                Assert.IsNotNull(channel);
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
             });
