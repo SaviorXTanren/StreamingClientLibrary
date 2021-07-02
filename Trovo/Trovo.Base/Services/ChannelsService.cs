@@ -46,15 +46,34 @@ namespace Trovo.Base.Services
         /// </summary>
         /// <param name="id">The channel ID to search for</param>
         /// <returns>The matching channel</returns>
-        public async Task<ChannelModel> GetChannel(string id)
+        public async Task<ChannelModel> GetChannelByID(string id)
         {
             Validator.ValidateString(id, "id");
-            ChannelModel channel = await this.GetAsync<ChannelModel>("channels/" + id);
+
+            JObject requestParameters = new JObject();
+            requestParameters["channel_id"] = id;
+
+            ChannelModel channel = await this.PostAsync<ChannelModel>("channels/id", AdvancedHttpClient.CreateContentFromObject(requestParameters));
             if (channel != null)
             {
                 channel.channel_id = id;
             }
             return channel;
+        }
+
+        /// <summary>
+        /// Gets the channel matching the specified username.
+        /// </summary>
+        /// <param name="username">The channel username to search for</param>
+        /// <returns>The matching channel</returns>
+        public async Task<ChannelModel> GetChannelByUsername(string username)
+        {
+            Validator.ValidateString(username, "username");
+
+            JObject requestParameters = new JObject();
+            requestParameters["user_name"] = username;
+
+            return await this.PostAsync<ChannelModel>("channels/id", AdvancedHttpClient.CreateContentFromObject(requestParameters));
         }
 
         /// <summary>
