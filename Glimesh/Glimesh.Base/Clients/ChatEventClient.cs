@@ -207,6 +207,21 @@ namespace Glimesh.Base.Clients
         }
 
         /// <summary>
+        /// Deletes the specified message from the specified channel's chat.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel to delete the message from</param>
+        /// <param name="messageID">The ID of the message to delete</param>
+        /// <returns>Whether the message was successful</returns>
+        public async Task<bool> DeleteMessage(string channelID, string messageID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(messageID, "messageID");
+
+            ClientResponsePacketModel response = await this.SendAndListen(new ChatDeleteMessagePacketModel(channelID, messageID));
+            return response != null && response.IsPayloadStatusOk;
+        }
+
+        /// <summary>
         /// Times out a user for a short period of time (5 minutes) for the specified channel.
         /// </summary>
         /// <param name="channelID">The ID of the channel to send the message to</param>

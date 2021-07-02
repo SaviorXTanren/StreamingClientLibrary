@@ -7,7 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatSendMessagePacketModel : ClientPacketModelBase
     {
-        private const string MessageMutationPayload = "mutation {{ createChatMessage(channelId: {0}, message: {{ message: \"{1}\" }}) {{ message }} }}";
+        private const string SendMessageMutationPayload = "mutation {{ createChatMessage(channelId: {0}, message: {{ message: \"{1}\" }}) {{ message }} }}";
 
         /// <summary>
         /// Creates a new instance of the ChatConnectPacketModel class.
@@ -21,7 +21,7 @@ namespace Glimesh.Base.Models.Clients.Chat
 
             this.Topic = AbsintheControlTopicName;
             this.Event = DocEventName;
-            this.Payload["query"] = string.Format(MessageMutationPayload, channelID, message);
+            this.Payload["query"] = string.Format(SendMessageMutationPayload, channelID, message);
             this.Payload["variables"] = new JObject();
         }
     }
