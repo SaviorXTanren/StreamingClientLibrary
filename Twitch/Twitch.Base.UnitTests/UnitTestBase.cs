@@ -21,7 +21,6 @@ namespace Twitch.Base.UnitTests
 
             OAuthClientScopeEnum.user_blocks_edit,
             OAuthClientScopeEnum.user_blocks_read,
-            OAuthClientScopeEnum.user_follows_edit,
             OAuthClientScopeEnum.user_read,
             OAuthClientScopeEnum.user_subscriptions,
 
