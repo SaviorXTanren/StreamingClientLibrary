@@ -4,6 +4,7 @@ using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Trovo.Base.Models;
 using Trovo.Base.Models.Channels;
 
 namespace Trovo.Base.Services
@@ -13,6 +14,11 @@ namespace Trovo.Base.Services
     /// </summary>
     public class ChannelsService : TrovoServiceBase
     {
+        private class TopChannelsPageDataResponseModel : PageDataResponseModel
+        {
+            public List<TopChannelModel> top_channels_lists { get; set; } = new List<TopChannelModel>();
+        }
+
         private class ChannelSubscriptionsWrapperModel
         {
             public int? total { get; set; }
@@ -49,6 +55,54 @@ namespace Trovo.Base.Services
                 channel.channel_id = id;
             }
             return channel;
+        }
+
+        /// <summary>
+        /// Gets the list of top channels with an optional category ID to search for.
+        /// </summary>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <param name="categoryID">Optional ID of the category to filter channels by</param>
+        /// <returns>The list of channel</returns>
+        public async Task<IEnumerable<TopChannelModel>> GetTopChannels(int maxResults = 1, string categoryID = null)
+        {
+            JObject requestParameters = new JObject();
+            requestParameters["limit"] = (maxResults > 100) ? 100 : maxResults;
+            requestParameters["after"] = true;
+            if (!string.IsNullOrEmpty(categoryID))
+            {
+                requestParameters["category_id"] = categoryID;
+            }
+
+            List<TopChannelModel> results = new List<TopChannelModel>();
+            string token = null;
+            int cursor = -1;
+            do
+            {
+                if (!string.IsNullOrEmpty(token) && cursor >= 0)
+                {
+                    requestParameters["token"] = token;
+                    requestParameters["cursor"] = token;
+                }
+                TopChannelsPageDataResponseModel data = await this.PostAsync<TopChannelsPageDataResponseModel>("gettopchannels", AdvancedHttpClient.CreateContentFromObject(requestParameters));
+
+                if (data != null && data.top_channels_lists != null && data.top_channels_lists.Count > 0)
+                {
+                    results.AddRange(data.top_channels_lists);
+                    if (data.cursor < data.total_page)
+                    {
+                        token = data.token;
+                        cursor = data.cursor;
+                    }
+                    else
+                    {
+                        token = null;
+                        cursor = -1;
+                    }
+                }
+            }
+            while (results.Count < maxResults && !string.IsNullOrEmpty(token));
+
+            return results;
         }
 
         /// <summary>

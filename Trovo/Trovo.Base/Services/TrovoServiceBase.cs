@@ -2,6 +2,7 @@
 using StreamingClient.Base.Services;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Trovo.Base.Services

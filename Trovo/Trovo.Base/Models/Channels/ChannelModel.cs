@@ -1,4 +1,5 @@
 ﻿using StreamingClient.Base.Util;
+using System.Collections.Generic;
 
 namespace Trovo.Base.Models.Channels
 {
@@ -30,6 +31,10 @@ namespace Trovo.Base.Models.Channels
         /// The ID of the channel.
         /// </summary>
         public string channel_id { get; set; }
+        /// <summary>
+        /// The username of the channel.
+        /// </summary>
+        public string username { get; set; }
         /// <summary>
         /// The profile information of the channel.
         /// </summary>
@@ -67,6 +72,10 @@ namespace Trovo.Base.Models.Channels
         /// </summary>
         public long followers { get; set; }
         /// <summary>
+        /// The current number of subscribers.
+        /// </summary>
+        public int subscriber_num { get; set; }
+        /// <summary>
         /// The ID of the category for the channel.
         /// </summary>
         public string category_id { get; set; }
@@ -78,6 +87,22 @@ namespace Trovo.Base.Models.Channels
         /// The thumbnail URL for the channel.
         /// </summary>
         public string thumbnail { get; set; }
+        /// <summary>
+        /// The social media links of the channel.
+        /// </summary>
+        public List<ChannelSocialLinkModel> social_links { get; set; } = new List<ChannelSocialLinkModel>();
+        /// <summary>
+        /// The date &amp; time the channel was created at.
+        /// </summary>
+        public string created_at { get; set; }
+        /// <summary>
+        /// The latest streaming start time of a given channel.
+        /// </summary>
+        public string started_at { get; set; }
+        /// <summary>
+        /// The latest streaming end time of a given channel.
+        /// </summary>
+        public string ended_at { get; set; }
 
         /// <summary>
         /// The audience enum for the channel.
