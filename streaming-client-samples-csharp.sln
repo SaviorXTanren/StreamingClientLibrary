@@ -38,8 +38,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTube.Base.UnitTests", "Y
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTube.ChatSample.Console", "YouTube\Samples\YouTube.ChatSample.Console\YouTube.ChatSample.Console.csproj", "{C88DF63D-227A-458E-9270-AB6A777A7A09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTube.VideoUploadSample.Console", "YouTube\Samples\YouTube.VideoUploadSample.Console\YouTube.VideoUploadSample.Console.csproj", "{7BD692E5-6886-4B5C-83C1-533BE2F90E67}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.Extensions.Base", "Twitch\Twitch.Extensions.Base\Twitch.Extensions.Base.csproj", "{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Twitch.ExtensionSample.API", "Twitch\Samples\Twitch.ExtensionSample.API\Twitch.ExtensionSample.API.csproj", "{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F}"
@@ -62,11 +60,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Glimesh", "Glimesh", "{6F8E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Glimesh", "Glimesh", "{3538B0D2-46D0-4B17-A03E-69BBDE70E170}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimesh.Base", "Glimesh\Glimesh.Base\Glimesh.Base.csproj", "{5CB7B69E-2D36-417B-8016-D3403272F0AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glimesh.Base", "Glimesh\Glimesh.Base\Glimesh.Base.csproj", "{5CB7B69E-2D36-417B-8016-D3403272F0AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimesh.Base.UnitTests", "Glimesh\Glimesh.Base.UnitTests\Glimesh.Base.UnitTests.csproj", "{36DA7618-16E5-43B0-844A-6D69B0460F50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glimesh.Base.UnitTests", "Glimesh\Glimesh.Base.UnitTests\Glimesh.Base.UnitTests.csproj", "{36DA7618-16E5-43B0-844A-6D69B0460F50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimesh.ChatSample.Console", "Glimesh\Samples\Glimesh.ChatSample.Console\Glimesh.ChatSample.Console.csproj", "{908E1060-6A28-4ED5-B357-CC98D02DF98B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glimesh.ChatSample.Console", "Glimesh\Samples\Glimesh.ChatSample.Console\Glimesh.ChatSample.Console.csproj", "{908E1060-6A28-4ED5-B357-CC98D02DF98B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,14 +138,6 @@ Global
 		{C88DF63D-227A-458E-9270-AB6A777A7A09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C88DF63D-227A-458E-9270-AB6A777A7A09}.Release|x86.ActiveCfg = Release|Any CPU
 		{C88DF63D-227A-458E-9270-AB6A777A7A09}.Release|x86.Build.0 = Release|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Debug|x86.Build.0 = Debug|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Release|x86.ActiveCfg = Release|Any CPU
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67}.Release|x86.Build.0 = Release|Any CPU
 		{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -244,7 +234,6 @@ Global
 		{D55565FF-E75D-46A3-BEA1-75414C9C3B76} = {310F8834-CFC8-4E18-80A1-2A2737228A44}
 		{4B768FE0-EBA6-4372-9E76-60B06A76E854} = {310F8834-CFC8-4E18-80A1-2A2737228A44}
 		{C88DF63D-227A-458E-9270-AB6A777A7A09} = {4A93CE08-D195-4A2F-985E-D8BC8C9B0CCF}
-		{7BD692E5-6886-4B5C-83C1-533BE2F90E67} = {4A93CE08-D195-4A2F-985E-D8BC8C9B0CCF}
 		{2F0FA09E-EA0C-4DA1-BED0-B09E8C6B6F89} = {15853CC4-4FF4-4942-ABE9-0D1B1BCD0F9C}
 		{5A6406CC-ACE0-48A4-A228-6FC7A24F2E9F} = {A036E2E9-43ED-4928-8235-1066BA5FDE05}
 		{5B88AA03-1640-4CD1-B616-430BB30E2D99} = {A036E2E9-43ED-4928-8235-1066BA5FDE05}
