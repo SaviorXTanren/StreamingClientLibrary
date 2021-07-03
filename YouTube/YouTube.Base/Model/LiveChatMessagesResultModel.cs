@@ -5,6 +5,8 @@ namespace YouTube.Base.Model
 {
     /// <summary>
     /// Information about a live chat messages query.
+    /// 
+    /// https://developers.google.com/youtube/v3/live/docs/liveChatMessages#resource
     /// </summary>
     public class LiveChatMessagesResultModel
     {
