@@ -28,7 +28,7 @@ namespace YouTube.Base.Services
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
-                IEnumerable<SearchResult> searchResults = await this.connection.Search.GetMyVideos(maxResults);
+                IEnumerable<SearchResult> searchResults = await this.SearchVideos(myVideos: true, maxResults: maxResults);
                 if (searchResults.Count() > 0)
                 {
                     return await this.GetVideosByID(searchResults.Select(s => s.Id.VideoId), isOwned: true);
@@ -45,12 +45,13 @@ namespace YouTube.Base.Services
         /// <returns>The list of videos</returns>
         public async Task<IEnumerable<Video>> GetVideosForChannel(Channel channel, int maxResults = 1)
         {
+            Validator.ValidateVariable(channel, "channel");
             return await this.YouTubeServiceWrapper(async () =>
             {
-                IEnumerable<PlaylistItem> playlistItems = await this.connection.Playlists.GetPlaylistItems(channel.ContentDetails.RelatedPlaylists.Uploads);
-                if (playlistItems.Count() > 0)
+                IEnumerable<SearchResult> searchResults = await this.SearchVideos(channelID: channel.Id, maxResults: maxResults);
+                if (searchResults.Count() > 0)
                 {
-                    return await this.GetVideosByID(playlistItems.Select(p => p.ContentDetails.VideoId), isOwned: false);
+                    return await this.GetVideosByID(searchResults.Select(s => s.Id.VideoId), isOwned: false);
                 }
                 return new List<Video>();
             });
@@ -82,7 +83,6 @@ namespace YouTube.Base.Services
             {
                 List<Video> results = new List<Video>();
                 List<string> searchIDs = new List<string>(ids);
-                string pageToken = null;
                 do
                 {
                     int searchAmount = Math.Min(searchIDs.Count, 50);
@@ -95,14 +95,81 @@ namespace YouTube.Base.Services
                     VideosResource.ListRequest request = this.connection.GoogleYouTubeService.Videos.List(parts);
                     request.MaxResults = searchAmount;
                     request.Id = string.Join(",", searchIDs.Take(searchAmount));
-                    request.PageToken = pageToken;
 
                     VideoListResponse response = await request.ExecuteAsync();
                     results.AddRange(response.Items);
                     searchIDs = new List<string>(searchIDs.Skip(searchAmount));
+
+                } while (searchIDs.Count > 0);
+                return results;
+            });
+        }
+
+        /// <summary>
+        /// Searchs for videos with the specified keyword search.
+        /// </summary>
+        /// <param name="keyword">The keyword to search for</param>
+        /// <param name="maxResults">The maximum results to return</param>
+        /// <returns>The list of videos</returns>
+        public async Task<IEnumerable<SearchResult>> GetVideosByKeyword(string keyword, int maxResults = 1)
+        {
+            Validator.ValidateString(keyword, "keyword");
+            return await this.SearchVideos(keyword: keyword, maxResults: maxResults);
+        }
+
+        /// <summary>
+        /// Performs a search for youtube videos
+        /// </summary>
+        /// <param name="myVideos">Only get videos associated with the connected account</param>
+        /// <param name="channelID">The specific ID of the channel to get videos for</param>
+        /// <param name="keyword">Keywords to search for in the video</param>
+        /// <param name="liveType">The live video type to search for</param>
+        /// <param name="maxResults">The maximum results to return</param>
+        /// <returns>The list of videos</returns>
+        public async Task<IEnumerable<SearchResult>> SearchVideos(bool myVideos = false, string channelID = null, string keyword = null, SearchResource.ListRequest.EventTypeEnum liveType = SearchResource.ListRequest.EventTypeEnum.None, int maxResults = 1)
+        {
+            if (myVideos && !string.IsNullOrEmpty(channelID))
+            {
+                Validator.Validate(false, "Only myVideos or channelID can be set");
+            }
+
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                List<SearchResult> results = new List<SearchResult>();
+                string pageToken = null;
+                do
+                {
+                    SearchResource.ListRequest search = this.connection.GoogleYouTubeService.Search.List("snippet");
+                    if (myVideos)
+                    {
+                        search.ForMine = true;
+                    }
+                    else if (!string.IsNullOrEmpty(channelID))
+                    {
+                        search.ChannelId = channelID;
+                    }
+
+                    if (!string.IsNullOrEmpty(keyword))
+                    {
+                        search.Q = keyword;
+                    }
+
+                    if (liveType != SearchResource.ListRequest.EventTypeEnum.None)
+                    {
+                        search.EventType = liveType;
+                    }
+
+                    search.Type = "video";
+                    search.Order = SearchResource.ListRequest.OrderEnum.Date;
+                    search.MaxResults = Math.Min(maxResults, 50);
+                    search.PageToken = pageToken;
+
+                    SearchListResponse response = await search.ExecuteAsync();
+                    results.AddRange(response.Items);
+                    maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
 
-                } while (searchIDs.Count > 0 && !string.IsNullOrEmpty(pageToken));
+                } while (maxResults > 0 && !string.IsNullOrEmpty(pageToken));
                 return results;
             });
         }

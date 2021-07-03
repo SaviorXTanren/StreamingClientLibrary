@@ -36,7 +36,7 @@ namespace YouTube.Base.Clients
         /// </summary>
         /// <param name="listenForMessage">Whether to enable message listen polling</param>
         /// <returns>Whether the connection was successful</returns>
-        public async Task<bool> Connect(bool listenForMessage = true) { return await this.Connect(await this.connection.LiveBroadcasts.GetActiveBroadcast(), listenForMessage); }
+        public async Task<bool> Connect(bool listenForMessage = true) { return await this.Connect(await this.connection.LiveBroadcasts.GetMyActiveBroadcast(), listenForMessage); }
 
         /// <summary>
         /// Connects to the specified broadcast.
@@ -160,7 +160,7 @@ namespace YouTube.Base.Clients
                     }
                     else
                     {
-                        this.broadcast = await this.connection.LiveBroadcasts.GetActiveBroadcast();
+                        this.broadcast = await this.connection.LiveBroadcasts.GetMyActiveBroadcast();
                         await Task.Delay(60000);
                     }
                 }

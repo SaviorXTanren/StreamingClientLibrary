@@ -48,5 +48,17 @@ namespace YouTube.Base.UnitTests
                 Assert.IsNotNull(result.Id);
             });
         }
+
+        [TestMethod]
+        public void GetVideosByKeyword()
+        {
+            TestWrapper(async (YouTubeConnection connection) =>
+            {
+                IEnumerable<SearchResult> results = await connection.Videos.GetVideosByKeyword("food", maxResults: 100);
+
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Count() == 100);
+            });
+        }
     }
 }

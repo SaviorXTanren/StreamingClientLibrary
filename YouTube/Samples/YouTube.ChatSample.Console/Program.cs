@@ -2,6 +2,8 @@
 using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using YouTube.Base;
 using YouTube.Base.Clients;
@@ -12,6 +14,8 @@ namespace YouTube.ChatSample.Console
     {
         public static string clientID = "884596410562-pcrl1fn8ov0npj7fhjl086ffmud7r5j6.apps.googleusercontent.com";
         public static string clientSecret = "QBkxNmPNIvWatRvOIfRYrXlc";
+
+        private static SemaphoreSlim fileLock = new SemaphoreSlim(1);
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
@@ -28,6 +32,8 @@ namespace YouTube.ChatSample.Console
 
         public static void Main(string[] args)
         {
+            Logger.SetLogLevel(LogLevel.Debug);
+
             Logger.LogOccurred += Logger_LogOccurred;
             Task.Run(async () =>
             {
@@ -39,9 +45,22 @@ namespace YouTube.ChatSample.Console
                     if (connection != null)
                     {
                         Channel channel = await connection.Channels.GetMyChannel();
+
+                        //Channel channel = await connection.Channels.GetChannelByID("UCyl1z3jo3XHR1riLFKG5UAg");
+
                         if (channel != null)
                         {
                             System.Console.WriteLine("Connection successful. Logged in as: " + channel.Snippet.Title);
+
+                            //LiveBroadcast broadcast = await connection.LiveBroadcasts.GetChannelActiveBroadcast(channel);
+                            //if (broadcast == null)
+                            //{
+                            //    broadcast = await connection.LiveBroadcasts.GetBroadcastByID("9rCRhTrEpDE");
+                            //    if (broadcast == null)
+                            //    {
+                            //        broadcast = new LiveBroadcast() { Snippet = new LiveBroadcastSnippet() { LiveChatId = "Cg0KC1VxWFFjZmZvTXhjKicKGFVDSHN4NEhxYS0xT1JqUVRoOVRZRGh3dxILVXFYUWNmZm9NeGM" } };
+                            //    }
+                            //}
 
                             System.Console.WriteLine("Connecting chat client!");
 
@@ -51,7 +70,7 @@ namespace YouTube.ChatSample.Console
                             {
                                 System.Console.WriteLine("Live chat connection successful!");
 
-                                if (await connection.LiveBroadcasts.GetActiveBroadcast() != null)
+                                if (await connection.LiveBroadcasts.GetMyActiveBroadcast() != null)
                                 {
                                     await client.SendMessage("Hello World!");
                                 }
@@ -78,16 +97,41 @@ namespace YouTube.ChatSample.Console
         {
             foreach (LiveChatMessage message in messages)
             {
-                System.Console.WriteLine(string.Format("{0}: {1}", message.AuthorDetails.DisplayName, message.Snippet.TextMessageDetails.MessageText));
+                try
+                {
+                    if (message.Snippet.HasDisplayContent.GetValueOrDefault())
+                    {
+                        System.Console.WriteLine(string.Format("{0}: {1}", message.AuthorDetails.DisplayName, message.Snippet.DisplayMessage));
+                    }
+
+                    //Logger.Log(JSONSerializerHelper.SerializeToString(message));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex);
+                }
             }
         }
 
-        private static void Logger_LogOccurred(object sender, Log log)
+        private static async void Logger_LogOccurred(object sender, Log log)
         {
             if (log.Level >= LogLevel.Error)
             {
                 System.Console.WriteLine(log.Message);
             }
+
+            await fileLock.WaitAndRelease(async () =>
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(File.Open("Log.txt", FileMode.Append)))
+                    {
+                        await writer.WriteAsync(string.Format("{0} - {1} - {2} " + Environment.NewLine + Environment.NewLine, DateTimeOffset.Now.ToString(), EnumHelper.GetEnumName(log.Level), log.Message));
+                        await writer.FlushAsync();
+                    }
+                }
+                catch (Exception) { }
+            });
         }
     }
 }

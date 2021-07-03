@@ -118,11 +118,6 @@ namespace YouTube.Base
         public PlaylistsService Playlists { get; private set; }
 
         /// <summary>
-        /// APIs for Search interaction.
-        /// </summary>
-        public SearchService Search { get; private set; }
-
-        /// <summary>
         /// APIs for Subscriptions interaction.
         /// </summary>
         public SubscriptionsService Subscriptions { get; private set; }
@@ -272,7 +267,6 @@ namespace YouTube.Base
             this.LiveBroadcasts = new LiveBroadcastsService(this);
             this.LiveChat = new LiveChatService(this);
             this.Playlists = new PlaylistsService(this);
-            this.Search = new SearchService(this);
             this.Subscriptions = new SubscriptionsService(this);
             this.Videos = new VideosService(this);
         }

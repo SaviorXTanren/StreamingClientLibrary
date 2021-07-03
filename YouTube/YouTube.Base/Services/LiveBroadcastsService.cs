@@ -45,10 +45,28 @@ namespace YouTube.Base.Services
         }
 
         /// <summary>
+        /// Gets the broadcast associated with the specified ID.
+        /// </summary>
+        /// <returns>The live broadcast</returns>
+        public async Task<LiveBroadcast> GetBroadcastByID(string id)
+        {
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                LiveBroadcastsResource.ListRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.List("snippet,contentDetails,status");
+                request.BroadcastType = BroadcastTypeEnum.All;
+                request.Id = id;
+                request.MaxResults = 10;
+
+                LiveBroadcastListResponse response = await request.ExecuteAsync();
+                return response.Items.FirstOrDefault();
+            });
+        }
+
+        /// <summary>
         /// Gets the currently active broadcast associated with the currently authenticated account.
         /// </summary>
-        /// <returns>The current live broadcasts</returns>
-        public async Task<LiveBroadcast> GetActiveBroadcast()
+        /// <returns>The current live broadcast</returns>
+        public async Task<LiveBroadcast> GetMyActiveBroadcast()
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
@@ -59,6 +77,24 @@ namespace YouTube.Base.Services
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
                 return response.Items.FirstOrDefault(b => string.Equals(b.Status.LifeCycleStatus, "live"));
+            });
+        }
+
+        /// <summary>
+        /// Gets the currently active broadcast associated with the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the live broadcast for</param>
+        /// <returns>The current live broadcast</returns>
+        public async Task<LiveBroadcast> GetChannelActiveBroadcast(Channel channel)
+        {
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                IEnumerable<SearchResult> searchResults = await this.connection.Videos.SearchVideos(channelID: channel.Id, liveType: SearchResource.ListRequest.EventTypeEnum.Live);
+                if (searchResults != null && searchResults.Count() > 0)
+                {
+                    return await this.GetBroadcastByID(searchResults.First().Id.VideoId);
+                }
+                return null;
             });
         }
 
