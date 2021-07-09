@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Trovo.Base.Models.Chat
@@ -67,7 +68,11 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// Custom Spells
         /// </summary>
-        CustomSpell = 5009
+        CustomSpell = 5009,
+        /// <summary>
+        /// Stream on/off messages, invisible to the viewers
+        /// </summary>
+        StreamOnOff = 5012
     }
 
     /// <summary>
@@ -98,6 +103,10 @@ namespace Trovo.Base.Models.Chat
         /// </summary>
         public const string StreamerRole = "streamer";
         /// <summary>
+        /// Super moderator of the current channel
+        /// </summary>
+        public const string SuperModRole = "supermod";
+        /// <summary>
         /// Moderator of the current channel
         /// </summary>
         public const string ModeratorRole = "mod";
@@ -117,6 +126,10 @@ namespace Trovo.Base.Models.Chat
         /// Warden of Trovo platform, across all channels, who helps to maintain the platform order.
         /// </summary>
         public const string WardenRole = "warden";
+        /// <summary>
+        /// User who have a role customized by the streamer of the current channel.
+        /// </summary>
+        public const string CustomRole = "custom role";
 
         /// <summary>
         /// The ID of the message.
@@ -126,7 +139,7 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// The ID of the sender.
         /// </summary>
-        public string sender_id { get; set; }
+        public long sender_id { get; set; }
 
         /// <summary>
         /// Type of chat message.
@@ -137,6 +150,16 @@ namespace Trovo.Base.Models.Chat
         /// Content of the message
         /// </summary>
         public string content { get; set; }
+
+        /// <summary>
+        /// User ID of the sender.
+        /// </summary>
+        public long uid { get; set; }
+
+        /// <summary>
+        /// User name of the sender.
+        /// </summary>
+        public string user_name { get; set; }
 
         /// <summary>
         /// Display name of the sender
@@ -167,6 +190,16 @@ namespace Trovo.Base.Models.Chat
         /// The roles of the sender.
         /// </summary>
         public List<string> roles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// The list of role of the message sender which is a json string. Different from "roles", "custom_role" contains more information. However, if you just need the role names, use "roles" instead.
+        /// </summary>
+        public string custom_role { get; set; }
+
+        /// <summary>
+        /// Extra info of chat, The content_data is different in different chat.
+        /// </summary>
+        public JObject content_data { get; set; }
 
         /// <summary>
         /// Name of the spell. Only for chat messages of spell (type = 5), in the content field.
