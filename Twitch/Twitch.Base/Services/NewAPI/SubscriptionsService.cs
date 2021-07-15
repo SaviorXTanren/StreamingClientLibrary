@@ -56,5 +56,16 @@ namespace Twitch.Base.Services.NewAPI
             IEnumerable<SubscriptionModel> subscriptions = await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions/user?broadcaster_id=" + broadcaster.id + "&user_id=" + user.id);
             return (subscriptions != null) ? subscriptions.FirstOrDefault() : null;
         }
+
+        /// <summary>
+        /// Gets the total number of subscribers for a channel.
+        /// </summary>
+        /// <param name="broadcaster">The channel to get the total number of subscribers for</param>
+        /// <returns>The total number of subscribers for the channel</returns>
+        public async Task<long> GetBroadcasterSubscribersCount(UserModel broadcaster)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            return await this.GetPagedResultTotalCountAsync("subscriptions?broadcaster_id=" +broadcaster.id);
+        }
     }
 }
