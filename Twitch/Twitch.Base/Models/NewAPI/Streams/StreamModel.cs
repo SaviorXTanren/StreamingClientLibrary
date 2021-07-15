@@ -20,9 +20,17 @@ namespace Twitch.Base.Models.NewAPI.Streams
         /// </summary>
         public string user_name { get; set; }
         /// <summary>
+        /// Login of the user who is streaming.
+        /// </summary>
+        public string user_login { get; set; }
+        /// <summary>
         /// The ID of the game.
         /// </summary>
         public string game_id { get; set; }
+        /// <summary>
+        /// Name of the game being played.
+        /// </summary>
+        public string game_name { get; set; }
         /// <summary>
         /// The list of community IDs.
         /// </summary>
@@ -55,5 +63,9 @@ namespace Twitch.Base.Models.NewAPI.Streams
         /// The list of tag IDs.
         /// </summary>
         public List<string> tag_ids { get; set; }
+        /// <summary>
+        /// Indicates if the broadcaster has specified their channel contains mature content that may be inappropriate for younger audiences.
+        /// </summary>
+        public bool is_mature { get; set; }
     }
 }
