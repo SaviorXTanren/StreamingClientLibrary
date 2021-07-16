@@ -33,6 +33,7 @@ namespace Twitch.Base.UnitTests
             OAuthClientScopeEnum.user__edit,
             OAuthClientScopeEnum.user__edit__broadcast,
             OAuthClientScopeEnum.user__read__broadcast,
+            OAuthClientScopeEnum.user__read__follows,
             OAuthClientScopeEnum.whispers__read,
         };
 

@@ -48,6 +48,20 @@ namespace Twitch.Base.UnitTests.NewAPI
         }
 
         [TestMethod]
+        public void GetFollowedStreams()
+        {
+            TestWrapper(async (TwitchConnection connection) =>
+            {
+                UserModel broadcaster = await UsersServiceUnitTests.GetCurrentUser(connection);
+
+                IEnumerable<StreamModel> results = await connection.NewAPI.Streams.GetFollowedStreams(broadcaster);
+
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Count() > 0);
+            });
+        }
+
+        [TestMethod]
         public void CreateStreamMarker()
         {
             TestWrapper(async (TwitchConnection connection) =>

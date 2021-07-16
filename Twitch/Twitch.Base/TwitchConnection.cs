@@ -183,6 +183,10 @@ namespace Twitch.Base
         /// </summary>
         user__edit__broadcast,
         /// <summary>
+        /// Manage the block list of a user.
+        /// </summary>
+        user__manage__blocked_users,
+        /// <summary>
         /// View your broadcasting configuration, including extension configurations.
         /// </summary>
         user__read__broadcast,
@@ -190,6 +194,10 @@ namespace Twitch.Base
         /// Read authorized user’s email address.
         /// </summary>
         user__read__email,
+        /// <summary>
+        /// View the list of channels a user follows.
+        /// </summary>
+        user__read__follows,
         /// <summary>
         /// Read authorized user’s stream key.
         /// </summary>
