@@ -3,19 +3,19 @@
 namespace Twitch.Base.Models.NewAPI.Channels
 {
     /// <summary>
-    /// Information about a channel ban event.
+    /// Information about a channel moderator event.
     /// </summary>
-    public class ChannelBannedEventModel
+    public class ChannelModeratorEventModel
     {
-        private const string BanEventType = "moderation.user.ban";
-        private const string UnbanEventType = "moderation.user.unban";
+        private const string ModEventType = "moderation.moderator.add";
+        private const string UnmodEventType = "moderation.moderator.remove";
 
         /// <summary>
         /// Event ID
         /// </summary>
         public string id { get; set; }
         /// <summary>
-        /// Displays moderation.user.ban or moderation.user.unban
+        /// Displays moderation.moderator.add or moderation.moderator.remove
         /// </summary>
         public string event_type { get; set; }
         /// <summary>
@@ -29,22 +29,22 @@ namespace Twitch.Base.Models.NewAPI.Channels
         /// <summary>
         /// The data for the event.
         /// </summary>
-        public ChannelBannedEventDataModel event_data { get; set; }
+        public ChannelModeratorEventDataModel event_data { get; set; }
 
         /// <summary>
         /// Indicates if the event is a ban.
         /// </summary>
-        public bool IsBan { get { return string.Equals(this.event_type, BanEventType, StringComparison.InvariantCultureIgnoreCase); } }
+        public bool IsMod { get { return string.Equals(this.event_type, ModEventType, StringComparison.InvariantCultureIgnoreCase); } }
         /// <summary>
         /// Indicates if the event is an unban.
         /// </summary>
-        public bool IsUnban { get { return string.Equals(this.event_type, UnbanEventType, StringComparison.InvariantCultureIgnoreCase); } }
+        public bool IsUnmod { get { return string.Equals(this.event_type, UnmodEventType, StringComparison.InvariantCultureIgnoreCase); } }
     }
 
     /// <summary>
     /// Information about the data of a channel ban.
     /// </summary>
-    public class ChannelBannedEventDataModel
+    public class ChannelModeratorEventDataModel
     {
         /// <summary>
         /// The ID of the channel.
