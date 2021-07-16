@@ -100,25 +100,14 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
-        /// Gets number of followers for and/or to a user.
+        /// Gets number of followers for a user.
         /// </summary>
-        /// <param name="from">The user to search for who they follow</param>
-        /// <param name="to">The user to search for who follows them</param>
+        /// <param name="user">The user to search for who they follow</param>
         /// <returns>The total number of followers</returns>
-        public async Task<long> GetFollowsCount(UserModel from = null, UserModel to = null)
+        public async Task<long> GetFollowerCount(UserModel user)
         {
-            Validator.Validate(!string.IsNullOrEmpty(from?.id) || !string.IsNullOrEmpty(to?.id), "At least either fromID or toID must be specified");
-
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(from?.id))
-            {
-                queryParameters.Add("from_id", from?.id);
-            }
-            if (!string.IsNullOrEmpty(to?.id))
-            {
-                queryParameters.Add("to_id", to?.id);
-            }
-            return await this.GetPagedResultTotalCountAsync("users/follows?" + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
+            Validator.ValidateVariable(user, "user");
+            return await this.GetPagedResultTotalCountAsync("users/follows?to_id=" + user.id );
         }
 
         /// <summary>
