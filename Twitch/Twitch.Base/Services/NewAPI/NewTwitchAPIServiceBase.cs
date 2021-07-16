@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,6 +36,31 @@ namespace Twitch.Base.Services.NewAPI
                 return result.data;
             }
             return new List<T>();
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data to get total count.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <returns>The total count of the response</returns>
+        public async Task<long> GetPagedResultTotalCountAsync(string requestUri)
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+            requestUri += "first=1";
+
+            JObject data = await this.GetJObjectAsync(requestUri);
+            if (data != null && data.ContainsKey("total"))
+            {
+                return (long)data["total"];
+            }
+            return 0;
         }
 
         /// <summary>

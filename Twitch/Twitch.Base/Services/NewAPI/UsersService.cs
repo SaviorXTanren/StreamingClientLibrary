@@ -100,6 +100,17 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets number of followers for a user.
+        /// </summary>
+        /// <param name="user">The user to search for who they follow</param>
+        /// <returns>The total number of followers</returns>
+        public async Task<long> GetFollowerCount(UserModel user)
+        {
+            Validator.ValidateVariable(user, "user");
+            return await this.GetPagedResultTotalCountAsync("users/follows?to_id=" + user.id );
+        }
+
+        /// <summary>
         /// Gets follower information for and/or to a user.
         /// </summary>
         /// <param name="from">The user to search for who they follow</param>
