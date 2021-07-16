@@ -107,7 +107,6 @@ namespace Twitch.Base.Services.NewAPI
         /// <returns>The total number of followers</returns>
         public async Task<long> GetFollowsCount(UserModel from = null, UserModel to = null)
         {
-
             Validator.Validate(!string.IsNullOrEmpty(from?.id) || !string.IsNullOrEmpty(to?.id), "At least either fromID or toID must be specified");
 
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();

@@ -62,7 +62,7 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="broadcaster">The channel to get the total number of subscribers for</param>
         /// <returns>The total number of subscribers for the channel</returns>
-        public async Task<long> GetBroadcasterSubscribersCount(UserModel broadcaster)
+        public async Task<long> GetSubscriptionsCount(UserModel broadcaster)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             return await this.GetPagedResultTotalCountAsync("subscriptions?broadcaster_id=" +broadcaster.id);

@@ -63,7 +63,6 @@ namespace Twitch.Base.Services.NewAPI
             return 0;
         }
 
-
         /// <summary>
         /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data.
         /// </summary>
