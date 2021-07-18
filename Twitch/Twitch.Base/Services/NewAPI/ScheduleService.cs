@@ -21,7 +21,7 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="broadcaster">broadcaster</param>
         /// <param name="maxResults">Maximum schedule segment results to return</param>
-        /// <returns></returns>
+        /// <returns>Broadcaster's schedule details</returns>
         public async Task<ScheduleModel> GetSchedule(UserModel broadcaster, int maxResults=1)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");

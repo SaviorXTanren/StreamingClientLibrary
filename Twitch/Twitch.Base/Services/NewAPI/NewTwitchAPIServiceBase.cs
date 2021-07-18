@@ -107,7 +107,6 @@ namespace Twitch.Base.Services.NewAPI
             return results;
         }
 
-
         /// <summary>
         /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data that has array of segments.
         /// </summary>
