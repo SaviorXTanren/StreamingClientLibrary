@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 
@@ -101,6 +103,66 @@ namespace Twitch.Base.Services.NewAPI
                 }
             }
             while (results.Count < maxResults && !string.IsNullOrEmpty(cursor));
+
+            return results;
+        }
+
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for New Twitch API-wrapped data that has array of segments.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A type-casted object of the contents of the response</returns>
+        public async Task<T> GetPagedDataSegmentsResultAsync<T>(string requestUri, int maxResults = 1)
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            queryParameters.Add("first", ((maxResults > 100) ? 100 : maxResults).ToString());
+
+            dynamic results = (T)Activator.CreateInstance(typeof(T));
+            bool firstPass = true;
+            PropertyInfo segmentsInfo = null;
+            bool segmentsIsList = false;
+            string cursor = null;
+
+            do
+            {
+                if (!string.IsNullOrEmpty(cursor))
+                {
+                    queryParameters["after"] = cursor;
+                }
+                dynamic data = await this.GetAsync<NewTwitchAPIDataRestResult2<T>>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
+
+                if (firstPass)
+                {
+                    results = data.data;
+                    segmentsInfo = results.GetType().GetProperty("segments");
+                    segmentsIsList = segmentsInfo.PropertyType.IsGenericType && segmentsInfo.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
+                    firstPass = false;
+                    if (segmentsInfo == null && !segmentsIsList)
+                        break;
+                }
+                else
+                {
+                    dynamic segments = segmentsInfo.GetValue(data.data);
+                    cursor = null;
+                    if (data != null && data.data.segments != null && data.data.segments.Count > 0)
+                    {
+                        results.segments.AddRange(data.data.segments);
+                        cursor = data.Cursor;
+                    }
+                }
+            }
+            while (results.segments.Count < maxResults && !string.IsNullOrEmpty(cursor));
 
             return results;
         }
