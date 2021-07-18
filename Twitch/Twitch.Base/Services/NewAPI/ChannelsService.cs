@@ -83,15 +83,14 @@ namespace Twitch.Base.Services.NewAPI
             return await this.GetPagedDataResultAsync<ChannelBannedEventModel>("moderation/banned/events?broadcaster_id=" + channel.id, maxResults);
         }
 
-
         /// <summary>
         /// Returns all banned and timed-out users in a channel.
         /// </summary>
-        /// <param name="channel">The channel to get banned events for</param>
+        /// <param name="channel">The channel to get banned and timed-out users for</param>
         /// <param name="userIDs">If specified, filters banned and timed-out users to those userIDs specified.</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The set of banned or timed-out users</returns>
-        public async Task<IEnumerable<ChannelBannedUserModel>> GetChannelBannedUsers(UserModel channel, IEnumerable<string> userIDs=null, int maxResults=1)
+        public async Task<IEnumerable<ChannelBannedUserModel>> GetChannelBannedUsers(UserModel channel, IEnumerable<string> userIDs = null, int maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
             List<string> parameters = new List<string>();
@@ -107,15 +106,60 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets the most recent moderator events for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get moderator events for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The set of moderator events</returns>
+        public async Task<IEnumerable<ChannelModeratorEventModel>> GetChannelModeratorEvents(UserModel channel, int maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedDataResultAsync<ChannelModeratorEventModel>("moderation/moderators/events?broadcaster_id=" + channel.id, maxResults);
+        }
+
+        /// <summary>
+        /// Returns all moderator users in a channel.
+        /// </summary>
+        /// <param name="channel">The channel to get moderators for</param>
+        /// <param name="userIDs">If specified, filters moderator users to those userIDs specified.</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The set of moderator users</returns>
+        public async Task<IEnumerable<ChannelModeratorUserModel>> GetChannelModeratorUsers(UserModel channel, IEnumerable<string> userIDs = null, int maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            List<string> parameters = new List<string>();
+            if (userIDs != null)
+            {
+                foreach (string userID in userIDs)
+                {
+                    parameters.Add("user_id=" + userID);
+                }
+            }
+            parameters.Add("broadcaster_id=" + channel.id);
+            return await this.GetPagedDataResultAsync<ChannelModeratorUserModel>("moderation/moderators?" + string.Join("&", parameters), maxResults);
+        }
+
+        /// <summary>
+        /// Gets the list of channel editors for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get channel editors for</param>
+        /// <returns>The list of channel editors</returns>
+        public async Task<IEnumerable<ChannelEditorUserModel>> GetChannelEditorUsers(UserModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetDataResultAsync<ChannelEditorUserModel>("channels/editors?broadcaster_id=" + channel.id);
+        }
+
+        /// <summary>
         /// Gets the information of the most recent Hype Train of the given channel ID.
         /// </summary>
         /// <param name="channel">The channel to get Hype Train data for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The most recent Hype Train</returns>
-        public async Task<ChannelHypeTrainModel> GetHypeTrainEvents(UserModel channel)
+        public async Task<IEnumerable<ChannelHypeTrainModel>> GetHypeTrainEvents(UserModel channel, int maxResults = 1)
         {
             Validator.ValidateVariable(channel, "channel");
-            IEnumerable<ChannelHypeTrainModel> results = await this.GetDataResultAsync<ChannelHypeTrainModel>($"hypetrain/events?broadcaster_id={channel.id}&first=1");
-            return results.FirstOrDefault();
+            return await this.GetPagedDataResultAsync<ChannelHypeTrainModel>($"hypetrain/events?broadcaster_id={channel.id}", maxResults);
         }
     }
 }

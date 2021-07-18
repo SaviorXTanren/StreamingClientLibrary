@@ -85,6 +85,18 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets the list of active streams from followed channels for the specified broadcaster
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to get followed streams for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>A list of streams</returns>
+        public async Task<IEnumerable<StreamModel>> GetFollowedStreams(UserModel broadcaster, int maxResults = 20)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            return await this.GetPagedDataResultAsync<StreamModel>("streams/followed?user_id=" + broadcaster.id, maxResults);
+        }
+
+        /// <summary>
         /// Creates a stream marker for the specified broadcaster.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to create the stream marker on</param>
