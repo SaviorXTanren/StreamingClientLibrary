@@ -47,6 +47,10 @@
         /// The user's email account.
         /// </summary>
         public string email { get; set; }
+        /// <summary>
+        /// Date when the user was created.
+        /// </summary>
+        public string created_at { get; set; }
 
         /// <summary>
         /// Gets the current thumbnail preview image for the user's channel in a large size.
