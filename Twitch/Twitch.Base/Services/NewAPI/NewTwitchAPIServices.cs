@@ -56,6 +56,11 @@
         public PredictionsService Predictions { get; private set; }
 
         /// <summary>
+        /// APIs for Schedule interation.
+        /// </summary>
+        public ScheduleService Schedule { get;private set;  }
+
+        /// <summary>
         /// APIs for Streams interaction.
         /// </summary>
         public StreamsService Streams { get; private set; }
@@ -101,6 +106,7 @@
             this.Games = new GamesService(connection);
             this.Polls = new PollsService(connection);
             this.Predictions = new PredictionsService(connection);
+            this.Schedule = new ScheduleService(connection);
             this.Streams = new StreamsService(connection);
             this.Subscriptions = new SubscriptionsService(connection);
             this.Tags = new TagsService(connection);
