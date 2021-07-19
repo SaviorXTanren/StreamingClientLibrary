@@ -17,12 +17,10 @@ namespace Twitch.Base.Models.NewAPI.Schedule
         /// The name of the broadcaster.
         /// </summary>
         public string broadcaster_name { get; set; }
-
         /// <summary>
         /// Login of the broadcaster.
         /// </summary>
         public string broadcaster_login { get; set; }
-
         /// <summary>
         /// If Vacation Mode is enabled, this includes start and end dates for the vacation.If Vacation Mode is disabled, value is set to null.
         /// </summary>

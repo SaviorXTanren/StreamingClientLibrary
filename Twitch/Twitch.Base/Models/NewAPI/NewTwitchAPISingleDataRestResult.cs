@@ -9,13 +9,12 @@ namespace Twitch.Base.Models.NewAPI
     /// A wrapper result used for the New Twitch APIs where results is a single object for the data node
     /// Used for APIs such as schedule
     /// </summary>
-    /// <typeparam name="T">The type that the result contains</typeparam>
-    public class NewTwitchAPIDataRestResult2<T>
+    public class NewTwitchAPISingleDataRestResult
     {
         /// <summary>
         /// The data of the result.
         /// </summary>
-        public T data { get; set; } 
+        public JObject data { get; set; } 
 
         /// <summary>
         /// Pagination information.
