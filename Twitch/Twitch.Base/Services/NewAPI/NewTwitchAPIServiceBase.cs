@@ -115,7 +115,7 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="maxResults">Maximum number of items per page of results</param>
         /// <param name="cursor">Pagination cursor</param>
         /// <returns>A single data node result set object of the response</returns>
-        public async Task<NewTwitchAPISingleDataRestResult> GetPagedSingleDataResultAsync(string requestUri, int maxResults, string cursor=null)
+        public async Task<NewTwitchAPISingleDataRestResult<T>> GetPagedSingleDataResultAsync<T>(string requestUri, int maxResults, string cursor=null)
         {
             if (!requestUri.Contains("?"))
             {
@@ -132,7 +132,7 @@ namespace Twitch.Base.Services.NewAPI
             {
                 queryParameters["after"] = cursor;
             }
-            return await this.GetAsync<NewTwitchAPISingleDataRestResult>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
+            return await this.GetAsync<NewTwitchAPISingleDataRestResult<T>>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using StreamingClient.Base.Util;
+﻿using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
@@ -23,42 +22,34 @@ namespace Twitch.Base.Services.NewAPI
         /// Get stream schedule for broadcaster
         /// </summary>
         /// <param name="broadcaster">broadcaster</param>
-        /// <param name="maxScheduleSegments">Maximum schedule segment results to return</param>
+        /// <param name="maxResults">Maximum schedule segment results to return. Will be either that amount or slightly more.</param>
         /// <returns>Broadcaster's schedule details</returns>
-        public async Task<ScheduleModel> GetSchedule(UserModel broadcaster, int maxScheduleSegments)
+        public async Task<ScheduleModel> GetSchedule(UserModel broadcaster, int maxResults)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             string cursor = null;
-            ScheduleModel scheduleModel = new ScheduleModel();
-            scheduleModel.segments = new List<ScheduleSegmentModel>();
+            ScheduleModel scheduleModel = null;
+            NewTwitchAPISingleDataRestResult<ScheduleModel> results;
 
-            int totalScheduleSegments = 0;
-            bool firstPass = true;
-            NewTwitchAPISingleDataRestResult results;
             do
             {
-                int itemsToRetrieve = maxScheduleSegments - totalScheduleSegments > 25 ? 25 : maxScheduleSegments - totalScheduleSegments;
-                results = await this.GetPagedSingleDataResultAsync("schedule?broadcaster_id=" + broadcaster.id, itemsToRetrieve, cursor);
+                int totalSegmentCount = (scheduleModel?.segments?.Count ?? 0);
+                int itemsToRetrieve = maxResults - totalSegmentCount > 25 ? 25 : maxResults - totalSegmentCount;
+                results = await this.GetPagedSingleDataResultAsync<ScheduleModel>("schedule?broadcaster_id=" + broadcaster.id, itemsToRetrieve, cursor);
                 cursor = results.Cursor;
 
                 if (results.data != null)
                 {
-                    if (firstPass)
-                    {
-                        scheduleModel = results.data.ToObject<ScheduleModel>();
-                        firstPass = false;
-                        totalScheduleSegments += results.data.ToObject<ScheduleModel>().segments.Count;
-                    }
+                    if (scheduleModel == null)
+                        scheduleModel = results.data;
                     else
                     {
-                        var segments = results.data.ToObject<ScheduleModel>().segments;
+                        var segments = results.data.segments;
                         scheduleModel.segments.AddRange(segments);
-                        totalScheduleSegments += segments.Count;
                     }
                 }
-
             }
-            while (totalScheduleSegments < maxScheduleSegments && cursor!=null && results.data!=null);
+            while (scheduleModel!=null && scheduleModel.segments.Count < maxResults && cursor!=null);
 
             return scheduleModel;
         }
