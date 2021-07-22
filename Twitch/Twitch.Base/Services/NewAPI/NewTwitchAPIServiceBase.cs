@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 
@@ -103,6 +105,34 @@ namespace Twitch.Base.Services.NewAPI
             while (results.Count < maxResults && !string.IsNullOrEmpty(cursor));
 
             return results;
+        }
+
+
+        /// <summary>
+        ///  Performs a GET REST request using the provided request URI for New Twitch API-wrapped data that has a single data result.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">Maximum number of items per page of results</param>
+        /// <param name="cursor">Pagination cursor</param>
+        /// <returns>A single data node result set object of the response</returns>
+        public async Task<NewTwitchAPISingleDataRestResult<T>> GetPagedSingleDataResultAsync<T>(string requestUri, int maxResults, string cursor=null)
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            queryParameters.Add("first", maxResults.ToString());
+            if (!string.IsNullOrEmpty(cursor))
+            {
+                queryParameters["after"] = cursor;
+            }
+            return await this.GetAsync<NewTwitchAPISingleDataRestResult<T>>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
         }
 
         /// <summary>
