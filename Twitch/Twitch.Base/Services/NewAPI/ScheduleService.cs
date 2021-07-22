@@ -1,5 +1,4 @@
 ﻿using StreamingClient.Base.Util;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 using Twitch.Base.Models.NewAPI.Schedule;
@@ -27,29 +26,31 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<ScheduleModel> GetSchedule(UserModel broadcaster, int maxResults)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            string cursor = null;
+
             ScheduleModel scheduleModel = null;
-            NewTwitchAPISingleDataRestResult<ScheduleModel> results;
+            string cursor = null;
 
             do
             {
                 int totalSegmentCount = (scheduleModel?.segments?.Count ?? 0);
                 int itemsToRetrieve = maxResults - totalSegmentCount > 25 ? 25 : maxResults - totalSegmentCount;
-                results = await this.GetPagedSingleDataResultAsync<ScheduleModel>("schedule?broadcaster_id=" + broadcaster.id, itemsToRetrieve, cursor);
+
+                NewTwitchAPISingleDataRestResult<ScheduleModel> results = await this.GetPagedSingleDataResultAsync<ScheduleModel>("schedule?broadcaster_id=" + broadcaster.id, itemsToRetrieve, cursor);
                 cursor = results.Cursor;
 
                 if (results.data != null)
                 {
                     if (scheduleModel == null)
+                    {
                         scheduleModel = results.data;
+                    }
                     else
                     {
-                        var segments = results.data.segments;
-                        scheduleModel.segments.AddRange(segments);
+                        scheduleModel.segments.AddRange(results.data.segments);
                     }
                 }
             }
-            while (scheduleModel!=null && scheduleModel.segments.Count < maxResults && cursor!=null);
+            while (scheduleModel != null && scheduleModel.segments.Count < maxResults && cursor != null);
 
             return scheduleModel;
         }
