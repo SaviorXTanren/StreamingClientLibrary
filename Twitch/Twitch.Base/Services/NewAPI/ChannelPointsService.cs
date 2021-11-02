@@ -102,7 +102,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateGuid(rewardID, "rewardID");
             Validator.ValidateVariable(reward, "reward");
 
-            return await this.UpdateCustomReward(broadcaster, rewardID, new JObject(reward));
+            return await this.UpdateCustomReward(broadcaster, rewardID, JObject.FromObject(reward));
         }
 
         /// <summary>
