@@ -68,7 +68,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<IEnumerable<CustomChannelPointRewardModel>> GetCustomRewards(UserModel broadcaster, bool managableRewardsOnly = false)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id + "&only_manageable_rewards=" + clientOnly, maxResults: int.MaxValue);
+            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id + "&only_manageable_rewards=" + managableRewardsOnly, maxResults: int.MaxValue);
         }
 
         /// <summary>
