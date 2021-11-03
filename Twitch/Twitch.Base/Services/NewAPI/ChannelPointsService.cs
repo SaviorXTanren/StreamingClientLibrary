@@ -63,11 +63,12 @@ namespace Twitch.Base.Services.NewAPI
         /// Gets all rewards associated with the broadcaster.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get rewards for</param>
+        /// <param name="clientOnly">Determines whether to get only the rewards for the client_id provided</param>
         /// <returns>The reward information</returns>
-        public async Task<IEnumerable<CustomChannelPointRewardModel>> GetCustomRewards(UserModel broadcaster)
+        public async Task<IEnumerable<CustomChannelPointRewardModel>> GetCustomRewards(UserModel broadcaster, bool clientOnly = false)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id, maxResults: int.MaxValue);
+            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id + "&only_manageable_rewards=" + clientOnly, maxResults: int.MaxValue);
         }
 
         /// <summary>
