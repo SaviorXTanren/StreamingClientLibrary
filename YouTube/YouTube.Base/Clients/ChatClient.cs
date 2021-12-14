@@ -49,7 +49,7 @@ namespace YouTube.Base.Clients
         /// <returns>Whether the connection was successful</returns>
         public Task<bool> Connect(LiveBroadcast broadcast, bool listenForMessage = true)
         {
-            this.broadcast = broadcast;
+            this.Broadcast = broadcast;
 
             if (listenForMessage)
             {
@@ -68,7 +68,7 @@ namespace YouTube.Base.Clients
         /// <returns>An awaitable Task</returns>
         public Task Disconnect()
         {
-            this.broadcast = null;
+            this.Broadcast = null;
             if (this.messageBackgroundPollingTokenSource != null)
             {
                 this.messageBackgroundPollingTokenSource.Cancel();
@@ -81,7 +81,7 @@ namespace YouTube.Base.Clients
         /// </summary>
         /// <param name="message">The message to send</param>
         /// <returns>The resulting message</returns>
-        public async Task<LiveChatMessage> SendMessage(string message) { return await this.connection.LiveChat.SendMessage(this.broadcast, message); }
+        public async Task<LiveChatMessage> SendMessage(string message) { return await this.connection.LiveChat.SendMessage(this.Broadcast, message); }
 
         /// <summary>
         /// Deletes the specified message from the live chat.
@@ -95,7 +95,7 @@ namespace YouTube.Base.Clients
         /// </summary>
         /// <param name="user">The user to mod</param>
         /// <returns>Information about the modded user</returns>
-        public async Task<LiveChatModerator> ModUser(Channel user) { return await this.connection.LiveChat.ModUser(this.broadcast, user); }
+        public async Task<LiveChatModerator> ModUser(Channel user) { return await this.connection.LiveChat.ModUser(this.Broadcast, user); }
 
         /// <summary>
         /// Removes moderator privileges from the specified user.
@@ -110,14 +110,14 @@ namespace YouTube.Base.Clients
         /// <param name="user">The user to timeout</param>
         /// <param name="duration">The length of the timeout in seconds</param>
         /// <returns>The timeout result</returns>
-        public async Task<LiveChatBan> TimeoutUser(Channel user, ulong duration) { return await this.connection.LiveChat.TimeoutUser(this.broadcast, user, duration); }
+        public async Task<LiveChatBan> TimeoutUser(Channel user, ulong duration) { return await this.connection.LiveChat.TimeoutUser(this.Broadcast, user, duration); }
 
         /// <summary>
         /// Bans the specified user from the channel.
         /// </summary>
         /// <param name="user">The user to ban</param>
         /// <returns>The ban result</returns>
-        public async Task<LiveChatBan> BanUser(Channel user) { return await this.connection.LiveChat.BanUser(this.broadcast, user); }
+        public async Task<LiveChatBan> BanUser(Channel user) { return await this.connection.LiveChat.BanUser(this.Broadcast, user); }
 
         /// <summary>
         /// Unbans the specified user from the channel.
@@ -133,9 +133,9 @@ namespace YouTube.Base.Clients
             {
                 try
                 {
-                    if (broadcast != null)
+                    if (this.Broadcast != null)
                     {
-                        LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.broadcast, nextResultsToken: nextResultsToken, maxResults: 200);
+                        LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.Broadcast, nextResultsToken: nextResultsToken, maxResults: 200);
                         if (result != null)
                         {
                             List<LiveChatMessage> newMessages = new List<LiveChatMessage>();
@@ -163,7 +163,7 @@ namespace YouTube.Base.Clients
                     }
                     else
                     {
-                        this.broadcast = await this.connection.LiveBroadcasts.GetMyActiveBroadcast();
+                        this.Broadcast = await this.connection.LiveBroadcasts.GetMyActiveBroadcast();
                         await Task.Delay(60000);
                     }
                 }
