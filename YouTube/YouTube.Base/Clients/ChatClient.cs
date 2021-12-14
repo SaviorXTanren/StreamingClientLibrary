@@ -14,11 +14,14 @@ namespace YouTube.Base.Clients
     /// </summary>
     public class ChatClient : YouTubeServiceBase, IDisposable
     {
-        private LiveBroadcast broadcast;
-
         private CancellationTokenSource messageBackgroundPollingTokenSource;
 
         private HashSet<string> messageIDs = new HashSet<string>();
+
+        /// <summary>
+        /// The live broadcast connected to for chat.
+        /// </summary>
+        public LiveBroadcast Broadcast { get; private set; }
 
         /// <summary>
         /// Invoked when chat messages are received.
