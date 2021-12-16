@@ -44,29 +44,23 @@ namespace YouTube.ChatSample.Console
                     YouTubeConnection connection = await YouTubeConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes);
                     if (connection != null)
                     {
-                        Channel channel = await connection.Channels.GetMyChannel();
+                        //Channel channel = await connection.Channels.GetMyChannel();
 
-                        //Channel channel = await connection.Channels.GetChannelByID("UCyl1z3jo3XHR1riLFKG5UAg");
+                        Channel channel = await connection.Channels.GetChannelByID("UCbkMvtBNkpIbHqQdKHJSb5A");
 
                         if (channel != null)
                         {
                             System.Console.WriteLine("Connection successful. Logged in as: " + channel.Snippet.Title);
 
-                            //LiveBroadcast broadcast = await connection.LiveBroadcasts.GetChannelActiveBroadcast(channel);
-                            //if (broadcast == null)
-                            //{
-                            //    broadcast = await connection.LiveBroadcasts.GetBroadcastByID("9rCRhTrEpDE");
-                            //    if (broadcast == null)
-                            //    {
-                            //        broadcast = new LiveBroadcast() { Snippet = new LiveBroadcastSnippet() { LiveChatId = "Cg0KC1VxWFFjZmZvTXhjKicKGFVDSHN4NEhxYS0xT1JqUVRoOVRZRGh3dxILVXFYUWNmZm9NeGM" } };
-                            //    }
-                            //}
+                            LiveBroadcast broadcast = await connection.LiveBroadcasts.GetChannelActiveBroadcast(channel);
 
                             System.Console.WriteLine("Connecting chat client!");
 
                             ChatClient client = new ChatClient(connection);
                             client.OnMessagesReceived += Client_OnMessagesReceived;
-                            if (await client.Connect())
+
+                            //if (await client.Connect())
+                            if (await client.Connect(broadcast))
                             {
                                 System.Console.WriteLine("Live chat connection successful!");
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Twitch.Base.Models.NewAPI.Schedule
 {
@@ -28,6 +26,6 @@ namespace Twitch.Base.Models.NewAPI.Schedule
         /// <summary>
         /// Scheduled broadcasts for this stream schedule.
         /// </summary>
-        public List<ScheduleSegmentModel> segments { get; set; }
+        public List<ScheduleSegmentModel> segments { get; set; } = new List<ScheduleSegmentModel>();
     }
 }

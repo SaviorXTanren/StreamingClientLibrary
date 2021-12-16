@@ -71,7 +71,7 @@ namespace Trovo.Base.Services
             Validator.ValidateString(username, "username");
 
             JObject requestParameters = new JObject();
-            requestParameters["user_name"] = username;
+            requestParameters["username"] = username;
 
             return await this.PostAsync<ChannelModel>("channels/id", AdvancedHttpClient.CreateContentFromObject(requestParameters));
         }

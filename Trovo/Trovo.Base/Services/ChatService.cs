@@ -118,7 +118,7 @@ namespace Trovo.Base.Services
             Validator.ValidateString(messageID, "messageID");
             Validator.ValidateString(userID, "userID");
 
-            return await this.DeleteAsync($"channels/{channelID}/messages/{messageID}/senderuid/{userID}");
+            return await this.DeleteAsync($"channels/{channelID}/messages/{messageID}/users/{userID}");
         }
 
         /// <summary>

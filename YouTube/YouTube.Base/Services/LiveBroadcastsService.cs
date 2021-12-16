@@ -3,6 +3,7 @@ using Google.Apis.YouTube.v3.Data;
 using Google.Apis.YouTubePartner.v1;
 using Google.Apis.YouTubePartner.v1.Data;
 using StreamingClient.Base.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -89,10 +90,19 @@ namespace YouTube.Base.Services
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
-                IEnumerable<SearchResult> searchResults = await this.connection.Videos.SearchVideos(channelID: channel.Id, liveType: SearchResource.ListRequest.EventTypeEnum.Live);
-                if (searchResults != null && searchResults.Count() > 0)
+                IEnumerable<Video> videos = await connection.Videos.GetVideosForChannel(channel, 5);
+                if (videos != null && videos.Count() > 0)
                 {
-                    return await this.GetBroadcastByID(searchResults.First().Id.VideoId);
+                    Video video = videos.FirstOrDefault(v => string.Equals(v.Snippet.LiveBroadcastContent, "live", StringComparison.InvariantCultureIgnoreCase));
+                    if (video != null && !string.IsNullOrEmpty(video.LiveStreamingDetails?.ActiveLiveChatId))
+                    {
+                        LiveBroadcast broadcast = await this.GetBroadcastByID(video.Id);
+                        if (broadcast == null)
+                        {
+                            broadcast = new LiveBroadcast() { Snippet = new LiveBroadcastSnippet() { LiveChatId = video.LiveStreamingDetails.ActiveLiveChatId } };
+                        }
+                        return broadcast;
+                    }
                 }
                 return null;
             });

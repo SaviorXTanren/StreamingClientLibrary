@@ -63,11 +63,12 @@ namespace Twitch.Base.Services.NewAPI
         /// Gets all rewards associated with the broadcaster.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get rewards for</param>
+        /// <param name="managableRewardsOnly">Whether to return only rewards manageable by the current client application</param>
         /// <returns>The reward information</returns>
-        public async Task<IEnumerable<CustomChannelPointRewardModel>> GetCustomRewards(UserModel broadcaster)
+        public async Task<IEnumerable<CustomChannelPointRewardModel>> GetCustomRewards(UserModel broadcaster, bool managableRewardsOnly = false)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id, maxResults: int.MaxValue);
+            return await this.GetPagedDataResultAsync<CustomChannelPointRewardModel>("channel_points/custom_rewards?broadcaster_id=" + broadcaster.id + "&only_manageable_rewards=" + managableRewardsOnly, maxResults: int.MaxValue);
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateGuid(rewardID, "rewardID");
             Validator.ValidateVariable(reward, "reward");
 
-            return await this.UpdateCustomReward(broadcaster, rewardID, new JObject(reward));
+            return await this.UpdateCustomReward(broadcaster, rewardID, JObject.FromObject(reward));
         }
 
         /// <summary>
