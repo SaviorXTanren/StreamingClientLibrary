@@ -264,7 +264,7 @@ namespace Twitch.Base
 
             if (forceApprovalPrompt)
             {
-                parameters.Add("force_verify", "force");
+                parameters.Add("force_verify", "true");
             }
 
             FormUrlEncodedContent content = new FormUrlEncodedContent(parameters.AsEnumerable());
