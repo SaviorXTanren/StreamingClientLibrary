@@ -72,7 +72,62 @@ namespace Trovo.Base.Models.Chat
         /// <summary>
         /// Stream on/off messages, invisible to the viewers
         /// </summary>
-        StreamOnOff = 5012
+        StreamOnOff = 5012,
+        /// <summary>
+        /// Unfollow message. Shows when someone unfollows the channel.
+        /// </summary>
+        UnfollowMessage = 5013,
+    }
+
+    /// <summary>
+    /// The types of roles for a user in chat.
+    /// </summary>
+    public enum ChatUserRolesTypeEnum
+    {
+        /// <summary>
+        /// Streamer of the current channel
+        /// </summary>
+        Streamer = 100000,
+        /// <summary>
+        /// Moderator of the current channel
+        /// </summary>
+        Mod = 100001,
+        /// <summary>
+        /// Editor of the current channel
+        /// </summary>
+        Editor = 100002,
+        /// <summary>
+        /// User who subscribed the current channel
+        /// </summary>
+        Subscriber = 100004,
+        /// <summary>
+        /// Super moderator of the current channel
+        /// </summary>
+        Supermod = 100005,
+        /// <summary>
+        /// User who followed of the current channel
+        /// </summary>
+        Follower = 100006,
+        /// <summary>
+        /// User who have a role customized by the streamer of the current channel
+        /// </summary>
+        CustomRole = 200000,
+        /// <summary>
+        /// Primary tier of Trovo membership
+        /// </summary>
+        Ace = 300000,
+        /// <summary>
+        /// Premium tier of Trovo membership
+        /// </summary>
+        AcePlus = 300001,
+        /// <summary>
+        /// Admin of Trovo platform, across all channels.
+        /// </summary>
+        Admin = 500000,
+        /// <summary>
+        /// Warden of Trovo platform, across all channels, who helps to maintain the platform order.
+        /// </summary>
+        Warden = 500001,
     }
 
     /// <summary>
@@ -111,6 +166,10 @@ namespace Trovo.Base.Models.Chat
         /// </summary>
         public const string ModeratorRole = "mod";
         /// <summary>
+        /// Editor of the current channel
+        /// </summary>
+        public const string EditorRole = "editor";
+        /// <summary>
         /// User who followed the current channel
         /// </summary>
         public const string FollowerRole = "follower";
@@ -126,6 +185,14 @@ namespace Trovo.Base.Models.Chat
         /// Warden of Trovo platform, across all channels, who helps to maintain the platform order.
         /// </summary>
         public const string WardenRole = "warden";
+        /// <summary>
+        /// Primary tier of Trovo membership
+        /// </summary>
+        public const string AceRole = "ace";
+        /// <summary>
+        /// Premium tier of Trovo membership
+        /// </summary>
+        public const string AcePlusRole = "ace+";
         /// <summary>
         /// User who have a role customized by the streamer of the current channel.
         /// </summary>
@@ -175,6 +242,11 @@ namespace Trovo.Base.Models.Chat
         /// The subscription level of the user in the channel. “sub_L1” for tier 1 subscriber.
         /// </summary>
         public string sub_lv { get; set; }
+
+        /// <summary>
+        /// Subscription tier
+        /// </summary>
+        public string sub_tier { get; set; }
 
         /// <summary>
         /// The list of badge names of the sender.
