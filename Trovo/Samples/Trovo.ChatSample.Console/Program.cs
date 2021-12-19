@@ -68,7 +68,7 @@ namespace Trovo.ChatSample.Console
 
                                     await chat.SendMessage("Hello World!");
 
-                                    ChatViewersRolesModel viewers = await connection.Chat.GetViewers(channel.channel_id, 1000);
+                                    ChatViewersModel viewers = await connection.Chat.GetViewers(channel.channel_id, 1000);
 
                                     while (true)
                                     {

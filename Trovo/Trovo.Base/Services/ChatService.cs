@@ -80,13 +80,13 @@ namespace Trovo.Base.Services
         /// <param name="channelID">The ID of the channel</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The current viewers of the channel</returns>
-        public async Task<ChatViewersRolesModel> GetViewers(string channelID, int maxResults = 1)
+        public async Task<ChatViewersModel> GetViewers(string channelID, int maxResults = 1)
         {
             Validator.ValidateString(channelID, "channelID");
-            IEnumerable<ChatViewersModel> viewers = await this.PostPagedCursorAsync<ChatViewersModel>($"channels/{channelID}/viewers", maxResults, maxLimit: 100000);
+            IEnumerable<ChatViewersInternalModel> viewers = await this.PostPagedCursorAsync<ChatViewersInternalModel>($"channels/{channelID}/viewers", maxResults, maxLimit: 100000);
 
-            ChatViewersRolesModel result = new ChatViewersRolesModel();
-            foreach (ChatViewersModel viewer in viewers)
+            ChatViewersModel result = new ChatViewersModel();
+            foreach (ChatViewersInternalModel viewer in viewers)
             {
                 result.ace.viewers.AddRange(viewer.chatters.ace.viewers);
                 result.aceplus.viewers.AddRange(viewer.chatters.aceplus.viewers);
@@ -100,6 +100,33 @@ namespace Trovo.Base.Services
                 result.supermods.viewers.AddRange(viewer.chatters.supermods.viewers);
                 result.VIPS.viewers.AddRange(viewer.chatters.VIPS.viewers);
                 result.wardens.viewers.AddRange(viewer.chatters.wardens.viewers);
+
+                foreach (var kvp in viewer.custome_roles)
+                {
+                    if (!result.CustomRoles.ContainsKey(kvp.Key))
+                    {
+                        result.CustomRoles[kvp.Key] = new ChatViewersRoleGroupModel();
+                    }
+
+                    ChatViewersRoleGroupModel group = kvp.Value.ToObject<ChatViewersRoleGroupModel>();
+                    result.CustomRoles[kvp.Key].viewers.AddRange(group.viewers);
+                }
+
+                foreach (var kvp in viewer.custom_roles)
+                {
+                    if (!result.CustomRoles.ContainsKey(kvp.Key))
+                    {
+                        result.CustomRoles[kvp.Key] = new ChatViewersRoleGroupModel();
+                    }
+
+                    ChatViewersRoleGroupModel group = kvp.Value.ToObject<ChatViewersRoleGroupModel>();
+                    result.CustomRoles[kvp.Key].viewers.AddRange(group.viewers);
+                }
+            }
+            
+            if (int.TryParse(viewers.FirstOrDefault()?.total, out int total))
+            {
+                result.Total = total;
             }
 
             return result;

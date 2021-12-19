@@ -8,7 +8,26 @@ namespace Trovo.Base.Models.Chat
     /// Viewer information for a channel.
     /// </summary>
     [DataContract]
-    public class ChatViewersModel
+    public class ChatViewersModel : ChatViewersRolesModel
+    {
+        /// <summary>
+        /// The channel's total login users.
+        /// </summary>
+        [DataMember]
+        public int Total { get; set; }
+
+        /// <summary>
+        /// The custom role viewers.
+        /// </summary>
+        [DataMember]
+        public Dictionary<string, ChatViewersRoleGroupModel> CustomRoles { get; set; } = new Dictionary<string, ChatViewersRoleGroupModel>();
+    }
+
+    /// <summary>
+    /// Viewer information for a channel.
+    /// </summary>
+    [DataContract]
+    internal class ChatViewersInternalModel
     {
         /// <summary>
         /// The channel's streamer nickname.
