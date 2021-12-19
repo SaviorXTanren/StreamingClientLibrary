@@ -3,6 +3,7 @@ using StreamingClient.Base.Services;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Trovo.Base.Services
@@ -46,6 +47,50 @@ namespace Trovo.Base.Services
         internal TrovoServiceBase(string baseAddress)
         {
             this.baseAddress = baseAddress;
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for paged cursor data.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <param name="maxLimit">The maximum limit of results that can be returned in a single request</param>
+        /// <returns>A type-casted object of the contents of the response</returns>
+        public async Task<IEnumerable<T>> PostPagedCursorAsync<T>(string requestUri, int maxResults = 1, int maxLimit = 100)
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            queryParameters.Add("limit", ((maxResults > maxLimit) ? maxLimit : maxResults).ToString());
+
+            List<T> results = new List<T>();
+            string cursor = null;
+            do
+            {
+                if (!string.IsNullOrEmpty(cursor))
+                {
+                    queryParameters["cursor"] = cursor;
+                }
+
+                T data = await this.PostAsync<T>(requestUri, AdvancedHttpClient.CreateContentFromObject(queryParameters));
+
+                cursor = null;
+                if (data != null)
+                {
+                    results.Add(data);
+                    //cursor = data.Cursor;
+                }
+            }
+            while (results.Count < maxResults && !string.IsNullOrEmpty(cursor));
+
+            return results;
         }
 
         /// <summary>

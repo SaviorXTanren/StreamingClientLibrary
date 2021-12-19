@@ -75,6 +75,37 @@ namespace Trovo.Base.Services
         }
 
         /// <summary>
+        /// Gets the current viewers of the specified channel ID
+        /// </summary>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The current viewers of the channel</returns>
+        public async Task<ChatViewersRolesModel> GetViewers(string channelID, int maxResults = 1)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            IEnumerable<ChatViewersModel> viewers = await this.PostPagedCursorAsync<ChatViewersModel>($"channels/{channelID}/viewers", maxResults, maxLimit: 100000);
+
+            ChatViewersRolesModel result = new ChatViewersRolesModel();
+            foreach (ChatViewersModel viewer in viewers)
+            {
+                result.ace.viewers.AddRange(viewer.chatters.ace.viewers);
+                result.aceplus.viewers.AddRange(viewer.chatters.aceplus.viewers);
+                result.admins.viewers.AddRange(viewer.chatters.admins.viewers);
+                result.all.viewers.AddRange(viewer.chatters.all.viewers);
+                result.creators.viewers.AddRange(viewer.chatters.creators.viewers);
+                result.editors.viewers.AddRange(viewer.chatters.editors.viewers);
+                result.followers.viewers.AddRange(viewer.chatters.followers.viewers);
+                result.moderators.viewers.AddRange(viewer.chatters.moderators.viewers);
+                result.subscribers.viewers.AddRange(viewer.chatters.subscribers.viewers);
+                result.supermods.viewers.AddRange(viewer.chatters.supermods.viewers);
+                result.VIPS.viewers.AddRange(viewer.chatters.VIPS.viewers);
+                result.wardens.viewers.AddRange(viewer.chatters.wardens.viewers);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Sends a message to the currently authenticated channel.
         /// </summary>
         /// <param name="message">The message to send</param>

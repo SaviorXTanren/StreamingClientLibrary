@@ -166,5 +166,24 @@ namespace Trovo.Base.Services
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets the followers to the specified channel ID
+        /// </summary>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The followers of the channel</returns>
+        public async Task<IEnumerable<ChannelFollowerModel>> GetFollowers(string channelID, int maxResults = 1)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            IEnumerable<ChannelFollowersModel> followers = await this.PostPagedCursorAsync<ChannelFollowersModel>($"channels/{channelID}/followers", maxResults);
+
+            List<ChannelFollowerModel> result = new List<ChannelFollowerModel>();
+            foreach (ChannelFollowersModel follower in followers)
+            {
+                result.AddRange(follower.follower);
+            }
+            return result;
+        }
     }
 }

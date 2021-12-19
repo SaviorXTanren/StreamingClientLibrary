@@ -68,6 +68,10 @@ namespace Trovo.ChatSample.Console
 
                                     await chat.SendMessage("Hello World!");
 
+                                    ChatViewersRolesModel viewers = await connection.Chat.GetViewers(channel.channel_id, 1000);
+
+                                    IEnumerable<ChannelFollowerModel> followers = await connection.Channels.GetFollowers(channel.channel_id, 100);
+
                                     while (true)
                                     {
                                         string line = System.Console.ReadLine();
