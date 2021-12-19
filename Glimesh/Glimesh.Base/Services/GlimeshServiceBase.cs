@@ -15,7 +15,7 @@ namespace Glimesh.Base.Services
     /// </summary>
     public abstract class GlimeshServiceBase : OAuthRestServiceBase
     {
-        private const string GlimeshRestAPIBaseAddressFormat = "https://glimesh.tv/api";
+        private const string GlimeshRestAPIBaseAddressFormat = "https://glimesh.tv/api/graph";
 
         private GlimeshConnection connection;
         private string baseAddress;

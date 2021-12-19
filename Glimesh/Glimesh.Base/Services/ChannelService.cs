@@ -33,6 +33,6 @@ namespace Glimesh.Base.Services
         /// </summary>
         /// <param name="name">The name of the channel</param>
         /// <returns>The channel</returns>
-        public async Task<ChannelModel> GetChannelByName(string name) { return await this.QueryAsync<ChannelModel>($"{{ channel(username: \"{name}\") {{ {ChannelModel.AllFields} }} }}", "channel"); }
+        public async Task<ChannelModel> GetChannelByName(string name) { return await this.QueryAsync<ChannelModel>($"{{ channel(streamerUsername: \"{name}\") {{ {ChannelModel.AllFields} }} }}", "channel"); }
     }
 }

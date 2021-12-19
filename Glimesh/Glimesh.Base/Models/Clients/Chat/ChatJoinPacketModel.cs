@@ -16,7 +16,7 @@ namespace Glimesh.Base.Models.Clients.Chat
         {
             this.Topic = AbsintheControlTopicName;
             this.Event = DocEventName;
-            this.Payload["query"] = $"subscription {{ chatMessage(channelId: {channelID}) {{ id channel {{ id }} user {{ {UserModel.BasicFields} }} message tokens {{ ...on EmoteToken {{ src, text, type, url }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
+            this.Payload["query"] = $"subscription {{ chatMessage(channelId: {channelID}) {{ id channel {{ id }} user {{ {UserModel.BasicFields} }} message tokens {{ ...on EmoteToken {{ src, text, type }}, ...on TextToken {{ text, type }}, ...on UrlToken {{ text, type, url }} }} insertedAt }} }}";
             this.Payload["variables"] = new JObject();
         }
     }

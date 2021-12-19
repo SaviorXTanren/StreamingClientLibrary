@@ -17,7 +17,7 @@ namespace Glimesh.Base.Clients
     /// </summary>
     public class ChatEventClient : ClientWebSocketBase
     {
-        private const string CONNECTION_URL_BASE = "wss://glimesh.tv/api/socket/websocket?vsn=2.0.0";
+        private const string CONNECTION_URL_BASE = "wss://glimesh.tv/api/graph/websocket?vsn=2.0.0";
         private const string TOKEN_CONNECTION_URL = CONNECTION_URL_BASE + "&token={0}";
         private const string CLIENT_ID_CONNECTION_URL = CONNECTION_URL_BASE + "client_id={0}";
 
@@ -36,7 +36,6 @@ namespace Glimesh.Base.Clients
         /// </summary>
         public event EventHandler<FollowPacketModel> OnFollowOccurred;
 
-        private GlimeshConnection connection;
         private string connectionUrl;
 
         private CancellationTokenSource backgroundPingCancellationTokenSource;
@@ -74,7 +73,6 @@ namespace Glimesh.Base.Clients
         /// <param name="connectionUrl">The URL to connect with</param>
         private ChatEventClient(GlimeshConnection connection, string connectionUrl)
         {
-            this.connection = connection;
             this.connectionUrl = connectionUrl;
         }
 

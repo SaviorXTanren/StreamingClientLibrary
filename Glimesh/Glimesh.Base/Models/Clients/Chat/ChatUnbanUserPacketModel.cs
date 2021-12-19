@@ -7,7 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatUnbanUserPacketModel : ClientPacketModelBase
     {
-        private const string UnbanUserMutationPayload = "mutation {{ unbanUser(channelId: {0}, userId: {1}) {{ action, moderator {{ displayname }} }} }}";
+        private const string UnbanUserMutationPayload = "mutation {{ unbanUser(channelId: {0}, userId: {1}) {{ action, moderator {{ displayname }}, user {{ displayname }} }} }}";
 
         /// <summary>
         /// Creates a new instance of the ChatUnbanUserPacketModel class.

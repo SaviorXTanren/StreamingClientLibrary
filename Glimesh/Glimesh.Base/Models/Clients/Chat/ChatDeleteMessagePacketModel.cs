@@ -7,7 +7,7 @@ namespace Glimesh.Base.Models.Clients.Chat
     /// </summary>
     public class ChatDeleteMessagePacketModel : ClientPacketModelBase
     {
-        private const string DeleteMessageMutationPayload = "mutation {{ deleteMessage(channelId: {0}, messageId: {1}) {{ action, moderator {{ displayname }} }} }}";
+        private const string DeleteMessageMutationPayload = "mutation {{ deleteMessage(channelId: {0}, messageId: {1}) {{ action, moderator {{ displayname }}, user {{ displayname }} }} }}";
 
         /// <summary>
         /// Creates a new instance of the ChatDeleteMessagePacketModel class.

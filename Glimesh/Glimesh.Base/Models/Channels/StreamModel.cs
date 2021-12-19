@@ -8,7 +8,7 @@
         /// <summary>
         /// Basic fields for a GraphQL query.
         /// </summary>
-        public const string BasicFields = "avgChatters, avgViewers, countChatters, countViewers, endedAt, id, newSubscribers, peakChatters, peakViewers, resubSubscribers, startedAt, title";
+        public static readonly string BasicFields = $"category {{ {CategoryModel.AllFields} }}, countViewers, endedAt, id, insertedAt, peakViewers, startedAt, thumbnailUrl, title";
 
         /// <summary>
         /// Basic fields with channel for a GraphQL query.
@@ -36,29 +36,19 @@
         public string endedAt { get; set; }
 
         /// <summary>
-        /// The average number of chatter for the stream.
+        /// The category of the channel.
         /// </summary>
-        public int? avgChatters { get; set; }
+        public CategoryModel category { get; set; }
 
         /// <summary>
-        /// The average number of viewers for the stream.
+        /// The thumbnail image of the channel.
         /// </summary>
-        public int? avgViewers { get; set; }
-
-        /// <summary>
-        /// The current number of chatter for the stream.
-        /// </summary>
-        public int? countChatters { get; set; }
+        public string thumbnailUrl { get; set; }
 
         /// <summary>
         /// The current number of viewers for the stream.
         /// </summary>
         public int? countViewers { get; set; }
-
-        /// <summary>
-        /// The peak number of chatter for the stream.
-        /// </summary>
-        public int? peakChatters { get; set; }
 
         /// <summary>
         /// The peak number of viewers for the stream.

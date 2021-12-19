@@ -13,7 +13,7 @@ namespace Glimesh.Base.Models.Channels
         /// <summary>
         /// Basic fields for a GraphQL query.
         /// </summary>
-        public static readonly string BasicFields = $"id, language, status, thumbnail, title, category {{ {CategoryModel.AllFields} }} updatedAt";
+        public static readonly string BasicFields = $"id, language, status, title, updatedAt";
 
         /// <summary>
         /// Basic fields with streamer for a GraphQL query.
@@ -23,7 +23,7 @@ namespace Glimesh.Base.Models.Channels
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, stream {{ {StreamModel.BasicFields} }}, bans {{ {ChannelBanModel.AllFields} }}";
+        public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, stream {{ {StreamModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the channel.
@@ -46,21 +46,6 @@ namespace Glimesh.Base.Models.Channels
         public string title { get; set; }
 
         /// <summary>
-        /// The thumbnail image of the channel.
-        /// </summary>
-        public string thumbnail { get; set; }
-
-        /// <summary>
-        /// The stream key of the channel.
-        /// </summary>
-        public string streamKey { get; set; }
-
-        /// <summary>
-        /// The category of the channel.
-        /// </summary>
-        public CategoryModel category { get; set; }
-
-        /// <summary>
         /// The user of the channel.
         /// </summary>
         public UserModel streamer { get; set; }
@@ -69,11 +54,6 @@ namespace Glimesh.Base.Models.Channels
         /// The current stream of the channel.
         /// </summary>
         public StreamModel stream { get; set; }
-
-        /// <summary>
-        /// The banned and timed out users of the channel.
-        /// </summary>
-        public List<ChannelBanModel> bans { get; set; } = new List<ChannelBanModel>();
 
         /// <summary>
         /// When the channel was last updated.

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Glimesh.Base
 {
     /// <summary>
-    /// https://glimesh.github.io/api-docs/docs/authencation/accesstoken/accesstoken/
+    /// https://glimesh.github.io/api-docs/docs/reference/scopes/
     /// </summary>
     public enum OAuthClientScopeEnum
     {
