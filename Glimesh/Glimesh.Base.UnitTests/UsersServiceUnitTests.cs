@@ -83,39 +83,5 @@ namespace Glimesh.Base.UnitTests
                 Assert.IsTrue(!string.IsNullOrEmpty(follows.First().id));
             });
         }
-
-        [TestMethod]
-        public void GetUsersSubscribedTo()
-        {
-            TestWrapper(async (GlimeshConnection connection) =>
-            {
-                UserModel currentUser = await connection.Users.GetCurrentUser();
-                Assert.IsNotNull(currentUser);
-                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
-
-                IEnumerable<UserSubscriptionModel> subscriptions = await connection.Users.GetUsersSubscribedTo(currentUser.username);
-                Assert.IsNotNull(subscriptions);
-                Assert.IsTrue(subscriptions.Count() > 0);
-                Assert.IsNotNull(subscriptions.First());
-                Assert.IsTrue(!string.IsNullOrEmpty(subscriptions.First().id));
-            });
-        }
-
-        [TestMethod]
-        public void GetSubscribedUsers()
-        {
-            TestWrapper(async (GlimeshConnection connection) =>
-            {
-                UserModel currentUser = await connection.Users.GetCurrentUser();
-                Assert.IsNotNull(currentUser);
-                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
-
-                IEnumerable<UserSubscriptionModel> subscriptions = await connection.Users.GetSubscribedUsers(currentUser.username);
-                Assert.IsNotNull(subscriptions);
-                Assert.IsTrue(subscriptions.Count() > 0);
-                Assert.IsNotNull(subscriptions.First());
-                Assert.IsTrue(!string.IsNullOrEmpty(subscriptions.First().id));
-            });
-        }
     }
 }
