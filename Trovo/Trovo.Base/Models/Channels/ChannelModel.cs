@@ -28,10 +28,6 @@ namespace Trovo.Base.Models.Channels
     public class ChannelModel
     {
         /// <summary>
-        /// The ID of the channel.
-        /// </summary>
-        public string channel_id { get; set; }
-        /// <summary>
         /// The username of the channel.
         /// </summary>
         public string username { get; set; }

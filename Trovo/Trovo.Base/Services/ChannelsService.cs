@@ -53,12 +53,7 @@ namespace Trovo.Base.Services
             JObject requestParameters = new JObject();
             requestParameters["channel_id"] = id;
 
-            ChannelModel channel = await this.PostAsync<ChannelModel>("channels/id", AdvancedHttpClient.CreateContentFromObject(requestParameters));
-            if (channel != null)
-            {
-                channel.channel_id = id;
-            }
-            return channel;
+            return await this.PostAsync<ChannelModel>("channels/id", AdvancedHttpClient.CreateContentFromObject(requestParameters));
         }
 
         /// <summary>
