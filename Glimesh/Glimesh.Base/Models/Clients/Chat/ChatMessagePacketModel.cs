@@ -65,7 +65,16 @@ namespace Glimesh.Base.Models.Clients.Chat
                 {
                     foreach (JToken messageToken in messageTokens)
                     {
-                        this.MessageTokens.Add(messageToken.ToObject<ChatMessageTokenModel>());
+                        ChatMessageTokenModel token = messageToken.ToObject<ChatMessageTokenModel>();
+                        if (!string.IsNullOrEmpty(token.src) && string.IsNullOrEmpty(token.url))
+                        {
+                            token.url = token.src;
+                        }
+                        else if (!string.IsNullOrEmpty(token.url) && string.IsNullOrEmpty(token.src))
+                        {
+                            token.src = token.url;
+                        }
+                        this.MessageTokens.Add(token);
                     }
                 }
 
