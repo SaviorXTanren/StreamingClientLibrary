@@ -1,7 +1,7 @@
-﻿using Glimesh.Base.Models.Users;
+﻿using Glimesh.Base.Models.GraphQL;
+using Glimesh.Base.Models.Users;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Glimesh.Base.Models.Channels
 {
@@ -23,7 +23,7 @@ namespace Glimesh.Base.Models.Channels
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, stream {{ {StreamModel.BasicFields} }}";
+        public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, moderators(first: 100) {{ edges {{ cursor, node {{ {ChannelModeratorModel.AllFields} }} }} }}, stream {{ {StreamModel.BasicFields} }}";
 
         /// <summary>
         /// The ID of the channel.
@@ -44,6 +44,11 @@ namespace Glimesh.Base.Models.Channels
         /// The title of the channel.
         /// </summary>
         public string title { get; set; }
+
+        /// <summary>
+        /// The moderators of the channel.
+        /// </summary>
+        public GraphQLEdgeArrayModel<ChannelModeratorModel> moderators { get; set; } = new GraphQLEdgeArrayModel<ChannelModeratorModel>();
 
         /// <summary>
         /// The user of the channel.

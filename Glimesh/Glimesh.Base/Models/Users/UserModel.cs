@@ -39,6 +39,11 @@ namespace Glimesh.Base.Models.Users
         public string avatarUrl { get; set; }
 
         /// <summary>
+        /// The total number of followers.
+        /// </summary>
+        public string countFollowers { get; set; }
+
+        /// <summary>
         /// The date of account confirmation.
         /// </summary>
         public string confirmedAt { get; set; }

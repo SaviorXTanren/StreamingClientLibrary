@@ -16,7 +16,7 @@ namespace Trovo.Base.UnitTests
                 ChannelModel channel = await connection.Channels.GetCurrentChannel();
 
                 Assert.IsNotNull(channel);
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.username));
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
             });
         }
@@ -26,16 +26,16 @@ namespace Trovo.Base.UnitTests
         {
             TestWrapper(async (TrovoConnection connection) =>
             {
-                ChannelModel channel = await connection.Channels.GetCurrentChannel();
+                PrivateChannelModel privateChannel = await connection.Channels.GetCurrentChannel();
+
+                Assert.IsNotNull(privateChannel);
+                Assert.IsTrue(!string.IsNullOrEmpty(privateChannel.username));
+                Assert.IsTrue(!string.IsNullOrEmpty(privateChannel.live_title));
+
+                ChannelModel channel = await connection.Channels.GetChannelByID(privateChannel.channel_id);
 
                 Assert.IsNotNull(channel);
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
-
-                channel = await connection.Channels.GetChannelByID(channel.channel_id);
-
-                Assert.IsNotNull(channel);
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channel.username));
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
             });
         }
@@ -45,13 +45,13 @@ namespace Trovo.Base.UnitTests
         {
             TestWrapper(async (TrovoConnection connection) =>
             {
-                ChannelModel channel = await connection.Channels.GetCurrentChannel();
+                PrivateChannelModel privateChannel = await connection.Channels.GetCurrentChannel();
 
-                Assert.IsNotNull(channel);
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.channel_id));
-                Assert.IsTrue(!string.IsNullOrEmpty(channel.live_title));
+                Assert.IsNotNull(privateChannel);
+                Assert.IsTrue(!string.IsNullOrEmpty(privateChannel.username));
+                Assert.IsTrue(!string.IsNullOrEmpty(privateChannel.live_title));
 
-                channel = await connection.Channels.GetChannelByUsername(channel.username);
+                ChannelModel channel = await connection.Channels.GetChannelByUsername(privateChannel.username);
 
                 Assert.IsNotNull(channel);
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.username));

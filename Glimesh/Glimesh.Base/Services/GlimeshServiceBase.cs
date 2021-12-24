@@ -56,6 +56,9 @@ namespace Glimesh.Base.Services
             {
                 GraphQLHttpClient client = await this.GetGraphQLClient();
                 GraphQLResponse<JObject> response = await client.SendQueryAsync<JObject>(new GraphQLRequest(query));
+
+                Logger.Log(LogLevel.Debug, JSONSerializerHelper.SerializeToString(response));
+
                 if (response.Errors != null && response.Errors.Length > 0)
                 {
                     foreach (GraphQLError error in response.Errors)
