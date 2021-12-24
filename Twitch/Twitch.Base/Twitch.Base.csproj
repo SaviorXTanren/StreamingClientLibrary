@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.33</Version>
+    <Version>1.0.0.34</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -35,11 +35,11 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.33</AssemblyVersion>
-    <FileVersion>1.0.0.33</FileVersion>
+    <AssemblyVersion>1.0.0.34</AssemblyVersion>
+    <FileVersion>1.0.0.34</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Correcting OAuth force parameter</PackageReleaseNotes>
+    <PackageReleaseNotes>- Adding new OAuth scopes</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">

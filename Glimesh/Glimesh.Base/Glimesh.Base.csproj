@@ -13,10 +13,10 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Glimesh Streaming Bot Chat Interactive</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.11</Version>
-    <AssemblyVersion>1.0.0.11</AssemblyVersion>
-    <FileVersion>1.0.0.11</FileVersion>
-    <PackageReleaseNotes>- Adding moderators to channel data</PackageReleaseNotes>
+    <Version>1.0.0.12</Version>
+    <AssemblyVersion>1.0.0.12</AssemblyVersion>
+    <FileVersion>1.0.0.12</FileVersion>
+    <PackageReleaseNotes>- Adding in back-compat support for Glimesh message token src and url properties to ensure both have a valid URL</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
