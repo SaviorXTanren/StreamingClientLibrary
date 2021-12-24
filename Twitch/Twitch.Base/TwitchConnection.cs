@@ -143,6 +143,10 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__broadcast,
         /// <summary>
+        /// Manage a channel’s Extension configuration, including activating Extensions.
+        /// </summary>
+        channel__manage__extensions,
+        /// <summary>
         /// Manage a channel’s polls.
         /// </summary>
         channel__manage__polls,
@@ -155,13 +159,41 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__redemptions,
         /// <summary>
+        /// Manage a channel’s stream schedule.
+        /// </summary>
+        channel__manage__schedule,
+        /// <summary>
+        /// Manage a channel’s videos, including deleting videos.
+        /// </summary>
+        channel__manage__videos,
+        /// <summary>
+        /// View a list of users with the editor role for a channel.
+        /// </summary>
+        channel__read__editors,
+        /// <summary>
+        /// View Creator Goals for a channel.
+        /// </summary>
+        channel__read__goals,
+        /// <summary>
         /// Get hype train information for your channel.
         /// </summary>
         channel__read__hype_train,
         /// <summary>
+        /// View a channel’s polls.
+        /// </summary>
+        channel__read__polls,
+        /// <summary>
+        /// View a channel’s Channel Points Predictions.
+        /// </summary>
+        channel__read__predictions,
+        /// <summary>
         /// Get channel point redemption events for your channel.
         /// </summary>
         channel__read__redemptions,
+        /// <summary>
+        /// View an authorized user’s stream key.
+        /// </summary>
+        channel__read__stream_key,
         /// <summary>
         /// Get a list of all subscribers to your channel and check if a user is subscribed to your channel
         /// </summary>
@@ -175,17 +207,49 @@ namespace Twitch.Base
         /// </summary>
         moderation__read,
         /// <summary>
+        /// Ban and unban users.
+        /// </summary>
+        moderator__manage__banned_users,
+        /// <summary>
+        /// View a broadcaster’s list of blocked terms.
+        /// </summary>
+        moderator__read__blocked_terms,
+        /// <summary>
+        /// Manage a broadcaster’s list of blocked terms.
+        /// </summary>
+        moderator__manage__blocked_terms,
+        /// <summary>
+        /// Manage messages held for review by AutoMod in channels where you are a moderator.
+        /// </summary>
+        moderator__manage__automod,
+        /// <summary>
+        /// View a broadcaster’s AutoMod settings.
+        /// </summary>
+        moderator__read__automod_settings,
+        /// <summary>
+        /// Manage a broadcaster’s AutoMod settings.
+        /// </summary>
+        moderator__manage__automod_settings,
+        /// <summary>
+        /// View a broadcaster’s chat room settings.
+        /// </summary>
+        moderator__read__chat_settings,
+        /// <summary>
+        /// Manage a broadcaster’s chat room settings.
+        /// </summary>
+        moderator__manage__chat_settings,
+        /// <summary>
         /// Manage a user object.
         /// </summary>
         user__edit,
         /// <summary>
-        /// Edit your channel’s broadcast configuration, including extension configuration. (This scope implies user:read:broadcast capability.)
-        /// </summary>
-        user__edit__broadcast,
-        /// <summary>
         /// Manage the block list of a user.
         /// </summary>
         user__manage__blocked_users,
+        /// <summary>
+        /// View the block list of a user.
+        /// </summary>
+        user__read__blocked_users,
         /// <summary>
         /// View your broadcasting configuration, including extension configurations.
         /// </summary>
@@ -199,9 +263,9 @@ namespace Twitch.Base
         /// </summary>
         user__read__follows,
         /// <summary>
-        /// Read authorized user’s stream key.
+        /// View if an authorized user is subscribed to specific channels.
         /// </summary>
-        user__read__stream_key
+        user__read__subscriptions,
     }
 
     /// <summary>

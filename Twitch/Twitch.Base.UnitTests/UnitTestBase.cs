@@ -24,18 +24,30 @@ namespace Twitch.Base.UnitTests
             OAuthClientScopeEnum.user_read,
             OAuthClientScopeEnum.user_subscriptions,
 
+            OAuthClientScopeEnum.channel__moderate,
+            OAuthClientScopeEnum.chat__edit,
+            OAuthClientScopeEnum.chat__read,
+            OAuthClientScopeEnum.whispers__read,
+            OAuthClientScopeEnum.whispers__edit,
+
             OAuthClientScopeEnum.bits__read,
             OAuthClientScopeEnum.channel__manage__broadcast,
+            OAuthClientScopeEnum.channel__manage__predictions,
             OAuthClientScopeEnum.channel__manage__redemptions,
-            OAuthClientScopeEnum.channel__read__subscriptions,
+            OAuthClientScopeEnum.channel__manage__redemptions,
+            OAuthClientScopeEnum.channel__read__editors,
+            OAuthClientScopeEnum.channel__read__goals,
             OAuthClientScopeEnum.channel__read__hype_train,
+            OAuthClientScopeEnum.channel__read__polls,
+            OAuthClientScopeEnum.channel__read__predictions,
+            OAuthClientScopeEnum.channel__read__redemptions,
+            OAuthClientScopeEnum.channel__read__subscriptions,
             OAuthClientScopeEnum.clips__edit,
             OAuthClientScopeEnum.moderation__read,
             OAuthClientScopeEnum.user__edit,
-            OAuthClientScopeEnum.user__edit__broadcast,
             OAuthClientScopeEnum.user__read__broadcast,
             OAuthClientScopeEnum.user__read__follows,
-            OAuthClientScopeEnum.whispers__read,
+            OAuthClientScopeEnum.user__read__subscriptions,
         };
 
         private static TwitchConnection connection;
