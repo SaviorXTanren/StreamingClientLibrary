@@ -58,15 +58,6 @@ namespace Trovo.Base.Services
         /// <returns>A type-casted object of the contents of the response</returns>
         public async Task<IEnumerable<T>> PostPagedCursorAsync<T>(string requestUri, int maxResults = 1, int maxLimit = 100)
         {
-            if (!requestUri.Contains("?"))
-            {
-                requestUri += "?";
-            }
-            else
-            {
-                requestUri += "&";
-            }
-
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             queryParameters.Add("limit", ((maxResults > maxLimit) ? maxLimit : maxResults).ToString());
 
