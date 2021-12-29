@@ -17,6 +17,8 @@ namespace Trovo.Base.Services
         private class TopChannelsPageDataResponseModel : PageDataResponseModel
         {
             public List<TopChannelModel> top_channels_lists { get; set; } = new List<TopChannelModel>();
+
+            public override int GetItemCount() { return this.top_channels_lists.Count; }
         }
 
         private class ChannelSubscriptionsWrapperModel
@@ -24,6 +26,13 @@ namespace Trovo.Base.Services
             public int? total { get; set; }
 
             public List<ChannelSubscriberModel> subscriptions { get; set; }
+        }
+
+        private class ChannelFollowersModel : PageDataResponseModel
+        {
+            public List<ChannelFollowerModel> follower { get; set; } = new List<ChannelFollowerModel>();
+
+            public override int GetItemCount() { return this.follower.Count; }
         }
 
         /// <summary>
@@ -79,42 +88,23 @@ namespace Trovo.Base.Services
         /// <returns>The list of channel</returns>
         public async Task<IEnumerable<TopChannelModel>> GetTopChannels(int maxResults = 1, string categoryID = null)
         {
-            JObject requestParameters = new JObject();
-            requestParameters["limit"] = (maxResults > 100) ? 100 : maxResults;
-            requestParameters["after"] = true;
+            Dictionary<string, object> parameters = null;
             if (!string.IsNullOrEmpty(categoryID))
             {
-                requestParameters["category_id"] = categoryID;
+                parameters = new Dictionary<string, object>();
+                parameters["category_id"] = categoryID;
             }
+
+            IEnumerable<TopChannelsPageDataResponseModel> response = await this.PostPagedTokenAsync<TopChannelsPageDataResponseModel>("gettopchannels", maxResults, maxLimit: 100, parameters: parameters);
 
             List<TopChannelModel> results = new List<TopChannelModel>();
-            string token = null;
-            int cursor = -1;
-            do
+            foreach (TopChannelsPageDataResponseModel r in response)
             {
-                if (!string.IsNullOrEmpty(token) && cursor >= 0)
+                if (r != null && r.top_channels_lists != null)
                 {
-                    requestParameters["token"] = token;
-                    requestParameters["cursor"] = token;
-                }
-                TopChannelsPageDataResponseModel data = await this.PostAsync<TopChannelsPageDataResponseModel>("gettopchannels", AdvancedHttpClient.CreateContentFromObject(requestParameters));
-
-                if (data != null && data.top_channels_lists != null && data.top_channels_lists.Count > 0)
-                {
-                    results.AddRange(data.top_channels_lists);
-                    if (data.cursor < data.total_page)
-                    {
-                        token = data.token;
-                        cursor = data.cursor;
-                    }
-                    else
-                    {
-                        token = null;
-                        cursor = -1;
-                    }
+                    results.AddRange(r.top_channels_lists);
                 }
             }
-            while (results.Count < maxResults && !string.IsNullOrEmpty(token));
 
             return results;
         }
@@ -151,7 +141,7 @@ namespace Trovo.Base.Services
         /// <param name="offset">The offset of results for the search</param>
         /// <param name="direction">The sort direction of subscribers. Valid values: asc, desc</param>
         /// <returns>The subscriptions of the channel</returns>
-        public async Task<IEnumerable<ChannelSubscriberModel>> GetSubscribers(string channelID, int maxResults = 1, int offset = 0, string direction = "asc")
+        public async Task<IEnumerable<ChannelSubscriberModel>> GetSubscribers(string channelID, int maxResults = 25, int offset = 0, string direction = "asc")
         {
             Validator.ValidateString(channelID, "channelID");
             ChannelSubscriptionsWrapperModel subscriptions = await this.GetAsync<ChannelSubscriptionsWrapperModel>($"channels/{channelID}/subscriptions?limit={maxResults}&offset={offset}&direction={direction}");
@@ -171,12 +161,12 @@ namespace Trovo.Base.Services
         public async Task<IEnumerable<ChannelFollowerModel>> GetFollowers(string channelID, int maxResults = 1)
         {
             Validator.ValidateString(channelID, "channelID");
-            IEnumerable<ChannelFollowersModel> followers = await this.PostPagedCursorAsync<ChannelFollowersModel>($"channels/{channelID}/followers", maxResults);
+            IEnumerable<ChannelFollowersModel> response = await this.PostPagedCursorAsync<ChannelFollowersModel>($"channels/{channelID}/followers", maxResults, maxLimit: 100);
 
             List<ChannelFollowerModel> result = new List<ChannelFollowerModel>();
-            foreach (ChannelFollowersModel follower in followers)
+            foreach (ChannelFollowersModel r in response)
             {
-                result.AddRange(follower.follower);
+                result.AddRange(r.follower);
             }
             return result;
         }

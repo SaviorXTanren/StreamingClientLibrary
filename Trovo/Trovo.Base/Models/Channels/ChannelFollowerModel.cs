@@ -4,37 +4,6 @@ using System.Runtime.Serialization;
 namespace Trovo.Base.Models.Channels
 {
     /// <summary>
-    /// Information about the followers of a channel.
-    /// </summary>
-    [DataContract]
-    public class ChannelFollowersModel
-    {
-        /// <summary>
-        /// Number of followers of the channel.
-        /// </summary>
-        [DataMember]
-        public string total { get; set; }
-
-        /// <summary>
-        /// An array of followers’ information.
-        /// </summary>
-        [DataMember]
-        public List<ChannelFollowerModel> follower { get; set; } = new List<ChannelFollowerModel>();
-
-        /// <summary>
-        /// The total number of pages of this multi-page response.
-        /// </summary>
-        [DataMember]
-        public int total_page { get; set; }
-
-        /// <summary>
-        /// The current page number.
-        /// </summary>
-        [DataMember]
-        public int cursor { get; set; }
-    }
-
-    /// <summary>
     /// Information about a channel follower.
     /// </summary>
     [DataContract]

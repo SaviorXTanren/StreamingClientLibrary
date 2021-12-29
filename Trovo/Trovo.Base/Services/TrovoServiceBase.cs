@@ -1,10 +1,12 @@
-﻿using StreamingClient.Base.Model.OAuth;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Services;
 using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trovo.Base.Models;
 
 namespace Trovo.Base.Services
 {
@@ -55,31 +57,110 @@ namespace Trovo.Base.Services
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <param name="maxLimit">The maximum limit of results that can be returned in a single request</param>
+        /// <param name="parameters">Optional parameters to include in the request</param>
         /// <returns>A type-casted object of the contents of the response</returns>
-        public async Task<IEnumerable<T>> PostPagedCursorAsync<T>(string requestUri, int maxResults = 1, int maxLimit = 100)
+        public async Task<IEnumerable<T>> PostPagedTokenAsync<T>(string requestUri, int maxResults = 1, int maxLimit = -1, Dictionary<string, object> parameters = null) where T : PageDataResponseModel
         {
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            queryParameters.Add("limit", ((maxResults > maxLimit) ? maxLimit : maxResults).ToString());
+            JObject requestParameters = new JObject();
+            if (maxLimit > 0)
+            {
+                requestParameters["limit"] = maxLimit;
+            }
+            requestParameters["after"] = true;
+
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    requestParameters[kvp.Key] = new JObject(kvp.Value);
+                }
+            }
 
             List<T> results = new List<T>();
-            string cursor = null;
+            string token = null;
+            int cursor = -1;
+            int count = 0;
             do
             {
-                if (!string.IsNullOrEmpty(cursor))
+                if (!string.IsNullOrEmpty(token) && cursor > 0)
                 {
-                    queryParameters["cursor"] = cursor;
+                    requestParameters["token"] = token;
+                    requestParameters["cursor"] = cursor;
                 }
+                T data = await this.PostAsync<T>(requestUri, AdvancedHttpClient.CreateContentFromObject(requestParameters));
 
-                T data = await this.PostAsync<T>(requestUri, AdvancedHttpClient.CreateContentFromObject(queryParameters));
-
-                cursor = null;
                 if (data != null)
                 {
                     results.Add(data);
-                    //cursor = data.Cursor;
+                    count += data.GetItemCount();
+
+                    if (data.cursor < data.total_page)
+                    {
+                        token = data.token;
+                        cursor = data.cursor;
+                    }
+                    else
+                    {
+                        token = null;
+                        cursor = -1;
+                    }
                 }
             }
-            while (results.Count < maxResults && !string.IsNullOrEmpty(cursor));
+            while (count < maxResults && !string.IsNullOrEmpty(token));
+
+            return results;
+        }
+
+        /// <summary>
+        /// Performs a GET REST request using the provided request URI for paged cursor data.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <param name="maxLimit">The maximum limit of results that can be returned in a single request</param>
+        /// <param name="parameters">Optional parameters to include in the request</param>
+        /// <returns>A type-casted object of the contents of the response</returns>
+        public async Task<IEnumerable<T>> PostPagedCursorAsync<T>(string requestUri, int maxResults = 1, int maxLimit = -1, Dictionary<string, object> parameters = null) where T : PageDataResponseModel
+        {
+            JObject requestParameters = new JObject();
+            if (maxLimit > 0)
+            {
+                requestParameters["limit"] = maxLimit;
+            }
+
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    requestParameters[kvp.Key] = new JObject(kvp.Value);
+                }
+            }
+
+            List<T> results = new List<T>();
+            int cursor = -1;
+            int count = 0;
+            do
+            {
+                if (cursor > 0)
+                {
+                    requestParameters["cursor"] = cursor;
+                }
+                T data = await this.PostAsync<T>(requestUri, AdvancedHttpClient.CreateContentFromObject(requestParameters));
+
+                if (data != null)
+                {
+                    results.Add(data);
+                    count += data.GetItemCount();
+                    if (data.cursor < data.total_page)
+                    {
+                        cursor = data.cursor;
+                    }
+                    else
+                    {
+                        cursor = -1;
+                    }
+                }
+            }
+            while (count < maxResults && cursor >= 0);
 
             return results;
         }

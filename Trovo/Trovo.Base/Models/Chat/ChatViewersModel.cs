@@ -24,61 +24,6 @@ namespace Trovo.Base.Models.Chat
     }
 
     /// <summary>
-    /// Viewer information for a channel.
-    /// </summary>
-    [DataContract]
-    internal class ChatViewersInternalModel
-    {
-        /// <summary>
-        /// The channel's streamer nickname.
-        /// </summary>
-        [DataMember]
-        public string nickname { get; set; }
-
-        /// <summary>
-        /// The channel's title.
-        /// </summary>
-        [DataMember]
-        public string live_title { get; set; }
-
-        /// <summary>
-        /// The channel's total login users.
-        /// </summary>
-        [DataMember]
-        public string total { get; set; }
-
-        /// <summary>
-        /// An map of online users nickname group by role type.
-        /// </summary>
-        [DataMember]
-        public ChatViewersRolesModel chatters { get; set; } = new ChatViewersRolesModel();
-
-        /// <summary>
-        /// An map of online users nickname group by custome role type.
-        /// </summary>
-        [DataMember]
-        public JObject custom_roles { get; set; } = new JObject();
-
-        /// <summary>
-        /// An map of online users nickname group by custome role type.
-        /// </summary>
-        [DataMember]
-        public JObject custome_roles { get; set; } = new JObject();
-
-        /// <summary>
-        /// The total number of pages of this multi-page response.
-        /// </summary>
-        [DataMember]
-        public int total_page { get; set; }
-
-        /// <summary>
-        /// The current page number.
-        /// </summary>
-        [DataMember]
-        public int cursor { get; set; }
-    }
-
-    /// <summary>
     /// Role viewers for a channel.
     /// </summary>
     [DataContract]

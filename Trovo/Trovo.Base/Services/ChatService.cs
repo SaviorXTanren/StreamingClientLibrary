@@ -4,6 +4,7 @@ using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trovo.Base.Models;
 using Trovo.Base.Models.Chat;
 
 namespace Trovo.Base.Services
@@ -16,6 +17,21 @@ namespace Trovo.Base.Services
         private class ChatEmotePackageWrapperModel
         {
             public ChatEmotePackageModel channels { get; set; }
+        }
+
+        private class ChatViewersInternalModel : PageDataResponseModel
+        {
+            public string nickname { get; set; }
+
+            public string live_title { get; set; }
+
+            public ChatViewersRolesModel chatters { get; set; } = new ChatViewersRolesModel();
+
+            public JObject custom_roles { get; set; } = new JObject();
+
+            public JObject custome_roles { get; set; } = new JObject();
+
+            public override int GetItemCount() { return this.total; }
         }
 
         /// <summary>
@@ -83,7 +99,7 @@ namespace Trovo.Base.Services
         public async Task<ChatViewersModel> GetViewers(string channelID, int maxResults = 1)
         {
             Validator.ValidateString(channelID, "channelID");
-            IEnumerable<ChatViewersInternalModel> viewers = await this.PostPagedCursorAsync<ChatViewersInternalModel>($"channels/{channelID}/viewers", maxResults, maxLimit: 100000);
+            IEnumerable<ChatViewersInternalModel> viewers = await this.PostPagedCursorAsync<ChatViewersInternalModel>($"channels/{channelID}/viewers", maxResults);
 
             ChatViewersModel result = new ChatViewersModel();
             foreach (ChatViewersInternalModel viewer in viewers)
@@ -123,10 +139,10 @@ namespace Trovo.Base.Services
                     result.CustomRoles[kvp.Key].viewers.AddRange(group.viewers);
                 }
             }
-            
-            if (int.TryParse(viewers.FirstOrDefault()?.total, out int total))
+
+            if (viewers.Count() > 0)
             {
-                result.Total = total;
+                result.Total = viewers.First().total;
             }
 
             return result;
