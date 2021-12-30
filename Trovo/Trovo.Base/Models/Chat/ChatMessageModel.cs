@@ -287,6 +287,16 @@ namespace Trovo.Base.Models.Chat
         /// Returns the full avatar URL for the user.
         /// </summary>
         [JsonIgnore]
-        public string FullAvatarURL { get { return (this.avatar.StartsWith(FullAvatarURLFormat)) ? this.avatar : FullAvatarURLFormat + this.avatar; } }
+        public string FullAvatarURL
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(this.avatar))
+                {
+                    return (this.avatar.StartsWith(FullAvatarURLFormat)) ? this.avatar : FullAvatarURLFormat + this.avatar;
+                }
+                return null;
+            }
+        }
     }
 }
