@@ -152,6 +152,7 @@ namespace Trovo.Base.Models.Chat
     public class ChatMessageModel
     {
         private const string FullAvatarURLFormat = "https://headicon.trovo.live/user/";
+        private const string DefaultAvatarURLFormat = "https://headicon.trovo.live/default/";
 
         /// <summary>
         /// Streamer of the current channel
@@ -293,7 +294,14 @@ namespace Trovo.Base.Models.Chat
             {
                 if (!string.IsNullOrEmpty(this.avatar))
                 {
-                    return (this.avatar.StartsWith(FullAvatarURLFormat)) ? this.avatar : FullAvatarURLFormat + this.avatar;
+                    if (this.avatar.StartsWith(FullAvatarURLFormat) || this.avatar.StartsWith(DefaultAvatarURLFormat))
+                    {
+                        return this.avatar;
+                    }
+                    else
+                    {
+                        return FullAvatarURLFormat + this.avatar;
+                    }
                 }
                 return null;
             }
