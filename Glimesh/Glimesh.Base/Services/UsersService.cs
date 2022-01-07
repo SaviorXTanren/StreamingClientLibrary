@@ -1,4 +1,5 @@
-﻿using Glimesh.Base.Models.Users;
+﻿using Glimesh.Base.Models.GraphQL;
+using Glimesh.Base.Models.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -39,14 +40,24 @@ namespace Glimesh.Base.Services
         /// Gets the users that the specified user are following.
         /// </summary>
         /// <param name="userId">The ID of the user to get follows for</param>
+        /// <param name="count">The maximum number to get</param>
         /// <returns>The set of follows</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string userId) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(userId: \"{userId}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
+        public async Task<IEnumerable<UserFollowModel>> GetUsersFollowed(string userId, int count = 1)
+        {
+            GraphQLEdgeArrayModel<UserFollowModel> follows = await this.QueryAsync<GraphQLEdgeArrayModel<UserFollowModel>>($"{{ followers(userId: {userId}, first: {count}) {{ {UserFollowModel.AllFieldsEdges} }} }}", "followers");
+            return follows?.Items;
+        }
 
         /// <summary>
         /// Gets the users that are following the specified channel
         /// </summary>
         /// <param name="streamerId">The ID of the user to get follows for</param>
+        /// <param name="count">The maximum number to get</param>
         /// <returns>The set of follows</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string streamerId) { return await this.QueryAsync<IEnumerable<UserFollowModel>>($"{{ followers(streamerId: \"{streamerId}\") {{ {UserFollowModel.AllFields} }} }}", "followers"); }
+        public async Task<IEnumerable<UserFollowModel>> GetFollowingUsers(string streamerId, int count = 1)
+        {
+            GraphQLEdgeArrayModel<UserFollowModel> follows = await this.QueryAsync<GraphQLEdgeArrayModel<UserFollowModel>>($"{{ followers(streamerId: {streamerId}, first: {count}) {{ {UserFollowModel.AllFieldsEdges} }} }}", "followers");
+            return follows?.Items;
+        }
     }
 }

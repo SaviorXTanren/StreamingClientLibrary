@@ -16,6 +16,11 @@
         public static readonly string AllFields = $"{UserFollowModel.BasicFields}, streamer {{ {UserModel.BasicFields} }}, user {{ {UserModel.BasicFields} }}";
 
         /// <summary>
+        /// All fields for a GraphQL query.
+        /// </summary>
+        public static readonly string AllFieldsEdges = $"edges {{ cursor, node {{ {UserFollowModel.AllFields} }} }}";
+
+        /// <summary>
         /// The ID of the follow.
         /// </summary>
         public string id { get; set; }
