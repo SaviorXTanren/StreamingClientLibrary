@@ -1,4 +1,6 @@
-﻿using StreamingClient.Base.Util;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
+using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trovo.Base.Models.Category;
@@ -45,7 +47,11 @@ namespace Trovo.Base.Services
         {
             Validator.ValidateString(query, "query");
 
-            CategoryWrapperModel categories = await this.GetAsync<CategoryWrapperModel>($"categorys/searchcategory?query={query}&limit={maxResults}");
+            JObject jobj = new JObject();
+            jobj["query"] = query;
+            jobj["limit"] = maxResults;
+
+            CategoryWrapperModel categories = await this.PostAsync<CategoryWrapperModel>("searchcategory", AdvancedHttpClient.CreateContentFromObject(jobj));
             if (categories != null)
             {
                 return categories.category_info;
