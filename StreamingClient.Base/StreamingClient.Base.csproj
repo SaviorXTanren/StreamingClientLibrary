@@ -8,16 +8,16 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.6</Version>
+    <Version>1.0.0.7</Version>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>Streaming Bot Chat Library</PackageTags>
     <PackageId>StreamingClientLibrary.Base</PackageId>
     <Product>Streaming Client Library</Product>
-    <PackageReleaseNotes>- Setting default timeout for AdvancedHttpClient to 5 seconds</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0.6</AssemblyVersion>
-    <FileVersion>1.0.0.6</FileVersion>
+    <PackageReleaseNotes>- Updating internal methods</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.7</AssemblyVersion>
+    <FileVersion>1.0.0.7</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
