@@ -117,7 +117,7 @@ namespace StreamingClient.Base.Util
         {
             foreach (object value in Enum.GetValues(type))
             {
-                if (string.Equals(str, EnumHelper.GetEnumName(type, value)))
+                if (string.Equals(str, EnumHelper.GetEnumName(type, value), StringComparison.CurrentCultureIgnoreCase))
                 {
                     return value;
                 }
@@ -140,7 +140,7 @@ namespace StreamingClient.Base.Util
         {
             foreach (T value in Enum.GetValues(typeof(T)))
             {
-                if (string.Equals(str, EnumHelper.GetEnumName(value)))
+                if (string.Equals(str, EnumHelper.GetEnumName(value), StringComparison.CurrentCultureIgnoreCase))
                 {
                     return value;
                 }
