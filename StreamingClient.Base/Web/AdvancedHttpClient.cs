@@ -108,11 +108,18 @@ namespace StreamingClient.Base.Web
         public static HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
 
         /// <summary>
-        /// HTTP encodes the specified string.
+        /// URL encodes the specified string.
         /// </summary>
         /// <param name="str">The string to encode</param>
-        /// <returns>The HTTP encoded string</returns>
-        public static string EncodeString(string str) { return HttpUtility.UrlEncode(str); }
+        /// <returns>The URL encoded string</returns>
+        public static string URLEncodeString(string str) { return HttpUtility.UrlEncode(str); }
+
+        /// <summary>
+        /// HTML encodes the specified string.
+        /// </summary>
+        /// <param name="str">The string to encode</param>
+        /// <returns>The HTML encoded string</returns>
+        public static string HTMLEncodeString(string str) { return HttpUtility.HtmlEncode(str); }
 
         /// <summary>
         /// Invoked when an update for rate limiting has occurred.

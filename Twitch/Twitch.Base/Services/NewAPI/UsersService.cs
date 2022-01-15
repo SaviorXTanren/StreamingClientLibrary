@@ -150,7 +150,7 @@ namespace Twitch.Base.Services.NewAPI
         /// <returns>The updated current user</returns>
         public async Task<UserModel> UpdateCurrentUserDescription(string description)
         {
-            NewTwitchAPIDataRestResult<UserModel> result = await this.PutAsync<NewTwitchAPIDataRestResult<UserModel>>("users?description=" + AdvancedHttpClient.EncodeString(description));
+            NewTwitchAPIDataRestResult<UserModel> result = await this.PutAsync<NewTwitchAPIDataRestResult<UserModel>>("users?description=" + AdvancedHttpClient.URLEncodeString(description));
             if (result != null && result.data != null)
             {
                 return result.data.FirstOrDefault();

@@ -59,7 +59,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<IEnumerable<GameModel>> GetGamesByName(string name)
         {
             Validator.ValidateString(name, "name");
-            return await this.GetDataResultAsync<GameModel>("games?name=" + AdvancedHttpClient.EncodeString(name));
+            return await this.GetDataResultAsync<GameModel>("games?name=" + AdvancedHttpClient.URLEncodeString(name));
         }
     }
 }

@@ -910,12 +910,19 @@
             <param name="str">The string to serialize</param>
             <returns>The HttpContent containing the serialized string</returns>
         </member>
-        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.EncodeString(System.String)">
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.URLEncodeString(System.String)">
             <summary>
-            HTTP encodes the specified string.
+            URL encodes the specified string.
             </summary>
             <param name="str">The string to encode</param>
-            <returns>The HTTP encoded string</returns>
+            <returns>The URL encoded string</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.HTMLEncodeString(System.String)">
+            <summary>
+            HTML encodes the specified string.
+            </summary>
+            <param name="str">The string to encode</param>
+            <returns>The HTML encoded string</returns>
         </member>
         <member name="E:StreamingClient.Base.Web.AdvancedHttpClient.RateLimitUpdateOccurred">
             <summary>

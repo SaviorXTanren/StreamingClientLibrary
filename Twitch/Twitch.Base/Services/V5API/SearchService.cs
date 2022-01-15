@@ -28,7 +28,7 @@ namespace Twitch.Base.Services.V5API
         public async Task<IEnumerable<ChannelModel>> SearchChannels(string query, int maxResults = 1)
         {
             Validator.ValidateVariable(query, "query");
-            return await this.GetOffsetPagedResultAsync<ChannelModel>("search/channels?query=" + AdvancedHttpClient.EncodeString(query), "channels", maxResults);
+            return await this.GetOffsetPagedResultAsync<ChannelModel>("search/channels?query=" + AdvancedHttpClient.URLEncodeString(query), "channels", maxResults);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Twitch.Base.Services.V5API
         public async Task<IEnumerable<GameModel>> SearchGames(string query, bool currentlyLive = false)
         {
             Validator.ValidateVariable(query, "query");
-            return await this.GetNamedArrayAsync<GameModel>("search/games?query=" + AdvancedHttpClient.EncodeString(query) + "&live=" + currentlyLive, "games");
+            return await this.GetNamedArrayAsync<GameModel>("search/games?query=" + AdvancedHttpClient.URLEncodeString(query) + "&live=" + currentlyLive, "games");
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Twitch.Base.Services.V5API
         public async Task<IEnumerable<StreamModel>> SearchStreams(string query, int maxResults = 1)
         {
             Validator.ValidateVariable(query, "query");
-            return await this.GetOffsetPagedResultAsync<StreamModel>("search/streams?query=" + AdvancedHttpClient.EncodeString(query), "streams", maxResults);
+            return await this.GetOffsetPagedResultAsync<StreamModel>("search/streams?query=" + AdvancedHttpClient.URLEncodeString(query), "streams", maxResults);
         }
     }
 }
