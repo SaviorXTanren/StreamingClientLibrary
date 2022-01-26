@@ -361,20 +361,6 @@
             <param name="value">The enum value</param>
             <returns>Whether it is obsolete</returns>
         </member>
-        <member name="M:StreamingClient.Base.Util.EnumHelper.SetEnumLocalizationResourceManager(System.Resources.ResourceManager)">
-            <summary>
-            Sets the resource manager to use for localization of names for enum values.
-            </summary>
-            <param name="enumLocalizationResourceManager">The localized resource manager</param>
-        </member>
-        <member name="M:StreamingClient.Base.Util.EnumHelper.GetLocalizedName``1(``0)">
-            <summary>
-            Gets the localized, public-facing name of the specified enum.
-            </summary>
-            <typeparam name="T">The type of enum value</typeparam>
-            <param name="value">The enum value</param>
-            <returns>The localized, public-facing name of the specified enum</returns>
-        </member>
         <member name="T:StreamingClient.Base.Util.HttpRateLimitedRestRequestException">
             <summary>
             An exception detailing the rate limiting of an Http REST web request.

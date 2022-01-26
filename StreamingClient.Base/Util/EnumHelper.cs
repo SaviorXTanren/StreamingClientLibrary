@@ -9,8 +9,6 @@ namespace StreamingClient.Base.Util
     /// </summary>
     public static class EnumHelper
     {
-        private static ResourceManager enumLocalizationResourceManager;
-
         /// <summary>
         /// Gets the public-facing name of the specified enum from the Name Attribute.
         /// </summary>
@@ -162,31 +160,6 @@ namespace StreamingClient.Base.Util
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Sets the resource manager to use for localization of names for enum values.
-        /// </summary>
-        /// <param name="enumLocalizationResourceManager">The localized resource manager</param>
-        public static void SetEnumLocalizationResourceManager(ResourceManager enumLocalizationResourceManager)
-        {
-            EnumHelper.enumLocalizationResourceManager = enumLocalizationResourceManager;
-        }
-
-        /// <summary>
-        /// Gets the localized, public-facing name of the specified enum.
-        /// </summary>
-        /// <typeparam name="T">The type of enum value</typeparam>
-        /// <param name="value">The enum value</param>
-        /// <returns>The localized, public-facing name of the specified enum</returns>
-        public static string GetLocalizedName<T>(T value)
-        {
-            string name = EnumHelper.GetEnumName<T>(value);
-            if (EnumHelper.enumLocalizationResourceManager != null)
-            {
-                return EnumHelper.enumLocalizationResourceManager.GetString(name) ?? name;
-            }
-            return name;
         }
     }
 }
