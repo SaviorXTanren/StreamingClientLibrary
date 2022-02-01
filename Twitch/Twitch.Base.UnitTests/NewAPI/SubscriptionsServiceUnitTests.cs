@@ -10,13 +10,13 @@ namespace Twitch.Base.UnitTests.NewAPI
     public class SubscriptionsServiceUnitTests : UnitTestBase
     {
         [TestMethod]
-        public void GetAllSubscriptions()
+        public void GetBroadcasterSubscriptions()
         {
             TestWrapper(async (TwitchConnection connection) =>
             {
                 UserModel user = await connection.NewAPI.Users.GetUserByLogin("Ninja");
 
-                IEnumerable<SubscriptionModel> results = await connection.NewAPI.Subscriptions.GetAllSubscriptions(user);
+                IEnumerable<SubscriptionModel> results = await connection.NewAPI.Subscriptions.GetBroadcasterSubscriptions(user);
 
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Count() > 0);
@@ -24,7 +24,7 @@ namespace Twitch.Base.UnitTests.NewAPI
         }
 
         [TestMethod]
-        public void GetSubscriptions()
+        public void GetSpecificBroadcasterSubscriptions()
         {
             TestWrapper(async (TwitchConnection connection) =>
             {
@@ -32,7 +32,7 @@ namespace Twitch.Base.UnitTests.NewAPI
 
                 UserModel broadcaster = await connection.NewAPI.Users.GetUserByLogin("Ninja");
 
-                IEnumerable<SubscriptionModel> results = await connection.NewAPI.Subscriptions.GetSubscriptions(broadcaster, new List<string>() { user.id });
+                IEnumerable<SubscriptionModel> results = await connection.NewAPI.Subscriptions.GetBroadcasterSubscriptions(broadcaster, new List<string>() { user.id });
 
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Count() > 0);
