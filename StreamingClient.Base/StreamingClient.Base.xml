@@ -1081,11 +1081,6 @@
             The web socket connection.
             </summary>
         </member>
-        <member name="P:StreamingClient.Base.Web.ClientWebSocketBase.Endpoint">
-            <summary>
-            The endpoint to connect.
-            </summary>
-        </member>
         <member name="M:StreamingClient.Base.Web.ClientWebSocketBase.Connect(System.String)">
             <summary>
             Connects the web socket to the server.
@@ -1111,21 +1106,16 @@
             An Http listening service for intercepting requests &amp; processing them.
             </summary>
         </member>
-        <member name="P:StreamingClient.Base.Web.LocalHttpListenerServer.Address">
-            <summary>
-            The address to be listening for.
-            </summary>
-        </member>
-        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.#ctor(System.String)">
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.#ctor">
             <summary>
             Creates a new instance of the LocalHttpListenerServer class with the specified address.
             </summary>
-            <param name="address"></param>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.Start">
+        <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.Start(System.String)">
             <summary>
             Starts listening for requests.
             </summary>
+            <param name="address">The address to start from</param>
             <returns>Whether the listener started successfully</returns>
         </member>
         <member name="M:StreamingClient.Base.Web.LocalHttpListenerServer.Stop">
@@ -1169,18 +1159,16 @@
             An Http listening server for processing OAuth requests.
             </summary>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String,System.String)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String)">
             <summary>
             Creates a new instance of the LocalOAuthHttpListenerService with the specified address.
             </summary>
-            <param name="address">The address to listen to</param>
             <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
         </member>
-        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String,System.String,System.String)">
+        <member name="M:StreamingClient.Base.Web.LocalOAuthHttpListenerServer.#ctor(System.String,System.String)">
             <summary>
             Creates a new instance of the LocalOAuthHttpListenerService with the specified address &amp; login response.
             </summary>
-            <param name="address">The address to listen to</param>
             <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
             <param name="successResponse">The response to send upon successfully obtaining an authorization token</param>
         </member>

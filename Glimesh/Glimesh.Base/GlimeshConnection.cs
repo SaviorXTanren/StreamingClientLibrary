@@ -121,8 +121,8 @@ namespace Glimesh.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
-            oauthServer.Start();
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
+            oauthServer.Start(oauthListenerURL);
 
             string url = await GlimeshConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, forceApprovalPrompt);
             ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };

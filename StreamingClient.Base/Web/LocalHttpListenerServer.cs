@@ -13,30 +13,25 @@ namespace StreamingClient.Base.Web
     /// </summary>
     public abstract class LocalHttpListenerServer
     {
-        /// <summary>
-        /// The address to be listening for.
-        /// </summary>
-        public string Address { get; private set; }
-
         private HttpListener httpListener;
 
         /// <summary>
         /// Creates a new instance of the LocalHttpListenerServer class with the specified address.
         /// </summary>
-        /// <param name="address"></param>
-        public LocalHttpListenerServer(string address) { this.Address = address; }
+        public LocalHttpListenerServer() { }
 
         /// <summary>
         /// Starts listening for requests.
         /// </summary>
+        /// <param name="address">The address to start from</param>
         /// <returns>Whether the listener started successfully</returns>
-        public bool Start()
+        public bool Start(string address)
         {
             try
             {
                 this.httpListener = new HttpListener();
                 this.httpListener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
-                this.httpListener.Prefixes.Add(this.Address);
+                this.httpListener.Prefixes.Add(address);
 
                 this.httpListener.Start();
 

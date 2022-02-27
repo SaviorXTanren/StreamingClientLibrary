@@ -18,19 +18,12 @@ namespace StreamingClient.Base.Web
         protected new ClientWebSocket webSocket;
 
         /// <summary>
-        /// The endpoint to connect.
-        /// </summary>
-        public string Endpoint { get; private set; }
-
-        /// <summary>
         /// Connects the web socket to the server.
         /// </summary>
         /// <param name="endpoint">The endpoint to connect to</param>
         /// <returns>Whether the connection was successful</returns>
         public virtual async Task<bool> Connect(string endpoint)
         {
-            this.Endpoint = endpoint;
-
             try
             {
                 this.webSocket = this.CreateWebSocket();

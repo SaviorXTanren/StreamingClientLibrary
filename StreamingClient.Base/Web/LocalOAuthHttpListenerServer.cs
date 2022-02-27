@@ -18,10 +18,8 @@ namespace StreamingClient.Base.Web
         /// <summary>
         /// Creates a new instance of the LocalOAuthHttpListenerService with the specified address.
         /// </summary>
-        /// <param name="address">The address to listen to</param>
         /// <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
-        public LocalOAuthHttpListenerServer(string address, string authorizationCodeParameterName)
-            : base(address)
+        public LocalOAuthHttpListenerServer(string authorizationCodeParameterName)
         {
             this.authorizationCodeParameterName = authorizationCodeParameterName;
         }
@@ -29,11 +27,10 @@ namespace StreamingClient.Base.Web
         /// <summary>
         /// Creates a new instance of the LocalOAuthHttpListenerService with the specified address &amp; login response.
         /// </summary>
-        /// <param name="address">The address to listen to</param>
         /// <param name="authorizationCodeParameterName">The name of the parameter for the authorization code</param>
         /// <param name="successResponse">The response to send upon successfully obtaining an authorization token</param>
-        public LocalOAuthHttpListenerServer(string address, string authorizationCodeParameterName, string successResponse)
-            : this(address, authorizationCodeParameterName)
+        public LocalOAuthHttpListenerServer(string authorizationCodeParameterName, string successResponse)
+            : this(authorizationCodeParameterName)
         {
             this.successResponse = successResponse;
         }

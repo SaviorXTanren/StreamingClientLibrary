@@ -123,8 +123,8 @@ namespace Trovo.Base
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(oauthListenerURL, DEFAULT_ACCESS_TOKEN_URL_PARAMETER, successResponse);
-            oauthServer.Start();
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(DEFAULT_ACCESS_TOKEN_URL_PARAMETER, successResponse);
+            oauthServer.Start(oauthListenerURL);
 
             string url = await TrovoConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, state, forceApprovalPrompt);
             ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };
