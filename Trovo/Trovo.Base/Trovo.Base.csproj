@@ -14,10 +14,10 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Trovo Streaming Bot Chat Interactive</PackageTags>
-    <Version>1.0.0.15</Version>
-    <AssemblyVersion>1.0.0.15</AssemblyVersion>
-    <FileVersion>1.0.0.15</FileVersion>
-    <PackageReleaseNotes>- Fixing bugs with SearchCategories() method</PackageReleaseNotes>
+    <Version>1.0.0.16</Version>
+    <AssemblyVersion>1.0.0.16</AssemblyVersion>
+    <FileVersion>1.0.0.16</FileVersion>
+    <PackageReleaseNotes>Updating LocalHttpListenerServer to take address in during Start() function instead of in the constructor</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
