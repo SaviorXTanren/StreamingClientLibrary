@@ -34,9 +34,12 @@ namespace Twitch.Base.Models.Clients.Chat
         public ChatHostTargetPacketModel(ChatRawPacketModel packet)
             : base(packet)
         {
-            this.HostingChannel = packet.Parameters[0];
-            this.TargetChannel = packet.Parameters[1];
-            this.ViewerCount = int.Parse(packet.Parameters[2]);
+            this.HostingChannel = packet.Parameters.Count > 0 ? packet.Parameters[0] : string.Empty;
+            this.TargetChannel = packet.Parameters.Count > 1 ? packet.Parameters[1] : string.Empty;
+            if (packet.Parameters.Count > 2 && int.TryParse(packet.Parameters[2], out int viewerCount))
+            {
+                this.ViewerCount = viewerCount;
+            }
         }
 
         /// <summary>
