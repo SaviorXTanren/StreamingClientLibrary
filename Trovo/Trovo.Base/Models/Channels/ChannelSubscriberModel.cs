@@ -21,5 +21,10 @@ namespace Trovo.Base.Models.Channels
         /// The level of the subscription
         /// </summary>
         public string sub_lv { get; set; }
+
+        /// <summary>
+        /// The tier of the subscription
+        /// </summary>
+        public string sub_tier { get; set; }
     }
 }
