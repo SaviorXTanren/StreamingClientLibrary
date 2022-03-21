@@ -52,7 +52,55 @@ namespace Trovo.Base.Services
         }
 
         /// <summary>
-        /// Performs a GET REST request using the provided request URI for paged cursor data.
+        /// Performs a GET REST request using the provided request URI for paged offset data.
+        /// </summary>
+        /// <param name="requestUri">The request URI to use</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <param name="maxLimit">The maximum limit of results that can be returned in a single request</param>
+        /// <returns>A type-casted object of the contents of the response</returns>
+        public async Task<IEnumerable<T>> GetPagedOffsetAsync<T>(string requestUri, int maxResults = 1, int maxLimit = -1) where T : PageDataResponseModel
+        {
+            if (!requestUri.Contains("?"))
+            {
+                requestUri += "?";
+            }
+            else
+            {
+                requestUri += "&";
+            }
+
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            if (maxLimit > 0)
+            {
+                queryParameters["limit"] = maxLimit.ToString();
+            }
+
+            List<T> results = new List<T>();
+            int lastCount = -1;
+            int totalCount = 0;
+            do
+            {
+                if (totalCount > 0)
+                {
+                    queryParameters["offset"] = totalCount.ToString();
+                }
+                T data = await this.GetAsync<T>(requestUri + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)));
+
+                lastCount = -1;
+                if (data != null)
+                {
+                    results.Add(data);
+                    lastCount = data.GetItemCount();
+                    totalCount += lastCount;
+                }
+            }
+            while (totalCount < maxResults && lastCount > 0);
+
+            return results;
+        }
+
+        /// <summary>
+        /// Performs a POST REST request using the provided request URI for paged cursor data.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
@@ -112,7 +160,7 @@ namespace Trovo.Base.Services
         }
 
         /// <summary>
-        /// Performs a GET REST request using the provided request URI for paged cursor data.
+        /// Performs a POST REST request using the provided request URI for paged cursor data.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>

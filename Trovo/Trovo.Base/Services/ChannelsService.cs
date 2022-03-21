@@ -21,11 +21,13 @@ namespace Trovo.Base.Services
             public override int GetItemCount() { return this.top_channels_lists.Count; }
         }
 
-        private class ChannelSubscriptionsWrapperModel
+        private class ChannelSubscriptionsWrapperModel : PageDataResponseModel
         {
             public int? total { get; set; }
 
             public List<ChannelSubscriberModel> subscriptions { get; set; }
+
+            public override int GetItemCount() { return this.subscriptions.Count; }
         }
 
         private class ChannelFollowersModel : PageDataResponseModel
@@ -138,18 +140,18 @@ namespace Trovo.Base.Services
         /// </summary>
         /// <param name="channelID">The ID of the channel</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
-        /// <param name="offset">The offset of results for the search</param>
-        /// <param name="direction">The sort direction of subscribers. Valid values: asc, desc</param>
         /// <returns>The subscriptions of the channel</returns>
-        public async Task<IEnumerable<ChannelSubscriberModel>> GetSubscribers(string channelID, int maxResults = 25, int offset = 0, string direction = "asc")
+        public async Task<IEnumerable<ChannelSubscriberModel>> GetSubscribers(string channelID, int maxResults = 1)
         {
             Validator.ValidateString(channelID, "channelID");
-            ChannelSubscriptionsWrapperModel subscriptions = await this.GetAsync<ChannelSubscriptionsWrapperModel>($"channels/{channelID}/subscriptions?limit={maxResults}&offset={offset}&direction={direction}");
-            if (subscriptions != null)
+            IEnumerable<ChannelSubscriptionsWrapperModel> response = await this.GetPagedOffsetAsync<ChannelSubscriptionsWrapperModel>($"channels/{channelID}/subscriptions", maxResults, maxLimit: 100);
+
+            List<ChannelSubscriberModel> result = new List<ChannelSubscriberModel>();
+            foreach (ChannelSubscriptionsWrapperModel r in response)
             {
-                return subscriptions.subscriptions;
+                result.AddRange(r.subscriptions);
             }
-            return null;
+            return result;
         }
 
         /// <summary>
