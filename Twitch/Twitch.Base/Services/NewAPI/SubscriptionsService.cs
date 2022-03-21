@@ -19,7 +19,7 @@ namespace Twitch.Base.Services.NewAPI
         public SubscriptionsService(TwitchConnection connection) : base(connection) { }
 
         /// <summary>
-        /// Gets the subscriptions for a broadcaster
+        /// Gets the subscriptions for a broadcaster. The broadcaster specified must match the user in the auth token being used.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
@@ -31,23 +31,36 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
-        /// Gets the subscriptions for a broadcaster for the specified user IDs.
+        /// Gets the subscription for a specific user to the broadcaster. The broadcaster specified must match the user in the auth token being used.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
-        /// <param name="userIDs">The user IDs to get subscriptions for</param>
-        /// <returns>The broadcaster's subscriptions</returns>
+        /// <param name="user">The user that is subscribed to the broadcaster</param>
+        /// <returns>The user's subscription to the broadcaster</returns>
+        public async Task<IEnumerable<SubscriptionModel>> GetBroadcasterSubscription(UserModel broadcaster, UserModel user)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            Validator.ValidateVariable(user, "user");
+            return await this.GetPagedDataResultAsync<SubscriptionModel>($"subscriptions?broadcaster_id={broadcaster.id}&user_id={user.id}");
+        }
+
+        /// <summary>
+        /// Gets the subscriptions for set of users to the broadcaster. The broadcaster specified must match the user in the auth token being used.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
+        /// <param name="userIDs">The user IDs that are subscribed to the broadcaster</param>
+        /// <returns>The user subscriptions to the broadcaster</returns>
         public async Task<IEnumerable<SubscriptionModel>> GetBroadcasterSubscriptions(UserModel broadcaster, IEnumerable<string> userIDs)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateList(userIDs, "userIDs");
-            return await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions?broadcaster_id=" + broadcaster.id + "&user_id=" + string.Join("&user_id=", userIDs), userIDs.Count());
+            return await this.GetPagedDataResultAsync<SubscriptionModel>($"subscriptions?broadcaster_id={broadcaster.id}&user_id={string.Join("&user_id=", userIDs)}", userIDs.Count());
         }
 
         /// <summary>
-        /// Gets the total number of subscribers for a channel.
+        /// Gets the total number of subscribers for a broadcaster's channel. The broadcaster specified must match the user in the auth token being used.
         /// </summary>
-        /// <param name="broadcaster">The channel to get the total number of subscribers for</param>
-        /// <returns>The total number of subscribers for the channel</returns>
+        /// <param name="broadcaster">The broadcaster to get the total number of subscribers for</param>
+        /// <returns>The total number of subscribers for the broadcaster's channel</returns>
         public async Task<long> GetBroadcasterSubscriptionsCount(UserModel broadcaster)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
@@ -55,16 +68,16 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
-        /// Checks of the specified user is subscribed to the specified broadcaster.
+        /// Gets the subscription that the specified user for the specified broadcaster. The user specified must match the user in the auth token being used. Useful for checking if the authenticated is subbed to another user.
         /// </summary>
-        /// <param name="broadcaster">The broadcaster to get subscriptions for</param>
-        /// <param name="user">The user to get subscription for</param>
-        /// <returns>The user's subscriptions</returns>
-        public async Task<SubscriptionModel> GetUserSubscription(UserModel broadcaster, UserModel user)
+        /// <param name="user">The user to get subscription for. Must match the user of the auth token being used.</param>
+        /// <param name="broadcaster">The broadcaster to whom to get that the user is subscribed to</param>
+        /// <returns>The user's subscriptions to the broadcaster.</returns>
+        public async Task<SubscriptionModel> GetSubscription(UserModel user, UserModel broadcaster)
         {
-            Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
-            IEnumerable<SubscriptionModel> subscriptions = await this.GetPagedDataResultAsync<SubscriptionModel>("subscriptions/user?broadcaster_id=" + broadcaster.id + "&user_id=" + user.id);
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+            IEnumerable<SubscriptionModel> subscriptions = await this.GetPagedDataResultAsync<SubscriptionModel>($"subscriptions/user?user_id={user.id}&broadcaster_id={broadcaster.id}");
             return (subscriptions != null) ? subscriptions.FirstOrDefault() : null;
         }
     }
