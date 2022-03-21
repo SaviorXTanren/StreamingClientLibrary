@@ -132,10 +132,6 @@ namespace Twitch.ChatSample.Console
 
                             await chat.SendMessage(user, "Hello World!");
 
-                            var subUser = await connection.NewAPI.Users.GetUserByLogin("mixitupapp");
-
-                            var sub = await connection.NewAPI.Subscriptions.GetBroadcasterSubscription(user, subUser);
-
                             while (true)
                             {
                                 string line = System.Console.ReadLine();
