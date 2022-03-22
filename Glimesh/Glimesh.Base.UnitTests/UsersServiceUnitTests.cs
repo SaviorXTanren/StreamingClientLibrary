@@ -59,7 +59,7 @@ namespace Glimesh.Base.UnitTests
                 Assert.IsNotNull(currentUser);
                 Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
 
-                IEnumerable<UserFollowModel> follows = await connection.Users.GetUsersFollowed(currentUser.username);
+                IEnumerable<UserFollowModel> follows = await connection.Users.GetUsersFollowed(currentUser);
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count() > 0);
                 Assert.IsNotNull(follows.First());
@@ -76,11 +76,32 @@ namespace Glimesh.Base.UnitTests
                 Assert.IsNotNull(currentUser);
                 Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
 
-                IEnumerable<UserFollowModel> follows = await connection.Users.GetFollowingUsers(currentUser.username);
+                IEnumerable<UserFollowModel> follows = await connection.Users.GetFollowingUsers(currentUser);
                 Assert.IsNotNull(follows);
                 Assert.IsTrue(follows.Count() > 0);
                 Assert.IsNotNull(follows.First());
                 Assert.IsTrue(!string.IsNullOrEmpty(follows.First().id));
+            });
+        }
+
+        [TestMethod]
+        public void GetFollowingUser()
+        {
+            TestWrapper(async (GlimeshConnection connection) =>
+            {
+                UserModel currentUser = await connection.Users.GetCurrentUser();
+                Assert.IsNotNull(currentUser);
+                Assert.IsTrue(!string.IsNullOrEmpty(currentUser.username));
+
+                IEnumerable<UserFollowModel> follows = await connection.Users.GetFollowingUsers(currentUser);
+                Assert.IsNotNull(follows);
+                Assert.IsTrue(follows.Count() > 0);
+                Assert.IsNotNull(follows.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(follows.First().id));
+
+                UserFollowModel follow = await connection.Users.GetFollowingUser(currentUser, follows.First().user);
+                Assert.IsNotNull(follow);
+                Assert.IsTrue(!string.IsNullOrEmpty(follow.id));
             });
         }
     }

@@ -26,6 +26,11 @@ namespace Glimesh.Base.Models.Channels
         public static readonly string AllFields = $"{ChannelModel.BasicFieldsWithStreamer}, moderators(first: 100) {{ edges {{ cursor, node {{ {ChannelModeratorModel.AllFields} }} }} }}, stream {{ {StreamModel.BasicFields} }}";
 
         /// <summary>
+        /// Basic with streamer fields for a GraphQL query.
+        /// </summary>
+        public static readonly string BasicFieldsWithStreamerEdges = $"edges {{ cursor, node {{ {ChannelModel.BasicFieldsWithStreamer} }} }}";
+
+        /// <summary>
         /// The ID of the channel.
         /// </summary>
         public string id { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Glimesh.Base.Models.Channels;
+using Glimesh.Base.Models.GraphQL;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,7 +20,11 @@ namespace Glimesh.Base.Services
         /// Gets all of the available channels
         /// </summary>
         /// <returns>All available channels</returns>
-        public async Task<IEnumerable<ChannelModel>> GetAllChannels() { return await this.QueryAsync<IEnumerable<ChannelModel>>($"{{ channels {{ {ChannelModel.BasicFields} }} }}", "channels"); }
+        public async Task<IEnumerable<ChannelModel>> GetLiveChannels(int count = 1)
+        {
+            GraphQLEdgeArrayModel<ChannelModel> channels = await this.QueryAsync<GraphQLEdgeArrayModel<ChannelModel>>($"{{ channels(status: LIVE, first: {count}) {{ {ChannelModel.BasicFieldsWithStreamerEdges} }} }}", "channels");
+            return channels?.Items;
+        }
 
         /// <summary>
         /// Gets the channel with the specified id.

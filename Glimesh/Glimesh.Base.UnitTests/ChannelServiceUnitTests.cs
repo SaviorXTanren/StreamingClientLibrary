@@ -10,11 +10,11 @@ namespace Glimesh.Base.UnitTests
     public class ChannelServiceUnitTests : UnitTestBase
     {
         [TestMethod]
-        public void GetAllChannels()
+        public void GetLiveChannels()
         {
             TestWrapper(async (GlimeshConnection connection) =>
             {
-                IEnumerable<ChannelModel> channels = await connection.Channel.GetAllChannels();
+                IEnumerable<ChannelModel> channels = await connection.Channel.GetLiveChannels();
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
                 Assert.IsNotNull(channels.First());
@@ -54,8 +54,8 @@ namespace Glimesh.Base.UnitTests
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.id));
                 Assert.IsTrue(!string.IsNullOrEmpty(channel.status));
 
-                Assert.IsTrue(string.Equals(currentUser.id, channel.id));
-                Assert.IsTrue(string.Equals(currentUser.username, channel.streamer.id));
+                Assert.IsTrue(string.Equals(currentUser.id, channel.streamer.id));
+                Assert.IsTrue(string.Equals(currentUser.username, channel.streamer.username));
             });
         }
     }
