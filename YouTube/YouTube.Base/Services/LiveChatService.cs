@@ -26,13 +26,18 @@ namespace YouTube.Base.Services
         /// <param name="nextResultsToken">The token for querying the next set of results from a previous query</param>
         /// <param name="maxResults">The maximum results to return</param>
         /// <returns>The list of chat messages</returns>
-        public async Task<LiveChatMessagesResultModel> GetMessages(LiveBroadcast broadcast, string nextResultsToken = null, int maxResults = 200)
+        public async Task<LiveChatMessagesResultModel> GetMessages(LiveBroadcast broadcast, string nextResultsToken = null, int maxResults = 0)
         {
             Validator.ValidateVariable(broadcast, "broadcast");
             return await this.YouTubeServiceWrapper(async () =>
             {
                 LiveChatMessagesResource.ListRequest request = this.connection.GoogleYouTubeService.LiveChatMessages.List(broadcast.Snippet.LiveChatId, "id,snippet,authorDetails");
-                request.MaxResults = maxResults;
+
+                if (maxResults > 0)
+                {
+                    request.MaxResults = maxResults;
+                }
+
                 if (!string.IsNullOrEmpty(nextResultsToken))
                 {
                     request.PageToken = nextResultsToken;

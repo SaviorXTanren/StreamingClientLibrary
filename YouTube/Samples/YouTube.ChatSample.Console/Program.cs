@@ -44,9 +44,9 @@ namespace YouTube.ChatSample.Console
                     YouTubeConnection connection = await YouTubeConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes);
                     if (connection != null)
                     {
-                        //Channel channel = await connection.Channels.GetMyChannel();
+                        Channel channel = await connection.Channels.GetMyChannel();
 
-                        Channel channel = await connection.Channels.GetChannelByID("UCbkMvtBNkpIbHqQdKHJSb5A");
+                        //Channel channel = await connection.Channels.GetChannelByID("");
 
                         if (channel != null)
                         {
@@ -59,7 +59,6 @@ namespace YouTube.ChatSample.Console
                             ChatClient client = new ChatClient(connection);
                             client.OnMessagesReceived += Client_OnMessagesReceived;
 
-                            //if (await client.Connect())
                             if (await client.Connect(broadcast))
                             {
                                 System.Console.WriteLine("Live chat connection successful!");
