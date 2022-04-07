@@ -173,5 +173,32 @@ namespace YouTube.Base.Services
                 return results;
             });
         }
+
+        /// <summary>
+        /// Updates the specified video.
+        /// </summary>
+        /// <param name="video">The video to update</param>
+        /// <param name="title">The title to set</param>
+        /// <param name="description">The description to set</param>
+        /// <param name="categoryId">The category ID to set</param>
+        /// <returns>The updated broadcast</returns>
+        public async Task<Video> UpdateVideo(Video video, string title = null, string description = null, string categoryId = null)
+        {
+            Validator.ValidateVariable(video, "video");
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                VideosResource.UpdateRequest request = this.connection.GoogleYouTubeService.Videos.Update(new Video()
+                {
+                    Id = video.Id,
+                    Snippet = new VideoSnippet()
+                    {
+                        Title = title ?? video.Snippet.Title,
+                        Description = description ?? video.Snippet.Description,
+                        CategoryId = categoryId ?? video.Snippet.CategoryId
+                    }
+                }, "snippet");
+                return await request.ExecuteAsync();
+            });
+        }
     }
 }
