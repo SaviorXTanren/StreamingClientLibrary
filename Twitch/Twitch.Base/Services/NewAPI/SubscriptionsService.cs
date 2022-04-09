@@ -1,4 +1,5 @@
-﻿using StreamingClient.Base.Util;
+﻿using Newtonsoft.Json.Linq;
+using StreamingClient.Base.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,23 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets the total subscriber points for a broadcaster's channel. The broadcaster specified must match the user in the auth token being used.
+        /// </summary>
+        /// <param name="broadcaster">The broadcaster to get the total number of subscribers for</param>
+        /// <returns>The total number of subscriber points for the broadcaster's channel</returns>
+        public async Task<long> GetBroadcasterSubscriptionPoints(UserModel broadcaster)
+        {
+            Validator.ValidateVariable(broadcaster, "broadcaster");
+
+            JObject data = await this.GetJObjectAsync($"subscriptions?broadcaster_id={broadcaster.id}&first=1");
+            if (data != null && data.ContainsKey("points"))
+            {
+                return (long)data["points"];
+            }
+            return 0;
+        }
+
+        /// <summary>
         /// Gets the total number of subscribers for a broadcaster's channel. The broadcaster specified must match the user in the auth token being used.
         /// </summary>
         /// <param name="broadcaster">The broadcaster to get the total number of subscribers for</param>
@@ -65,7 +83,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<long> GetBroadcasterSubscriptionsCount(UserModel broadcaster)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetPagedResultTotalCountAsync("subscriptions?broadcaster_id=" +broadcaster.id);
+            return await this.GetPagedResultTotalCountAsync("subscriptions?broadcaster_id=" + broadcaster.id);
         }
 
         /// <summary>
