@@ -178,6 +178,16 @@ namespace StreamingClient.Base.Web
         }
 
         /// <summary>
+        /// Adding a custom header to the client
+        /// </summary>
+        /// <param name="header">The header name</param>
+        /// <param name="value">The header value</param>
+        public void AddHeader(string header, string value)
+        {
+            this.DefaultRequestHeaders.Add(header, value);
+        }
+
+        /// <summary>
         /// Performs a GET REST request using the provided request URI.
         /// </summary>
         /// <param name="requestUri">The request URI to use</param>
