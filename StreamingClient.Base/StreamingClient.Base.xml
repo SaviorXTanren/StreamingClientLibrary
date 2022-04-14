@@ -948,6 +948,13 @@
             <param name="baseAddress">The base address to use for communication</param>
             <param name="token">The OAuth token to include in the authentication header</param>
         </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.AddHeader(System.String,System.String)">
+            <summary>
+            Adding a custom header to the client
+            </summary>
+            <param name="header">The header name</param>
+            <param name="value">The header value</param>
+        </member>
         <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.GetAsync(System.String)">
             <summary>
             Performs a GET REST request using the provided request URI.
