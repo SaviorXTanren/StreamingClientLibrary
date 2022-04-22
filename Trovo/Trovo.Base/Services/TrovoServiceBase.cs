@@ -94,7 +94,7 @@ namespace Trovo.Base.Services
                     totalCount += lastCount;
                 }
             }
-            while (totalCount < maxResults && lastCount > 0);
+            while (totalCount < maxResults && lastCount > 0 && lastCount < totalCount);
 
             return results;
         }
