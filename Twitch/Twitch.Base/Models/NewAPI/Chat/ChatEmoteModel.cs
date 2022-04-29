@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Twitch.Base.Models.NewAPI.Chat
 {
@@ -10,6 +11,37 @@ namespace Twitch.Base.Models.NewAPI.Chat
         private const string imageUrlSize1 = "url_1x";
         private const string imageUrlSize2 = "url_2x";
         private const string imageUrlSize4 = "url_4x";
+
+        /// <summary>
+        /// The format name for a static image.
+        /// </summary>
+        public const string StaticFormatName = "static";
+        /// <summary>
+        /// The format name for an animated image.
+        /// </summary>
+        public const string AnimatedFormatName = "animated";
+
+        /// <summary>
+        /// The 1 scale for an image.
+        /// </summary>
+        public const string Scale1Name = "1.0";
+        /// <summary>
+        /// The 2 scale for an image.
+        /// </summary>
+        public const string Scale2Name = "2.0";
+        /// <summary>
+        /// The 3 scale for an image.
+        /// </summary>
+        public const string Scale3Name = "3.0";
+
+        /// <summary>
+        /// The light theme for an image.
+        /// </summary>
+        public const string LightThemeName = "light";
+        /// <summary>
+        /// The dark theme for an image.
+        /// </summary>
+        public const string DarkThemeName = "dark";
 
         /// <summary>
         /// The ID of the emote.
@@ -48,6 +80,23 @@ namespace Twitch.Base.Models.NewAPI.Chat
         public string emote_set_id { get; set; }
 
         /// <summary>
+        /// The format of the image to get. For example, a static PNG or animated GIF.
+        /// 
+        /// Use default if you want the server to return an animated GIF if it exists, otherwise, a static PNG.
+        /// </summary>
+        public HashSet<string> format { get; set; } = new HashSet<string>();
+
+        /// <summary>
+        /// The list of supported scale sizes for the emote.
+        /// </summary>
+        public HashSet<string> scale { get; set; } = new HashSet<string>();
+
+        /// <summary>
+        /// The list of supported theme modes for the emote.
+        /// </summary>
+        public HashSet<string> theme_mode { get; set; } = new HashSet<string>();
+
+        /// <summary>
         /// The ID of the broadcaster that this emote belongs to.
         /// </summary>
         public string owner_id { get; set; }
@@ -64,5 +113,26 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// The size 4 image url of the emote.
         /// </summary>
         public string Size4URL { get { return this.images.ContainsKey(imageUrlSize4) ? this.images[imageUrlSize4].ToString() : null; } }
+
+        /// <summary>
+        /// Whether the emote has a static format image.
+        /// </summary>
+        public bool HasStatic { get { return this.format.Contains(StaticFormatName); } }
+        /// <summary>
+        /// Whether the emote has an animated format image.
+        /// </summary>
+        public bool HasAnimated { get { return this.format.Contains(AnimatedFormatName); } }
+
+        /// <summary>
+        /// Builds a URL to the image with the following parameters.
+        /// </summary>
+        /// <param name="format">The format type of the image</param>
+        /// <param name="theme">The theme type of the image</param>
+        /// <param name="scale">The scale type of the image</param>
+        /// <returns>The URL of the image</returns>
+        public string BuildImageURL(string format, string theme, string scale)
+        {
+            return $"https://static-cdn.jtvnw.net/emoticons/v2/{this.id}/{format}/{theme}/{scale}";
+        }
     }
 }
