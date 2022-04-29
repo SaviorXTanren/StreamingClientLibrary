@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Twitch.Base.Services;
 using Twitch.Base.Services.NewAPI;
-using Twitch.Base.Services.V5API;
 
 [assembly: InternalsVisibleTo("Twitch.Base.UnitTests")]
 
@@ -296,11 +295,6 @@ namespace Twitch.Base
         public NewTwitchAPIServices NewAPI { get; private set; }
 
         /// <summary>
-        /// APIs for the Twitch API V5.
-        /// </summary>
-        public V5APIServices V5API { get; private set; }
-
-        /// <summary>
         /// The Client ID associated with the connection.
         /// </summary>
         public string ClientID { get { return (this.token != null) ? this.token.clientID : null; } }
@@ -482,7 +476,6 @@ namespace Twitch.Base
 
             this.OAuth = new OAuthService(this);
             this.NewAPI = new NewTwitchAPIServices(this);
-            this.V5API = new V5APIServices(this);
         }
 
         /// <summary>
