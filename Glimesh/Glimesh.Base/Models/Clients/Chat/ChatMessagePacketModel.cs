@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Glimesh.Base.Models.Clients.Chat
 {
     /// <summary>
-    /// Packet for chat messag received.
+    /// Packet for chat message received.
     /// </summary>
     public class ChatMessagePacketModel : ClientResponsePacketModel
     {
@@ -38,6 +38,21 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// The datetime the message was sent.
         /// </summary>
         public string SentAt { get; set; }
+
+        /// <summary>
+        /// Whether the message indicates a new follow.
+        /// </summary>
+        public bool IsFollowedMessage { get; set; }
+
+        /// <summary>
+        /// Whether the message indicates a new subscription.
+        /// </summary>
+        public bool IsSubscriptionMessage { get; set; }
+
+        /// <summary>
+        /// The metadata for the user of the message.
+        /// </summary>
+        public ChatMessageMetadataPacketModel Metadata { get; set; }
 
         /// <summary>
         /// Creates a new instance of the ChatMessagePacketModel class.
@@ -79,6 +94,21 @@ namespace Glimesh.Base.Models.Clients.Chat
                 }
 
                 this.SentAt = chatMessage.SelectToken("insertedAt")?.ToString();
+
+                if (chatMessage.ContainsKey("is_followed_message"))
+                {
+                    this.IsFollowedMessage = chatMessage.SelectToken("is_followed_message").ToObject<bool>();
+                }
+
+                if (chatMessage.ContainsKey("is_subscription_message"))
+                {
+                    this.IsSubscriptionMessage = chatMessage.SelectToken("is_subscription_message").ToObject<bool>();
+                }
+
+                if (chatMessage.ContainsKey("metadata"))
+                {
+                    this.Metadata = chatMessage.SelectToken("metadata").ToObject<ChatMessageMetadataPacketModel>();
+                }
             }
         }
     }
@@ -107,5 +137,36 @@ namespace Glimesh.Base.Models.Clients.Chat
         /// The full url path of the token.
         /// </summary>
         public string url { get; set; }
+    }
+
+    /// <summary>
+    /// Packet for metadata on a message
+    /// </summary>
+    public class ChatMessageMetadataPacketModel
+    {
+        /// <summary>
+        /// Whether the user is an admin.
+        /// </summary>
+        public bool admin { get; set; }
+        /// <summary>
+        /// Whether the user is a streamer.
+        /// </summary>
+        public bool streamer { get; set; }
+        /// <summary>
+        /// Whether the user is an moderator.
+        /// </summary>
+        public bool moderator { get; set; }
+        /// <summary>
+        /// Whether the user is a subscriber.
+        /// </summary>
+        public bool subscriber { get; set; }
+        /// <summary>
+        /// Whether the user is a platform_founder_subscriber.
+        /// </summary>
+        public bool platform_founder_subscriber { get; set; }
+        /// <summary>
+        /// Whether the user is a platform_supporter_subscriber.
+        /// </summary>
+        public bool platform_supporter_subscriber { get; set; }
     }
 }
