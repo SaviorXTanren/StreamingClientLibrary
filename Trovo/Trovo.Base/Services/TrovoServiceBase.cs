@@ -120,7 +120,7 @@ namespace Trovo.Base.Services
             {
                 foreach (var kvp in parameters)
                 {
-                    requestParameters[kvp.Key] = new JObject(kvp.Value);
+                    requestParameters[kvp.Key] = kvp.Value.ToString();
                 }
             }
 
