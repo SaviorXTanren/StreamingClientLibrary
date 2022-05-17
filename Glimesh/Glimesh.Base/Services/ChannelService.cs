@@ -17,12 +17,30 @@ namespace Glimesh.Base.Services
         public ChannelService(GlimeshConnection connection) : base(connection) { }
 
         /// <summary>
-        /// Gets all of the available channels
+        /// Gets the channels currently live on the homepage
         /// </summary>
         /// <returns>All available channels</returns>
-        public async Task<IEnumerable<ChannelModel>> GetLiveChannels(int count = 1)
+        public async Task<IEnumerable<ChannelModel>> GetHomepageChannels(int count = 1)
         {
-            GraphQLEdgeArrayModel<ChannelModel> channels = await this.QueryAsync<GraphQLEdgeArrayModel<ChannelModel>>($"{{ channels(status: LIVE, first: {count}) {{ {ChannelModel.BasicFieldsWithStreamerEdges} }} }}", "channels");
+            GraphQLEdgeArrayModel<ChannelModel> channels = await this.QueryAsync<GraphQLEdgeArrayModel<ChannelModel>>($"{{ homepageChannels(first: {count}) {{ {ChannelModel.BasicFieldsWithStreamerEdges} }} }}", "homepageChannels");
+            return channels?.Items;
+        }
+
+        /// <summary>
+        /// Gets all of the available live channels
+        /// </summary>
+        /// <param name="categorySlug">The optional category slug to search for</param>
+        /// <param name="count">The number of channels to return</param>
+        /// <returns>All available channels</returns>
+        public async Task<IEnumerable<ChannelModel>> GetLiveChannels(string categorySlug = null, int count = 1)
+        {
+            string query = $"{{ channels(status: LIVE, first: {count}) {{ {ChannelModel.BasicFieldsWithStreamerEdges} }} }}";
+            if (!string.IsNullOrEmpty(categorySlug))
+            {
+                query = $"{{ channels(categorySlug: \"{categorySlug}\", status: LIVE, first: {count}) {{ {ChannelModel.BasicFieldsWithStreamerEdges} }} }}";
+            }
+
+            GraphQLEdgeArrayModel<ChannelModel> channels = await this.QueryAsync<GraphQLEdgeArrayModel<ChannelModel>>(query, "channels");
             return channels?.Items;
         }
 

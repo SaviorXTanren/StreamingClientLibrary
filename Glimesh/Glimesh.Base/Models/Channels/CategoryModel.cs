@@ -1,4 +1,6 @@
-﻿namespace Glimesh.Base.Models.Channels
+﻿using System.Collections.Generic;
+
+namespace Glimesh.Base.Models.Channels
 {
     /// <summary>
     /// Information for a category.
@@ -8,7 +10,7 @@
         /// <summary>
         /// All fields for a GraphQL query.
         /// </summary>
-        public const string AllFields = "id, name, slug";
+        public static readonly string AllFields = $"id, name, slug";
 
         /// <summary>
         /// The ID of the category

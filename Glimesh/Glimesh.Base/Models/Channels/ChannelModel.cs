@@ -13,7 +13,7 @@ namespace Glimesh.Base.Models.Channels
         /// <summary>
         /// Basic fields for a GraphQL query.
         /// </summary>
-        public static readonly string BasicFields = $"id, language, status, title, updatedAt";
+        public static readonly string BasicFields = $"id, language, status, title, updatedAt, category {{ {CategoryModel.AllFields} }}, subcategory {{ {SubcategoryModel.AllFields} }}";
 
         /// <summary>
         /// Basic fields with streamer for a GraphQL query.
@@ -64,6 +64,16 @@ namespace Glimesh.Base.Models.Channels
         /// The current stream of the channel.
         /// </summary>
         public StreamModel stream { get; set; }
+
+        /// <summary>
+        /// The category of the channel.
+        /// </summary>
+        public CategoryModel category { get; set; }
+
+        /// <summary>
+        /// The subcategory for the channel.
+        /// </summary>
+        public SubcategoryModel subcategory { get; set; }
 
         /// <summary>
         /// When the channel was last updated.

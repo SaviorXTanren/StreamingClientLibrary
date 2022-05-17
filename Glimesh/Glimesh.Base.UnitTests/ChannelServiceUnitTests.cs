@@ -10,11 +10,46 @@ namespace Glimesh.Base.UnitTests
     public class ChannelServiceUnitTests : UnitTestBase
     {
         [TestMethod]
+        public void GetHomepageChannels()
+        {
+            TestWrapper(async (GlimeshConnection connection) =>
+            {
+                IEnumerable<ChannelModel> channels = await connection.Channel.GetHomepageChannels();
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+                Assert.IsNotNull(channels.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().status));
+            });
+        }
+
+        [TestMethod]
         public void GetLiveChannels()
         {
             TestWrapper(async (GlimeshConnection connection) =>
             {
                 IEnumerable<ChannelModel> channels = await connection.Channel.GetLiveChannels();
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+                Assert.IsNotNull(channels.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().status));
+            });
+        }
+
+        [TestMethod]
+        public void GetLiveCategoryChannels()
+        {
+            TestWrapper(async (GlimeshConnection connection) =>
+            {
+                IEnumerable<ChannelModel> channels = await connection.Channel.GetLiveChannels();
+                Assert.IsNotNull(channels);
+                Assert.IsTrue(channels.Count() > 0);
+                Assert.IsNotNull(channels.First());
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().id));
+                Assert.IsTrue(!string.IsNullOrEmpty(channels.First().status));
+
+                channels = await connection.Channel.GetLiveChannels(channels.First().category.slug);
                 Assert.IsNotNull(channels);
                 Assert.IsTrue(channels.Count() > 0);
                 Assert.IsNotNull(channels.First());
