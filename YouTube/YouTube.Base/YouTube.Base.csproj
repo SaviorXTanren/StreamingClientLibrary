@@ -8,15 +8,15 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.11</Version>
+    <Version>1.0.0.12</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>YouTube Streaming Bot Chat Interactive</PackageTags>
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Product>YouTube Streaming Client Library</Product>
-    <AssemblyVersion>1.0.0.11</AssemblyVersion>
-    <FileVersion>1.0.0.11</FileVersion>
+    <AssemblyVersion>1.0.0.12</AssemblyVersion>
+    <FileVersion>1.0.0.12</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -28,7 +28,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2637" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2693" />
     <PackageReference Include="Google.Apis.YouTubePartner.v1" Version="1.35.1.1334" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
