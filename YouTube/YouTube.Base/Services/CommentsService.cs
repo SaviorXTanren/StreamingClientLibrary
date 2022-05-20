@@ -73,8 +73,10 @@ namespace YouTube.Base.Services
                     request.ParentId = commentThread.Id;
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     CommentListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -114,8 +116,10 @@ namespace YouTube.Base.Services
                     }
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     CommentThreadListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;

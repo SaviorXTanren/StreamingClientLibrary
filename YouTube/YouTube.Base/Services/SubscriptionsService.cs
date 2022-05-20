@@ -73,8 +73,10 @@ namespace YouTube.Base.Services
                     }
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     SubscriptionListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;

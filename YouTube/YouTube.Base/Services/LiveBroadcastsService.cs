@@ -35,8 +35,10 @@ namespace YouTube.Base.Services
                 request.BroadcastType = BroadcastTypeEnum.All;
                 request.Mine = true;
                 request.MaxResults = maxResults;
+                LogRequest(request);
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 if (response.Items.Count > 0)
                 {
                     return response.Items;
@@ -57,8 +59,10 @@ namespace YouTube.Base.Services
                 request.BroadcastType = BroadcastTypeEnum.All;
                 request.Id = id;
                 request.MaxResults = 10;
+                LogRequest(request);
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 return response.Items.FirstOrDefault();
             });
         }
@@ -75,8 +79,10 @@ namespace YouTube.Base.Services
                 request.BroadcastType = BroadcastTypeEnum.All;
                 request.Mine = true;
                 request.MaxResults = 10;
+                LogRequest(request);
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 return response.Items.FirstOrDefault(b => string.Equals(b.Status.LifeCycleStatus, "live"));
             });
         }
@@ -126,7 +132,11 @@ namespace YouTube.Base.Services
                 liveCuepoint.Settings.DurationSecs = duration;
 
                 LiveCuepointsResource.InsertRequest request = this.connection.GoogleYouTubePartnerService.LiveCuepoints.Insert(liveCuepoint, broadcast.Snippet.ChannelId);
-                return await request.ExecuteAsync();
+                LogRequest(request);
+
+                liveCuepoint = await request.ExecuteAsync();
+                LogResponse(request, liveCuepoint);
+                return liveCuepoint;
             });
         }
     }

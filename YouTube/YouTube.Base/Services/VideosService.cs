@@ -95,8 +95,10 @@ namespace YouTube.Base.Services
                     VideosResource.ListRequest request = this.connection.GoogleYouTubeService.Videos.List(parts);
                     request.MaxResults = searchAmount;
                     request.Id = string.Join(",", searchIDs.Take(searchAmount));
+                    LogRequest(request);
 
                     VideoListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     searchIDs = new List<string>(searchIDs.Skip(searchAmount));
 
@@ -139,32 +141,34 @@ namespace YouTube.Base.Services
                 string pageToken = null;
                 do
                 {
-                    SearchResource.ListRequest search = this.connection.GoogleYouTubeService.Search.List("snippet");
+                    SearchResource.ListRequest request = this.connection.GoogleYouTubeService.Search.List("snippet");
                     if (myVideos)
                     {
-                        search.ForMine = true;
+                        request.ForMine = true;
                     }
                     else if (!string.IsNullOrEmpty(channelID))
                     {
-                        search.ChannelId = channelID;
+                        request.ChannelId = channelID;
                     }
 
                     if (!string.IsNullOrEmpty(keyword))
                     {
-                        search.Q = keyword;
+                        request.Q = keyword;
                     }
 
                     if (liveType != SearchResource.ListRequest.EventTypeEnum.None)
                     {
-                        search.EventType = liveType;
+                        request.EventType = liveType;
                     }
 
-                    search.Type = "video";
-                    search.Order = SearchResource.ListRequest.OrderEnum.Date;
-                    search.MaxResults = Math.Min(maxResults, 50);
-                    search.PageToken = pageToken;
+                    request.Type = "video";
+                    request.Order = SearchResource.ListRequest.OrderEnum.Date;
+                    request.MaxResults = Math.Min(maxResults, 50);
+                    request.PageToken = pageToken;
+                    LogRequest(request);
 
-                    SearchListResponse response = await search.ExecuteAsync();
+                    SearchListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -197,7 +201,11 @@ namespace YouTube.Base.Services
                         CategoryId = categoryId ?? video.Snippet.CategoryId
                     }
                 }, "snippet");
-                return await request.ExecuteAsync();
+                LogRequest(request);
+
+                Video response = await request.ExecuteAsync();
+                LogResponse(request, response);
+                return response;
             });
         }
     }

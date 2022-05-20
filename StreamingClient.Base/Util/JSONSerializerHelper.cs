@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace StreamingClient.Base.Util
 {
@@ -13,10 +16,16 @@ namespace StreamingClient.Base.Util
         /// <typeparam name="T">The type of the object</typeparam>
         /// <param name="data">The object to serialize</param>
         /// <param name="includeObjectType">Whether to include the serialized object type in the serialized string</param>
+        /// <param name="propertiesToIgnore">An optionalproperties to ignore</param>
         /// <returns>The serialized string</returns>
-        public static string SerializeToString<T>(T data, bool includeObjectType = true)
+        public static string SerializeToString<T>(T data, bool includeObjectType = true, IgnorePropertiesResolver propertiesToIgnore = null)
         {
-            return JsonConvert.SerializeObject(data, new JsonSerializerSettings { TypeNameHandling = (includeObjectType) ? TypeNameHandling.Objects : TypeNameHandling.None });
+            return JsonConvert.SerializeObject(data,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = (includeObjectType) ? TypeNameHandling.Objects : TypeNameHandling.None,
+                    ContractResolver = propertiesToIgnore
+                });
         }
 
         /// <summary>
@@ -78,6 +87,39 @@ namespace StreamingClient.Base.Util
         {
             Logger.Log(errorArgs.ErrorContext.Error.Message);
             errorArgs.ErrorContext.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Helper class for ignoring properties for JSON serialization
+    /// </summary>
+    public class IgnorePropertiesResolver : DefaultContractResolver
+    {
+        private readonly HashSet<string> ignoreProps;
+
+        /// <summary>
+        /// Creates a new instance of IgnorePropertiesResolver.
+        /// </summary>
+        /// <param name="propNamesToIgnore">The list of properties to ignore</param>
+        public IgnorePropertiesResolver(IEnumerable<string> propNamesToIgnore)
+        {
+            this.ignoreProps = new HashSet<string>(propNamesToIgnore);
+        }
+
+        /// <summary>
+        /// Creates a property
+        /// </summary>
+        /// <param name="member"></param>
+        /// <param name="memberSerialization"></param>
+        /// <returns></returns>
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            JsonProperty property = base.CreateProperty(member, memberSerialization);
+            if (this.ignoreProps.Contains(property.PropertyName))
+            {
+                property.ShouldSerialize = _ => false;
+            }
+            return property;
         }
     }
 }

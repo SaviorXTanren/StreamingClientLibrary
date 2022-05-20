@@ -71,7 +71,11 @@ namespace YouTube.Base.Services
             newPlaylistItem.Snippet.ResourceId.VideoId = video.Id;
 
             PlaylistItemsResource.InsertRequest request = this.connection.GoogleYouTubeService.PlaylistItems.Insert(newPlaylistItem, "snippet");
-            return await request.ExecuteAsync();
+            LogRequest(request);
+
+            newPlaylistItem = await request.ExecuteAsync();
+            LogResponse(request, newPlaylistItem);
+            return newPlaylistItem;
         }
 
         internal async Task<IEnumerable<Playlist>> GetPlaylists(Channel channel = null, bool myPlaylists = false, string id = null, int maxResults = 1)
@@ -97,8 +101,10 @@ namespace YouTube.Base.Services
                     }
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     PlaylistListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -120,8 +126,10 @@ namespace YouTube.Base.Services
                     request.PlaylistId = playlistID;
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     PlaylistItemListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;

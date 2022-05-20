@@ -1,4 +1,7 @@
-﻿using StreamingClient.Base.Model.OAuth;
+﻿using Google.Apis.Requests;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTubePartner.v1;
+using StreamingClient.Base.Model.OAuth;
 using StreamingClient.Base.Services;
 using StreamingClient.Base.Util;
 using System;
@@ -15,6 +18,8 @@ namespace YouTube.Base.Services
     public abstract class YouTubeServiceBase : OAuthRestServiceBase
     {
         private const string YouTubeRestAPIBaseAddressFormat = "https://www.googleapis.com/youtube/v3/";
+
+        private static readonly IgnorePropertiesResolver requestPropertiesToIgnore = new IgnorePropertiesResolver(new List<string>() { "Service" });
 
         /// <summary>
         /// The YouTube Live connection.
@@ -126,5 +131,73 @@ namespace YouTube.Base.Services
         /// </summary>
         /// <returns>The base address for all RESTful calls</returns>
         protected override string GetBaseAddress() { return this.baseAddress; }
+
+        /// <summary>
+        /// Logs a YouTube service request.
+        /// </summary>
+        /// <typeparam name="T">The type of the request</typeparam>
+        /// <param name="request">The request to log</param>
+        protected void LogRequest<T>(YouTubeBaseServiceRequest<T> request)
+        {
+            if (Logger.Level == LogLevel.Debug)
+            {
+                Logger.Log(LogLevel.Debug, "Rest API Request Sent: " + request.RestPath + " - " + JSONSerializerHelper.SerializeToString(request, propertiesToIgnore: requestPropertiesToIgnore));
+            }
+        }
+
+        /// <summary>
+        /// Logs a YouTube service request.
+        /// </summary>
+        /// <typeparam name="T">The type of the request</typeparam>
+        /// <param name="request">The request to log</param>
+        protected void LogRequest<T>(YouTubePartnerBaseServiceRequest<T> request)
+        {
+            if (Logger.Level == LogLevel.Debug)
+            {
+                Logger.Log(LogLevel.Debug, "Rest API Request Sent: " + request.RestPath + " - " + JSONSerializerHelper.SerializeToString(request, propertiesToIgnore: requestPropertiesToIgnore));
+            }
+        }
+
+        /// <summary>
+        /// Logs a YouTube service response
+        /// </summary>
+        /// <typeparam name="T">The type of the request</typeparam>
+        /// <param name="request">The request to log</param>
+        /// <param name="response">The response to log</param>
+        protected void LogResponse<T>(YouTubeBaseServiceRequest<T> request, IDirectResponseSchema response)
+        {
+            if (Logger.Level == LogLevel.Debug)
+            {
+                Logger.Log(LogLevel.Debug, "Rest API Request Complete: " + request.RestPath + " - " + JSONSerializerHelper.SerializeToString(response));
+            }
+        }
+
+        /// <summary>
+        /// Logs a YouTube service response
+        /// </summary>
+        /// <typeparam name="T">The type of the request</typeparam>
+        /// <param name="request">The request to log</param>
+        /// <param name="response">The response to log</param>
+        protected void LogResponse<T>(YouTubeBaseServiceRequest<T> request, string response)
+        {
+            if (Logger.Level == LogLevel.Debug)
+            {
+                Logger.Log(LogLevel.Debug, "Rest API Request Complete: " + request.RestPath + " - " + response);
+            }
+        }
+
+        /// <summary>
+        /// Logs a YouTube service response
+        /// </summary>
+        /// <typeparam name="T">The type of the request</typeparam>
+        /// <param name="request">The request to log</param>
+        /// <param name="response">The response to log</param>
+        protected void LogResponse<T>(YouTubePartnerBaseServiceRequest<T> request, IDirectResponseSchema response)
+        {
+            if (Logger.Level == LogLevel.Debug)
+            {
+                Logger.Log(LogLevel.Debug, "Rest API Request Complete: " + request.RestPath + " - " + JSONSerializerHelper.SerializeToString(response));
+            }
+        }
     }
 }

@@ -26,11 +26,14 @@ namespace YouTube.Base.Services
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
-                ChannelsResource.ListRequest search = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics,contentDetails");
-                search.Mine = true;
-                search.MaxResults = 1;
+                ChannelsResource.ListRequest request = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics,contentDetails");
+                request.Mine = true;
+                request.MaxResults = 1;
+                LogRequest(request);
 
-                ChannelListResponse response = await search.ExecuteAsync();
+                ChannelListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
+
                 if (response.Items.Count > 0)
                 {
                     return response.Items.First();
@@ -49,11 +52,14 @@ namespace YouTube.Base.Services
             Validator.ValidateString(username, "username");
             return await this.YouTubeServiceWrapper(async () =>
             {
-                ChannelsResource.ListRequest search = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics");
-                search.ForUsername = username;
-                search.MaxResults = 1;
+                ChannelsResource.ListRequest request = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics");
+                request.ForUsername = username;
+                request.MaxResults = 1;
+                LogRequest(request);
 
-                ChannelListResponse response = await search.ExecuteAsync();
+                ChannelListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
+
                 if (response.Items.Count > 0)
                 {
                     return response.Items.First();
@@ -84,11 +90,14 @@ namespace YouTube.Base.Services
             Validator.ValidateList(ids, "ids");
             return await this.YouTubeServiceWrapper(async () =>
             {
-                ChannelsResource.ListRequest search = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics,contentDetails");
-                search.Id = string.Join(",", ids);
-                search.MaxResults = ids.Count();
+                ChannelsResource.ListRequest request = this.connection.GoogleYouTubeService.Channels.List("snippet,statistics,contentDetails");
+                request.Id = string.Join(",", ids);
+                request.MaxResults = ids.Count();
+                LogRequest(request);
 
-                ChannelListResponse response = await search.ExecuteAsync();
+                ChannelListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
+
                 return response.Items;
             });
         }

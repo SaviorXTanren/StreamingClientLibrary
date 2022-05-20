@@ -42,7 +42,13 @@ namespace YouTube.Base.Services
                 {
                     request.PageToken = nextResultsToken;
                 }
-                return new LiveChatMessagesResultModel(await request.ExecuteAsync());
+
+                LogRequest(request);
+
+                LiveChatMessageListResponse response = await request.ExecuteAsync();
+                LogResponse(request, response);
+
+                return new LiveChatMessagesResultModel(response);
             });
         }
 
@@ -66,7 +72,11 @@ namespace YouTube.Base.Services
                 newMessage.Snippet.TextMessageDetails.MessageText = message;
 
                 LiveChatMessagesResource.InsertRequest request = this.connection.GoogleYouTubeService.LiveChatMessages.Insert(newMessage, "snippet");
-                return await request.ExecuteAsync();
+                LogRequest(request);
+
+                LiveChatMessage liveChatMessage = await request.ExecuteAsync();
+                LogResponse(request, liveChatMessage);
+                return liveChatMessage;
             });
         }
 
@@ -81,7 +91,10 @@ namespace YouTube.Base.Services
             await this.YouTubeServiceWrapper<object>(async () =>
             {
                 LiveChatMessagesResource.DeleteRequest request = this.connection.GoogleYouTubeService.LiveChatMessages.Delete(message.Id);
-                await request.ExecuteAsync();
+                LogRequest(request);
+
+                string response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 return null;
             });
         }
@@ -101,11 +114,13 @@ namespace YouTube.Base.Services
                 string pageToken = null;
                 do
                 {
-                    SuperChatEventsResource.ListRequest search = this.connection.GoogleYouTubeService.SuperChatEvents.List("id,snippet");
-                    search.MaxResults = Math.Min(maxResults, 50);
-                    search.PageToken = pageToken;
+                    SuperChatEventsResource.ListRequest request = this.connection.GoogleYouTubeService.SuperChatEvents.List("id,snippet");
+                    request.MaxResults = Math.Min(maxResults, 50);
+                    request.PageToken = pageToken;
+                    LogRequest(request);
 
-                    SuperChatEventListResponse response = await search.ExecuteAsync();
+                    SuperChatEventListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -131,8 +146,10 @@ namespace YouTube.Base.Services
                     MembersResource.ListRequest request = this.connection.GoogleYouTubeService.Members.List("id,snippet");
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     MemberListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -160,8 +177,10 @@ namespace YouTube.Base.Services
                     LiveChatModeratorsResource.ListRequest request = this.connection.GoogleYouTubeService.LiveChatModerators.List(broadcast.Snippet.LiveChatId, "id,snippet");
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;
+                    LogRequest(request);
 
                     LiveChatModeratorListResponse response = await request.ExecuteAsync();
+                    LogResponse(request, response);
                     results.AddRange(response.Items);
                     maxResults -= response.Items.Count;
                     pageToken = response.NextPageToken;
@@ -190,7 +209,11 @@ namespace YouTube.Base.Services
                 moderator.Snippet.ModeratorDetails.ChannelId = user.Id;
 
                 LiveChatModeratorsResource.InsertRequest request = this.connection.GoogleYouTubeService.LiveChatModerators.Insert(moderator, "snippet");
-                return await request.ExecuteAsync();
+                LogRequest(request);
+
+                moderator = await request.ExecuteAsync();
+                LogResponse(request, moderator);
+                return moderator;
             });
         }
 
@@ -205,7 +228,10 @@ namespace YouTube.Base.Services
             await this.YouTubeServiceWrapper<object>(async () =>
             {
                 LiveChatModeratorsResource.DeleteRequest request = this.connection.GoogleYouTubeService.LiveChatModerators.Delete(moderator.Id);
-                await request.ExecuteAsync();
+                LogRequest(request);
+
+                string response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 return null;
             });
         }
@@ -248,7 +274,10 @@ namespace YouTube.Base.Services
             await this.YouTubeServiceWrapper<object>(async () =>
             {
                 LiveChatBansResource.DeleteRequest request = this.connection.GoogleYouTubeService.LiveChatBans.Delete(ban.Id);
-                await request.ExecuteAsync();
+                LogRequest(request);
+
+                string response = await request.ExecuteAsync();
+                LogResponse(request, response);
                 return null;
             });
         }
@@ -269,7 +298,11 @@ namespace YouTube.Base.Services
                 ban.Snippet.BannedUserDetails.ChannelId = user.Id;
 
                 LiveChatBansResource.InsertRequest request = this.connection.GoogleYouTubeService.LiveChatBans.Insert(ban, "snippet");
-                return await request.ExecuteAsync();
+                LogRequest(request);
+
+                ban = await request.ExecuteAsync();
+                LogResponse(request, ban);
+                return ban;
             });
         }
     }
