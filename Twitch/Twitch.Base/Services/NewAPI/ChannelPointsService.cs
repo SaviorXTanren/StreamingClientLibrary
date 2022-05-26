@@ -140,7 +140,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateGuid(rewardID, "rewardID");
             Validator.ValidateString(status, "status");
-            return await this.GetPagedDataResultAsync<CustomChannelPointRewardRedemptionModel>($"channel_points/custom_rewards?broadcaster_id={broadcaster.id}&reward_id={rewardID}&status={status}&sort=NEWEST", maxResults: maxResults);
+            return await this.GetPagedDataResultAsync<CustomChannelPointRewardRedemptionModel>($"channel_points/custom_rewards/redemptions?broadcaster_id={broadcaster.id}&reward_id={rewardID}&status={status}&sort=NEWEST", maxResults: maxResults);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Twitch.Base.Services.NewAPI
             CustomChannelPointRewardRedemptionUpdateModel redemption = new CustomChannelPointRewardRedemptionUpdateModel();
             redemption.status = status;
 
-            NewTwitchAPIDataRestResult<CustomChannelPointRewardRedemptionModel> result = await this.PatchAsync<NewTwitchAPIDataRestResult<CustomChannelPointRewardRedemptionModel>>($"channel_points/custom_rewards?broadcaster_id={broadcaster.id}&reward_id={rewardID}&id={id}", AdvancedHttpClient.CreateContentFromObject(redemption));
+            NewTwitchAPIDataRestResult<CustomChannelPointRewardRedemptionModel> result = await this.PatchAsync<NewTwitchAPIDataRestResult<CustomChannelPointRewardRedemptionModel>>($"channel_points/custom_rewards/redemptions?broadcaster_id={broadcaster.id}&reward_id={rewardID}&id={id}", AdvancedHttpClient.CreateContentFromObject(redemption));
             if (result != null && result.data != null)
             {
                 return result.data.FirstOrDefault();
