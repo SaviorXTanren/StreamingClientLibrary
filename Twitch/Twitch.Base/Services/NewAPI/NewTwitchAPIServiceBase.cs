@@ -31,7 +31,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<IEnumerable<T>> GetDataResultAsync<T>(string requestUri)
         {
             NewTwitchAPIDataRestResult<T> result = await this.GetAsync<NewTwitchAPIDataRestResult<T>>(requestUri);
-            if (result != null && result.data.Count > 0)
+            if (result != null && result.data != null && result.data.Count > 0)
             {
                 return result.data;
             }
@@ -141,7 +141,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<T[]> PostDataResultAsync<T>(string requestUri)
         {
             NewTwitchAPIDataRestResult<T> result = await this.PostAsync<NewTwitchAPIDataRestResult<T>>(requestUri);
-            if (result != null && result.data.Count > 0)
+            if (result != null && result.data != null && result.data.Count > 0)
             {
                 return result.data.ToArray();
             }
@@ -157,7 +157,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<T[]> PostDataResultAsync<T>(string requestUri, HttpContent content)
         {
             NewTwitchAPIDataRestResult<T> result = await this.PostAsync<NewTwitchAPIDataRestResult<T>>(requestUri, content);
-            if (result != null && result.data.Count > 0)
+            if (result != null && result.data != null && result.data.Count > 0)
             {
                 return result.data.ToArray();
             }
