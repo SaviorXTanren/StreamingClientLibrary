@@ -139,20 +139,7 @@ namespace Twitch.Base.Clients
         /// Connects to the default ChatClient connection.
         /// </summary>
         /// <returns>An awaitable Task</returns>
-        public async Task Connect()
-        {
-            await base.Connect(ChatClient.CHAT_CONNECTION_URL);
-
-            await this.AddCommandsCapability();
-            await this.AddTagsCapability();
-            await this.AddMembershipCapability();
-
-            OAuthTokenModel oauthToken = await this.connection.GetOAuthToken();
-            await this.Send("PASS oauth:" + oauthToken.accessToken);
-
-            NewAPI.Users.UserModel user = await this.connection.NewAPI.Users.GetCurrentUser();
-            await this.Send("NICK " + user.login.ToLower());
-        }
+        public virtual async Task Connect() { await this.Connect(ChatClient.CHAT_CONNECTION_URL); }
 
         /// <summary>
         /// Sends a pong packet.
@@ -355,6 +342,26 @@ namespace Twitch.Base.Clients
         public async Task AddCommandsCapability()
         {
             await this.Send("CAP REQ :twitch.tv/commands");
+        }
+
+        /// <summary>
+        /// Connects to the default ChatClient connection.
+        /// </summary>
+        /// <param name="connectionURL">The URL to connect to</param>
+        /// <returns>An awaitable Task</returns>
+        protected async Task Connect(string connectionURL)
+        {
+            await base.Connect(connectionURL);
+
+            await this.AddCommandsCapability();
+            await this.AddTagsCapability();
+            await this.AddMembershipCapability();
+
+            OAuthTokenModel oauthToken = await this.connection.GetOAuthToken();
+            await this.Send("PASS oauth:" + oauthToken.accessToken);
+
+            NewAPI.Users.UserModel user = await this.connection.NewAPI.Users.GetCurrentUser();
+            await this.Send("NICK " + user.login.ToLower());
         }
 
         /// <summary>
