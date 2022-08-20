@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using StreamingClient.Base.Util;
+using StreamingClient.Base.Web;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -86,6 +89,18 @@ namespace Twitch.Base.Services.NewAPI
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Sends an announcement to the broadcaster’s chat room.
+        /// <param name="channelID">The channel ID send the announcement to</param>
+        /// <param name="announcement">The announcement data to send</param>
+        /// </summary>
+        public async Task SendChatAnnouncement(string channelID, AnnouncementModel announcement)
+        {
+            Validator.ValidateString(channelID, "channelID");
+
+            await this.PostAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(announcement));
         }
 
         private IEnumerable<ChatBadgeSetModel> ProcessChatBadges(JObject jobj)
