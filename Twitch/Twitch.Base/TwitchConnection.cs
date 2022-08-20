@@ -238,6 +238,10 @@ namespace Twitch.Base
         /// </summary>
         moderator__manage__chat_settings,
         /// <summary>
+        /// Manage a broadcaster’s chat announcements.
+        /// </summary>
+        moderator__manage__announcements,
+        /// <summary>
         /// Manage a user object.
         /// </summary>
         user__edit,
