@@ -105,11 +105,6 @@ namespace Twitch.Base.Clients
         public event EventHandler<ChatClearMessagePacketModel> OnClearMessageReceived;
 
         /// <summary>
-        /// Invoked when a host target is received.
-        /// </summary>
-        public event EventHandler<ChatHostTargetPacketModel> OnHostTargetReceived;
-
-        /// <summary>
         /// Invoked when a notice is received.
         /// </summary>
         public event EventHandler<ChatNoticePacketModel> OnNoticeReceived;
@@ -411,9 +406,6 @@ namespace Twitch.Base.Clients
                         break;
                     case ChatClearMessagePacketModel.CommandID:
                         this.OnClearMessageReceived?.Invoke(this, new ChatClearMessagePacketModel(packet));
-                        break;
-                    case ChatHostTargetPacketModel.CommandID:
-                        this.OnHostTargetReceived?.Invoke(this, new ChatHostTargetPacketModel(packet));
                         break;
                     case ChatNoticePacketModel.CommandID:
                         this.OnNoticeReceived?.Invoke(this, new ChatNoticePacketModel(packet));
