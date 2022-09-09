@@ -207,7 +207,8 @@ namespace Twitch.Base.Clients
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
             Validator.ValidateString(message, "message");
-            await this.Send(string.Format("PRIVMSG #{0} :.w {1} {2}", broadcaster.login, user.login, message));
+
+            await this.connection.NewAPI.Chat.SendWhisper(broadcaster.id, user.id, message);
         }
 
         /// <summary>
@@ -220,7 +221,8 @@ namespace Twitch.Base.Clients
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateString(messageID, "messageID");
-            await this.Send(string.Format("PRIVMSG #{0} :/delete {1}", broadcaster.login, messageID));
+
+            await this.connection.NewAPI.Chat.DeleteChatMessage(broadcaster.id, messageID);
         }
 
         /// <summary>
@@ -229,12 +231,14 @@ namespace Twitch.Base.Clients
         /// <param name="broadcaster">The broadcaster's channel to use</param>
         /// <param name="targetUser">The target user to purge</param>
         /// <param name="lengthInSeconds">The length in seconds to time out for</param>
+        /// <param name="reason">The reason to timeout the user</param>
         /// <returns>An awaitable Task</returns>
-        public async Task TimeoutUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser, int lengthInSeconds)
+        public async Task TimeoutUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser, int lengthInSeconds, string reason = null)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(targetUser, "targetUser");
-            await this.Send(string.Format("PRIVMSG #{0} :.timeout {1} {2}", broadcaster.login, targetUser.login, lengthInSeconds));
+
+            await this.connection.NewAPI.Chat.TimeoutUser(broadcaster.id, targetUser.id, lengthInSeconds, reason);
         }
 
         /// <summary>
@@ -245,7 +249,8 @@ namespace Twitch.Base.Clients
         public async Task ClearChat(NewAPI.Users.UserModel broadcaster)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            await this.Send(string.Format("PRIVMSG #{0} :.clear", broadcaster.login));
+
+            await this.connection.NewAPI.Chat.ClearChat(broadcaster.id);
         }
 
         /// <summary>
@@ -258,7 +263,8 @@ namespace Twitch.Base.Clients
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
-            await this.Send(string.Format("PRIVMSG #{0} :.mod {1}", broadcaster.login, user.login));
+
+            await this.connection.NewAPI.Chat.ModUser(broadcaster.id, user.id);
         }
 
         /// <summary>
@@ -271,7 +277,8 @@ namespace Twitch.Base.Clients
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
-            await this.Send(string.Format("PRIVMSG #{0} :.unmod {1}", broadcaster.login, user.login));
+
+            await this.connection.NewAPI.Chat.UnmodUser(broadcaster.id, user.id);
         }
 
         /// <summary>
@@ -279,12 +286,14 @@ namespace Twitch.Base.Clients
         /// </summary>
         /// <param name="broadcaster">The broadcaster's channel</param>
         /// <param name="user">The user to ban</param>
+        /// <param name="reason">The reason to ban the user</param>
         /// <returns>An awaitable Task</returns>
-        public async Task BanUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user)
+        public async Task BanUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user, string reason = null)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
-            await this.Send(string.Format("PRIVMSG #{0} :.ban {1}", broadcaster.login, user.login));
+
+            await this.connection.NewAPI.Chat.BanUser(broadcaster.id, user.id, reason);
         }
 
         /// <summary>
@@ -297,7 +306,8 @@ namespace Twitch.Base.Clients
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
-            await this.Send(string.Format("PRIVMSG #{0} :.unban {1}", broadcaster.login, user.login));
+
+            await this.connection.NewAPI.Chat.UnbanUser(broadcaster.id, user.id);
         }
 
         /// <summary>
@@ -309,7 +319,8 @@ namespace Twitch.Base.Clients
         public async Task RunCommercial(NewAPI.Users.UserModel broadcaster, int lengthInSeconds)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            await this.Send(string.Format("PRIVMSG #{0} :.commercial {1}", broadcaster.login, lengthInSeconds));
+
+            await this.connection.NewAPI.Ads.RunAd(broadcaster, lengthInSeconds);
         }
 
         /// <summary>

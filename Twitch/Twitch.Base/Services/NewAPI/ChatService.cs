@@ -5,7 +5,9 @@ using StreamingClient.Base.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Twitch.Base.Models.NewAPI;
 using Twitch.Base.Models.NewAPI.Chat;
 using Twitch.Base.Models.NewAPI.Users;
 
@@ -92,6 +94,24 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Sends a whisper from the broadcaster to the specified user.
+        /// <param name="channelID">The channel ID to send the whisper from</param>
+        /// <param name="userID">The user ID to send the whisper to</param>
+        /// <param name="message">The message to whisper</param>
+        /// </summary>
+        public async Task SendWhisper(string channelID, string userID, string message)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+            Validator.ValidateString(message, "message");
+
+            JObject jobj = new JObject();
+            jobj["message"] = message;
+
+            await this.PostAsync("whispers?from_user_id=" + channelID + "&to_user_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(jobj));
+        }
+
+        /// <summary>
         /// Sends an announcement to the broadcaster’s chat room.
         /// <param name="channelID">The channel ID send the announcement to</param>
         /// <param name="announcement">The announcement data to send</param>
@@ -101,6 +121,183 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateString(channelID, "channelID");
 
             await this.PostAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(announcement));
+        }
+
+        /// <summary>
+        /// Raids the specified target channel.
+        /// </summary>
+        /// <param name="channelID">The channel ID to raid from</param>
+        /// <param name="targetChannelID">The channel ID to raid</param>
+        public async Task RaidChannel(string channelID, string targetChannelID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(targetChannelID, "targetChannelID");
+
+            await this.PostAsync("raids?from_broadcaster_id=" + channelID + "&to_broadcaster_id=" + targetChannelID, AdvancedHttpClient.CreateEmptyContent());
+        }
+
+        /// <summary>
+        /// Deletes the specified message in the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to clear chat for</param>
+        /// <param name="messageID">The message ID to delete</param>
+        public async Task DeleteChatMessage(string channelID, string messageID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(messageID, "messageID");
+
+            await this.DeleteAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + channelID + "&message_id=" + messageID);
+        }
+
+        /// <summary>
+        /// Clears chat for the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to clear chat for</param>
+        public async Task ClearChat(string channelID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+
+            await this.DeleteAsync("moderation/chat?broadcaster_id=" + channelID + "&moderator_id=" + channelID);
+        }
+
+        /// <summary>
+        /// Bans the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to ban the user from</param>
+        /// <param name="userID">The user ID to ban</param>
+        /// <param name="duration">The duration to ban for</param>
+        /// <param name="reason">The reason for the ban</param>
+        public async Task TimeoutUser(string channelID, string userID, int duration, string reason)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+            Validator.ValidateVariable(duration, "duration");
+            Validator.ValidateString(reason, "reason");
+
+            JObject jobj = new JObject();
+            jobj["user_id"] = userID;
+            jobj["reason"] = reason ?? string.Empty;
+            if (duration > 0)
+            {
+                jobj["duration"] = duration;
+            }
+
+            await this.PostAsync("moderation/bans?broadcaster_id=" + channelID + "&moderator_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(jobj));
+        }
+
+        /// <summary>
+        /// Untimeouts the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to untimeout the user from</param>
+        /// <param name="userID">The user ID to untimeout</param>
+        public async Task UntimeoutUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.DeleteAsync("moderation/bans?broadcaster_id=" + channelID + "&moderator_id=" + channelID + "&user_id=" + userID);
+        }
+
+        /// <summary>
+        /// Bans the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to ban the user from</param>
+        /// <param name="userID">The user ID to ban</param>
+        /// <param name="reason">The reason for the ban</param>
+        public async Task BanUser(string channelID, string userID, string reason)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+            Validator.ValidateString(reason, "reason");
+
+            await this.TimeoutUser(channelID, userID, 0, reason);
+        }
+
+        /// <summary>
+        /// Unbans the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to unban the user from</param>
+        /// <param name="userID">The user ID to unban</param>
+        public async Task UnbanUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.UntimeoutUser(channelID, userID);
+        }
+
+        /// <summary>
+        /// Mods the specified user in the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to mod the user for</param>
+        /// <param name="userID">The user ID to mod</param>
+        public async Task ModUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.PostAsync("moderation/moderators?broadcaster_id=" + channelID + "&user_id=" + userID, AdvancedHttpClient.CreateEmptyContent());
+        }
+
+        /// <summary>
+        /// Unbans the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to unban the user from</param>
+        /// <param name="userID">The user ID to unban</param>
+        public async Task UnmodUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.DeleteAsync("moderation/moderators?broadcaster_id=" + channelID + "&user_id=" + userID);
+        }
+
+        /// <summary>
+        /// VIPs the specified user in the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to VIP the user for</param>
+        /// <param name="userID">The user ID to VIP</param>
+        public async Task VIPUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.PostAsync("channels/vips?broadcaster_id=" + channelID + "&user_id=" + userID, AdvancedHttpClient.CreateEmptyContent());
+        }
+
+        /// <summary>
+        /// Un-VIPs the specified user from the broadcaster's chat room.
+        /// </summary>
+        /// <param name="channelID">The channel ID to un-VIP the user from</param>
+        /// <param name="userID">The user ID to un-VIP</param>
+        public async Task UnVIPUser(string channelID, string userID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(userID, "userID");
+
+            await this.DeleteAsync("channels/vips?broadcaster_id=" + channelID + "&user_id=" + userID);
+        }
+
+        /// <summary>
+        /// Updates the chat settings for the broadcster's channel.
+        /// </summary>
+        /// <param name="channelID">The channel ID to update chat settings for</param>
+        /// <param name="settings">The settings to update for the channel</param>
+        /// <returns>The updated chat settings</returns>
+        public async Task<ChatSettingsModel> UpdateChatSettings(string channelID, ChatSettingsModel settings)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateVariable(settings, "settings");
+
+            NewTwitchAPIDataRestResult<ChatSettingsModel> updatedSettings =
+                await this.PatchAsync<NewTwitchAPIDataRestResult<ChatSettingsModel>>("chat/settings?broadcaster_id=" + channelID + "&moderator_id=" + channelID,
+                AdvancedHttpClient.CreateContentFromObject(settings));
+
+            if (updatedSettings != null && updatedSettings.data.Count > 0)
+            {
+                return updatedSettings.data.First();
+            }
+            return null;
         }
 
         private IEnumerable<ChatBadgeSetModel> ProcessChatBadges(JObject jobj)

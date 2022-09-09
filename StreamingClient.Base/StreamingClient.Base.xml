@@ -916,6 +916,12 @@
             <param name="str">The string to serialize</param>
             <returns>The HttpContent containing the serialized string</returns>
         </member>
+        <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.CreateEmptyContent">
+            <summary>
+            Creates an empty HttpContent object.
+            </summary>
+            <returns>The empty HttpContent</returns>
+        </member>
         <member name="M:StreamingClient.Base.Web.AdvancedHttpClient.URLEncodeString(System.String)">
             <summary>
             URL encodes the specified string.

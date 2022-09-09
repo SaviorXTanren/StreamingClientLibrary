@@ -108,6 +108,12 @@ namespace StreamingClient.Base.Web
         public static HttpContent CreateContentFromString(string str) { return new StringContent(str, Encoding.UTF8, "application/json"); }
 
         /// <summary>
+        /// Creates an empty HttpContent object.
+        /// </summary>
+        /// <returns>The empty HttpContent</returns>
+        public static HttpContent CreateEmptyContent() { return new StringContent(string.Empty); }
+
+        /// <summary>
         /// URL encodes the specified string.
         /// </summary>
         /// <param name="str">The string to encode</param>
