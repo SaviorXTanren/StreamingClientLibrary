@@ -279,6 +279,23 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Gets the chat settings for the broadcster's channel.
+        /// </summary>
+        /// <param name="channelID">The channel ID to update chat settings for</param>
+        /// <returns>The chat settings</returns>
+        public async Task<ChatSettingsModel> GetChatSettings(string channelID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+
+            IEnumerable<ChatSettingsModel> settings = await this.GetDataResultAsync<ChatSettingsModel>("chat/settings?broadcaster_id=" + channelID + "&moderator_id=" + channelID);
+            if (settings != null)
+            {
+                return settings.FirstOrDefault();
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Updates the chat settings for the broadcster's channel.
         /// </summary>
         /// <param name="channelID">The channel ID to update chat settings for</param>
