@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.47</Version>
+    <Version>1.0.0.48</Version>
     <Description>C# client library for the Twitch streaming service: https://twitch.tv
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -35,8 +35,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <AssemblyVersion>1.0.0.47</AssemblyVersion>
-    <FileVersion>1.0.0.47</FileVersion>
+    <AssemblyVersion>1.0.0.48</AssemblyVersion>
+    <FileVersion>1.0.0.48</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageReleaseNotes>- Adding new chat functionality APIs and switching underlying chat client functions to use these APIs
