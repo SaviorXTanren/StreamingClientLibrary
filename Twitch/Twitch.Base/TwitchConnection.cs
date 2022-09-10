@@ -146,6 +146,10 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__extensions,
         /// <summary>
+        /// Manage a channel’s moderators.
+        /// </summary>
+        channel__manage__moderators,
+        /// <summary>
         /// Manage a channel’s polls.
         /// </summary>
         channel__manage__polls,
@@ -165,6 +169,10 @@ namespace Twitch.Base
         /// Manage a channel’s videos, including deleting videos.
         /// </summary>
         channel__manage__videos,
+        /// <summary>
+        /// Manage a channel’s VIPs.
+        /// </summary>
+        channel__manage__vips,
         /// <summary>
         /// View a list of users with the editor role for a channel.
         /// </summary>
@@ -197,6 +205,10 @@ namespace Twitch.Base
         /// Get a list of all subscribers to your channel and check if a user is subscribed to your channel
         /// </summary>
         channel__read__subscriptions,
+        /// <summary>
+        /// View a channel’s VIPs.
+        /// </summary>
+        channel__read__vips,
         /// <summary>
         /// Manage a clip object.
         /// </summary>
@@ -234,6 +246,10 @@ namespace Twitch.Base
         /// </summary>
         moderator__read__chat_settings,
         /// <summary>
+        /// Manage a broadcaster’s chat room messages.
+        /// </summary>
+        moderator__manage__chat_messages,
+        /// <summary>
         /// Manage a broadcaster’s chat room settings.
         /// </summary>
         moderator__manage__chat_settings,
@@ -249,6 +265,14 @@ namespace Twitch.Base
         /// Manage the block list of a user.
         /// </summary>
         user__manage__blocked_users,
+        /// <summary>
+        /// Manage a user's chat color.
+        /// </summary>
+        user__manage__chat_color,
+        /// <summary>
+        /// Manage the whispers of a user.
+        /// </summary>
+        user__manage__whispers,
         /// <summary>
         /// View the block list of a user.
         /// </summary>
