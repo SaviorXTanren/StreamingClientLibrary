@@ -31,9 +31,11 @@ namespace Twitch.ChatSample.Console
             OAuthClientScopeEnum.channel__edit__commercial,
 
             OAuthClientScopeEnum.channel__manage__broadcast,
+            OAuthClientScopeEnum.channel__manage__moderators,
             OAuthClientScopeEnum.channel__manage__polls,
             OAuthClientScopeEnum.channel__manage__predictions,
             OAuthClientScopeEnum.channel__manage__redemptions,
+            OAuthClientScopeEnum.channel__manage__vips,
 
             OAuthClientScopeEnum.channel__moderate,
 
@@ -44,6 +46,7 @@ namespace Twitch.ChatSample.Console
             OAuthClientScopeEnum.channel__read__predictions,
             OAuthClientScopeEnum.channel__read__redemptions,
             OAuthClientScopeEnum.channel__read__subscriptions,
+            OAuthClientScopeEnum.channel__read__vips,
 
             OAuthClientScopeEnum.clips__edit,
 
@@ -52,13 +55,17 @@ namespace Twitch.ChatSample.Console
 
             OAuthClientScopeEnum.moderation__read,
 
-            OAuthClientScopeEnum.moderator__manage__banned_users,
             OAuthClientScopeEnum.moderator__read__chat_settings,
+
+            OAuthClientScopeEnum.moderator__manage__banned_users,
+            OAuthClientScopeEnum.moderator__manage__chat_messages,
             OAuthClientScopeEnum.moderator__manage__chat_settings,
 
             OAuthClientScopeEnum.user__edit,
 
             OAuthClientScopeEnum.user__manage__blocked_users,
+            OAuthClientScopeEnum.user__manage__whispers,
+
             OAuthClientScopeEnum.user__read__blocked_users,
 
             OAuthClientScopeEnum.user__read__broadcast,
