@@ -21,9 +21,5 @@
         /// The number of seconds into the stream.
         /// </summary>
         public long position_seconds { get; set; }
-        /// <summary>
-        /// The url to the stream marker.
-        /// </summary>
-        public string URL { get; set; }
     }
 }
