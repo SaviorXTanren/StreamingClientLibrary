@@ -52,7 +52,7 @@ namespace YouTube.ChatSample.Console
                         {
                             System.Console.WriteLine("Connection successful. Logged in as: " + channel.Snippet.Title);
 
-                            LiveBroadcast broadcast = await connection.LiveBroadcasts.GetChannelActiveBroadcast(channel);
+                            var broadcast = await connection.LiveBroadcasts.GetMyActiveBroadcast();
 
                             System.Console.WriteLine("Connecting chat client!");
 

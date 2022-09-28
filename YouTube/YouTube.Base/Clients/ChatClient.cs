@@ -44,7 +44,7 @@ namespace YouTube.Base.Clients
         /// <returns>Whether the connection was successful</returns>
         public async Task<bool> Connect(bool listenForMessage = true, int minimumPollTimeMilliseconds = 0)
         {
-            return await this.Connect(await this.connection.LiveBroadcasts.GetMyActiveBroadcast(), listenForMessage, minimumPollTimeMilliseconds);
+            return await this.Connect(null, listenForMessage, minimumPollTimeMilliseconds);
         }
 
         /// <summary>
@@ -142,6 +142,11 @@ namespace YouTube.Base.Clients
             {
                 try
                 {
+                    if (this.Broadcast == null)
+                    {
+                        this.Broadcast = await this.connection.LiveBroadcasts.GetMyActiveBroadcast();
+                    }
+
                     if (this.Broadcast != null)
                     {
                         LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.Broadcast);
@@ -172,9 +177,9 @@ namespace YouTube.Base.Clients
                     }
                     else
                     {
-                        this.Broadcast = await this.connection.LiveBroadcasts.GetMyActiveBroadcast();
                         await Task.Delay(60000);
                     }
+
                 }
                 catch (TaskCanceledException) { }
                 catch (Exception ex) { Logger.Log(ex); }

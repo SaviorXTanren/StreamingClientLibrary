@@ -77,8 +77,8 @@ namespace YouTube.Base.Services
             {
                 LiveBroadcastsResource.ListRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.List("snippet,contentDetails,status");
                 request.BroadcastType = BroadcastTypeEnum.All;
-                request.Mine = true;
-                request.MaxResults = 10;
+                request.BroadcastStatus = BroadcastStatusEnum.Active;
+                request.MaxResults = 5;
                 LogRequest(request);
 
                 LiveBroadcastListResponse response = await request.ExecuteAsync();
