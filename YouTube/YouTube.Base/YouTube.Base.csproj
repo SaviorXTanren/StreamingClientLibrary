@@ -4,19 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>YouTube.Base</AssemblyName>
     <RootNamespace>YouTube.Base</RootNamespace>
-    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2021</Copyright>
+    <Copyright>Copyright © Matthew Olivo (SaviorXTanren) 2017-2022</Copyright>
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.12</Version>
+    <Version>1.0.0.13</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>YouTube Streaming Bot Chat Interactive</PackageTags>
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Product>YouTube Streaming Client Library</Product>
-    <AssemblyVersion>1.0.0.12</AssemblyVersion>
-    <FileVersion>1.0.0.12</FileVersion>
+    <AssemblyVersion>1.0.0.13</AssemblyVersion>
+    <FileVersion>1.0.0.13</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -42,7 +42,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Authors>Matthew Olivo</Authors>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>Moving broadcast updating logic over into video updating service</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating logic for getting active broadcast for account</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>YouTube.Base</AssemblyName>
     <RootNamespace>YouTube.Base</RootNamespace>
