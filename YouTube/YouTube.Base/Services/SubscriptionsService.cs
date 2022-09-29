@@ -1,10 +1,8 @@
 ﻿using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace YouTube.Base.Services
@@ -50,7 +48,23 @@ namespace YouTube.Base.Services
             return await this.GetSubscriptions(myRecentSubscribers: true, maxResults: maxResults);
         }
 
-        internal async Task<IEnumerable<Subscription>> GetSubscriptions(bool mySubscriptions = false, bool myRecentSubscribers = false, bool mySubscribers = false, int maxResults = 1)
+        /// <summary>
+        /// Gets the subscription information for the subscriber channel to the subscribed channel if it exists.
+        /// </summary>
+        /// <param name="subscribedChannel">The channel to check if they are subscribed to</param>
+        /// <param name="subscriberChannel">The channel to check if they are subscribed</param>
+        /// <returns>The subscription, if it exists</returns>
+        public async Task<Subscription> CheckIfSubscribed(string subscribedChannel, string subscriberChannel)
+        {
+            var subscriptions = await this.GetSubscriptions(forChannelId: subscribedChannel, channelId: subscriberChannel, maxResults: 1);
+            if (subscriptions != null)
+            {
+                return subscriptions.FirstOrDefault();
+            }
+            return null;
+        }
+
+        internal async Task<IEnumerable<Subscription>> GetSubscriptions(bool mySubscriptions = false, bool myRecentSubscribers = false, bool mySubscribers = false, string forChannelId = null, string channelId = null, int maxResults = 1)
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
@@ -70,6 +84,11 @@ namespace YouTube.Base.Services
                     else if (mySubscribers)
                     {
                         request.MySubscribers = mySubscribers;
+                    }
+                    else if (!string.IsNullOrEmpty(forChannelId) && !string.IsNullOrEmpty(channelId))
+                    {
+                        request.ForChannelId = forChannelId;
+                        request.ChannelId = channelId;
                     }
                     request.MaxResults = Math.Min(maxResults, 50);
                     request.PageToken = pageToken;

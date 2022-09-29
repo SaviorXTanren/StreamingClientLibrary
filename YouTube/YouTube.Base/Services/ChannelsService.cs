@@ -34,9 +34,9 @@ namespace YouTube.Base.Services
                 ChannelListResponse response = await request.ExecuteAsync();
                 LogResponse(request, response);
 
-                if (response.Items.Count > 0)
+                if (response.Items != null)
                 {
-                    return response.Items.First();
+                    return response.Items.FirstOrDefault();
                 }
                 return null;
             });
@@ -60,9 +60,9 @@ namespace YouTube.Base.Services
                 ChannelListResponse response = await request.ExecuteAsync();
                 LogResponse(request, response);
 
-                if (response.Items.Count > 0)
+                if (response.Items != null)
                 {
-                    return response.Items.First();
+                    return response.Items.FirstOrDefault();
                 }
                 return null;
             });
