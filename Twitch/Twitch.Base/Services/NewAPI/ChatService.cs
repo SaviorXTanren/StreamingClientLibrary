@@ -146,7 +146,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateString(channelID, "channelID");
             Validator.ValidateString(messageID, "messageID");
 
-            await this.DeleteAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + channelID + "&message_id=" + messageID);
+            await this.DeleteAsync("moderation/chat?broadcaster_id=" + channelID + "&moderator_id=" + channelID + "&message_id=" + messageID);
         }
 
         /// <summary>
