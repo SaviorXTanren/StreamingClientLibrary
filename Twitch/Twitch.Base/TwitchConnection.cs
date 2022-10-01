@@ -242,6 +242,10 @@ namespace Twitch.Base
         /// </summary>
         moderator__manage__automod_settings,
         /// <summary>
+        /// View a broadcaster’s list of chatters.
+        /// </summary>
+        moderator__read__chatters,
+        /// <summary>
         /// View a broadcaster’s chat room settings.
         /// </summary>
         moderator__read__chat_settings,

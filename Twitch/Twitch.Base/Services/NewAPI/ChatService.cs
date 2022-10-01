@@ -283,6 +283,17 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <param name="channelID">The channel ID to update chat settings for</param>
         /// <returns>The chat settings</returns>
+        public async Task<IEnumerable<ChatterModel>> GetChatters(string channelID)
+        {
+            Validator.ValidateString(channelID, "channelID");
+            return await this.GetPagedDataResultAsync<ChatterModel>("chat/chatters?broadcaster_id=" + channelID + "&moderator_id=" + channelID);
+        }
+
+        /// <summary>
+        /// Gets the chat settings for the broadcster's channel.
+        /// </summary>
+        /// <param name="channelID">The channel ID to update chat settings for</param>
+        /// <returns>The chat settings</returns>
         public async Task<ChatSettingsModel> GetChatSettings(string channelID)
         {
             Validator.ValidateString(channelID, "channelID");
