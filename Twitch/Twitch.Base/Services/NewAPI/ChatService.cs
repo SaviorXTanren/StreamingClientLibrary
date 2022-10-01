@@ -279,14 +279,15 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
-        /// Gets the chat settings for the broadcster's channel.
+        /// Gets the chatters for the broadcster's channel.
         /// </summary>
-        /// <param name="channelID">The channel ID to update chat settings for</param>
-        /// <returns>The chat settings</returns>
-        public async Task<IEnumerable<ChatterModel>> GetChatters(string channelID)
+        /// <param name="channelID">The channel ID to get chatters for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The chatters</returns>
+        public async Task<IEnumerable<ChatterModel>> GetChatters(string channelID, int maxResults = 1)
         {
             Validator.ValidateString(channelID, "channelID");
-            return await this.GetPagedDataResultAsync<ChatterModel>("chat/chatters?broadcaster_id=" + channelID + "&moderator_id=" + channelID);
+            return await this.GetPagedDataResultAsync<ChatterModel>("chat/chatters?broadcaster_id=" + channelID + "&moderator_id=" + channelID, maxResults);
         }
 
         /// <summary>
