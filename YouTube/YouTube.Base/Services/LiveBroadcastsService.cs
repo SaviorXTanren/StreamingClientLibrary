@@ -115,6 +115,36 @@ namespace YouTube.Base.Services
         }
 
         /// <summary>
+        /// Updates the specified broadcast.
+        /// </summary>
+        /// <param name="broadcast">The broadcast to update</param>
+        /// <param name="title">The title to set</param>
+        /// <param name="description">The description to set</param>
+        /// <returns>The updated broadcast</returns>
+        public async Task<LiveBroadcast> UpdateBroadcast(LiveBroadcast broadcast, string title = null, string description = null)
+        {
+            return await this.YouTubeServiceWrapper(async () =>
+            {
+                LiveBroadcastsResource.UpdateRequest request = this.connection.GoogleYouTubeService.LiveBroadcasts.Update(new LiveBroadcast()
+                {
+                    Id = broadcast.Id,
+                    Snippet = new LiveBroadcastSnippet()
+                    {
+                        Title = title ?? broadcast.Snippet.Title,
+                        Description = description ?? broadcast.Snippet.Description
+                    },
+                    Status = broadcast.Status,
+                    ContentDetails = broadcast.ContentDetails
+                }, "snippet");
+                LogRequest(request);
+
+                LiveBroadcast response = await request.ExecuteAsync();
+                LogResponse(request, response);
+                return broadcast;
+            });
+        }
+
+        /// <summary>
         /// Starts an ad break for the live broadcast.
         /// </summary>
         /// <param name="broadcast">The broadcast of the live broadcast</param>
