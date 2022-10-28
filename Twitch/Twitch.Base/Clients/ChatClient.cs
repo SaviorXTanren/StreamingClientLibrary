@@ -233,7 +233,7 @@ namespace Twitch.Base.Clients
         /// <param name="lengthInSeconds">The length in seconds to time out for</param>
         /// <param name="reason">The reason to timeout the user</param>
         /// <returns>An awaitable Task</returns>
-        public async Task TimeoutUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser, int lengthInSeconds, string reason = null)
+        public async Task TimeoutUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel targetUser, int lengthInSeconds, string reason = "None")
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(targetUser, "targetUser");
@@ -288,7 +288,7 @@ namespace Twitch.Base.Clients
         /// <param name="user">The user to ban</param>
         /// <param name="reason">The reason to ban the user</param>
         /// <returns>An awaitable Task</returns>
-        public async Task BanUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user, string reason = null)
+        public async Task BanUser(NewAPI.Users.UserModel broadcaster, NewAPI.Users.UserModel user, string reason = "None")
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
             Validator.ValidateVariable(user, "user");
