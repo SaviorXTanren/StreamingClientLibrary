@@ -1,9 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StreamingClient.Base.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI.EventSub;
 using Twitch.Base.Services.NewAPI;
 
@@ -43,7 +41,12 @@ namespace Twitch.Base.UnitTests.NewAPI
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Count() == 0);
 
-                EventSubSubscriptionModel newSub = await connection.NewAPI.EventSub.CreateSubscription(EventSubTypesEnum.ChannelFollow, "broadcaster_user_id", "12826", "https://example.com/webhooks/callback", secret);
+                EventSubSubscriptionModel newSub = await connection.NewAPI.EventSub.CreateSubscription(
+                    EventSubTypesEnum.ChannelFollow,
+                    "webhook",
+                    new Dictionary<string, string> { { "broadcaster_user_id", "12826" } },
+                    secret,
+                    "https://example.com/webhooks/callback");
                 Assert.IsNotNull(newSub);
                 Assert.AreEqual("webhook_callback_verification_pending", newSub.status);
 

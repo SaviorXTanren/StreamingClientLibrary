@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,19 +63,39 @@ namespace Twitch.Base.Services.NewAPI
         /// Creates a subscription for the app identified by a Bearer token.  Requires App Token.
         /// </summary>
         /// <returns>The subscribed webhooks for the app identified by a Bearer token in the Twitch connection</returns>
-        public async Task<EventSubSubscriptionModel> CreateSubscription(EventSubTypesEnum type, string conditionName, string conditionValue, string callback, string secret)
+        [Obsolete]
+        public Task<EventSubSubscriptionModel> CreateSubscription(EventSubTypesEnum type, string conditionName, string conditionValue, string callback, string secret)
+        {
+            return CreateSubscription(type, "webhook", new Dictionary<string, string> { { conditionName, conditionValue } }, secret, callback);
+        }
+
+        /// <summary>
+        /// Creates a subscription for the app identified by a Bearer token.  Requires App Token for webhook and user token for websocket.
+        /// </summary>
+        /// <returns>The subscribed event for the app identified by a Bearer token in the Twitch connection</returns>
+        public async Task<EventSubSubscriptionModel> CreateSubscription(EventSubTypesEnum type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null)
         {
             JObject jobj = new JObject();
             jobj["type"] = EnumHelper.GetEnumName(type);
             jobj["version"] = "1";
 
             jobj["condition"] = new JObject();
-            jobj["condition"][conditionName] = conditionValue;
+            foreach (KeyValuePair<string, string> kvp in conditions)
+            {
+                jobj["condition"][kvp.Key] = kvp.Value;
+            }
 
             jobj["transport"] = new JObject();
-            jobj["transport"]["method"] = "webhook";
-            jobj["transport"]["callback"] = callback;
-            jobj["transport"]["secret"] = secret;
+            jobj["transport"]["method"] = transportMethod;
+            if (transportMethod == "webhook")
+            {
+                jobj["transport"]["callback"] = webhookCallback;
+                jobj["transport"]["secret"] = secretOrSessionId;
+            }
+            else
+            {
+                jobj["transport"]["session_id"] = secretOrSessionId;
+            }
 
             // TODO: Consider getting other top level fields
             //      "total": 1,
