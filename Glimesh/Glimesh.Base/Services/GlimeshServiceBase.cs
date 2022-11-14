@@ -80,6 +80,42 @@ namespace Glimesh.Base.Services
         }
 
         /// <summary>
+        /// Performs a GraphQL mutation with the specified query text and returns the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of the result</typeparam>
+        /// <param name="query">The query to perform</param>
+        /// <param name="key">The key to get for the data</param>
+        /// <returns>The result data</returns>
+        protected async Task<T> MutationAsync<T>(string query, string key = null)
+        {
+            try
+            {
+                GraphQLHttpClient client = await this.GetGraphQLClient();
+                GraphQLResponse<JObject> response = await client.SendMutationAsync<JObject>(new GraphQLRequest(query));
+
+                Logger.Log(LogLevel.Debug, JSONSerializerHelper.SerializeToString(response));
+
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    foreach (GraphQLError error in response.Errors)
+                    {
+                        Logger.Log(LogLevel.Error, $"GraphQL Query Error: {query} - {error.Message}");
+                    }
+                }
+
+                if (key != null && response.Data != null && response.Data.ContainsKey(key))
+                {
+                    return response.Data[key].ToObject<T>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+            }
+            return default(T);
+        }
+
+        /// <summary>
         /// Gets the OAuth token for the connection of this service.
         /// </summary>
         /// <param name="autoRefreshToken">Whether to automatically refresh the OAuth token or not if it has to be</param>

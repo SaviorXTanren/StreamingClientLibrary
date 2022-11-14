@@ -36,6 +36,14 @@ namespace Glimesh.Base
         /// View the streamkey of the user.
         /// </summary>
         streamkey,
+        /// <summary>
+        /// Update stream info.
+        /// </summary>
+        stream_info,
+        /// <summary>
+        /// Follow and unfollow on behalf of the user.
+        /// </summary>
+        follow,
     }
 
     /// <summary>
@@ -69,6 +77,11 @@ namespace Glimesh.Base
         /// APIs for Channel interaction.
         /// </summary>
         public ChannelService Channel { get; private set; }
+
+        /// <summary>
+        /// APIs for User interaction.
+        /// </summary>
+        public StreamService Stream { get; private set; }
 
         /// <summary>
         /// APIs for User interaction.
@@ -205,6 +218,7 @@ namespace Glimesh.Base
             this.OAuth = new OAuthService(this);
             this.Category = new CategoryService(this);
             this.Channel = new ChannelService(this);
+            this.Stream = new StreamService(this);
             this.Users = new UsersService(this);
         }
 
