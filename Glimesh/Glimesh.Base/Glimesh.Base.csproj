@@ -13,10 +13,10 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Glimesh Streaming Bot Chat Interactive</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.18</Version>
-    <AssemblyVersion>1.0.0.18</AssemblyVersion>
-    <FileVersion>1.0.0.18</FileVersion>
-    <PackageReleaseNotes>Adding additional properties to Glimesh channels</PackageReleaseNotes>
+    <Version>1.0.0.19</Version>
+    <AssemblyVersion>1.0.0.19</AssemblyVersion>
+    <FileVersion>1.0.0.19</FileVersion>
+    <PackageReleaseNotes>Adding new APIs for Glimesh service</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
