@@ -17,8 +17,7 @@ namespace Twitch.Base.Models.NewAPI.EventSub
         /// <summary>
         /// The notification’s subscription type.
         /// </summary>
-        [JsonConverter(typeof(StringEnumNameConverter))]
-        public EventSubTypesEnum type { get; set; }
+        public string type { get; set; }
 
         /// <summary>
         /// The version of the subscription.

@@ -42,7 +42,7 @@ namespace Twitch.Base.UnitTests.NewAPI
                 Assert.IsTrue(results.Count() == 0);
 
                 EventSubSubscriptionModel newSub = await connection.NewAPI.EventSub.CreateSubscription(
-                    EventSubTypesEnum.ChannelFollow,
+                    "channel.follow",
                     "webhook",
                     new Dictionary<string, string> { { "broadcaster_user_id", "12826" } },
                     secret,

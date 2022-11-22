@@ -4,8 +4,6 @@ using StreamingClient.Base.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +62,7 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <returns>The subscribed webhooks for the app identified by a Bearer token in the Twitch connection</returns>
         [Obsolete]
-        public Task<EventSubSubscriptionModel> CreateSubscription(EventSubTypesEnum type, string conditionName, string conditionValue, string callback, string secret)
+        public Task<EventSubSubscriptionModel> CreateSubscription(string type, string conditionName, string conditionValue, string callback, string secret)
         {
             return CreateSubscription(type, "webhook", new Dictionary<string, string> { { conditionName, conditionValue } }, secret, callback);
         }
@@ -73,7 +71,7 @@ namespace Twitch.Base.Services.NewAPI
         /// Creates a subscription for the app identified by a Bearer token.  Requires App Token for webhook and user token for websocket.
         /// </summary>
         /// <returns>The subscribed event for the app identified by a Bearer token in the Twitch connection</returns>
-        public async Task<EventSubSubscriptionModel> CreateSubscription(EventSubTypesEnum type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null)
+        public async Task<EventSubSubscriptionModel> CreateSubscription(string type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null)
         {
             JObject jobj = new JObject();
             jobj["type"] = EnumHelper.GetEnumName(type);
