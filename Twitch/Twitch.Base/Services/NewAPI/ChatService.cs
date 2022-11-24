@@ -173,7 +173,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateString(userID, "userID");
             Validator.ValidateVariable(duration, "duration");
             Validator.ValidateString(reason, "reason");
-
+            JObject jdata = new JObject();
             JObject jobj = new JObject();
             jobj["user_id"] = userID;
             jobj["reason"] = reason ?? string.Empty;
@@ -181,8 +181,10 @@ namespace Twitch.Base.Services.NewAPI
             {
                 jobj["duration"] = duration;
             }
+            jdata["data"] = jobj;
 
-            await this.PostAsync("moderation/bans?broadcaster_id=" + channelID + "&moderator_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(jobj));
+            await this.PostAsync("moderation/bans?broadcaster_id=" + channelID + "&moderator_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(jdata));
+
         }
 
         /// <summary>
