@@ -173,6 +173,7 @@ namespace Twitch.Base.Services.NewAPI
             Validator.ValidateString(userID, "userID");
             Validator.ValidateVariable(duration, "duration");
             Validator.ValidateString(reason, "reason");
+
             JObject jdata = new JObject();
             JObject jobj = new JObject();
             jobj["user_id"] = userID;
