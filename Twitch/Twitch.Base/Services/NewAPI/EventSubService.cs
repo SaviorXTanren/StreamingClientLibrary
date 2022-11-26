@@ -74,7 +74,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<EventSubSubscriptionModel> CreateSubscription(string type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null)
         {
             JObject jobj = new JObject();
-            jobj["type"] = EnumHelper.GetEnumName(type);
+            jobj["type"] = type;
             jobj["version"] = "1";
 
             jobj["condition"] = new JObject();
