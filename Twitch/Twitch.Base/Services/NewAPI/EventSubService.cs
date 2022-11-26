@@ -62,20 +62,28 @@ namespace Twitch.Base.Services.NewAPI
         /// </summary>
         /// <returns>The subscribed webhooks for the app identified by a Bearer token in the Twitch connection</returns>
         [Obsolete]
-        public Task<EventSubSubscriptionModel> CreateSubscription(string type, string conditionName, string conditionValue, string callback, string secret)
+        public Task<EventSubSubscriptionModel> CreateSubscription(string type, string conditionName, string conditionValue, string callback, string secret, string version = null)
         {
-            return CreateSubscription(type, "webhook", new Dictionary<string, string> { { conditionName, conditionValue } }, secret, callback);
+            return CreateSubscription(type, "webhook", new Dictionary<string, string> { { conditionName, conditionValue } }, secret, callback, version);
         }
 
         /// <summary>
         /// Creates a subscription for the app identified by a Bearer token.  Requires App Token for webhook and user token for websocket.
         /// </summary>
         /// <returns>The subscribed event for the app identified by a Bearer token in the Twitch connection</returns>
-        public async Task<EventSubSubscriptionModel> CreateSubscription(string type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null)
+        public async Task<EventSubSubscriptionModel> CreateSubscription(string type, string transportMethod, IReadOnlyDictionary<string, string> conditions, string secretOrSessionId, string webhookCallback = null, string version = null)
         {
             JObject jobj = new JObject();
             jobj["type"] = type;
-            jobj["version"] = "1";
+
+            if (string.IsNullOrEmpty(version))
+            {
+                jobj["version"] = "1";
+            }
+            else
+            {
+                jobj["version"] = version;
+            }
 
             jobj["condition"] = new JObject();
             foreach (KeyValuePair<string, string> kvp in conditions)
