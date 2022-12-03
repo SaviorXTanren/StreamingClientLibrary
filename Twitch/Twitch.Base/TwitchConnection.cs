@@ -174,6 +174,10 @@ namespace Twitch.Base
         /// </summary>
         channel__manage__vips,
         /// <summary>
+        /// Read charity campaign details and user donations on your channel.
+        /// </summary>
+        channel__read__charity,
+        /// <summary>
         /// View a list of users with the editor role for a channel.
         /// </summary>
         channel__read__editors,
