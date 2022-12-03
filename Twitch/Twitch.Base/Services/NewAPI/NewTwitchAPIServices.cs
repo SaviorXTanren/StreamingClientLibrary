@@ -26,6 +26,11 @@
         public ChannelsService Channels { get; private set; }
 
         /// <summary>
+        /// APIs for Charity interaction.
+        /// </summary>
+        public CharityService Charity { get; private set; }
+
+        /// <summary>
         /// APIs for Chat interaction.
         /// </summary>
         public ChatService Chat { get; private set; }
@@ -100,6 +105,7 @@
             this.Bits = new BitsService(connection);
             this.ChannelPoints = new ChannelPointsService(connection);
             this.Channels = new ChannelsService(connection);
+            this.Charity = new CharityService(connection);
             this.Chat = new ChatService(connection);
             this.Clips = new ClipsService(connection);
             this.EventSub = new EventSubService(connection);
