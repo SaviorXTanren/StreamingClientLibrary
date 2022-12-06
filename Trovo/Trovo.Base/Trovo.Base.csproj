@@ -14,9 +14,9 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Trovo Streaming Bot Chat Interactive</PackageTags>
-    <Version>1.0.0.19</Version>
-    <AssemblyVersion>1.0.0.19</AssemblyVersion>
-    <FileVersion>1.0.0.19</FileVersion>
+    <Version>1.0.0.20</Version>
+    <AssemblyVersion>1.0.0.20</AssemblyVersion>
+    <FileVersion>1.0.0.20</FileVersion>
     <PackageReleaseNotes>Fixing bug with querying top channels with category</PackageReleaseNotes>
   </PropertyGroup>
 
