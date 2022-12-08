@@ -30,7 +30,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
   <ItemGroup>
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2756" />
     <PackageReference Include="Google.Apis.YouTubePartner.v1" Version="1.35.1.1334" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
   <ItemGroup>
