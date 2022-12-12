@@ -355,7 +355,7 @@ namespace Twitch.Base.Clients
         /// </summary>
         /// <param name="connectionURL">The URL to connect to</param>
         /// <returns>An awaitable Task</returns>
-        protected async Task Connect(string connectionURL)
+        protected new async Task Connect(string connectionURL)
         {
             await base.Connect(connectionURL);
 

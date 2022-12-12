@@ -23,7 +23,7 @@ namespace Trovo.Base.Services
 
         private class ChannelSubscriptionsWrapperModel : PageDataResponseModel
         {
-            public int? total { get; set; }
+            public new int? total { get; set; }
 
             public List<ChannelSubscriberModel> subscriptions { get; set; }
 
