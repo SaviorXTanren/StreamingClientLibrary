@@ -8,15 +8,15 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.14</Version>
+    <Version>1.0.0.15</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>YouTube Streaming Bot Chat Interactive</PackageTags>
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Product>YouTube Streaming Client Library</Product>
-    <AssemblyVersion>1.0.0.14</AssemblyVersion>
-    <FileVersion>1.0.0.14</FileVersion>
+    <AssemblyVersion>1.0.0.15</AssemblyVersion>
+    <FileVersion>1.0.0.15</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -42,7 +42,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Authors>Matthew Olivo</Authors>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>Adding API to check if a user is subscribed to a channel</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating Nuget packages</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>YouTube.Base</AssemblyName>
     <RootNamespace>YouTube.Base</RootNamespace>
