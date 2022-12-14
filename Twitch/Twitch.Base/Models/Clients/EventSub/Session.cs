@@ -22,7 +22,7 @@ namespace Twitch.Base.Models.Clients.EventSub
         /// The maximum number of seconds that you should expect silence before receiving a keepalive message.
         /// </summary>
         [JsonProperty("keepalive_timeout_seconds")]
-        public int KeepaliveTimeoutSeconds { get; set; }
+        public int? KeepaliveTimeoutSeconds { get; set; }
 
         /// <summary>
         /// The URL to reconnect to. The connection automatically includes the subscriptions from the old connection.
