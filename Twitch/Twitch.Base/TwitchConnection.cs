@@ -198,6 +198,10 @@ namespace Twitch.Base
         /// </summary>
         channel__read__predictions,
         /// <summary>
+        /// Manage a channel raiding another channel.
+        /// </summary>
+        channel__read__raids,
+        /// <summary>
         /// Get channel point redemption events for your channel.
         /// </summary>
         channel__read__redemptions,
