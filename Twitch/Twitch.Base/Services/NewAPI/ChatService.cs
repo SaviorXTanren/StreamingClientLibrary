@@ -108,7 +108,7 @@ namespace Twitch.Base.Services.NewAPI
             JObject jobj = new JObject();
             jobj["message"] = message;
 
-            await this.PostAsync("whispers?from_user_id=" + channelID + "&to_user_id=" + channelID, AdvancedHttpClient.CreateContentFromObject(jobj));
+            await this.PostAsync("whispers?from_user_id=" + channelID + "&to_user_id=" + userID, AdvancedHttpClient.CreateContentFromObject(jobj));
         }
 
         /// <summary>
