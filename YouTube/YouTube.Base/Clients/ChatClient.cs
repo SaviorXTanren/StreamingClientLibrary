@@ -18,12 +18,25 @@ namespace YouTube.Base.Clients
 
         private CancellationTokenSource messageBackgroundPollingTokenSource;
 
-        private HashSet<string> messageIDs = new HashSet<string>();
+        /// <summary>
+        /// <see cref="LiveChatMessagesResultModel.NextResultsToken"/> from the previous live chat request.
+        /// </summary>
+        private string nextResultsToken;
+
+        private LiveBroadcast broadcast;
 
         /// <summary>
         /// The live broadcast connected to for chat.
         /// </summary>
-        public LiveBroadcast Broadcast { get; private set; }
+        public LiveBroadcast Broadcast
+        {
+            get { return this.broadcast; }
+            private set
+            {
+                this.broadcast = value;
+                this.nextResultsToken = null; // also clear the next message token, as it's no longer valid for the new broadcast
+            }
+        }
 
         /// <summary>
         /// Invoked when chat messages are received.
@@ -149,24 +162,15 @@ namespace YouTube.Base.Clients
 
                     if (this.Broadcast != null)
                     {
-                        LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.Broadcast);
+                        LiveChatMessagesResultModel result = await this.connection.LiveChat.GetMessages(this.Broadcast, this.nextResultsToken);
                         if (result != null)
                         {
-                            List<LiveChatMessage> newMessages = new List<LiveChatMessage>();
-                            foreach (LiveChatMessage message in result.Messages)
+                            if (result.Messages.Count > 0)
                             {
-                                if (!messageIDs.Contains(message.Id))
-                                {
-                                    newMessages.Add(message);
-                                    messageIDs.Add(message.Id);
-                                }
+                                this.OnMessagesReceived?.Invoke(this, result.Messages);
                             }
 
-                            if (newMessages.Count > 0)
-                            {
-                                this.OnMessagesReceived?.Invoke(this, newMessages);
-                            }
-
+                            this.nextResultsToken = result.NextResultsToken;
                             int pollingInterval = Math.Max((int)result.PollingInterval, this.minimumPollTimeMilliseconds);
                             await Task.Delay(pollingInterval);
                         }
