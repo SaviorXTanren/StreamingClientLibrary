@@ -32,7 +32,7 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// You may specify a value in the range: 0 (no restriction) through 129600 (3 months). The default is 0.
         /// </summary>
         [DataMember]
-        public int follower_mode_duration { get; set; }
+        public int? follower_mode_duration { get; set; }
 
         /// <summary>
         /// A Boolean value that determines whether the broadcaster adds a short delay before chat messages appear in the chat room. This gives chat moderators and bots a chance to remove them before viewers can see the message.
@@ -54,7 +54,7 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// See non_moderator_chat_delay.
         /// </summary>
         [DataMember]
-        public int non_moderator_chat_delay_duration { get; set; }
+        public int? non_moderator_chat_delay_duration { get; set; }
 
         /// <summary>
         /// A Boolean value that determines whether the broadcaster limits how often users in the chat room are allowed to send messages.
@@ -72,7 +72,7 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// You may specify a value in the range: 3 (3 second delay) through 120 (2 minute delay). The default is 30 seconds.
         /// </summary>
         [DataMember]
-        public int slow_mode_wait_time { get; set; }
+        public int? slow_mode_wait_time { get; set; }
 
         /// <summary>
         /// A Boolean value that determines whether only users that subscribe to the broadcaster’s channel can talk in the chat room.
