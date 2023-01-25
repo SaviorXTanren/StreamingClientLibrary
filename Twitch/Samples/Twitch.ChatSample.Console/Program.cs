@@ -60,6 +60,7 @@ namespace Twitch.ChatSample.Console
             OAuthClientScopeEnum.moderator__manage__banned_users,
             OAuthClientScopeEnum.moderator__manage__chat_messages,
             OAuthClientScopeEnum.moderator__manage__chat_settings,
+            OAuthClientScopeEnum.moderator__manage__shoutouts,
 
             OAuthClientScopeEnum.user__edit,
 
@@ -138,6 +139,10 @@ namespace Twitch.ChatSample.Console
                             System.Console.WriteLine(string.Format("There are {0} users currently in chat", initialUserList.Count()));
 
                             await chat.SendMessage(user, "Hello World!");
+
+                            var targetUser = await connection.NewAPI.Users.GetUserByLogin("calebhart42");
+
+                            await connection.NewAPI.Chat.SendShoutout(user.id, targetUser.id);
 
                             while (true)
                             {

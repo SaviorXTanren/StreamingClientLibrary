@@ -332,6 +332,21 @@ namespace Twitch.Base.Services.NewAPI
             return null;
         }
 
+        /// <summary>
+        /// Sends a Shoutout to the specified broadcaster.
+        /// </summary>
+        /// <param name="sourceChannelID">The channel ID to send the shoutout for</param>
+        /// <param name="targetChannelID">The channel ID to shoutout</param>
+        /// <returns>Whether the shoutout was successful</returns>
+        public async Task<bool> SendShoutout(string sourceChannelID, string targetChannelID)
+        {
+            Validator.ValidateString(sourceChannelID, "sourceChannelID");
+            Validator.ValidateString(targetChannelID, "targetChannelID");
+
+            HttpResponseMessage response = await this.PostAsync("chat/shoutouts?from_broadcaster_id=" + sourceChannelID + "&to_broadcaster_id=" + targetChannelID + "&moderator_id=" + sourceChannelID, new StringContent(string.Empty));
+            return response.IsSuccessStatusCode;
+        }
+
         private IEnumerable<ChatBadgeSetModel> ProcessChatBadges(JObject jobj)
         {
             List<ChatBadgeSetModel> results = new List<ChatBadgeSetModel>();

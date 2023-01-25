@@ -222,41 +222,25 @@ namespace Twitch.Base
         /// </summary>
         clips__edit,
         /// <summary>
-        /// Read moderation events.
+        /// Manage a broadcaster’s chat announcements.
         /// </summary>
-        moderation__read,
-        /// <summary>
-        /// Ban and unban users.
-        /// </summary>
-        moderator__manage__banned_users,
-        /// <summary>
-        /// View a broadcaster’s list of blocked terms.
-        /// </summary>
-        moderator__read__blocked_terms,
-        /// <summary>
-        /// Manage a broadcaster’s list of blocked terms.
-        /// </summary>
-        moderator__manage__blocked_terms,
+        moderator__manage__announcements,
         /// <summary>
         /// Manage messages held for review by AutoMod in channels where you are a moderator.
         /// </summary>
         moderator__manage__automod,
         /// <summary>
-        /// View a broadcaster’s AutoMod settings.
-        /// </summary>
-        moderator__read__automod_settings,
-        /// <summary>
         /// Manage a broadcaster’s AutoMod settings.
         /// </summary>
         moderator__manage__automod_settings,
         /// <summary>
-        /// View a broadcaster’s list of chatters.
+        /// Ban and unban users.
         /// </summary>
-        moderator__read__chatters,
+        moderator__manage__banned_users,
         /// <summary>
-        /// View a broadcaster’s chat room settings.
+        /// Manage a broadcaster’s list of blocked terms.
         /// </summary>
-        moderator__read__chat_settings,
+        moderator__manage__blocked_terms,
         /// <summary>
         /// Manage a broadcaster’s chat room messages.
         /// </summary>
@@ -266,9 +250,29 @@ namespace Twitch.Base
         /// </summary>
         moderator__manage__chat_settings,
         /// <summary>
-        /// Manage a broadcaster’s chat announcements.
+        /// Manage a broadcaster's shoutouts
         /// </summary>
-        moderator__manage__announcements,
+        moderator__manage__shoutouts,
+        /// <summary>
+        /// Read moderation events.
+        /// </summary>
+        moderation__read,
+        /// <summary>
+        /// View a broadcaster’s list of blocked terms.
+        /// </summary>
+        moderator__read__blocked_terms,
+        /// <summary>
+        /// View a broadcaster’s AutoMod settings.
+        /// </summary>
+        moderator__read__automod_settings,
+        /// <summary>
+        /// View a broadcaster’s list of chatters.
+        /// </summary>
+        moderator__read__chatters,
+        /// <summary>
+        /// View a broadcaster’s chat room settings.
+        /// </summary>
+        moderator__read__chat_settings,
         /// <summary>
         /// Manage a user object.
         /// </summary>
