@@ -274,6 +274,10 @@ namespace Twitch.Base
         /// </summary>
         moderator__read__chat_settings,
         /// <summary>
+        /// View a broadcaster's followers.
+        /// </summary>
+        moderator__read__followers,
+        /// <summary>
         /// Manage a user object.
         /// </summary>
         user__edit,
