@@ -132,6 +132,7 @@ namespace Twitch.Base.Services.NewAPI
         public async Task SendChatAnnouncement(string channelID, string moderatorID, AnnouncementModel announcement)
         {
             Validator.ValidateString(channelID, "channelID");
+            Validator.ValidateString(moderatorID, "moderatorID");
 
             await this.PostAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + moderatorID, AdvancedHttpClient.CreateContentFromObject(announcement));
         }
