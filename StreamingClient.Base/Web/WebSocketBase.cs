@@ -12,7 +12,10 @@ namespace StreamingClient.Base.Web
     /// </summary>
     public abstract class WebSocketBase
     {
-        private const int BUFFER_SIZE = 1000000;
+        /// <summary>
+        /// The base buffer size for websocket buffers.
+        /// </summary>
+        protected const int BUFFER_SIZE = 1000000;
 
         /// <summary>
         /// Invoked when a packet is sent.
@@ -86,11 +89,21 @@ namespace StreamingClient.Base.Web
         /// <returns>The current state of the web socket</returns>
         public WebSocketState GetState()
         {
+            return GetState(this.webSocket);
+        }
+
+        /// <summary>
+        /// Gets the state of the specified web socket.
+        /// </summary>
+        /// <param name="webSocket">The web socket to examine.</param>
+        /// <returns>The current state of the web socket</returns>
+        protected static WebSocketState GetState(WebSocket webSocket)
+        {
             try
             {
-                if (this.webSocket != null && (this.webSocket.CloseStatus == null || this.webSocket.CloseStatus == WebSocketCloseStatus.Empty))
+                if (webSocket != null && (webSocket.CloseStatus == null || webSocket.CloseStatus == WebSocketCloseStatus.Empty))
                 {
-                    return this.webSocket.State;
+                    return webSocket.State;
                 }
             }
             finally { }
@@ -149,7 +162,7 @@ namespace StreamingClient.Base.Web
                                 jsonBuffer += Encoding.UTF8.GetString(buffer, 0, result.Count);
                                 if (result.EndOfMessage)
                                 {
-                                    this.OnTextReceivedOccurred?.Invoke(this, jsonBuffer);
+                                    TextReceivedOccurred(jsonBuffer);
 
                                     await this.ProcessReceivedPacket(jsonBuffer);
                                     jsonBuffer = string.Empty;
@@ -186,6 +199,15 @@ namespace StreamingClient.Base.Web
             }
 
             return closeStatus;
+        }
+
+        /// <summary>
+        /// Used to trigger the OnTextReceivedOccurred event from inherited classes.
+        /// </summary>
+        /// <param name="jsonBuffer">The contents of the text buffer.</param>
+        protected void TextReceivedOccurred(string jsonBuffer)
+        {
+            this.OnTextReceivedOccurred?.Invoke(this, jsonBuffer);
         }
 
         /// <summary>

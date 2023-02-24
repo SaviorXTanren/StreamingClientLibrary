@@ -1224,6 +1224,11 @@
             Handles web socket communication for both client &amp; server connections.
             </summary>
         </member>
+        <member name="F:StreamingClient.Base.Web.WebSocketBase.BUFFER_SIZE">
+            <summary>
+            The base buffer size for websocket buffers.
+            </summary>
+        </member>
         <member name="E:StreamingClient.Base.Web.WebSocketBase.OnSentOccurred">
             <summary>
             Invoked when a packet is sent.
@@ -1275,6 +1280,13 @@
             </summary>
             <returns>The current state of the web socket</returns>
         </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.GetState(System.Net.WebSockets.WebSocket)">
+            <summary>
+            Gets the state of the specified web socket.
+            </summary>
+            <param name="webSocket">The web socket to examine.</param>
+            <returns>The current state of the web socket</returns>
+        </member>
         <member name="M:StreamingClient.Base.Web.WebSocketBase.SetWebSocket(System.Net.WebSockets.WebSocket)">
             <summary>
             Sets the web socket connection to use.
@@ -1300,6 +1312,12 @@
             Handles all receiving &amp; processing of packets.
             </summary>
             <returns>An awaitable task with the close status of the web socket connection</returns>
+        </member>
+        <member name="M:StreamingClient.Base.Web.WebSocketBase.TextReceivedOccurred(System.String)">
+            <summary>
+            Used to trigger the OnTextReceivedOccurred event from inherited classes.
+            </summary>
+            <param name="jsonBuffer">The contents of the text buffer.</param>
         </member>
         <member name="M:StreamingClient.Base.Web.WebSocketBase.DisconnectAndFireEvent(System.Net.WebSockets.WebSocketCloseStatus)">
             <summary>

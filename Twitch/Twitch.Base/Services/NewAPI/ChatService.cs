@@ -124,6 +124,18 @@ namespace Twitch.Base.Services.NewAPI
         }
 
         /// <summary>
+        /// Sends an announcement to the broadcaster’s chat room as the moderator.
+        /// <param name="channelID">The channel ID send the announcement to</param>
+        /// <param name="moderatorID">The ID of the moderator sending the announcement</param>
+        /// <param name="announcement">The announcement data to send</param>
+        /// </summary>
+        public async Task SendChatAnnouncement(string channelID, string moderatorID, AnnouncementModel announcement) {
+            Validator.ValidateString(channelID, "channelID");
+
+            await this.PostAsync("chat/announcements?broadcaster_id=" + channelID + "&moderator_id=" + moderatorID, AdvancedHttpClient.CreateContentFromObject(announcement));
+        }
+
+        /// <summary>
         /// Raids the specified target channel.
         /// </summary>
         /// <param name="channelID">The channel ID to raid from</param>
