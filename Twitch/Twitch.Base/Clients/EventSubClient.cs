@@ -21,7 +21,7 @@ namespace Twitch.Base.Clients
         /// <summary>
         /// The default event sub connection url.
         /// </summary>
-        public const string EVENT_SUB_CONNECTION_URL = "wss://eventsub-beta.wss.twitch.tv/ws";
+        public const string EVENT_SUB_CONNECTION_URL = "wss://eventsub.wss.twitch.tv/ws";
 
         private readonly IReadOnlyDictionary<MessageType, (Type MessageType, MethodInfo MessageHandler)> MessageTypeMap;
 
