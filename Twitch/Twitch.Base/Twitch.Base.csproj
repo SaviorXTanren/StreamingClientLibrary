@@ -36,7 +36,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <AssemblyVersion>1.0.0.67</AssemblyVersion>
-    <FileVersion>1.0.0.65</FileVersion>
+    <FileVersion>1.0.0.67</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageReleaseNotes>Updating EventSub connection URL</PackageReleaseNotes>
