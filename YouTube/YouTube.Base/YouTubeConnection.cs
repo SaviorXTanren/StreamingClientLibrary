@@ -113,6 +113,11 @@ namespace YouTube.Base
         public LiveChatService LiveChat { get; private set; }
 
         /// <summary>
+        /// APIs for Membership interaction.
+        /// </summary>
+        public MembershipService Membership { get; private set; }
+
+        /// <summary>
         /// APIs for Playlists interaction.
         /// </summary>
         public PlaylistsService Playlists { get; private set; }
@@ -266,6 +271,7 @@ namespace YouTube.Base
             this.Comments = new CommentsService(this);
             this.LiveBroadcasts = new LiveBroadcastsService(this);
             this.LiveChat = new LiveChatService(this);
+            this.Membership = new MembershipService(this);
             this.Playlists = new PlaylistsService(this);
             this.Subscriptions = new SubscriptionsService(this);
             this.Videos = new VideosService(this);
