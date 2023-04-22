@@ -40,9 +40,9 @@ namespace YouTube.Base.Services
         /// </summary>
         /// <param name="maxResults">The maximum results to return</param>
         /// <returns>The list of members</returns>
-        public async Task<IEnumerable<Subscription>> GetMembers(int maxResults = 1)
+        public async Task<IEnumerable<Member>> GetMembers(int maxResults = 1)
         {
-            return await this.GetMembers(maxResults: maxResults);
+            return await this.GetMembersInternal(maxResults: maxResults);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace YouTube.Base.Services
         /// <returns>The membership, if it exists</returns>
         public async Task<Member> CheckIfMember(string memberChannelId)
         {
-            var memberships = await this.GetMembers(filterToSpecificMemberChannelId: memberChannelId, maxResults: 1);
+            var memberships = await this.GetMembersInternal(filterToSpecificMemberChannelId: memberChannelId, maxResults: 1);
             if (memberships != null)
             {
                 return memberships.FirstOrDefault();
@@ -60,7 +60,7 @@ namespace YouTube.Base.Services
             return null;
         }
 
-        internal async Task<IEnumerable<Member>> GetMembers(bool onlyUpdates = false, string filterToSpecificLevel = null, string filterToSpecificMemberChannelId = null, int maxResults = 1)
+        internal async Task<IEnumerable<Member>> GetMembersInternal(bool onlyUpdates = false, string filterToSpecificLevel = null, string filterToSpecificMemberChannelId = null, int maxResults = 1)
         {
             return await this.YouTubeServiceWrapper(async () =>
             {
