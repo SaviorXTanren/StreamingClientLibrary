@@ -640,6 +640,11 @@
             </summary>
             <param name="level">The maximum level to capture logs for</param>
         </member>
+        <member name="P:StreamingClient.Base.Util.Logger.AlwaysLogFullStackTraceWithExceptions">
+            <summary>
+            Indicates where to always log full stack trace when exceptions are logged.
+            </summary>
+        </member>
         <member name="M:StreamingClient.Base.Util.Logger.Log(System.String)">
             <summary>
             Logs the specified message at the Information level.

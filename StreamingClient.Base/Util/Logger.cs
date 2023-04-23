@@ -82,6 +82,11 @@ namespace StreamingClient.Base.Util
         public static void SetLogLevel(LogLevel level) { Logger.Level = level; }
 
         /// <summary>
+        /// Indicates where to always log full stack trace when exceptions are logged.
+        /// </summary>
+        public static bool AlwaysLogFullStackTraceWithExceptions { get; set; }
+
+        /// <summary>
         /// Logs the specified message at the Information level.
         /// </summary>
         /// <param name="message">The message to log</param>
@@ -126,7 +131,7 @@ namespace StreamingClient.Base.Util
         public static void Log(LogLevel level, Exception ex, bool includeStackTrace = false)
         {
             string log = ex.ToString();
-            if (includeStackTrace)
+            if (AlwaysLogFullStackTraceWithExceptions || includeStackTrace)
             {
                 log += Environment.NewLine + "Full Stack:" + Environment.StackTrace;
             }
