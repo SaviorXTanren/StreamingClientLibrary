@@ -8,15 +8,15 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.19</Version>
+    <Version>1.0.0.20</Version>
     <Description>C# client library for the YouTube streaming service: https://www.youtube.com/live
       
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
     <PackageTags>YouTube Streaming Bot Chat Interactive</PackageTags>
     <PackageId>StreamingClientLibrary.YouTube</PackageId>
     <Product>YouTube Streaming Client Library</Product>
-    <AssemblyVersion>1.0.0.19</AssemblyVersion>
-    <FileVersion>1.0.0.19</FileVersion>
+    <AssemblyVersion>1.0.0.20</AssemblyVersion>
+    <FileVersion>1.0.0.20</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
