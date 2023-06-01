@@ -10,12 +10,12 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// <summary>
         /// The id of the set of chat badges.
         /// </summary>
-        public string id { get; set; }
+        public string set_id { get; set; }
 
         /// <summary>
         /// The versions of the chat badges.
         /// </summary>
-        public Dictionary<string, ChatBadgeModel> versions { get; set; } = new Dictionary<string, ChatBadgeModel>();
+        public List<ChatBadgeModel> versions { get; set; } = new List<ChatBadgeModel>();
     }
 
     /// <summary>
@@ -24,9 +24,9 @@ namespace Twitch.Base.Models.NewAPI.Chat
     public class ChatBadgeModel
     {
         /// <summary>
-        /// The version ID of the chat badge.
+        /// The ID of the chat badge.
         /// </summary>
-        public string versionID { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         /// The title of the chat badge.
@@ -37,6 +37,16 @@ namespace Twitch.Base.Models.NewAPI.Chat
         /// The description of the chat badge.
         /// </summary>
         public string description { get; set; }
+
+        /// <summary>
+        /// The action to take when clicking on the badge. Set to null if no action is specified.
+        /// </summary>
+        public string click_action { get; set; }
+
+        /// <summary>
+        /// The URL to navigate to when clicking on the badge. Set to null if no URL is specified.
+        /// </summary>
+        public string click_url { get; set; }
 
         /// <summary>
         /// The 1x size image of the chat badge.
