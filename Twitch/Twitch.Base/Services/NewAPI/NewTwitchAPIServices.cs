@@ -76,11 +76,6 @@
         public SubscriptionsService Subscriptions { get; private set; }
 
         /// <summary>
-        /// APIs for Tags interaction.
-        /// </summary>
-        public TagsService Tags { get; private set; }
-
-        /// <summary>
         /// APIs for Teams interaction.
         /// </summary>
         public TeamsService Teams { get; private set; }
@@ -115,7 +110,6 @@
             this.Schedule = new ScheduleService(connection);
             this.Streams = new StreamsService(connection);
             this.Subscriptions = new SubscriptionsService(connection);
-            this.Tags = new TagsService(connection);
             this.Teams = new TeamsService(connection);
             this.Users = new UsersService(connection);
             this.Webhooks = new WebhooksService(connection);

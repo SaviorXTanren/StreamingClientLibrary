@@ -40,11 +40,12 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="title">The optional title to update to</param>
         /// <param name="gameID">The optional game ID to update to</param>
         /// <param name="broadcasterLanguage">The optional broadcast language to update to</param>
+        /// <param name="tags">The optional tags to update to</param>
         /// <returns>Whether the update was successful or not</returns>
-        public async Task<bool> UpdateChannelInformation(ChannelInformationModel channelInformation, string title = null, string gameID = null, string broadcasterLanguage = null)
+        public async Task<bool> UpdateChannelInformation(ChannelInformationModel channelInformation, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
         {
             Validator.ValidateVariable(channelInformation, "channelInformation");
-            return await this.UpdateChannelInformation(channelInformation.broadcaster_id, title, gameID, broadcasterLanguage);
+            return await this.UpdateChannelInformation(channelInformation.broadcaster_id, title, gameID, broadcasterLanguage, tags);
         }
 
         /// <summary>
@@ -54,19 +55,21 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="title">The optional title to update to</param>
         /// <param name="gameID">The optional game ID to update to</param>
         /// <param name="broadcasterLanguage">The optional broadcast language to update to</param>
+        /// <param name="tags">The optional tags to update to</param>
         /// <returns>Whether the update was successful or not</returns>
-        public async Task<bool> UpdateChannelInformation(UserModel channel, string title = null, string gameID = null, string broadcasterLanguage = null)
+        public async Task<bool> UpdateChannelInformation(UserModel channel, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.UpdateChannelInformation(channel.id, title, gameID, broadcasterLanguage);
+            return await this.UpdateChannelInformation(channel.id, title, gameID, broadcasterLanguage, tags);
         }
 
-        private async Task<bool> UpdateChannelInformation(string broadcasterID, string title = null, string gameID = null, string broadcasterLanguage = null)
+        private async Task<bool> UpdateChannelInformation(string broadcasterID, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
         {
             JObject jobj = new JObject();
             if (!string.IsNullOrEmpty(title)) { jobj["title"] = title; }
             if (!string.IsNullOrEmpty(gameID)) { jobj["game_id"] = gameID; }
             if (!string.IsNullOrEmpty(broadcasterLanguage)) { jobj["broadcaster_language"] = broadcasterLanguage; }
+            if (tags != null && tags.Count() > 0) { jobj["tags"] = JArray.FromObject(tags.ToArray()); }
             HttpResponseMessage response = await this.PatchAsync("channels?broadcaster_id=" + broadcasterID, AdvancedHttpClient.CreateContentFromObject(jobj));
             return response.IsSuccessStatusCode;
         }

@@ -140,10 +140,6 @@ namespace Twitch.ChatSample.Console
 
                             await chat.SendMessage(user, "Hello World!");
 
-                            var targetUser = await connection.NewAPI.Users.GetUserByLogin("calebhart42");
-
-                            await connection.NewAPI.Chat.SendShoutout(user.id, targetUser.id);
-
                             while (true)
                             {
                                 string line = System.Console.ReadLine();

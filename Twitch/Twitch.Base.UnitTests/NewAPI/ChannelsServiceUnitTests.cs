@@ -20,6 +20,7 @@ namespace Twitch.Base.UnitTests.NewAPI
 
                 Assert.IsNotNull(result);
                 Assert.AreEqual(result.broadcaster_id, channel.id);
+                Assert.IsTrue(result.tags != null && result.tags.Count > 0);
             });
         }
 

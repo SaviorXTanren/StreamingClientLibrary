@@ -1,4 +1,6 @@
-﻿namespace Twitch.Base.Models.NewAPI.Channels
+﻿using System.Collections.Generic;
+
+namespace Twitch.Base.Models.NewAPI.Channels
 {
     /// <summary>
     /// Information about a channel.
@@ -29,5 +31,17 @@
         /// Title of the stream
         /// </summary>
         public string title { get; set; }
+        /// <summary>
+        /// The value of the broadcaster’s stream delay setting, in seconds. This field’s value defaults to zero unless
+        /// 
+        /// 1) the request specifies a user access token,
+        /// 2) the ID in the broadcaster_id query parameter matches the user ID in the access token, and
+        /// 3) the broadcaster has partner status and they set a non-zero stream delay value.
+        /// </summary>
+        public uint delay { get; set; }
+        /// <summary>
+        /// The tags applied to the channel.
+        /// </summary>
+        public List<string> tags { get; set; }
     }
 }
