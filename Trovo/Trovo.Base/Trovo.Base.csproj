@@ -14,10 +14,10 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageTags>Trovo Streaming Bot Chat Interactive</PackageTags>
-    <Version>1.0.0.22</Version>
-    <AssemblyVersion>1.0.0.22</AssemblyVersion>
-    <FileVersion>1.0.0.22</FileVersion>
-    <PackageReleaseNotes>Updating Nuget packages</PackageReleaseNotes>
+    <Version>1.0.0.23</Version>
+    <AssemblyVersion>1.0.0.23</AssemblyVersion>
+    <FileVersion>1.0.0.23</FileVersion>
+    <PackageReleaseNotes>Changing authorization flow to use </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
