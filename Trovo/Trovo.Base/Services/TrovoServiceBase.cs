@@ -18,12 +18,16 @@ namespace Trovo.Base.Services
         private const string TrovoRestAPIBaseAddressFormat = "https://open-api.trovo.live/openplatform/";
 
         /// <summary>
+        /// The client ID for the connection.
+        /// </summary>
+        public string ClientID { get; private set; }
+
+        /// <summary>
         /// The Trovo connection.
         /// </summary>
         protected TrovoConnection connection;
 
         private string baseAddress;
-        private string clientID;
 
         /// <summary>
         /// Creates an instance of the TrovoServiceBase.
@@ -41,14 +45,13 @@ namespace Trovo.Base.Services
             Validator.ValidateVariable(connection, "connection");
             this.connection = connection;
             this.baseAddress = baseAddress;
-            this.clientID = connection.ClientID;
+            this.ClientID = connection.ClientID;
         }
 
-        internal TrovoServiceBase() : this(TrovoRestAPIBaseAddressFormat) { }
-
-        internal TrovoServiceBase(string baseAddress)
+        internal TrovoServiceBase(string clientID)
         {
-            this.baseAddress = baseAddress;
+            this.baseAddress = TrovoRestAPIBaseAddressFormat;
+            this.ClientID = clientID;
         }
 
         /// <summary>
@@ -246,7 +249,7 @@ namespace Trovo.Base.Services
             {
                 client = new AdvancedHttpClient(this.GetBaseAddress(), "OAuth", token.accessToken);
             }
-            client.DefaultRequestHeaders.Add("Client-ID", this.clientID);
+            client.DefaultRequestHeaders.Add("Client-ID", this.ClientID);
             return client;
         }
     }

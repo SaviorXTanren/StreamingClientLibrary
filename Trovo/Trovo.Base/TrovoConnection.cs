@@ -65,9 +65,9 @@ namespace Trovo.Base
         public const string DEFAULT_OAUTH_LOCALHOST_URL = "http://localhost:8919/";
 
         /// <summary>
-        /// The default request parameter for the access token from the OAuth service.
+        /// The default request parameter for the authorization code from the OAuth service.
         /// </summary>
-        public const string DEFAULT_ACCESS_TOKEN_URL_PARAMETER = "access_token";
+        public const string DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER = "code";
 
         private OAuthTokenModel token;
 
@@ -93,7 +93,7 @@ namespace Trovo.Base
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "client_id", clientID },
-                { "response_type", "token" },
+                { "response_type", "code" },
                 { "scope", TrovoConnection.ConvertClientScopesToString(scopes) },
                 { "redirect_uri", redirectUri },
                 { "state", state },
@@ -112,43 +112,55 @@ namespace Trovo.Base
         /// Creates a TrovoConnection object from an OAuth authentication locally.
         /// </summary>
         /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
         /// <param name="scopes">The authorization scopes to request</param>
         /// <param name="state">The state for authentication check</param>
         /// <param name="forceApprovalPrompt">Whether to force an approval from the user</param>
         /// <param name="oauthListenerURL">The URL to listen for the OAuth successful authentication</param>
         /// <param name="successResponse">The response to send back upon successful authentication</param>
         /// <returns>The TrovoConnection object</returns>
-        public static async Task<TrovoConnection> ConnectViaLocalhostOAuthBrowser(string clientID, IEnumerable<OAuthClientScopeEnum> scopes, string state = "abc123", bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string successResponse = null)
+        public static async Task<TrovoConnection> ConnectViaLocalhostOAuthBrowser(string clientID, string clientSecret, IEnumerable<OAuthClientScopeEnum> scopes, string state = "abc123", bool forceApprovalPrompt = false, string oauthListenerURL = DEFAULT_OAUTH_LOCALHOST_URL, string successResponse = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateList(scopes, "scopes");
 
-            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(DEFAULT_ACCESS_TOKEN_URL_PARAMETER, successResponse);
+            LocalOAuthHttpListenerServer oauthServer = new LocalOAuthHttpListenerServer(DEFAULT_AUTHORIZATION_CODE_URL_PARAMETER, successResponse);
             oauthServer.Start(oauthListenerURL);
 
             string url = await TrovoConnection.GetAuthorizationCodeURLForOAuthBrowser(clientID, scopes, oauthListenerURL, state, forceApprovalPrompt);
             ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = url, UseShellExecute = true };
             Process.Start(startInfo);
 
-            string accessToken = await oauthServer.WaitForAuthorizationCode();
+            string authorizationCode = await oauthServer.WaitForAuthorizationCode();
             oauthServer.Stop();
 
-            if (accessToken != null)
+            if (authorizationCode != null)
             {
-                TrovoConnection connection = new TrovoConnection(new OAuthTokenModel()
-                {
-                    clientID = clientID,
-                    accessToken = accessToken,
-                    AcquiredDateTime = DateTimeOffset.Now,
-                    expiresIn = int.MaxValue,
-                });
-
-                OAuthTokenValidationModel validation = await connection.OAuth.ValidateToken(connection.token);
-                connection.token.expiresTimeStamp = validation.expire_ts;
-
-                return connection;
+                return await TrovoConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, oauthListenerURL);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Creates a TwitchConnection object from an authorization code.
+        /// </summary>
+        /// <param name="clientID">The ID of the client application</param>
+        /// <param name="clientSecret">The secret of the client application</param>
+        /// <param name="authorizationCode">The authorization code for the authenticated user</param>
+        /// <param name="redirectUrl">The redirect URL of the client application</param>
+        /// <returns>The TwitchConnection object</returns>
+        public static async Task<TrovoConnection> ConnectViaAuthorizationCode(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
+        {
+            Validator.ValidateString(clientID, "clientID");
+            Validator.ValidateString(authorizationCode, "authorizationCode");
+
+            OAuthService oauthService = new OAuthService(clientID);
+            OAuthTokenModel token = await oauthService.GetOAuthTokenModel(clientID, clientSecret, authorizationCode, redirectUrl);
+            if (token == null)
+            {
+                throw new InvalidOperationException("OAuth token was not acquired");
+            }
+            return new TrovoConnection(token);
         }
 
         /// <summary>
@@ -216,11 +228,9 @@ namespace Trovo.Base
         /// Refreshs the current OAuth token.
         /// </summary>
         /// <returns>An awaitable Task</returns>
-        public Task RefreshOAuthToken()
+        public async Task RefreshOAuthToken()
         {
-            // TODO - Add OAuth token refreshing logic when API supports it
-            //this.token = await this.OAuth.RefreshToken(this.token);
-            return Task.FromResult(0);
+            this.token = await this.OAuth.RefreshToken(this.token);
         }
 
         /// <summary>

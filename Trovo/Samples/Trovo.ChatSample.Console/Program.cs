@@ -13,7 +13,8 @@ namespace Trovo.ChatSample.Console
 {
     public class Program
     {
-        private static string clientID = "8FMjuk785AX4FMyrwPTU3B8vYvgHWN33";
+        private static string clientID = "";
+        private static string clientSecret = "";
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
             OAuthClientScopeEnum.chat_connect,
@@ -43,7 +44,7 @@ namespace Trovo.ChatSample.Console
 
                     System.Console.WriteLine("Connecting to Trovo...");
 
-                    connection = await TrovoConnection.ConnectViaLocalhostOAuthBrowser(clientID, scopes);
+                    connection = await TrovoConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes);
                     if (connection != null)
                     {
                         System.Console.WriteLine("Trovo connection successful!");
