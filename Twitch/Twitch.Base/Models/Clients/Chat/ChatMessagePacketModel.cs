@@ -74,6 +74,38 @@ namespace Twitch.Base.Models.Clients.Chat
         public string Bits { get; set; }
 
         /// <summary>
+        /// The value of the Hype Chat sent by the user.
+        /// </summary>
+        public string PinnedChatPaidAmount { get; set; }
+
+        /// <summary>
+        /// The canonical value of the Hype Chat sent by the user.
+        /// </summary>
+        public string PinnedChatPaidCanonicalAmount { get; set; }
+
+        /// <summary>
+        /// The ISO 4217 alphabetic currency code the user has sent the Hype Chat in.
+        /// </summary>
+        public string PinnedChatPaidCurrency { get; set; }
+
+        /// <summary>
+        /// Indicates how many decimal points this currency represents partial amounts in. Decimal points start from the right side of the value defined in pinned-chat-paid-amount.
+        /// </summary>
+        public string PinnedChatPaidExponent { get; set; }
+
+        /// <summary>
+        /// A Boolean value that determines if the message sent with the Hype Chat was filled in by the system.
+        /// If true (1), the user entered no message and the body message was automatically filled in by the system.
+        /// If false (0), the user provided their own message to send with the Hype Chat.
+        /// </summary>
+        public string PinnedChatPaidIsSystemMessage { get; set; }
+
+        /// <summary>
+        /// The level of the Hype Chat, in English. Possible values are: ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN
+        /// </summary>
+        public string PinnedChatPaidLevel { get; set; }
+
+        /// <summary>
         /// Timestamp when the server received the message.
         /// </summary>
         public string Timestamp { get; set; }
@@ -100,6 +132,13 @@ namespace Twitch.Base.Models.Clients.Chat
             this.RoomID = packet.GetTagString("room-id");
 
             this.Bits = packet.GetTagString("bits");
+
+            this.PinnedChatPaidAmount = packet.GetTagString("pinned-chat-paid-amount");
+            this.PinnedChatPaidCanonicalAmount = packet.GetTagString("pinned-chat-paid-canonical-amount");
+            this.PinnedChatPaidCurrency = packet.GetTagString("pinned-chat-paid-currency");
+            this.PinnedChatPaidExponent = packet.GetTagString("pinned-chat-paid-exponent");
+            this.PinnedChatPaidIsSystemMessage = packet.GetTagString("pinned-chat-paid-is-system-message");
+            this.PinnedChatPaidLevel = packet.GetTagString("pinned-chat-paid-level");
 
             this.Timestamp = packet.GetTagString("tmi-sent-ts");
         }
