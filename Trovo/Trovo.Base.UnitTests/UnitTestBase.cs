@@ -7,7 +7,8 @@ namespace Trovo.Base.UnitTests
 {
     public abstract class UnitTestBase
     {
-        public const string clientID = "8FMjuk785AX4FMyrwPTU3B8vYvgHWN33";
+        public const string clientID = "";
+        public const string clientSecret = "";
 
         public static readonly List<OAuthClientScopeEnum> scopes = new List<OAuthClientScopeEnum>()
         {
@@ -29,7 +30,7 @@ namespace Trovo.Base.UnitTests
         {
             if (UnitTestBase.connection == null)
             {
-                UnitTestBase.connection = TrovoConnection.ConnectViaLocalhostOAuthBrowser(clientID, scopes).Result;
+                UnitTestBase.connection = TrovoConnection.ConnectViaLocalhostOAuthBrowser(clientID, clientSecret, scopes).Result;
             }
 
             Assert.IsNotNull(UnitTestBase.connection);
