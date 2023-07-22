@@ -39,8 +39,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <FileVersion>1.0.0.70</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>- Updating Twitch chat badges API
-- Updating channel information APIs to include new custom tags and removing old tags API</PackageReleaseNotes>
+    <PackageReleaseNotes>- Adding Twitch HypeChat message properties</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
