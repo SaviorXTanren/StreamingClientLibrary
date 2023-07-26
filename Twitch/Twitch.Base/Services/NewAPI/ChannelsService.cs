@@ -41,11 +41,13 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="gameID">The optional game ID to update to</param>
         /// <param name="broadcasterLanguage">The optional broadcast language to update to</param>
         /// <param name="tags">The optional tags to update to</param>
+        /// <param name="cclIdsToAdd">ID of the Content Classification Labels that must be added to the channel.</param>
+        /// <param name="cclIdsToRemove">ID of the Content Classification Labels that must be removed from the channel.</param>
         /// <returns>Whether the update was successful or not</returns>
-        public async Task<bool> UpdateChannelInformation(ChannelInformationModel channelInformation, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
+        public async Task<bool> UpdateChannelInformation(ChannelInformationModel channelInformation, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null, IEnumerable<string> cclIdsToAdd = null, IEnumerable<string> cclIdsToRemove = null)
         {
             Validator.ValidateVariable(channelInformation, "channelInformation");
-            return await this.UpdateChannelInformation(channelInformation.broadcaster_id, title, gameID, broadcasterLanguage, tags);
+            return await this.UpdateChannelInformation(channelInformation.broadcaster_id, title, gameID, broadcasterLanguage, tags, cclIdsToAdd, cclIdsToRemove);
         }
 
         /// <summary>
@@ -56,20 +58,50 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="gameID">The optional game ID to update to</param>
         /// <param name="broadcasterLanguage">The optional broadcast language to update to</param>
         /// <param name="tags">The optional tags to update to</param>
+        /// <param name="cclIdsToAdd">ID of the Content Classification Labels that must be added to the channel.</param>
+        /// <param name="cclIdsToRemove">ID of the Content Classification Labels that must be removed from the channel.</param>
         /// <returns>Whether the update was successful or not</returns>
-        public async Task<bool> UpdateChannelInformation(UserModel channel, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
+        public async Task<bool> UpdateChannelInformation(UserModel channel, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null, IEnumerable<string> cclIdsToAdd = null, IEnumerable<string> cclIdsToRemove = null)
         {
             Validator.ValidateVariable(channel, "channel");
-            return await this.UpdateChannelInformation(channel.id, title, gameID, broadcasterLanguage, tags);
+            return await this.UpdateChannelInformation(channel.id, title, gameID, broadcasterLanguage, tags, cclIdsToAdd, cclIdsToRemove);
         }
 
-        private async Task<bool> UpdateChannelInformation(string broadcasterID, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null)
+        private async Task<bool> UpdateChannelInformation(string broadcasterID, string title = null, string gameID = null, string broadcasterLanguage = null, IEnumerable<string> tags = null, IEnumerable<string> cclIdsToAdd = null, IEnumerable<string> cclIdsToRemove = null)
         {
             JObject jobj = new JObject();
             if (!string.IsNullOrEmpty(title)) { jobj["title"] = title; }
             if (!string.IsNullOrEmpty(gameID)) { jobj["game_id"] = gameID; }
             if (!string.IsNullOrEmpty(broadcasterLanguage)) { jobj["broadcaster_language"] = broadcasterLanguage; }
             if (tags != null && tags.Count() > 0) { jobj["tags"] = JArray.FromObject(tags.ToArray()); }
+            if ((cclIdsToAdd != null && cclIdsToAdd.Count() > 0) || (cclIdsToRemove != null && cclIdsToRemove.Count() > 0))
+            {
+                JArray ccls = new JArray();
+
+                if (cclIdsToAdd != null)
+                {
+                    foreach (string cclId in cclIdsToAdd)
+                    {
+                        JObject ccl = new JObject();
+                        ccl["id"] = cclId;
+                        ccl["is_enabled"] = true;
+                        ccls.Add(ccl);
+                    }
+                }
+
+                if (cclIdsToRemove != null)
+                {
+                    foreach (string cclId in cclIdsToRemove)
+                    {
+                        JObject ccl = new JObject();
+                        ccl["id"] = cclId;
+                        ccl["is_enabled"] = false;
+                        ccls.Add(ccl);
+                    }
+                }
+
+                jobj["content_classification_labels"] = ccls;
+            }
             HttpResponseMessage response = await this.PatchAsync("channels?broadcaster_id=" + broadcasterID, AdvancedHttpClient.CreateContentFromObject(jobj));
             return response.IsSuccessStatusCode;
         }
@@ -163,6 +195,16 @@ namespace Twitch.Base.Services.NewAPI
         {
             Validator.ValidateVariable(channel, "channel");
             return await this.GetPagedDataResultAsync<ChannelHypeTrainModel>($"hypetrain/events?broadcaster_id={channel.id}", maxResults);
+        }
+
+        /// <summary>
+        /// Gets the list of content classification labels.
+        /// </summary>
+        /// <param name="locale">The locale to use when looking up</param>
+        /// <returns>The list of content classification labels</returns>
+        public async Task<IEnumerable<ChannelContentClassificationLabelModel>> GetContentClassificationLabels(string locale = null)
+        {
+            return await this.GetDataResultAsync<ChannelContentClassificationLabelModel>($"content_classification_labels" + (!string.IsNullOrEmpty(locale) ? $"locale?={locale}" : string.Empty));
         }
     }
 }

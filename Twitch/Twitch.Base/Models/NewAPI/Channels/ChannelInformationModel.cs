@@ -43,5 +43,13 @@ namespace Twitch.Base.Models.NewAPI.Channels
         /// The tags applied to the channel.
         /// </summary>
         public List<string> tags { get; set; }
+        /// <summary>
+        /// The CCLs applied to the channel.
+        /// </summary>
+        public List<string> content_classification_labels { get; set; }
+        /// <summary>
+        /// Boolean flag indicating if the channel has branded content.
+        /// </summary>
+        public bool is_branded_content { get; set; }
     }
 }
