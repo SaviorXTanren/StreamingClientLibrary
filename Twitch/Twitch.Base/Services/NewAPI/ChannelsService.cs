@@ -204,7 +204,7 @@ namespace Twitch.Base.Services.NewAPI
         /// <returns>The list of content classification labels</returns>
         public async Task<IEnumerable<ChannelContentClassificationLabelModel>> GetContentClassificationLabels(string locale = null)
         {
-            return await this.GetDataResultAsync<ChannelContentClassificationLabelModel>($"content_classification_labels" + (!string.IsNullOrEmpty(locale) ? $"locale?={locale}" : string.Empty));
+            return await this.GetDataResultAsync<ChannelContentClassificationLabelModel>($"content_classification_labels" + (!string.IsNullOrEmpty(locale) ? "?locale=" + locale : string.Empty));
         }
     }
 }
