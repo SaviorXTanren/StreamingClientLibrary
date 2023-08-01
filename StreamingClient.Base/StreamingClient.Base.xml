@@ -84,6 +84,11 @@
             The time when the token was obtained.
             </summary>
         </member>
+        <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.ScopeList">
+            <summary>
+            Comma-delimited list of all scopes requested as part of the authorization token.
+            </summary>
+        </member>
         <member name="P:StreamingClient.Base.Model.OAuth.OAuthTokenModel.ExpirationDateTime">
             <summary>
             The expiration time of the token.

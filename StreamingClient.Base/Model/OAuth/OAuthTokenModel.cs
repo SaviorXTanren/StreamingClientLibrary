@@ -61,6 +61,12 @@ namespace StreamingClient.Base.Model.OAuth
         public DateTimeOffset AcquiredDateTime { get; set; }
 
         /// <summary>
+        /// Comma-delimited list of all scopes requested as part of the authorization token.
+        /// </summary>
+        [DataMember]
+        public string ScopeList { get; set; }
+
+        /// <summary>
         /// The expiration time of the token.
         /// </summary>
         [JsonIgnore]

@@ -428,7 +428,7 @@ namespace Twitch.Base
 
             if (authorizationCode != null)
             {
-                return await TwitchConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, redirectUrl: oauthListenerURL);
+                return await TwitchConnection.ConnectViaAuthorizationCode(clientID, clientSecret, authorizationCode, scopes, redirectUrl: oauthListenerURL);
             }
             return null;
         }
@@ -439,15 +439,16 @@ namespace Twitch.Base
         /// <param name="clientID">The ID of the client application</param>
         /// <param name="clientSecret">The secret of the client application</param>
         /// <param name="authorizationCode">The authorization code for the authenticated user</param>
+        /// <param name="scopes">The list of scopes that were requested</param>
         /// <param name="redirectUrl">The redirect URL of the client application</param>
         /// <returns>The TwitchConnection object</returns>
-        public static async Task<TwitchConnection> ConnectViaAuthorizationCode(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
+        public static async Task<TwitchConnection> ConnectViaAuthorizationCode(string clientID, string clientSecret, string authorizationCode, IEnumerable<OAuthClientScopeEnum> scopes = null, string redirectUrl = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(authorizationCode, "authorizationCode");
 
             OAuthService oauthService = new OAuthService();
-            OAuthTokenModel token = await oauthService.GetOAuthTokenModel(clientID, clientSecret, authorizationCode, redirectUrl);
+            OAuthTokenModel token = await oauthService.GetOAuthTokenModel(clientID, clientSecret, authorizationCode, scopes, redirectUrl);
             if (token == null)
             {
                 throw new InvalidOperationException("OAuth token was not acquired");

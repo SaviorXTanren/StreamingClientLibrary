@@ -28,11 +28,12 @@ namespace YouTube.Base.Services
         /// </summary>
         /// <param name="clientID">The id of the client application</param>
         /// <param name="authorizationCode">The authorization code</param>
+        /// <param name="scopes">The list of scopes that were requested</param>
         /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
         /// <returns></returns>
-        public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string authorizationCode, string redirectUrl = null)
+        public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string authorizationCode, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUrl = null)
         {
-            return await this.GetOAuthTokenModel(clientID, null, authorizationCode, redirectUrl);
+            return await this.GetOAuthTokenModel(clientID, null, authorizationCode, scopes, redirectUrl);
         }
 
         /// <summary>
@@ -41,9 +42,10 @@ namespace YouTube.Base.Services
         /// <param name="clientID">The id of the client application</param>
         /// <param name="clientSecret">The secret key of the client application</param>
         /// <param name="authorizationCode">The authorization code</param>
+        /// <param name="scopes">The list of scopes that were requested</param>
         /// <param name="redirectUrl">The URL to redirect to after authorization is complete</param>
         /// <returns></returns>
-        public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string clientSecret, string authorizationCode, string redirectUrl = null)
+        public async Task<OAuthTokenModel> GetOAuthTokenModel(string clientID, string clientSecret, string authorizationCode, IEnumerable<OAuthClientScopeEnum> scopes, string redirectUrl = null)
         {
             Validator.ValidateString(clientID, "clientID");
             Validator.ValidateString(authorizationCode, "authorizationCode");
@@ -62,6 +64,7 @@ namespace YouTube.Base.Services
             token.clientID = clientID;
             token.clientSecret = clientSecret;
             token.authorizationCode = authorizationCode;
+            token.ScopeList = string.Join(",", scopes ?? new List<OAuthClientScopeEnum>());
             return token;
         }
 
@@ -88,6 +91,7 @@ namespace YouTube.Base.Services
             newToken.clientSecret = token.clientSecret;
             newToken.authorizationCode = token.authorizationCode;
             newToken.refreshToken = token.refreshToken;
+            newToken.ScopeList = token.ScopeList;
             return newToken;
         }
     }
