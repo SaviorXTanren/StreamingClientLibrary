@@ -70,6 +70,6 @@
         /// 
         /// Note that there’s a delay between when a clip is created during a broadcast and when the offset is set.During the delay period, vod_offset is null. The delay is indeterminant but is typically minutes long.
         /// </summary>
-        public int vod_offset { get; set; }
+        public int? vod_offset { get; set; }
     }
 }
