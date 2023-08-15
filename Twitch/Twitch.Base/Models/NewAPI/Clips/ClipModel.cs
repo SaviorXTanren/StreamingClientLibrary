@@ -61,5 +61,15 @@
         /// The url of the clip thumbnail.
         /// </summary>
         public string thumbnail_url { get; set; }
+        /// <summary>
+        /// The length of the clip, in seconds. Precision is 0.1.
+        /// </summary>
+        public float duration { get; set; }
+        /// <summary>
+        /// The zero-based offset, in seconds, to where the clip starts in the video (VOD). Is null if the video is not available or hasn’t been created yet from the live stream (see video_id).
+        /// 
+        /// Note that there’s a delay between when a clip is created during a broadcast and when the offset is set.During the delay period, vod_offset is null. The delay is indeterminant but is typically minutes long.
+        /// </summary>
+        public int vod_offset { get; set; }
     }
 }
