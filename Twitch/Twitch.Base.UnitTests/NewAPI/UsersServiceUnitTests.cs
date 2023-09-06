@@ -75,20 +75,6 @@ namespace Twitch.Base.UnitTests.NewAPI
         }
 
         [TestMethod]
-        public void GetFollows()
-        {
-            TestWrapper(async (TwitchConnection connection) =>
-            {
-                UserModel user = await connection.NewAPI.Users.GetUserByLogin("Ninja");
-
-                IEnumerable<UserFollowModel> follows = await connection.NewAPI.Users.GetFollows(to: user, maxResults: 200);
-
-                Assert.IsNotNull(follows);
-                Assert.IsTrue(follows.Count() > 0);
-            });
-        }
-
-        [TestMethod]
         public void UpdateCurrentUserDescription()
         {
             TestWrapper(async (TwitchConnection connection) =>

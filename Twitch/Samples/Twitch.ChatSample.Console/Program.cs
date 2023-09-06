@@ -56,6 +56,7 @@ namespace Twitch.ChatSample.Console
             OAuthClientScopeEnum.moderation__read,
 
             OAuthClientScopeEnum.moderator__read__chat_settings,
+            OAuthClientScopeEnum.moderator__read__followers,
 
             OAuthClientScopeEnum.moderator__manage__banned_users,
             OAuthClientScopeEnum.moderator__manage__chat_messages,

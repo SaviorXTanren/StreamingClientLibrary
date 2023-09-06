@@ -206,5 +206,53 @@ namespace Twitch.Base.Services.NewAPI
         {
             return await this.GetDataResultAsync<ChannelContentClassificationLabelModel>($"content_classification_labels" + (!string.IsNullOrEmpty(locale) ? "?locale=" + locale : string.Empty));
         }
+
+        /// <summary>
+        /// Gets the followers for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get followers for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The list of followers</returns>
+        public async Task<IEnumerable<ChannelFollowerModel>> GetFollowers(UserModel channel, int maxResults = 1)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedDataResultAsync<ChannelFollowerModel>($"channels/followers?broadcaster_id={channel.id}", maxResults);
+        }
+
+        /// <summary>
+        /// Gets the follower count for the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to get followers for</param>
+        /// <returns>The count of followers</returns>
+        public async Task<long> GetFollowerCount(UserModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            return await this.GetPagedResultTotalCountAsync($"channels/followers?broadcaster_id={channel.id}");
+        }
+
+        /// <summary>
+        /// Checks if the specified user is following the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel to check follows for</param>
+        /// <param name="user">The user to check if they are following</param>
+        /// <returns>The follow information for the user if they are following</returns>
+        public async Task<ChannelFollowerModel> CheckIfFollowing(UserModel channel, UserModel user)
+        {
+            Validator.ValidateVariable(channel, "channel");
+            IEnumerable<ChannelFollowerModel> follows = await this.GetPagedDataResultAsync<ChannelFollowerModel>($"channels/followers?broadcaster_id={channel.id}&user_id={user.id}", maxResults: 1);
+            return (follows != null && follows.Count() > 0) ? follows.First() : null;
+        }
+
+        /// <summary>
+        /// Gets the channels that the specified user is following.
+        /// </summary>
+        /// <param name="user">The user to get followed channels for</param>
+        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
+        /// <returns>The list of followed channels</returns>
+        public async Task<IEnumerable<ChannelFollowedModel>> GetFollowedChannels(UserModel user, int maxResults = 1)
+        {
+            Validator.ValidateVariable(user, "user");
+            return await this.GetPagedDataResultAsync<ChannelFollowedModel>($"channels/followed?user_id={user.id}", maxResults);
+        }
     }
 }

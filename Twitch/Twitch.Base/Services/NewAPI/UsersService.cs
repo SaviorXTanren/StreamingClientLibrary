@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using StreamingClient.Base.Util;
+﻿using StreamingClient.Base.Util;
 using StreamingClient.Base.Web;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Twitch.Base.Models.NewAPI;
 using Twitch.Base.Models.NewAPI.Users;
@@ -97,50 +95,6 @@ namespace Twitch.Base.Services.NewAPI
             }
 
             return await this.GetDataResultAsync<UserModel>("users?" + string.Join("&", parameters));
-        }
-
-        /// <summary>
-        /// Gets number of followers for a user.
-        /// </summary>
-        /// <param name="user">The user to search for who they follow</param>
-        /// <returns>The total number of followers</returns>
-        public async Task<long> GetFollowerCount(UserModel user)
-        {
-            Validator.ValidateVariable(user, "user");
-            return await this.GetPagedResultTotalCountAsync("users/follows?to_id=" + user.id );
-        }
-
-        /// <summary>
-        /// Gets follower information for and/or to a user.
-        /// </summary>
-        /// <param name="from">The user to search for who they follow</param>
-        /// <param name="to">The user to search for who follows them</param>
-        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
-        /// <returns>The follow information</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetFollows(UserModel from = null, UserModel to = null, int maxResults = 1) { return await this.GetFollows(from?.id, to?.id, maxResults); }
-
-        /// <summary>
-        /// Gets follower information for and/or to a user.
-        /// </summary>
-        /// <param name="fromID">The user to search for who they follow</param>
-        /// <param name="toID">The user to search for who follows them</param>
-        /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
-        /// <returns>The follow information</returns>
-        public async Task<IEnumerable<UserFollowModel>> GetFollows(string fromID = null, string toID = null, int maxResults = 1)
-        {
-            Validator.Validate(!string.IsNullOrEmpty(fromID) || !string.IsNullOrEmpty(toID), "At least either fromID or toID must be specified");
-
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(fromID))
-            {
-                queryParameters.Add("from_id", fromID);
-            }
-            if (!string.IsNullOrEmpty(toID))
-            {
-                queryParameters.Add("to_id", toID);
-            }
-
-            return await this.GetPagedDataResultAsync<UserFollowModel>("users/follows?" + string.Join("&", queryParameters.Select(kvp => kvp.Key + "=" + kvp.Value)), maxResults);
         }
 
         /// <summary>
