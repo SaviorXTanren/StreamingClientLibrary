@@ -113,18 +113,19 @@ namespace YouTube.ChatSample.Console
                 System.Console.WriteLine(log.Message);
             }
 
-            await fileLock.WaitAndRelease(async () =>
+            await fileLock.WaitAsync();
+
+            try
             {
-                try
+                using (StreamWriter writer = new StreamWriter(File.Open("Log.txt", FileMode.Append)))
                 {
-                    using (StreamWriter writer = new StreamWriter(File.Open("Log.txt", FileMode.Append)))
-                    {
-                        await writer.WriteAsync(string.Format("{0} - {1} - {2} " + Environment.NewLine + Environment.NewLine, DateTimeOffset.Now.ToString(), EnumHelper.GetEnumName(log.Level), log.Message));
-                        await writer.FlushAsync();
-                    }
+                    await writer.WriteAsync(string.Format("{0} - {1} - {2} " + Environment.NewLine + Environment.NewLine, DateTimeOffset.Now.ToString(), EnumHelper.GetEnumName(log.Level), log.Message));
+                    await writer.FlushAsync();
                 }
-                catch (Exception) { }
-            });
+            }
+            catch (Exception) { }
+
+            fileLock.Release();
         }
     }
 }

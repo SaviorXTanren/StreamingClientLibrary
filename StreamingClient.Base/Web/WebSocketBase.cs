@@ -72,7 +72,11 @@ namespace StreamingClient.Base.Web
         {
             byte[] buffer = Encoding.UTF8.GetBytes(packet);
 
-            await this.webSocketSemaphore.WaitAndRelease(async () => await this.SendInternal(buffer));
+            await this.webSocketSemaphore.WaitAsync();
+
+            await this.SendInternal(buffer);
+
+            this.webSocketSemaphore.Release();
 
             this.OnSentOccurred?.Invoke(this, packet);
         }

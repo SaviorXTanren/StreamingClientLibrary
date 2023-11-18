@@ -215,15 +215,16 @@ namespace Twitch.ChatSample.Console
             {
                 System.Console.WriteLine("PACKET: " + packet.Command);
 
-                await semaphore.WaitAndRelease(async () =>
+                await semaphore.WaitAsync();
+
+                using (StreamWriter writer = new StreamWriter(File.Open("Packets.txt", FileMode.Append)))
                 {
-                    using (StreamWriter writer = new StreamWriter(File.Open("Packets.txt", FileMode.Append)))
-                    {
-                        await writer.WriteLineAsync(JSONSerializerHelper.SerializeToString(packet));
-                        await writer.WriteLineAsync();
-                        await writer.FlushAsync();
-                    }
-                });
+                    await writer.WriteLineAsync(JSONSerializerHelper.SerializeToString(packet));
+                    await writer.WriteLineAsync();
+                    await writer.FlushAsync();
+                }
+
+                semaphore.Release();
             }
         }
 

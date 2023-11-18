@@ -730,43 +730,6 @@
             </summary>
             <returns>true if this instance is the default attribute for the class; otherwise, false.</returns>
         </member>
-        <member name="T:StreamingClient.Base.Util.SemaphoreSlimExtensions">
-            <summary>
-            Extension methods for the SemaphoreSlim class.
-            </summary>
-        </member>
-        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease(System.Threading.SemaphoreSlim,System.Threading.Tasks.Task)">
-            <summary>
-            Awaits on a semaphore, awaits the specified task, &amp; then releases the semaphore.
-            </summary>
-            <param name="semaphore">The semaphore to await on</param>
-            <param name="task">The task to await</param>
-            <returns>An awaitable task</returns>
-        </member>
-        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease``1(System.Threading.SemaphoreSlim,System.Threading.Tasks.Task{``0})">
-            <summary>
-            Awaits on a semaphore, awaits the specified task, &amp; then releases the semaphore.
-            </summary>
-            <param name="semaphore">The semaphore to await on</param>
-            <param name="task">The task to await</param>
-            <returns>An awaitable task of type T</returns>
-        </member>
-        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease(System.Threading.SemaphoreSlim,System.Func{System.Threading.Tasks.Task})">
-            <summary>
-            Awaits on a semaphore, runs the specified function, &amp; then releases the semaphore.
-            </summary>
-            <param name="semaphore">The semaphore to await on</param>
-            <param name="function">The function to run</param>
-            <returns>An awaitable task</returns>
-        </member>
-        <member name="M:StreamingClient.Base.Util.SemaphoreSlimExtensions.WaitAndRelease``1(System.Threading.SemaphoreSlim,System.Func{System.Threading.Tasks.Task{``0}})">
-            <summary>
-            Awaits on a semaphore, runs the specified function, &amp; then releases the semaphore.
-            </summary>
-            <param name="semaphore">The semaphore to await on</param>
-            <param name="function">The function to run</param>
-            <returns>An awaitable task of type T</returns>
-        </member>
         <member name="T:StreamingClient.Base.Util.StringEnumNameConverter">
             <summary>
             This converts from Enum value to name and back
