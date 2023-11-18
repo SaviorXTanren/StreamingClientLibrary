@@ -8,7 +8,7 @@
     <Company>Matthew Olivo</Company>
     <Authors>Matthew Olivo</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.12</Version>
+    <Version>1.0.0.13</Version>
     <Description>A library used for multiple streaming libraries to share common code logic.
 
 For more information, please see our project site: https://github.com/SaviorXTanren/StreamingClientLibrary</Description>
@@ -16,8 +16,8 @@ For more information, please see our project site: https://github.com/SaviorXTan
     <PackageId>StreamingClientLibrary.Base</PackageId>
     <Product>Streaming Client Library</Product>
     <PackageReleaseNotes>Adding scope list to OAuth Token</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0.12</AssemblyVersion>
-    <FileVersion>1.0.0.12</FileVersion>
+    <AssemblyVersion>1.0.0.13</AssemblyVersion>
+    <FileVersion>1.0.0.13</FileVersion>
     <RepositoryUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SaviorXTanren/StreamingClientLibrary</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
