@@ -138,6 +138,10 @@ namespace Twitch.Base
         /// </summary>
         channel__edit__commercial,
         /// <summary>
+        /// Manage ads schedule on a channel.
+        /// </summary>
+        channel__manage__ads,
+        /// <summary>
         /// Manage your channel’s broadcast configuration, including updating channel configuration and managing stream markers and stream tags.
         /// </summary>
         channel__manage__broadcast,
@@ -177,6 +181,10 @@ namespace Twitch.Base
         /// Manage a channel’s VIPs.
         /// </summary>
         channel__manage__vips,
+        /// <summary>
+        /// Read the ads schedule and details on your channel.
+        /// </summary>
+        channel__read__ads,
         /// <summary>
         /// Read charity campaign details and user donations on your channel.
         /// </summary>

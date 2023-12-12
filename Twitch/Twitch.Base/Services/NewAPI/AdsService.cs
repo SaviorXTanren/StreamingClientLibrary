@@ -47,5 +47,41 @@ namespace Twitch.Base.Services.NewAPI
             }
             return null;
         }
+
+        /// <summary>
+        /// If available, pushes back the timestamp of the upcoming automatic mid-roll ad by 5 minutes. This endpoint duplicates the snooze functionality in the creator dashboard’s Ads Manager.
+        /// </summary>
+        /// <param name="channel">The channel to attempt to snooze ads for</param>
+        /// <returns>Information about the channel’s snoozes and next upcoming ad after successfully snoozing.</returns>
+        public async Task<AdSnoozeResponseModel> SnoozeNextAd(UserModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+
+            IEnumerable<AdSnoozeResponseModel> result = await this.PostDataResultAsync<AdSnoozeResponseModel>("channels/ads/schedule/snooze?broadcaster_id=" + channel.id);
+            if (result != null && result.Count() > 0)
+            {
+                return result.FirstOrDefault();
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// This endpoint returns ad schedule related information, including snooze, when the last ad was run, when the next ad is scheduled, and if the channel is currently in pre-roll free time.
+        /// 
+        /// Note that a new ad cannot be run until 8 minutes after running a previous ad.
+        /// </summary>
+        /// <param name="channel">The channel to get the ad schedule for</param>
+        /// <returns>Information related to the channel’s ad schedule.</returns>
+        public async Task<AdScheduleModel> GetAdSchedule(UserModel channel)
+        {
+            Validator.ValidateVariable(channel, "channel");
+
+            IEnumerable<AdScheduleModel> result = await this.GetDataResultAsync<AdScheduleModel>("channels/ads?broadcaster_id=" + channel.id);
+            if (result != null && result.Count() > 0)
+            {
+                return result.FirstOrDefault();
+            }
+            return null;
+        }
     }
 }

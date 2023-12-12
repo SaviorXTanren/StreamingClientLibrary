@@ -30,6 +30,7 @@ namespace Twitch.ChatSample.Console
 
             OAuthClientScopeEnum.channel__edit__commercial,
 
+            OAuthClientScopeEnum.channel__manage__ads,
             OAuthClientScopeEnum.channel__manage__broadcast,
             OAuthClientScopeEnum.channel__manage__moderators,
             OAuthClientScopeEnum.channel__manage__polls,
@@ -39,6 +40,7 @@ namespace Twitch.ChatSample.Console
 
             OAuthClientScopeEnum.channel__moderate,
 
+            OAuthClientScopeEnum.channel__read__ads,
             OAuthClientScopeEnum.channel__read__editors,
             OAuthClientScopeEnum.channel__read__goals,
             OAuthClientScopeEnum.channel__read__hype_train,
