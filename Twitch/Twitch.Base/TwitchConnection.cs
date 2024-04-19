@@ -321,6 +321,10 @@ namespace Twitch.Base
         /// View if an authorized user is subscribed to specific channels.
         /// </summary>
         user__read__subscriptions,
+        /// <summary>
+        /// View the whispers of a user.
+        /// </summary>
+        user__read__whispers,
     }
 
     /// <summary>
