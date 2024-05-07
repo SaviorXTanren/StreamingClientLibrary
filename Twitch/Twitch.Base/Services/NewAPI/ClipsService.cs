@@ -61,12 +61,13 @@ namespace Twitch.Base.Services.NewAPI
         /// <param name="broadcaster">The broadcaster to get clips for</param>
         /// <param name="startedAt">An optional start time</param>
         /// <param name="endedAt">An optional end time</param>
+        /// <param name="featured">Whether the clips should be featured</param>
         /// <param name="maxResults">The maximum number of results. Will be either that amount or slightly more</param>
         /// <returns>The clips for the broadcaster</returns>
-        public async Task<IEnumerable<ClipModel>> GetBroadcasterClips(UserModel broadcaster, DateTimeOffset? startedAt = null, DateTimeOffset? endedAt = null, int maxResults = 20)
+        public async Task<IEnumerable<ClipModel>> GetBroadcasterClips(UserModel broadcaster, DateTimeOffset? startedAt = null, DateTimeOffset? endedAt = null, bool featured = false, int maxResults = 20)
         {
             Validator.ValidateVariable(broadcaster, "broadcaster");
-            return await this.GetClips("broadcaster_id", broadcaster.id, startedAt, endedAt, maxResults);
+            return await this.GetClips("broadcaster_id", broadcaster.id, startedAt, endedAt, featured: featured, maxResults: maxResults);
         }
 
         /// <summary>
@@ -80,10 +81,10 @@ namespace Twitch.Base.Services.NewAPI
         public async Task<IEnumerable<ClipModel>> GetGameClips(GameModel game, DateTimeOffset? startedAt = null, DateTimeOffset? endedAt = null, int maxResults = 20)
         {
             Validator.ValidateVariable(game, "game");
-            return await this.GetClips("game_id", game.id, startedAt, endedAt, maxResults);
+            return await this.GetClips("game_id", game.id, startedAt, endedAt, maxResults: maxResults);
         }
 
-        private async Task<IEnumerable<ClipModel>> GetClips(string typeName, string typeID, DateTimeOffset? startedAt = null, DateTimeOffset? endedAt = null, int maxResults = 20)
+        private async Task<IEnumerable<ClipModel>> GetClips(string typeName, string typeID, DateTimeOffset? startedAt = null, DateTimeOffset? endedAt = null, bool featured = false, int maxResults = 20)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             if (startedAt != null)
@@ -93,6 +94,10 @@ namespace Twitch.Base.Services.NewAPI
             if (endedAt != null)
             {
                 parameters.Add("endedAt", endedAt.GetValueOrDefault().ToRFC3339String());
+            }
+            if (featured)
+            {
+                parameters.Add("is_featured", "true");
             }
 
             string parameterString = (parameters.Count > 0) ? "&" + string.Join("&", parameters.Select(kvp => kvp.Key + "=" + kvp.Value)) : string.Empty;
