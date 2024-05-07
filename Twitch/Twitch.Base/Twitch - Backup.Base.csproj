@@ -36,7 +36,7 @@ For more information, please see our project site: https://github.com/SaviorXTan
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <AssemblyVersion>1.0.0.78</AssemblyVersion>
-    <FileVersion>1.0.0.78</FileVersion>
+    <FileVersion>1.0.0.77</FileVersion>
     <PackageId>StreamingClientLibrary.Twitch</PackageId>
     <PackageLicenseUrl>https://github.com/SaviorXTanren/StreamingClientLibrary/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageReleaseNotes>Adding featured parameter for Twitch Clips API</PackageReleaseNotes>
