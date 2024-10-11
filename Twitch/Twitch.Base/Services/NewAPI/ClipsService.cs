@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Twitch.Base.Models.NewAPI.Clips;
 using Twitch.Base.Models.NewAPI.Games;
 using Twitch.Base.Models.NewAPI.Users;
@@ -89,11 +90,11 @@ namespace Twitch.Base.Services.NewAPI
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             if (startedAt != null)
             {
-                parameters.Add("started_at", startedAt.GetValueOrDefault().ToRFC3339String());
+                parameters.Add("started_at", HttpUtility.UrlEncode(startedAt.GetValueOrDefault().ToRFC3339String()));
             }
             if (endedAt != null)
             {
-                parameters.Add("endedAt", endedAt.GetValueOrDefault().ToRFC3339String());
+                parameters.Add("ended_at", HttpUtility.UrlEncode(endedAt.GetValueOrDefault().ToRFC3339String()));
             }
             if (featured)
             {
