@@ -1,3 +1,6 @@
+# PROJECT HAS BEEN ARCHIVED
+The StreamingClientLibrary project has officially been archived and is no longer being actively worked on. Changes are being done in the main project that leverages this library require it to become fully integrated into the larger project as opposed to being maintained separately. This repository will be kept around for archival and research purposes, but no future updates are planned for this. If you wish, you can look at the parent project that leverages this library, which will soon have it's core code moved over to it: [https://github.com/SaviorXTanren/mixer-mixitup](https://github.com/SaviorXTanren/mixer-mixitup)
+
 [![Build Status](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary.svg?branch=master)](https://travis-ci.org/SaviorXTanren/StreamingClientLibrary)
 # StreamingClientLibrary
 C# client library for Twitch, YouTube, and other streaming services
